@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>See Saw</SongName>
+  <BeatmapName>editor_beatmap</BeatmapName>
+  <Beatmapper>FunkyFight</Beatmapper>
+  <ArtistName>Tsunku, arranged by Koichi Yuasa</ArtistName>
+  <MusicName>See Saw</MusicName>
+  <SongPath>Songs\See Saw.mp3</SongPath>
+  <BPM>120</BPM>
+  <Offset>0.15</Offset>
+  <Notes />
+</Chart>

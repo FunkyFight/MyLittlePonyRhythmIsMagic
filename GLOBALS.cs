@@ -1,5 +1,6 @@
 using GameCore.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using MLP_RiM.Elements.Editor;
 
 /// <summary>
 /// Defined on the go by Game1.cs so everyone can access it.
@@ -13,4 +14,5 @@ public static class GLOBALS
     public static GraphicsDevice graphicsDevice;
     public static BeatmapPlayer beatmapPlayer;
     public static RhythmInputVisualElement rhythmInputVisualElement;
+    public static BeatmapEditorElement beatmapEditorElement;
 }

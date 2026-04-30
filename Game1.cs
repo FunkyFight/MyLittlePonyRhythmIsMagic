@@ -7,6 +7,7 @@ using GameCore.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MLP_RiM.Elements.Editor;
 using Rhythm.Conductor;
 using Rhythm.Note;
 using Rhythm.Note.Evaluator;
@@ -42,13 +43,8 @@ public class Game1 : Core
         _sceneManager.SetScene(new SeeSawScene(this));
 
 
-        // Beatmap
-        // Debug
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("action", "see_saw_toward_outer");
-        //
-        GLOBALS.beatmapPlayer.StartMetronomeDebugMap(data);
-        GLOBALS.rhythmInputVisualElement = new RhythmInputVisualElement(GLOBALS.beatmapPlayer);
+        // Beatmap editor
+        GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
         GLOBALS.beatmapPlayer.ChartPlayer.NoteReacted += (result) =>
         {
             Console.WriteLine(result);
@@ -69,8 +65,9 @@ public class Game1 : Core
             Exit();
 
 
-        GLOBALS.beatmapPlayer?.Update();
+        GLOBALS.beatmapPlayer?.Update(gameTime);
         _sceneManager.Update(gameTime);
+        GLOBALS.beatmapEditorElement?.Update(gameTime);
         handleInputs();
 
         
@@ -84,6 +81,7 @@ public class Game1 : Core
 
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         _sceneManager.Draw(SpriteBatch);
+        GLOBALS.beatmapEditorElement?.Draw(SpriteBatch);
         SpriteBatch.End();
 
         base.Draw(gameTime);

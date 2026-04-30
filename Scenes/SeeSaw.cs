@@ -8,8 +8,10 @@ using GameCore.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MLP_RiM;
+using Rhythm.Note;
 using Rhythm.Note.Visual;
 using TexturePackerMonoGameDefinitions;
+using Vector2 = System.Numerics.Vector2;
 
 public class SeeSawScene : Scene
 {
@@ -29,8 +31,12 @@ public class SeeSawScene : Scene
 
     public short turn = 0;
 
-    private float applejackBaseY;
-    private float rainbowBaseY;
+    private System.Numerics.Vector2 applejackOuterPos;
+    private System.Numerics.Vector2 applejackInnerPos;
+    private System.Numerics.Vector2 applejackExitPos;
+    private System.Numerics.Vector2 rainbowOuterPos;
+    private System.Numerics.Vector2 rainbowInnerPos;
+    private ChartPlayer _visualChartPlayer;
 
     public SeeSawScene(Game1 game) : base("See Saw")
     {
@@ -56,19 +62,23 @@ public class SeeSawScene : Scene
 
         SeeSaw2.Position = new System.Numerics.Vector2(vp.Width / 2, vp.Height / 2 + vp.Height / 4);
         SeeSaw1.Position = new System.Numerics.Vector2(vp.Width / 2, vp.Height / 2 + (vp.Height / 5) * 1.5f);
-        Rainbow.Position = new System.Numerics.Vector2(vp.Width / 2 + 270, vp.Height / 2 + 100);
-        Applejack.Position = new System.Numerics.Vector2(vp.Width / 2 - 450, vp.Height / 2 + 300);
+        Rainbow.Position = new System.Numerics.Vector2(vp.Width / 2 + 270, vp.Height / 2 + 210);
+        Applejack.Position = new System.Numerics.Vector2(vp.Width / 2 - 500, vp.Height / 2 + 300);
 
-        applejackBaseY = Applejack.Position.Y;
-        rainbowBaseY = Rainbow.Position.Y;
+        applejackExitPos = Applejack.Position;
+        applejackOuterPos = new System.Numerics.Vector2(vp.Width / 2 - 300, Rainbow.Position.Y);
+        applejackInnerPos = new System.Numerics.Vector2(vp.Width / 2 - 50, Applejack.Position.Y);
+        rainbowOuterPos = Rainbow.Position;
+        rainbowInnerPos = new System.Numerics.Vector2(vp.Width / 2 + 100, Rainbow.Position.Y);
 
-        SeeSaw2.Rotation = MathHelper.ToRadians(-15);
-        Rainbow.Rotation = MathHelper.ToRadians(-15);
+        SeeSaw2.Rotation = MathHelper.ToRadians(10);
+        Rainbow.Rotation = MathHelper.ToRadians(10);
 
         SetupAnimations();
 
         GLOBALS.beatmapPlayer.BeatmapStarted += () =>
         {
+            ResetActors();
             SetupVisuals();
             GLOBALS.beatmapPlayer.Conductor.BeatChanged += (_, _) => 
             {
@@ -79,32 +89,124 @@ public class SeeSawScene : Scene
 
     private void SetupVisuals()
     {
-        seeSawVisuals = new VisualNoteManager<VisualNote>(GLOBALS.beatmapPlayer.ChartPlayer, note =>
+        double crotchet = 60.0 / GLOBALS.beatmapPlayer.Conductor.BPM;
+
+        _visualChartPlayer = new ChartPlayer(GLOBALS.beatmapPlayer.CurrentChart, Rhythm.Note.ReactionRules.RhythmHeavenLike());
+
+        seeSawVisuals = new VisualNoteManager<VisualNote>(_visualChartPlayer, note =>
         {
             if (note.AdditionnalData == null || !note.AdditionnalData.ContainsKey("action")) 
                 return null;
 
             string action = note.AdditionnalData["action"];
+            Vector2 rainbowFromPos = GetRainbowPositionBefore(note);
+            Vector2 applejackFromPos = GetApplejackPositionBefore(note);
+            float fromRotation = GetBeamRotationForRainbowPosition(rainbowFromPos);
 
             switch(action)
             {
                 case "see_saw_toward_outer":
-                    if(turn == 0) 
-                    {
-                        turn = 1;
-                        return new SeeSawVisualNote(note, Applejack, applejackBaseY, 1.0);
-                    }
-                    else 
-                    {
-                        turn = 0;
-                        return new SeeSawVisualNote(note, Rainbow, rainbowBaseY, 1.0);
-                    }
+                    return new SeeSawVisualNote(note, Rainbow, rainbowFromPos, rainbowOuterPos, crotchet, SeeSaw2, fromRotation, MathHelper.ToRadians(10), rainbowInnerPos, rainbowOuterPos, Applejack, applejackFromPos, applejackOuterPos, MathHelper.ToRadians(-10), applejackInnerPos, applejackOuterPos);
+                case "see_saw_toward_inner":
+                    return new SeeSawVisualNote(note, Rainbow, rainbowFromPos, rainbowInnerPos, crotchet, SeeSaw2, fromRotation, MathHelper.ToRadians(10), rainbowInnerPos, rainbowOuterPos, Applejack, applejackFromPos, applejackInnerPos, MathHelper.ToRadians(-10), applejackInnerPos, applejackOuterPos);
             }
 
             return null; 
         });
 
         seeSawVisuals.LookBehindSeconds = 0;
+        seeSawVisuals.LookAheadSeconds = crotchet * 2.0;
+    }
+
+    private void ApplyTimelineBaseState(double songPosition)
+    {
+        Vector2 rainbowPosition = rainbowOuterPos;
+        Vector2 applejackPosition = applejackExitPos;
+
+        foreach (Note note in _visualChartPlayer.Notes)
+        {
+            if (note.SongPosition > songPosition)
+                break;
+
+            rainbowPosition = GetRainbowTargetPosition(note, rainbowPosition);
+            applejackPosition = GetApplejackTargetPosition(note, applejackPosition);
+        }
+
+        Rainbow.Position = rainbowPosition;
+        Applejack.Position = applejackPosition;
+        SeeSaw2.Rotation = GetBeamRotationForRainbowPosition(rainbowPosition);
+    }
+
+    private Vector2 GetRainbowPositionBefore(Note targetNote)
+    {
+        Vector2 position = rainbowOuterPos;
+
+        foreach (Note note in _visualChartPlayer.Notes)
+        {
+            if (note == targetNote)
+                break;
+
+            position = GetRainbowTargetPosition(note, position);
+        }
+
+        return position;
+    }
+
+    private Vector2 GetApplejackPositionBefore(Note targetNote)
+    {
+        Vector2 position = applejackExitPos;
+
+        foreach (Note note in _visualChartPlayer.Notes)
+        {
+            if (note == targetNote)
+                break;
+
+            position = GetApplejackTargetPosition(note, position);
+        }
+
+        return position;
+    }
+
+    private Vector2 GetRainbowTargetPosition(Note note, Vector2 fallback)
+    {
+        if (note.AdditionnalData == null || !note.AdditionnalData.TryGetValue("action", out string action))
+            return fallback;
+
+        return action switch
+        {
+            "see_saw_toward_outer" => rainbowOuterPos,
+            "see_saw_toward_inner" => rainbowInnerPos,
+            _ => fallback
+        };
+    }
+
+    private Vector2 GetApplejackTargetPosition(Note note, Vector2 fallback)
+    {
+        if (note.AdditionnalData == null || !note.AdditionnalData.TryGetValue("action", out string action))
+            return fallback;
+
+        return action switch
+        {
+            "see_saw_toward_outer" => applejackOuterPos,
+            "see_saw_toward_inner" => applejackInnerPos,
+            _ => fallback
+        };
+    }
+
+    private float GetBeamRotationForRainbowPosition(Vector2 rainbowPosition)
+    {
+        return Vector2.Distance(rainbowPosition, rainbowOuterPos) < Vector2.Distance(rainbowPosition, rainbowInnerPos)
+            ? MathHelper.ToRadians(10)
+            : MathHelper.ToRadians(-10);
+    }
+
+    private void ResetActors()
+    {
+        Rainbow.Position = rainbowOuterPos;
+        Applejack.Position = applejackExitPos;
+        SeeSaw2.Rotation = MathHelper.ToRadians(10);
+        Rainbow.Rotation = MathHelper.ToRadians(10);
+        Applejack.Rotation = 0;
     }
 
     public override void OnUnload()
@@ -117,7 +219,14 @@ public class SeeSawScene : Scene
 
         RainbowState.Update(gameTime);
         ApplejackState?.Update(gameTime);
-        seeSawVisuals.Update(GLOBALS.beatmapPlayer.Conductor.SongPosition);
+        if (GLOBALS.beatmapPlayer.Conductor != null && seeSawVisuals != null)
+        {
+            double songPosition = GLOBALS.beatmapPlayer.Conductor.SongPosition;
+            _visualChartPlayer?.Seek(songPosition);
+            seeSawVisuals.Reset();
+            ApplyTimelineBaseState(songPosition);
+            seeSawVisuals.Update(songPosition);
+        }
     }
 
     public override void Draw(SpriteBatch spriteBatch)
