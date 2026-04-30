@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<InputActions>
+  <!-- Main reaction -->
+  <InputAction Name="ReactMain">
+    <Key Value="Space" />
+  </InputAction>
+</InputActions>

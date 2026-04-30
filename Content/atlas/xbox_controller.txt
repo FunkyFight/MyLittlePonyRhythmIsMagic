@@ -1,0 +1,466 @@
+#
+# Sprite sheet data for MonoGame.
+#
+# To learn how to import these sprites into your MonoGame project visit:
+# https://www.codeandweb.com/texturepacker/monogame
+#
+# Sprite sheet: xbox_controller.png (7760 x 5052)
+# $TexturePacker:SmartUpdate:1b65e0b0f99fa0f833ecd02326d7708a:17bc4cb7245a82ed0d27c63893dea53f:b1df28153a0507a6a0480bd0caca1f40$
+#
+
+Analog Sticks/Blank/button_xbox_analog_blank;0;800;4263;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_direction_1;0;926;761;402;418;480;480;0.5;0.5191387559808612
+Analog Sticks/Blank/button_xbox_analog_blank_direction_2;0;1330;761;418;402;480;480;0.48086124401913877;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_direction_3;1;6569;405;418;402;480;480;0.5;0.48086124401913877
+Analog Sticks/Blank/button_xbox_analog_blank_direction_4;0;1750;761;418;402;480;480;0.5191387559808612;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_direction_5;0;4309;1165;409;409;480;480;0.49144254278728605;0.508557457212714
+Analog Sticks/Blank/button_xbox_analog_blank_direction_6;0;1560;1569;409;409;480;480;0.49144254278728605;0.49144254278728605
+Analog Sticks/Blank/button_xbox_analog_blank_direction_7;0;1560;1980;409;409;480;480;0.508557457212714;0.49144254278728605
+Analog Sticks/Blank/button_xbox_analog_blank_direction_8;0;1971;1569;409;409;480;480;0.508557457212714;0.508557457212714
+Analog Sticks/Blank/button_xbox_analog_blank_direction_9;0;3197;2803;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_direction_10;0;3197;3207;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_direction_11;0;3608;2392;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_rotate_1;0;483;483;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_rotate_2;0;965;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_rotate_3;0;1;1447;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Blank/button_xbox_analog_blank_rotate_4;0;483;887;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank;0;2786;3626;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_1;0;965;1181;402;418;480;480;0.5;0.5191387559808612
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_2;0;2170;761;418;402;480;480;0.48086124401913877;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_3;1;1369;1165;418;402;480;480;0.5;0.48086124401913877
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_4;0;2590;761;418;402;480;480;0.5191387559808612;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_5;0;1560;2391;409;409;480;480;0.49144254278728605;0.508557457212714
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_6;0;1971;1980;409;409;480;480;0.49144254278728605;0.49144254278728605
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_7;0;2382;1569;409;409;480;480;0.508557457212714;0.49144254278728605
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_8;0;1560;2802;409;409;480;480;0.508557457212714;0.508557457212714
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_9;0;4302;1576;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_10;0;4019;1981;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_direction_11;0;3608;2392;402;402;480;480;0.5;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_rotate_1;0;1408;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_rotate_2;0;1;1851;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_rotate_3;0;1851;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Blank/button_xboxone_analog_blank_rotate_4;0;1;2255;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xbox_analog_l;0;4423;1980;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xbox_analog_l_direction_1;1;1789;1165;418;402;480;480;0.5;0.5191387559808612
+Analog Sticks/Left/button_xbox_analog_l_direction_2;0;3010;761;418;402;480;480;0.48086124401913877;0.5
+Analog Sticks/Left/button_xbox_analog_l_direction_3;1;2209;1165;418;402;480;480;0.5;0.48086124401913877
+Analog Sticks/Left/button_xbox_analog_l_direction_4;0;3430;761;418;402;480;480;0.5191387559808612;0.5
+Analog Sticks/Left/button_xbox_analog_l_direction_5;0;1971;2391;409;409;480;480;0.49144254278728605;0.508557457212714
+Analog Sticks/Left/button_xbox_analog_l_direction_6;0;2382;1980;409;409;480;480;0.49144254278728605;0.49144254278728605
+Analog Sticks/Left/button_xbox_analog_l_direction_7;0;2793;1569;409;409;480;480;0.508557457212714;0.49144254278728605
+Analog Sticks/Left/button_xbox_analog_l_direction_8;0;1560;3213;409;409;480;480;0.508557457212714;0.508557457212714
+Analog Sticks/Left/button_xbox_analog_l_direction_9;0;1204;4089;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xbox_analog_l_direction_10;0;1608;4035;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xbox_analog_l_direction_11;0;2288;4036;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xbox_analog_l_rotate_1;0;2294;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xbox_analog_l_rotate_2;0;1;2659;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xbox_analog_l_rotate_3;0;2737;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xbox_analog_l_rotate_4;0;1;3063;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xboxone_analog_l;0;6989;405;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xboxone_analog_l_direction_1;1;2629;1165;418;402;480;480;0.5;0.5191387559808612
+Analog Sticks/Left/button_xboxone_analog_l_direction_2;0;3850;761;418;402;480;480;0.48086124401913877;0.5
+Analog Sticks/Left/button_xboxone_analog_l_direction_3;1;3049;1165;418;402;480;480;0.5;0.48086124401913877
+Analog Sticks/Left/button_xboxone_analog_l_direction_4;0;4270;761;418;402;480;480;0.5191387559808612;0.5
+Analog Sticks/Left/button_xboxone_analog_l_direction_5;0;1971;2802;409;409;480;480;0.49144254278728605;0.508557457212714
+Analog Sticks/Left/button_xboxone_analog_l_direction_6;0;2382;2391;409;409;480;480;0.49144254278728605;0.49144254278728605
+Analog Sticks/Left/button_xboxone_analog_l_direction_7;0;2793;1980;409;409;480;480;0.508557457212714;0.49144254278728605
+Analog Sticks/Left/button_xboxone_analog_l_direction_8;0;3204;1569;409;409;480;480;0.508557457212714;0.508557457212714
+Analog Sticks/Left/button_xboxone_analog_l_direction_9;0;1204;4493;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xboxone_analog_l_direction_10;0;1608;4439;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xboxone_analog_l_direction_11;0;2288;4036;402;402;480;480;0.5;0.5
+Analog Sticks/Left/button_xboxone_analog_l_rotate_1;0;3180;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xboxone_analog_l_rotate_2;0;1;3467;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xboxone_analog_l_rotate_3;0;3623;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Left/button_xboxone_analog_l_rotate_4;0;1;3871;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xbox_analog_r;0;2012;4447;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xbox_analog_r_direction_1;1;3469;1165;418;402;480;480;0.5;0.5191387559808612
+Analog Sticks/Right/button_xbox_analog_r_direction_2;0;4889;405;418;402;480;480;0.48086124401913877;0.5
+Analog Sticks/Right/button_xbox_analog_r_direction_3;1;3889;1165;418;402;480;480;0.5;0.48086124401913877
+Analog Sticks/Right/button_xbox_analog_r_direction_4;0;5309;405;418;402;480;480;0.5191387559808612;0.5
+Analog Sticks/Right/button_xbox_analog_r_direction_5;0;1560;3624;409;409;480;480;0.49144254278728605;0.508557457212714
+Analog Sticks/Right/button_xbox_analog_r_direction_6;0;1971;3213;409;409;480;480;0.49144254278728605;0.49144254278728605
+Analog Sticks/Right/button_xbox_analog_r_direction_7;0;2382;2802;409;409;480;480;0.508557457212714;0.49144254278728605
+Analog Sticks/Right/button_xbox_analog_r_direction_8;0;2793;2391;409;409;480;480;0.508557457212714;0.508557457212714
+Analog Sticks/Right/button_xbox_analog_r_direction_9;0;4706;1576;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xbox_analog_r_direction_10;0;4827;1980;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xbox_analog_r_direction_11;0;2692;4448;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xbox_analog_r_rotate_1;0;4066;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xbox_analog_r_rotate_2;0;1;4275;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xbox_analog_r_rotate_3;0;4509;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xbox_analog_r_rotate_4;0;4952;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xboxone_analog_r;0;3190;3626;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xboxone_analog_r_direction_1;0;1156;1601;402;418;480;480;0.5;0.5191387559808612
+Analog Sticks/Right/button_xboxone_analog_r_direction_2;0;5729;405;418;402;480;480;0.48086124401913877;0.5
+Analog Sticks/Right/button_xboxone_analog_r_direction_3;0;1156;2021;402;418;480;480;0.5;0.48086124401913877
+Analog Sticks/Right/button_xboxone_analog_r_direction_4;0;6149;405;418;402;480;480;0.5191387559808612;0.5
+Analog Sticks/Right/button_xboxone_analog_r_direction_5;0;3204;1980;409;409;480;480;0.49144254278728605;0.508557457212714
+Analog Sticks/Right/button_xboxone_analog_r_direction_6;0;3615;1569;409;409;480;480;0.49144254278728605;0.49144254278728605
+Analog Sticks/Right/button_xboxone_analog_r_direction_7;0;1971;3624;409;409;480;480;0.508557457212714;0.49144254278728605
+Analog Sticks/Right/button_xboxone_analog_r_direction_8;0;2382;3213;409;409;480;480;0.508557457212714;0.508557457212714
+Analog Sticks/Right/button_xboxone_analog_r_direction_9;0;3244;4030;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xboxone_analog_r_direction_10;0;3372;4434;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xboxone_analog_r_direction_11;0;2692;4448;402;402;480;480;0.5;0.5
+Analog Sticks/Right/button_xboxone_analog_r_rotate_1;0;5395;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xboxone_analog_r_rotate_2;0;5838;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xboxone_analog_r_rotate_3;0;6281;1;441;402;480;480;0.54421768707483;0.5
+Analog Sticks/Right/button_xboxone_analog_r_rotate_4;0;6724;1;441;402;480;480;0.54421768707483;0.5
+Analog Triggers/button_xbox_analog_trigger_dark_1;1;759;4667;378;274;480;480;0.5;0.47883597883597884
+Analog Triggers/button_xbox_analog_trigger_dark_2;1;4690;809;378;274;480;480;0.5;0.47883597883597884
+Analog Triggers/button_xbox_analog_trigger_dark_3;0;4720;1085;274;378;480;480;0.5;0.47883597883597884
+Analog Triggers/button_xbox_analog_trigger_dark_4;1;4996;1213;378;274;480;480;0.5;0.47883597883597884
+Analog Triggers/button_xbox_analog_trigger_light_1;0;7396;1213;274;378;480;480;0.5;0.47883597883597884
+Analog Triggers/button_xbox_analog_trigger_light_2;1;5231;2425;378;274;480;480;0.5;0.47883597883597884
+Analog Triggers/button_xbox_analog_trigger_light_3;1;5611;2425;378;274;480;480;0.5;0.47883597883597884
+Analog Triggers/button_xbox_analog_trigger_light_4;1;5991;2425;378;274;480;480;0.5;0.47883597883597884
+D-Pad/button_xbox_dpad_dark_1;0;444;4057;354;434;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_dark_2;0;965;405;434;354;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_dark_3;0;800;1647;354;434;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_dark_4;0;1401;405;434;354;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_dark_5;0;7167;1;480;354;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_dark_6;0;444;1647;354;480;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_dark_7;0;1;1;480;480;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_light_1;0;800;2083;354;434;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_light_2;0;1837;405;434;354;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_light_3;0;800;2519;354;434;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_light_4;0;2273;405;434;354;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_light_5;0;1;4679;480;354;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_light_6;0;444;2129;354;480;480;480;0.5;0.5
+D-Pad/button_xbox_dpad_light_7;0;1;483;480;480;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_dark_1;0;800;2955;354;434;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_dark_2;0;2709;405;434;354;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_dark_3;0;800;3391;354;434;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_dark_4;0;3145;405;434;354;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_dark_5;0;483;1291;480;354;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_dark_6;0;444;2611;354;480;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_dark_7;0;483;1;480;480;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_light_1;0;800;3827;354;434;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_light_2;0;3581;405;434;354;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_light_3;1;4453;405;434;354;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_light_4;0;4017;405;434;354;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_light_5;1;444;3575;354;480;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_light_6;0;444;3093;354;480;480;480;0.5;0.5
+D-Pad/button_xboxone_dpad_light_7;0;1;965;480;480;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_1;0;5070;809;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_2;0;5474;809;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_3;0;5878;809;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_4;0;6282;809;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_5;0;6686;809;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_6;0;7090;809;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_7;0;5376;1213;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_8;0;5780;1213;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_9;0;6184;1213;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_10;0;6588;1213;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_11;0;6992;1213;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_a_12;0;4012;2392;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_1;0;3601;2803;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_2;0;3601;3207;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_3;0;4005;2796;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_4;0;4005;3200;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_5;0;3594;3611;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_6;0;3648;4015;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_7;0;3776;4419;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_8;0;3998;3611;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_9;0;4052;4015;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_10;0;4180;4419;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_11;0;4409;2796;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_b_12;0;4409;3200;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_1;0;4402;3604;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_2;0;4456;4008;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_3;0;4584;4412;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_4;0;4806;3604;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_5;0;4860;4008;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_6;0;4988;4412;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_7;0;4423;2384;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_8;0;4827;2384;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_9;0;4813;2788;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_10;0;4813;3192;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_11;0;5217;2788;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_x_12;0;5217;3192;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_1;0;5210;3596;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_2;0;5264;4000;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_3;0;5392;4404;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_4;0;5614;3596;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_5;0;5668;4000;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_6;0;5796;4404;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_7;0;5621;1617;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_8;0;6025;1617;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_9;0;6429;1617;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_10;0;6833;1617;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_11;0;7237;1617;402;402;480;480;0.5;0.5
+Digital Buttons/ABXY/button_xbox_digital_y_12;0;5231;2021;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xbox_digital_analog_click_dark_1;0;5635;2021;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xbox_digital_analog_click_dark_2;0;6039;2021;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xbox_digital_analog_click_dark_3;0;6443;2021;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xbox_digital_analog_click_dark_4;1;7251;2021;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xbox_digital_analog_click_dark_5;1;5621;2701;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xbox_digital_analog_click_dark_6;1;5621;3105;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xbox_digital_analog_click_light_1;0;6847;2021;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xbox_digital_analog_click_light_2;0;6013;2701;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xbox_digital_analog_click_light_3;0;6013;3105;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xbox_digital_analog_click_light_4;0;1156;2441;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xbox_digital_analog_click_light_5;0;1156;2853;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xbox_digital_analog_click_light_6;0;1156;3265;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_1;0;6018;3509;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_2;0;6072;3913;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_3;0;6677;2425;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_4;1;6200;4317;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_5;1;6422;3509;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_6;1;6476;3913;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_7;1;6592;4317;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_8;1;6868;3637;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xboxone_digital_analog_click_dark_9;1;7218;3233;390;402;480;480;0.5;0.4641025641025641
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_1;0;7081;2425;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_2;0;6417;2829;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_3;0;6821;2829;402;402;480;480;0.5;0.5
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_4;0;1156;3677;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_5;0;2793;2802;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_6;0;3204;2391;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_7;0;3615;1980;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_8;0;2382;3624;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Analog/button_xboxone_digital_analog_click_light_9;0;2793;3214;402;410;480;480;0.5;0.4902439024390244
+Digital Buttons/Shoulder/button_xbox_digital_bumper_dark_1;1;4026;1569;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/Shoulder/button_xbox_digital_bumper_dark_2;1;2012;4035;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/Shoulder/button_xbox_digital_bumper_dark_3;1;7393;357;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/Shoulder/button_xbox_digital_bumper_dark_4;1;2416;4440;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/Shoulder/button_xbox_digital_bumper_light_1;1;2692;4036;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/Shoulder/button_xbox_digital_bumper_light_2;1;2968;4030;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/Shoulder/button_xbox_digital_bumper_light_3;1;3096;4442;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/Shoulder/button_xbox_digital_bumper_light_4;1;483;4493;274;410;480;480;0.4902439024390244;0.5
+Digital Buttons/System/button_xbox_digital_back_1;0;7485;2731;274;288;480;480;0.5;0.4965277777777778
+Digital Buttons/System/button_xbox_digital_back_2;1;6371;2425;304;274;480;480;0.5;0.5230263157894737
+Digital Buttons/System/button_xbox_digital_home_green;0;6814;3233;402;402;480;480;0.5;0.5
+Digital Buttons/System/button_xbox_digital_home_white;0;7260;3637;402;402;480;480;0.5;0.5
+Digital Buttons/System/button_xbox_digital_menu_1;0;6200;4721;290;290;480;480;0.5;0.5
+Digital Buttons/System/button_xbox_digital_menu_2;0;6492;4721;290;290;480;480;0.5;0.5
+Digital Buttons/System/button_xbox_digital_start_1;1;6417;3233;288;274;480;480;0.5;0.4965277777777778
+Digital Buttons/System/button_xbox_digital_start_2;0;7485;2425;274;304;480;480;0.5;0.5230263157894737
+Digital Buttons/System/button_xbox_digital_view_1;0;6784;4721;290;290;480;480;0.5;0.5
+Digital Buttons/System/button_xbox_digital_view_2;0;5110;1617;290;290;480;480;0.5;0.5
+Svg/button_xbox_analog_blank;0;2310;4943;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_blank_direction_1;0;1990;4943;102;106;120;120;0.5;0.5188679245283019
+Svg/button_xbox_analog_blank_direction_2;0;2094;4943;106;102;120;120;0.4811320754716981;0.5
+Svg/button_xbox_analog_blank_direction_3;0;2414;4924;102;106;120;120;0.5;0.4811320754716981
+Svg/button_xbox_analog_blank_direction_4;0;2202;4943;106;102;120;120;0.5188679245283019;0.5
+Svg/button_xbox_analog_blank_direction_5;0;5515;1617;104;104;120;120;0.49038461538461536;0.5096153846153846
+Svg/button_xbox_analog_blank_direction_6;0;5515;1723;104;104;120;120;0.49038461538461536;0.49038461538461536
+Svg/button_xbox_analog_blank_direction_7;0;718;4947;104;104;120;120;0.5096153846153846;0.49038461538461536
+Svg/button_xbox_analog_blank_direction_8;0;824;4947;104;104;120;120;0.5096153846153846;0.5096153846153846
+Svg/button_xbox_analog_blank_direction_9;0;7607;1099;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_blank_direction_10;0;3315;4854;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_blank_direction_11;0;3743;4838;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_blank_rotate_1;0;4720;1465;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_blank_rotate_2;1;6707;3233;102;111;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_blank_rotate_3;0;605;4905;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_blank_rotate_4;0;6539;2701;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_l;0;4491;4823;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_l_direction_1;0;2518;4924;102;106;120;120;0.5;0.5188679245283019
+Svg/button_xbox_analog_l_direction_2;0;7607;887;106;102;120;120;0.4811320754716981;0.5
+Svg/button_xbox_analog_l_direction_3;0;2622;4924;102;106;120;120;0.5;0.4811320754716981
+Svg/button_xbox_analog_l_direction_4;0;3419;4838;106;102;120;120;0.5188679245283019;0.5
+Svg/button_xbox_analog_l_direction_5;0;930;4947;104;104;120;120;0.49038461538461536;0.5096153846153846
+Svg/button_xbox_analog_l_direction_6;0;1036;4947;104;104;120;120;0.49038461538461536;0.49038461538461536
+Svg/button_xbox_analog_l_direction_7;0;1142;4947;104;104;120;120;0.5096153846153846;0.49038461538461536
+Svg/button_xbox_analog_l_direction_8;0;1248;4947;104;104;120;120;0.5096153846153846;0.5096153846153846
+Svg/button_xbox_analog_l_direction_9;0;5347;4816;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_l_direction_10;0;7088;4449;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_l_direction_11;0;7192;4343;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_l_rotate_1;0;6868;4163;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_l_rotate_2;0;6990;4041;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_l_rotate_3;0;7225;2951;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_l_rotate_4;0;7347;2829;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_r;0;7088;4553;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_r_direction_1;0;2726;4924;102;106;120;120;0.5;0.5188679245283019
+Svg/button_xbox_analog_r_direction_2;0;3527;4838;106;102;120;120;0.4811320754716981;0.5
+Svg/button_xbox_analog_r_direction_3;0;7607;991;102;106;120;120;0.5;0.4811320754716981
+Svg/button_xbox_analog_r_direction_4;0;3635;4838;106;102;120;120;0.5188679245283019;0.5
+Svg/button_xbox_analog_r_direction_5;0;1354;4947;104;104;120;120;0.49038461538461536;0.5096153846153846
+Svg/button_xbox_analog_r_direction_6;0;1460;4947;104;104;120;120;0.49038461538461536;0.49038461538461536
+Svg/button_xbox_analog_r_direction_7;0;1566;4947;104;104;120;120;0.5096153846153846;0.49038461538461536
+Svg/button_xbox_analog_r_direction_8;0;1672;4947;104;104;120;120;0.5096153846153846;0.5096153846153846
+Svg/button_xbox_analog_r_direction_9;0;7192;4447;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_r_direction_10;0;7192;4551;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_r_direction_11;0;7298;4249;102;102;120;120;0.5;0.5
+Svg/button_xbox_analog_r_rotate_1;0;5402;1617;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_r_rotate_2;0;5402;1721;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_r_rotate_3;0;4833;1465;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_r_rotate_4;1;6707;3346;102;111;120;120;0.5405405405405406;0.5
+Svg/button_xbox_analog_trigger_dark_1;1;5443;2701;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_analog_trigger_dark_2;1;5833;3509;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_analog_trigger_dark_3;1;5507;1933;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_analog_trigger_dark_4;1;2413;4852;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_analog_trigger_light_1;1;2511;4852;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_analog_trigger_light_2;1;2609;4852;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_analog_trigger_light_3;1;2707;4852;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_analog_trigger_light_4;1;2805;4852;96;70;120;120;0.5;0.4791666666666667
+Svg/button_xbox_digital_a_1;0;7296;4353;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_2;0;7296;4457;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_3;0;7296;4561;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_4;0;7402;4251;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_5;0;7506;4251;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_6;0;7610;4251;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_7;0;7400;4355;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_8;0;7400;4459;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_9;0;7504;4355;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_10;0;7504;4459;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_11;0;7608;4355;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_a_12;0;7608;4459;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_analog_click_dark_1;0;7400;4563;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_analog_click_dark_2;0;7504;4563;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_analog_click_dark_3;0;7608;4563;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_analog_click_dark_4;0;7347;2933;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xbox_digital_analog_click_dark_5;0;3419;4942;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xbox_digital_analog_click_dark_6;0;3523;4942;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xbox_digital_analog_click_light_1;0;7338;3034;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_analog_click_light_2;0;5110;1489;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_analog_click_light_3;0;5214;1489;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_analog_click_light_4;1;5983;4808;104;102;120;120;0.5;0.49038461538461536
+Svg/button_xbox_digital_analog_click_light_5;1;6089;4808;104;102;120;120;0.5;0.49038461538461536
+Svg/button_xbox_digital_analog_click_light_6;1;7326;4145;104;102;120;120;0.5;0.49038461538461536
+Svg/button_xbox_digital_b_1;0;3627;4942;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_2;0;3731;4942;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_3;0;3014;4946;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_4;0;3118;4946;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_5;0;7192;4655;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_6;0;7088;4657;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_7;0;7296;4665;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_8;0;7400;4667;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_9;0;7504;4667;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_10;0;7608;4667;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_11;0;7076;4761;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_b_12;0;7076;4865;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_back_1;0;2830;4924;70;74;120;120;0.5;0.5
+Svg/button_xbox_digital_back_2;1;5541;2701;78;70;120;120;0.5;0.5256410256410257
+Svg/button_xbox_digital_bumper_dark_1;1;4996;1085;70;104;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_bumper_dark_2;0;5231;2701;104;70;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_bumper_dark_3;0;5621;3509;104;70;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_bumper_dark_4;0;6072;4317;104;70;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_bumper_light_1;0;5402;1825;104;70;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_bumper_light_2;0;7225;3159;104;70;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_bumper_light_3;0;5337;2701;104;70;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_bumper_light_4;0;5727;3509;104;70;120;120;0.49038461538461536;0.5
+Svg/button_xbox_digital_home_green;0;3835;4942;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_home_white;0;7192;4759;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_menu_1;0;3015;4852;74;74;120;120;0.5;0.5
+Svg/button_xbox_digital_menu_2;0;3222;4946;74;74;120;120;0.5;0.5
+Svg/button_xbox_digital_start_1;1;3298;4958;74;70;120;120;0.5;0.5
+Svg/button_xbox_digital_start_2;1;5931;3509;78;70;120;120;0.5;0.5256410256410257
+Svg/button_xbox_digital_view_1;0;7076;4969;74;74;120;120;0.5;0.5
+Svg/button_xbox_digital_view_2;0;7152;4977;74;74;120;120;0.5;0.5
+Svg/button_xbox_digital_x_1;0;7296;4769;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_2;0;7400;4771;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_3;0;7504;4771;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_4;0;7608;4771;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_5;0;7180;4863;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_6;0;7284;4873;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_7;0;7388;4875;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_8;0;7492;4875;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_9;0;7596;4875;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_10;0;7442;3034;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_11;0;7546;3021;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_x_12;0;7650;3021;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_1;0;7546;3125;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_2;0;7650;3125;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_3;0;7610;3229;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_4;0;7610;3333;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_5;0;7610;3437;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_6;0;7641;1593;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_7;0;7641;1697;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_8;0;7641;1801;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_9;0;7641;1905;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_10;0;7643;2009;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_11;0;7643;2113;102;102;120;120;0.5;0.5
+Svg/button_xbox_digital_y_12;0;7643;2217;102;102;120;120;0.5;0.5
+Svg/button_xbox_dpad_dark_1;0;5231;1909;90;110;120;120;0.5;0.5
+Svg/button_xbox_dpad_dark_2;0;7649;1;110;90;120;120;0.5;0.5
+Svg/button_xbox_dpad_dark_3;0;5323;1909;90;110;120;120;0.5;0.5
+Svg/button_xbox_dpad_dark_4;0;7649;93;110;90;120;120;0.5;0.5
+Svg/button_xbox_dpad_dark_5;1;7669;765;90;120;120;120;0.5;0.5
+Svg/button_xbox_dpad_dark_6;0;7669;277;90;120;120;120;0.5;0.5
+Svg/button_xbox_dpad_dark_7;0;483;4905;120;120;120;120;0.5;0.5
+Svg/button_xbox_dpad_light_1;1;3091;4854;110;90;120;120;0.5;0.5
+Svg/button_xbox_dpad_light_2;0;7649;185;110;90;120;120;0.5;0.5
+Svg/button_xbox_dpad_light_3;1;3203;4854;110;90;120;120;0.5;0.5
+Svg/button_xbox_dpad_light_4;0;1965;4851;110;90;120;120;0.5;0.5
+Svg/button_xbox_dpad_light_5;1;5415;1897;90;120;120;120;0.5;0.5
+Svg/button_xbox_dpad_light_6;0;7669;399;90;120;120;120;0.5;0.5
+Svg/button_xbox_dpad_light_7;0;6417;2701;120;120;120;120;0.5;0.5
+Svg/button_xboxone_analog_blank;0;7643;2321;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_blank_direction_1;0;3847;4823;102;106;120;120;0.5;0.5188679245283019
+Svg/button_xboxone_analog_blank_direction_2;0;3951;4823;106;102;120;120;0.4811320754716981;0.5
+Svg/button_xboxone_analog_blank_direction_3;1;4915;4816;106;102;120;120;0.5;0.4811320754716981
+Svg/button_xboxone_analog_blank_direction_4;0;4059;4823;106;102;120;120;0.5188679245283019;0.5
+Svg/button_xboxone_analog_blank_direction_5;0;1778;4947;104;104;120;120;0.49038461538461536;0.5096153846153846
+Svg/button_xboxone_analog_blank_direction_6;0;1884;4947;104;104;120;120;0.49038461538461536;0.49038461538461536
+Svg/button_xboxone_analog_blank_direction_7;0;4595;4816;104;104;120;120;0.5096153846153846;0.49038461538461536
+Svg/button_xboxone_analog_blank_direction_8;0;4701;4816;104;104;120;120;0.5096153846153846;0.5096153846153846
+Svg/button_xboxone_analog_blank_direction_9;0;5451;4914;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_blank_direction_10;0;5555;4914;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_blank_direction_11;0;3743;4838;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_blank_rotate_1;0;7103;4041;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_blank_rotate_2;0;7225;3055;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_blank_rotate_3;0;7216;4041;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_blank_rotate_4;0;7329;4041;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_l;0;5659;4914;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_l_direction_1;1;5023;4816;106;102;120;120;0.5;0.5188679245283019
+Svg/button_xboxone_analog_l_direction_2;0;4167;4823;106;102;120;120;0.4811320754716981;0.5
+Svg/button_xboxone_analog_l_direction_3;1;5131;4816;106;102;120;120;0.5;0.4811320754716981
+Svg/button_xboxone_analog_l_direction_4;0;4275;4823;106;102;120;120;0.5188679245283019;0.5
+Svg/button_xboxone_analog_l_direction_5;0;5451;4808;104;104;120;120;0.49038461538461536;0.5096153846153846
+Svg/button_xboxone_analog_l_direction_6;0;5557;4808;104;104;120;120;0.49038461538461536;0.49038461538461536
+Svg/button_xboxone_analog_l_direction_7;0;5663;4808;104;104;120;120;0.5096153846153846;0.49038461538461536
+Svg/button_xboxone_analog_l_direction_8;0;5769;4808;104;104;120;120;0.5096153846153846;0.5096153846153846
+Svg/button_xboxone_analog_l_direction_9;0;5763;4914;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_l_direction_10;0;5867;4914;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_l_direction_11;0;7192;4343;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_l_rotate_1;0;7442;4041;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_l_rotate_2;0;7555;4041;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_l_rotate_3;0;5508;1829;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_l_rotate_4;0;7494;769;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_r;0;5971;4912;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_r_direction_1;1;5239;4816;106;102;120;120;0.5;0.5188679245283019
+Svg/button_xboxone_analog_r_direction_2;0;4383;4823;106;102;120;120;0.4811320754716981;0.5
+Svg/button_xboxone_analog_r_direction_3;1;5875;4808;106;102;120;120;0.5;0.4811320754716981
+Svg/button_xboxone_analog_r_direction_4;0;4807;4816;106;102;120;120;0.5188679245283019;0.5
+Svg/button_xboxone_analog_r_direction_5;0;7432;4145;104;104;120;120;0.49038461538461536;0.5096153846153846
+Svg/button_xboxone_analog_r_direction_6;0;7538;4145;104;104;120;120;0.49038461538461536;0.49038461538461536
+Svg/button_xboxone_analog_r_direction_7;0;7644;4145;104;104;120;120;0.5096153846153846;0.49038461538461536
+Svg/button_xboxone_analog_r_direction_8;0;6984;4237;104;104;120;120;0.5096153846153846;0.5096153846153846
+Svg/button_xboxone_analog_r_direction_9;0;6075;4912;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_r_direction_10;0;4595;4922;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_r_direction_11;0;7298;4249;102;102;120;120;0.5;0.5
+Svg/button_xboxone_analog_r_rotate_1;0;7494;873;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_r_rotate_2;0;7494;977;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_r_rotate_3;0;7494;1081;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_analog_r_rotate_4;0;1852;4843;111;102;120;120;0.5405405405405406;0.5
+Svg/button_xboxone_digital_analog_click_dark_1;0;4699;4922;102;102;120;120;0.5;0.5
+Svg/button_xboxone_digital_analog_click_dark_2;0;3951;4927;102;102;120;120;0.5;0.5
+Svg/button_xboxone_digital_analog_click_dark_3;0;4055;4927;102;102;120;120;0.5;0.5
+Svg/button_xboxone_digital_analog_click_dark_4;0;4471;4927;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xboxone_digital_analog_click_dark_5;1;4803;4922;99;102;120;120;0.5;0.46464646464646464
+Svg/button_xboxone_digital_analog_click_dark_6;0;4904;4920;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xboxone_digital_analog_click_dark_7;0;5008;4920;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xboxone_digital_analog_click_dark_8;0;5112;4920;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xboxone_digital_analog_click_dark_9;0;5216;4920;102;99;120;120;0.5;0.46464646464646464
+Svg/button_xboxone_digital_analog_click_light_1;0;4159;4927;102;102;120;120;0.5;0.5
+Svg/button_xboxone_digital_analog_click_light_2;0;4263;4927;102;102;120;120;0.5;0.5
+Svg/button_xboxone_digital_analog_click_light_3;0;4367;4927;102;102;120;120;0.5;0.5
+Svg/button_xboxone_digital_analog_click_light_4;0;7090;4237;102;104;120;120;0.5;0.49038461538461536
+Svg/button_xboxone_digital_analog_click_light_5;0;6984;4343;102;104;120;120;0.5;0.49038461538461536
+Svg/button_xboxone_digital_analog_click_light_6;0;7194;4237;102;104;120;120;0.5;0.49038461538461536
+Svg/button_xboxone_digital_analog_click_light_7;0;6984;4449;102;104;120;120;0.5;0.49038461538461536
+Svg/button_xboxone_digital_analog_click_light_8;0;7088;4343;102;104;120;120;0.5;0.49038461538461536
+Svg/button_xboxone_digital_analog_click_light_9;0;6984;4555;102;104;120;120;0.5;0.49038461538461536
+Svg/button_xboxone_dpad_dark_1;1;2902;4944;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_dark_2;0;2077;4851;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_dark_3;1;6990;4145;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_dark_4;0;2189;4851;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_dark_5;0;1608;4843;120;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_dark_6;0;7669;521;90;120;120;120;0.5;0.5
+Svg/button_xboxone_dpad_dark_7;0;6868;4041;120;120;120;120;0.5;0.5
+Svg/button_xboxone_dpad_light_1;1;7102;4145;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_light_2;0;2301;4851;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_light_3;1;7214;4145;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_light_4;0;2903;4852;110;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_light_5;0;1730;4843;120;90;120;120;0.5;0.5
+Svg/button_xboxone_dpad_light_6;0;7669;643;90;120;120;120;0.5;0.5
+Svg/button_xboxone_dpad_light_7;0;7225;2829;120;120;120;120;0.5;0.5

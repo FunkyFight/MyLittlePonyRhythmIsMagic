@@ -1,0 +1,18 @@
+#
+# Sprite sheet data for MonoGame.
+#
+# To learn how to import these sprites into your MonoGame project visit:
+# https://www.codeandweb.com/texturepacker/monogame
+#
+# Sprite sheet: main_atlas.png (312 x 64)
+# $TexturePacker:SmartUpdate:57039cc9ad950e30cd984addbee17fdd:e204b135dd7a604a0c51a64e04d3a371:bb8c871ba50dcb594d48391b0a334787$
+#
+
+applejack afk1;0;158;27;22;27;32;37;0.5454545454545454;0.5370370370370371
+applejack afk2;0;182;27;23;25;32;37;0.5652173913043478;0.5
+applejack afk3;0;132;27;24;26;32;37;0.5833333333333334;0.5192307692307693
+rainbowdash-idle1;0;1;27;41;36;42;37;0.4878048780487805;0.4861111111111111
+rainbowdash-idle2;0;88;27;42;33;42;37;0.5;0.4696969696969697
+rainbowdash-idle3;0;44;27;42;34;42;37;0.5;0.4852941176470588
+Sprite-0001;0;253;1;57;62;64;64;0.49122807017543857;0.5161290322580645
+Sprite-0002;0;1;1;250;24;256;64;0.504;0.5833333333333334
