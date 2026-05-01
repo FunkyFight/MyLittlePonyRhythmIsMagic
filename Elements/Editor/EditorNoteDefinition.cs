@@ -107,18 +107,18 @@ public sealed class EditorNoteDefinition
         return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet));
     }
 
-    public double GetStart(double noteSongPosition, double crotchet, int variantIndex, bool beforeUsesOuterTiming)
+    public double GetStart(double noteSongPosition, double crotchet, int variantIndex, bool beforeUsesOuterTiming, bool forceBigLeapTiming = false)
     {
-        return Timing.GetStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming));
+        return Timing.GetStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming));
     }
 
-    public double GetHitWindowStart(double noteSongPosition, double crotchet, int variantIndex, bool beforeUsesOuterTiming)
+    public double GetHitWindowStart(double noteSongPosition, double crotchet, int variantIndex, bool beforeUsesOuterTiming, bool forceBigLeapTiming = false)
     {
-        return Timing.GetHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming));
+        return Timing.GetHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming));
     }
 
-    public double GetHitWindowEnd(double noteSongPosition, double crotchet, int variantIndex, bool rainbowTargetsOuter)
+    public double GetHitWindowEnd(double noteSongPosition, double crotchet, int variantIndex, bool rainbowTargetsOuter, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false)
     {
-        return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, rainbowTargetsOuter: rainbowTargetsOuter));
+        return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, rainbowTargetsOuter: rainbowTargetsOuter, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming));
     }
 }

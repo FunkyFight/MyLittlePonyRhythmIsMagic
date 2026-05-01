@@ -4,5 +4,8 @@ public enum SeeSawDirection
 {
     Outer,
     Inner,
-    Opposite
+    Opposite,
+    OuterBigLeap,
+    InnerBigLeap,
+    OppositeBigLeap,
 }

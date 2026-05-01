@@ -1,7 +1,6 @@
-using System.Drawing;
-using System.Numerics;
 using GameCore.GameObjects;
 using GameCore.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rhythm.Note;
 using Rhythm.Note.Visual;

@@ -5,8 +5,8 @@ public sealed class SeeSawEditorNote : IEditorNoteDefinitionProvider
     public EditorNoteDefinition Create()
     {
         return new EditorNoteDefinitionBuilder(EditorNoteKind.SeeSaw, "See Saw")
-            .Occupies(beforeBeats: 3, afterBeats: 3)
-            .HitWindow(beforeBeats: 0, afterBeats: 3)
+            .Occupies(beforeBeats: 4, afterBeats: 4)
+            .HitWindow(beforeBeats: 0, afterBeats: 4)
             .Timing(new SeeSawEditorNoteTiming())
             .Matches(SeeSawChartNoteMatcher.Matches)
             .Variant("SeeSawTowardOuter", SeeSawAction.TowardOuter.ToAdditionnalData())

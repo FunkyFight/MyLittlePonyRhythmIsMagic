@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SongName>See Saw</SongName>
-  <BeatmapName>tutorialseesaw</BeatmapName>
-  <Beatmapper>FunkyFight</Beatmapper>
-  <ArtistName>Tsunku, arranged by Koichi Yuasa</ArtistName>
+  <BeatmapName>See Saw</BeatmapName>
+  <Beatmapper>FunkyFight + rhythm heaven</Beatmapper>
+  <ArtistName>Tsuku</ArtistName>
   <MusicName>See Saw</MusicName>
-  <SongPath>Songs\metronome.wav</SongPath>
-  <BPM>100</BPM>
-  <Offset>0.2</Offset>
+  <SongPath>Songs\See Saw.mp3</SongPath>
+  <BPM>120</BPM>
+  <Offset>6.4</Offset>
   <Notes>
     <Note>
-      <SongPosition>3.2</SongPosition>
+      <SongPosition>6.4</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
@@ -18,7 +18,15 @@
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>5</SongPosition>
+      <SongPosition>8.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>9.4</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
@@ -26,35 +34,11 @@
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>6.8</SongPosition>
+      <SongPosition>11.4</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>8.6</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>10.399999999999999</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>12.2</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="action" Value="see_saw_toward_opposite" />
       </AdditionnalData>
     </Note>
   </Notes>
