@@ -49,5 +49,53 @@
         <Entry Key="action" Value="see_saw_toward_opposite" />
       </AdditionnalData>
     </Note>
+    <Note>
+      <SongPosition>14.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>16.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>18.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.9</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>20.9</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>22.9</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer_big_leap" />
+      </AdditionnalData>
+    </Note>
   </Notes>
 </Chart>

@@ -261,11 +261,22 @@ public class SeeSawScene : Scene
             GetBeamRotationToward(SeeSawJumper.APPLEJACK));
 
         double visualApproachDuration = approachDuration ?? rainbowPath.GetApproachDuration(crotchet);
+        float handoffProgression = jumperStartProgression;
+
+        if (!isBigLeap && !approachDuration.HasValue && !counterJumpDuration.HasValue)
+        {
+            double applejackPhaseDuration = applejackCounterJump.Path.GetApproachDuration(crotchet) / 2.0;
+            double rainbowPhaseDuration = rainbowPath.GetApproachDuration(crotchet) / 2.0;
+            visualApproachDuration = applejackPhaseDuration + rainbowPhaseDuration;
+            handoffProgression = (float)(applejackPhaseDuration / visualApproachDuration);
+            counterRotationProgression = handoffProgression;
+        }
+
         float counterJumpEndProgression = counterJumpDuration.HasValue
             ? (float)(counterJumpDuration.Value / visualApproachDuration)
-            : counterRotationProgression;
+            : handoffProgression;
 
-        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, counterRotationProgression, jumperStartProgression, approachDuration: visualApproachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier, counterJumpEndProgression: counterJumpEndProgression);
+        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, counterRotationProgression, handoffProgression, approachDuration: visualApproachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier, counterJumpEndProgression: counterJumpEndProgression);
     }
 
     /// <summary>
@@ -416,8 +427,17 @@ public class SeeSawScene : Scene
             if (GetBaseDirection(action.Direction) == SeeSawDirection.Opposite)
             {
                 Vector2 applejackFromPosition = GetApplejackPositionBefore(note);
-                return SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPosition, applejackInnerPos, applejackOuterPos);
+                Vector2 oppositeRainbowFromPosition = GetRainbowPositionBefore(note);
+                Vector2 rainbowTargetPosition = GetOppositeRainbowPosition(applejackFromPosition);
+                double applejackPhaseDuration = SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPosition, applejackInnerPos, applejackOuterPos) / 2.0;
+                double rainbowPhaseDuration = new SeeSawJumpPath(oppositeRainbowFromPosition, rainbowTargetPosition, rainbowInnerPos, rainbowOuterPos).GetApproachDuration(crotchet) / 2.0;
+                return applejackPhaseDuration + rainbowPhaseDuration;
             }
+
+            Vector2 pairedRainbowFromPosition = GetRainbowPositionBefore(note);
+            Vector2 applejackFromPositionForPairedJump = GetApplejackPositionBefore(note);
+            return (SeeSawVisualNote.GetApproachDuration(crotchet, pairedRainbowFromPosition, rainbowInnerPos, rainbowOuterPos)
+                + SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPositionForPairedJump, applejackInnerPos, applejackOuterPos)) / 2.0;
         }
 
         Vector2 rainbowFromPosition = GetRainbowPositionBefore(note);

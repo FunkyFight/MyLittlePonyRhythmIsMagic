@@ -47,7 +47,7 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
     private static double GetBeforeBeats(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
         SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
-        if (action.Direction == SeeSawDirection.Opposite)
+        if (!action.IsBigLeap)
             return GetPhaseBeats(context.BeforeUsesOuterTiming) + GetPhaseBeats(context.AfterUsesOuterTiming);
 
         return GetBeforeBeats(context);

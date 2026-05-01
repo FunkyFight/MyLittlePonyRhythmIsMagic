@@ -241,9 +241,9 @@ public sealed class BeatmapEditorDocument
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         EditorNoteVariant variant = definition.GetVariant(variantIndex);
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(variant, state);
-        bool afterUsesOuterTiming = GetAfterUsesOuterTiming(variant, state);
+        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(variant, state);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
-        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, afterUsesOuterTiming);
+        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming);
     }
 
     public double GetBlockingStart(ChartNote note, EditorNoteDefinition definition)
@@ -257,9 +257,9 @@ public sealed class BeatmapEditorDocument
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         EditorNoteVariant variant = definition.GetVariant(variantIndex);
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(variant, state);
-        bool afterUsesOuterTiming = GetAfterUsesOuterTiming(variant, state);
+        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(variant, state);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
-        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, afterUsesOuterTiming);
+        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming);
     }
 
     public double GetContextualEnd(ChartNote note, EditorNoteDefinition definition)
@@ -275,9 +275,9 @@ public sealed class BeatmapEditorDocument
         SeeSawEditorState state = GetSeeSawStateBefore(songPosition);
         EditorNoteVariant variant = definition.GetVariant(variantIndex);
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(variant, state);
-        bool afterUsesOuterTiming = GetAfterUsesOuterTiming(variant, state);
+        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(variant, state);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
-        return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, afterUsesOuterTiming);
+        return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming);
     }
 
     private ChartNote FindBlockingNote(EditorNoteDefinition placedDefinition, double songPosition, int variantIndex)
@@ -358,6 +358,15 @@ public sealed class BeatmapEditorDocument
             SeeSawDirection.Opposite => state.RainbowIsOuter,
             _ => action.Apply(state).RainbowIsOuter
         };
+    }
+
+    private bool GetCounterUsesOuterTiming(EditorNoteVariant variant, SeeSawEditorState state)
+    {
+        SeeSawAction action = SeeSawAction.FromVariant(variant);
+        if (action.Direction == SeeSawDirection.Opposite || action.Direction == SeeSawDirection.OppositeBigLeap)
+            return state.RainbowIsOuter;
+
+        return state.ApplejackIsOuter;
     }
 
     private void NormalizeChart()
