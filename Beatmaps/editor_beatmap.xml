@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SongName>See Saw</SongName>
-  <BeatmapName>editor_beatmap</BeatmapName>
+  <BeatmapName>tutorialseesaw</BeatmapName>
   <Beatmapper>FunkyFight</Beatmapper>
   <ArtistName>Tsunku, arranged by Koichi Yuasa</ArtistName>
   <MusicName>See Saw</MusicName>
-  <SongPath>Songs\See Saw.mp3</SongPath>
-  <BPM>120</BPM>
-  <Offset>0.15</Offset>
-  <Notes />
+  <SongPath>Songs\metronome.wav</SongPath>
+  <BPM>100</BPM>
+  <Offset>0.2</Offset>
+  <Notes>
+    <Note>
+      <SongPosition>3.2</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>5</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>6.8</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>8.6</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.399999999999999</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>12.2</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
 </Chart>

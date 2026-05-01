@@ -89,24 +89,29 @@ public sealed class BeatmapEditorDocument
 
         SortNotes();
 
-        using FileStream stream = File.Create(ChartPath);
-        XmlSerializer serializer = new(typeof(Chart));
-        serializer.Serialize(stream, Chart);
+        string tempPath = ChartPath + ".tmp";
+        using (FileStream stream = File.Create(tempPath))
+        {
+            XmlSerializer serializer = new(typeof(Chart));
+            serializer.Serialize(stream, Chart);
+        }
+
+        File.Move(tempPath, ChartPath, overwrite: true);
         IsDirty = false;
     }
 
-    public bool TryPlaceNote(EditorNoteDefinition definition, double songPosition, out ChartNote placedNote, out string reason)
+    public bool TryPlaceNote(EditorNoteDefinition definition, double songPosition, int variantIndex, out ChartNote placedNote, out string reason)
     {
         placedNote = null;
         songPosition = Math.Max(0, songPosition);
 
-        if (FindBlockingNote(definition, songPosition) is ChartNote blocker)
+        if (FindBlockingNote(definition, songPosition, variantIndex) is ChartNote blocker)
         {
             reason = $"Blocked by {EditorNoteDefinitions.FromChartNote(blocker).DisplayName} at {blocker.SongPosition:0.000}s";
             return false;
         }
 
-        placedNote = definition.CreateChartNote(songPosition, Crotchet);
+        placedNote = definition.CreateChartNote(songPosition, Crotchet, variantIndex);
         Chart.Notes.Add(placedNote);
         SortNotes();
         IsDirty = true;
@@ -140,7 +145,9 @@ public sealed class BeatmapEditorDocument
         foreach (ChartNote note in Chart.Notes)
         {
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
-            if (definition.Occupies(note.SongPosition, Crotchet, songPosition))
+            double start = GetContextualStart(note, definition);
+            double end = GetContextualEnd(note, definition);
+            if (songPosition >= start && songPosition <= end)
                 return true;
         }
 
@@ -152,7 +159,7 @@ public sealed class BeatmapEditorDocument
         foreach (ChartNote note in Chart.Notes)
         {
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
-            if (definition.GetEnd(note.SongPosition, Crotchet) >= startSongPosition && definition.GetStart(note.SongPosition, Crotchet) <= endSongPosition)
+            if (GetContextualHitWindowEnd(note, definition) >= startSongPosition && GetContextualStart(note, definition) <= endSongPosition)
                 yield return note;
         }
     }
@@ -186,6 +193,19 @@ public sealed class BeatmapEditorDocument
         IsDirty = true;
     }
 
+    public void SetChartPath(string chartPath)
+    {
+        if (string.IsNullOrWhiteSpace(chartPath))
+            return;
+
+        ChartPath = chartPath;
+
+        if (string.IsNullOrWhiteSpace(Chart.BeatmapName) || Chart.BeatmapName == "Unknown")
+            Chart.BeatmapName = Path.GetFileNameWithoutExtension(chartPath);
+
+        IsDirty = true;
+    }
+
     public void SetMetadata(string beatmapName = null, string beatmapper = null, string artistName = null, string musicName = null)
     {
         if (beatmapName != null)
@@ -204,22 +224,116 @@ public sealed class BeatmapEditorDocument
         IsDirty = true;
     }
 
-    private ChartNote FindBlockingNote(EditorNoteDefinition placedDefinition, double songPosition)
+    public double GetContextualHitWindowEnd(ChartNote note, EditorNoteDefinition definition)
     {
-        double placedStart = placedDefinition.GetHitWindowStart(songPosition, Crotchet);
-        double placedEnd = placedDefinition.GetHitWindowEnd(songPosition, Crotchet);
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
+        bool rainbowTargetsOuter = GetRainbowTargetIsOuter(definition.GetVariant(variantIndex), state);
+        return definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, rainbowTargetsOuter);
+    }
+
+    public double GetContextualStart(ChartNote note, EditorNoteDefinition definition)
+    {
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
+        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(definition.GetVariant(variantIndex), state);
+        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming);
+    }
+
+    public double GetBlockingStart(ChartNote note, EditorNoteDefinition definition)
+    {
+        return GetBlockingStart(definition, note.SongPosition);
+    }
+
+    public double GetContextualHitWindowStart(ChartNote note, EditorNoteDefinition definition)
+    {
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
+        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(definition.GetVariant(variantIndex), state);
+        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming);
+    }
+
+    public double GetContextualEnd(ChartNote note, EditorNoteDefinition definition)
+    {
+        if (definition.Kind == EditorNoteKind.SeeSaw)
+            return note.SongPosition;
+
+        return definition.GetEnd(note.SongPosition, Crotchet);
+    }
+
+    public double GetContextualStart(EditorNoteDefinition definition, double songPosition, int variantIndex)
+    {
+        SeeSawEditorState state = GetSeeSawStateBefore(songPosition);
+        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(definition.GetVariant(variantIndex), state);
+        return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming);
+    }
+
+    private ChartNote FindBlockingNote(EditorNoteDefinition placedDefinition, double songPosition, int variantIndex)
+    {
+        double placedStart = GetBlockingStart(placedDefinition, songPosition);
+        double placedEnd = placedDefinition.Kind == EditorNoteKind.SeeSaw ? songPosition : placedDefinition.GetEnd(songPosition, Crotchet);
 
         foreach (ChartNote note in Chart.Notes)
         {
             EditorNoteDefinition existingDefinition = EditorNoteDefinitions.FromChartNote(note);
-            double existingStart = existingDefinition.GetHitWindowStart(note.SongPosition, Crotchet);
-            double existingEnd = existingDefinition.GetHitWindowEnd(note.SongPosition, Crotchet);
+            double existingStart = GetBlockingStart(existingDefinition, note.SongPosition);
+            double existingEnd = GetContextualEnd(note, existingDefinition);
+
+            if (TouchesAllowedBoundary(placedDefinition, existingDefinition, placedStart, placedEnd, existingStart, existingEnd))
+                continue;
 
             if (placedStart < existingEnd - HitWindowEpsilonSeconds && placedEnd > existingStart + HitWindowEpsilonSeconds)
                 return note;
         }
 
         return null;
+    }
+
+    private bool TouchesAllowedBoundary(EditorNoteDefinition placedDefinition, EditorNoteDefinition existingDefinition, double placedStart, double placedEnd, double existingStart, double existingEnd)
+    {
+        if (placedDefinition.Kind != EditorNoteKind.SeeSaw || existingDefinition.Kind != EditorNoteKind.SeeSaw)
+            return false;
+
+        return Math.Abs(placedEnd - existingEnd) <= HitWindowEpsilonSeconds
+            || Math.Abs(placedStart - existingEnd) <= HitWindowEpsilonSeconds
+            || Math.Abs(existingStart - placedEnd) <= HitWindowEpsilonSeconds;
+    }
+
+    private double GetBlockingStart(EditorNoteDefinition definition, double songPosition)
+    {
+        if (definition.Kind == EditorNoteKind.SeeSaw)
+            return songPosition - 2 * Crotchet;
+
+        return definition.GetStart(songPosition, Crotchet);
+    }
+
+    private SeeSawEditorState GetSeeSawStateBefore(double songPosition)
+    {
+        SeeSawEditorState state = new(rainbowIsOuter: true, applejackIsOuter: false);
+
+        foreach (ChartNote note in Chart.Notes.Where(note => note.SongPosition < songPosition - HitWindowEpsilonSeconds).OrderBy(note => note.SongPosition))
+        {
+            if (note.AdditionnalData == null || !note.AdditionnalData.TryGetValue("action", out string actionValue))
+                continue;
+
+            if (SeeSawAction.TryParse(actionValue, out SeeSawAction action))
+                state = action.Apply(state);
+        }
+
+        return state;
+    }
+
+    private bool GetRainbowTargetIsOuter(EditorNoteVariant variant, SeeSawEditorState state)
+    {
+        return SeeSawAction.FromVariant(variant).Apply(state).RainbowIsOuter;
+    }
+
+    private bool GetBeforeUsesOuterTiming(EditorNoteVariant variant, SeeSawEditorState state)
+    {
+        if (SeeSawAction.FromVariant(variant).Direction == SeeSawDirection.Opposite)
+            return state.ApplejackIsOuter;
+
+        return state.RainbowIsOuter;
     }
 
     private void NormalizeChart()

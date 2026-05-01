@@ -11,6 +11,7 @@ using MLP_RiM;
 using Rhythm.Note;
 using Rhythm.Note.Visual;
 using TexturePackerMonoGameDefinitions;
+using System.Collections.Generic;
 using Vector2 = System.Numerics.Vector2;
 
 public class SeeSawScene : Scene
@@ -23,11 +24,13 @@ public class SeeSawScene : Scene
 
     private AnimationStateMachine RainbowState;
     private AnimationStateMachine ApplejackState;
-    private VisualNoteManager<VisualNote> seeSawVisuals;
+    private VisualNoteManager<SeeSawVisualNote> seeSawVisuals;
+    private Dictionary<SeeSawJumper, GameObject> seeSawJumpers;
+    private Dictionary<SeeSawJumper, AnimationStateMachine> seeSawAnimationStates;
     private bool[] requestBop = [true, true];
 
-    private int ponyScale = 7;
-    private int seeSawScale = 2;
+    private int ponyScale = 3;
+    private int seeSawScale = 1;
 
     public short turn = 0;
 
@@ -37,6 +40,8 @@ public class SeeSawScene : Scene
     private System.Numerics.Vector2 rainbowOuterPos;
     private System.Numerics.Vector2 rainbowInnerPos;
     private ChartPlayer _visualChartPlayer;
+    private Note _drivingVisualNote;
+    private double _lastSongPosition = double.NaN;
 
     public SeeSawScene(Game1 game) : base("See Saw")
     {
@@ -56,25 +61,35 @@ public class SeeSawScene : Scene
         SeeSaw2.sprite.CenterOrigin();
 
         SeeSaw1.Scale = new System.Numerics.Vector2(seeSawScale, seeSawScale);
-        SeeSaw2.Scale = new System.Numerics.Vector2(seeSawScale + 1, seeSawScale);
+        SeeSaw2.Scale = new System.Numerics.Vector2(seeSawScale+0.5f, seeSawScale);
         Applejack.Scale = new System.Numerics.Vector2(ponyScale, ponyScale);
         Rainbow.Scale = new System.Numerics.Vector2(ponyScale, ponyScale);
 
-        SeeSaw2.Position = new System.Numerics.Vector2(vp.Width / 2, vp.Height / 2 + vp.Height / 4);
+        SeeSaw2.Position = new System.Numerics.Vector2(vp.Width * 0.4914f, vp.Height * 0.8008f);
         SeeSaw1.Position = new System.Numerics.Vector2(vp.Width / 2, vp.Height / 2 + (vp.Height / 5) * 1.5f);
-        Rainbow.Position = new System.Numerics.Vector2(vp.Width / 2 + 270, vp.Height / 2 + 210);
-        Applejack.Position = new System.Numerics.Vector2(vp.Width / 2 - 500, vp.Height / 2 + 300);
+        Rainbow.Position = new Vector2(vp.Width * 0.6351f, vp.Height * 0.4833f);
+        Applejack.Position = new Vector2(vp.Width * 0.0289f, vp.Height * 0.6139f);
+        seeSawJumpers = new Dictionary<SeeSawJumper, GameObject>
+        {
+            [SeeSawJumper.APPLEJACK] = Applejack,
+            [SeeSawJumper.RAINBOW_DASH] = Rainbow
+        };
 
         applejackExitPos = Applejack.Position;
-        applejackOuterPos = new System.Numerics.Vector2(vp.Width / 2 - 300, Rainbow.Position.Y);
-        applejackInnerPos = new System.Numerics.Vector2(vp.Width / 2 - 50, Applejack.Position.Y);
+        applejackOuterPos = new Vector2(vp.Width * 0.1984f, vp.Height * 0.5444f);
+        applejackInnerPos = new Vector2(vp.Width * 0.3406f, vp.Height * 0.5042f);
         rainbowOuterPos = Rainbow.Position;
-        rainbowInnerPos = new System.Numerics.Vector2(vp.Width / 2 + 100, Rainbow.Position.Y);
+        rainbowInnerPos = new Vector2(vp.Width * 0.4953f, vp.Height * 0.4375f);
 
         SeeSaw2.Rotation = MathHelper.ToRadians(10);
         Rainbow.Rotation = MathHelper.ToRadians(10);
 
         SetupAnimations();
+        seeSawAnimationStates = new Dictionary<SeeSawJumper, AnimationStateMachine>
+        {
+            [SeeSawJumper.APPLEJACK] = ApplejackState,
+            [SeeSawJumper.RAINBOW_DASH] = RainbowState
+        };
 
         GLOBALS.beatmapPlayer.BeatmapStarted += () =>
         {
@@ -85,6 +100,11 @@ public class SeeSawScene : Scene
                 requestBop = [true, true];
             };
         };
+
+        GameObjects.Add(Rainbow);
+        GameObjects.Add(Applejack);
+        GameObjects.Add(SeeSaw1);
+        GameObjects.Add(SeeSaw2);
     }
 
     private void SetupVisuals()
@@ -93,7 +113,7 @@ public class SeeSawScene : Scene
 
         _visualChartPlayer = new ChartPlayer(GLOBALS.beatmapPlayer.CurrentChart, Rhythm.Note.ReactionRules.RhythmHeavenLike());
 
-        seeSawVisuals = new VisualNoteManager<VisualNote>(_visualChartPlayer, note =>
+        seeSawVisuals = new VisualNoteManager<SeeSawVisualNote>(_visualChartPlayer, note =>
         {
             if (note.AdditionnalData == null || !note.AdditionnalData.ContainsKey("action")) 
                 return null;
@@ -101,52 +121,120 @@ public class SeeSawScene : Scene
             string action = note.AdditionnalData["action"];
             Vector2 rainbowFromPos = GetRainbowPositionBefore(note);
             Vector2 applejackFromPos = GetApplejackPositionBefore(note);
-            float fromRotation = GetBeamRotationForRainbowPosition(rainbowFromPos);
+            float fromRotation = GetBeamRotationBefore(note);
 
             switch(action)
             {
                 case "see_saw_toward_outer":
-                    return new SeeSawVisualNote(note, Rainbow, rainbowFromPos, rainbowOuterPos, crotchet, SeeSaw2, fromRotation, MathHelper.ToRadians(10), rainbowInnerPos, rainbowOuterPos, Applejack, applejackFromPos, applejackOuterPos, MathHelper.ToRadians(-10), applejackInnerPos, applejackOuterPos);
+                case "see_saw_toward_outer_big_leap":
+                {
+                    float counterTarget = GetBeamRotationToward(SeeSawJumper.APPLEJACK);      // Applejack atterrit -> beam penche a gauche
+                    float target = GetBeamRotationToward(SeeSawJumper.RAINBOW_DASH);          // Rainbow atterrit -> beam penche a droite
+                    return new SeeSawVisualNote(note, seeSawJumpers, seeSawAnimationStates, SeeSawJumper.RAINBOW_DASH, rainbowFromPos, rainbowOuterPos, crotchet, SeeSaw2, fromRotation, target, rainbowInnerPos, rainbowOuterPos, SeeSawJumper.APPLEJACK, applejackFromPos, applejackOuterPos, counterTarget, applejackInnerPos, applejackOuterPos, 0.4375f, 0.4375f, () => ReferenceEquals(_drivingVisualNote, note));
+                }
                 case "see_saw_toward_inner":
-                    return new SeeSawVisualNote(note, Rainbow, rainbowFromPos, rainbowInnerPos, crotchet, SeeSaw2, fromRotation, MathHelper.ToRadians(10), rainbowInnerPos, rainbowOuterPos, Applejack, applejackFromPos, applejackInnerPos, MathHelper.ToRadians(-10), applejackInnerPos, applejackOuterPos);
+                case "see_saw_toward_inner_big_leap":
+                {
+                    float counterTarget = GetBeamRotationToward(SeeSawJumper.APPLEJACK);      // Applejack atterrit -> beam penche a gauche
+                    float target = GetBeamRotationToward(SeeSawJumper.RAINBOW_DASH);          // Rainbow atterrit -> beam penche a droite
+                    return new SeeSawVisualNote(note, seeSawJumpers, seeSawAnimationStates, SeeSawJumper.RAINBOW_DASH, rainbowFromPos, rainbowInnerPos, crotchet, SeeSaw2, fromRotation, target, rainbowInnerPos, rainbowOuterPos, SeeSawJumper.APPLEJACK, applejackFromPos, applejackInnerPos, counterTarget, applejackInnerPos, applejackOuterPos, canApplyState: () => ReferenceEquals(_drivingVisualNote, note));
+                }
+                case "see_saw_toward_opposite":
+                case "see_saw_toward_opposite_big_leap":
+                {
+                    float counterTarget = GetBeamRotationToward(SeeSawJumper.APPLEJACK);
+                    float target = GetBeamRotationToward(SeeSawJumper.RAINBOW_DASH);
+
+                    Vector2 rainbowTargetPos = GetOppositeRainbowPosition(applejackFromPos);
+
+                    double approachDuration = SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPos, applejackInnerPos, applejackOuterPos);
+                    return new SeeSawVisualNote(note, seeSawJumpers, seeSawAnimationStates, SeeSawJumper.RAINBOW_DASH, rainbowFromPos, rainbowTargetPos, crotchet, SeeSaw2, fromRotation, target, rainbowInnerPos, rainbowOuterPos, SeeSawJumper.APPLEJACK, applejackFromPos, applejackFromPos, counterTarget, applejackInnerPos, applejackOuterPos, canApplyState: () => ReferenceEquals(_drivingVisualNote, note), approachDuration: approachDuration);
+                }
             }
 
             return null; 
         });
 
         seeSawVisuals.LookBehindSeconds = 0;
-        seeSawVisuals.LookAheadSeconds = crotchet * 2.0;
+        seeSawVisuals.LookAheadSeconds = crotchet * 3.0;
+        _lastSongPosition = double.NaN;
     }
 
     private void ApplyTimelineBaseState(double songPosition)
     {
         Vector2 rainbowPosition = rainbowOuterPos;
         Vector2 applejackPosition = applejackExitPos;
+        float beamRotation = MathHelper.ToRadians(10);
 
         foreach (Note note in _visualChartPlayer.Notes)
         {
             if (note.SongPosition > songPosition)
                 break;
 
-            rainbowPosition = GetRainbowTargetPosition(note, rainbowPosition);
+            Vector2 nextRainbowPosition = GetRainbowTargetPosition(note, rainbowPosition, applejackPosition);
             applejackPosition = GetApplejackTargetPosition(note, applejackPosition);
+            rainbowPosition = nextRainbowPosition;
+            beamRotation = GetBeamTargetRotation(note, beamRotation);
         }
 
         Rainbow.Position = rainbowPosition;
         Applejack.Position = applejackPosition;
-        SeeSaw2.Rotation = GetBeamRotationForRainbowPosition(rainbowPosition);
+        SeeSaw2.Rotation = beamRotation;
+    }
+
+    private Note FindDrivingVisualNote(double songPosition)
+    {
+        foreach (Note note in _visualChartPlayer.Notes)
+        {
+            if (!IsSeeSawNote(note))
+                continue;
+
+            double start = note.SongPosition - GetApproachDuration(note);
+            if (songPosition >= start && songPosition <= note.SongPosition)
+                return note;
+
+            if (note.SongPosition > songPosition)
+                break;
+        }
+
+        return null;
+    }
+
+    private double GetApproachDuration(Note note)
+    {
+        double crotchet = 60.0 / GLOBALS.beatmapPlayer.Conductor.BPM;
+
+        if (note.AdditionnalData != null
+            && note.AdditionnalData.TryGetValue("action", out string action)
+            && IsTowardOpposite(action))
+        {
+            Vector2 applejackFromPosition = GetApplejackPositionBefore(note);
+            return SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPosition, applejackInnerPos, applejackOuterPos);
+        }
+
+        Vector2 rainbowFromPosition = GetRainbowPositionBefore(note);
+        return SeeSawVisualNote.GetApproachDuration(crotchet, rainbowFromPosition, rainbowInnerPos, rainbowOuterPos);
+    }
+
+    private bool IsSeeSawNote(Note note)
+    {
+        return note.AdditionnalData != null
+            && note.AdditionnalData.TryGetValue("action", out string action)
+            && IsSeeSawAction(action);
     }
 
     private Vector2 GetRainbowPositionBefore(Note targetNote)
     {
         Vector2 position = rainbowOuterPos;
+        Vector2 applejackPosition = applejackExitPos;
 
         foreach (Note note in _visualChartPlayer.Notes)
         {
-            if (note == targetNote)
+            if (note == targetNote || Math.Abs(note.SongPosition - targetNote.SongPosition) <= 0.0005)
                 break;
 
-            position = GetRainbowTargetPosition(note, position);
+            position = GetRainbowTargetPosition(note, position, applejackPosition);
+            applejackPosition = GetApplejackTargetPosition(note, applejackPosition);
         }
 
         return position;
@@ -158,7 +246,7 @@ public class SeeSawScene : Scene
 
         foreach (Note note in _visualChartPlayer.Notes)
         {
-            if (note == targetNote)
+            if (note == targetNote || Math.Abs(note.SongPosition - targetNote.SongPosition) <= 0.0005)
                 break;
 
             position = GetApplejackTargetPosition(note, position);
@@ -167,17 +255,21 @@ public class SeeSawScene : Scene
         return position;
     }
 
-    private Vector2 GetRainbowTargetPosition(Note note, Vector2 fallback)
+    private Vector2 GetRainbowTargetPosition(Note note, Vector2 fallback, Vector2 currentApplejackPosition)
     {
         if (note.AdditionnalData == null || !note.AdditionnalData.TryGetValue("action", out string action))
             return fallback;
 
-        return action switch
-        {
-            "see_saw_toward_outer" => rainbowOuterPos,
-            "see_saw_toward_inner" => rainbowInnerPos,
-            _ => fallback
-        };
+        if (IsTowardOuter(action))
+            return rainbowOuterPos;
+
+        if (IsTowardInner(action))
+            return rainbowInnerPos;
+
+        if (IsTowardOpposite(action))
+            return GetOppositeRainbowPosition(currentApplejackPosition);
+
+        return fallback;
     }
 
     private Vector2 GetApplejackTargetPosition(Note note, Vector2 fallback)
@@ -185,19 +277,85 @@ public class SeeSawScene : Scene
         if (note.AdditionnalData == null || !note.AdditionnalData.TryGetValue("action", out string action))
             return fallback;
 
-        return action switch
-        {
-            "see_saw_toward_outer" => applejackOuterPos,
-            "see_saw_toward_inner" => applejackInnerPos,
-            _ => fallback
-        };
+        if (IsTowardOuter(action))
+            return applejackOuterPos;
+
+        if (IsTowardInner(action))
+            return applejackInnerPos;
+
+        if (IsTowardOpposite(action))
+            return fallback;
+
+        return fallback;
     }
 
-    private float GetBeamRotationForRainbowPosition(Vector2 rainbowPosition)
+    private Vector2 GetOppositeRainbowPosition(Vector2 currentApplejackPosition)
     {
-        return Vector2.Distance(rainbowPosition, rainbowOuterPos) < Vector2.Distance(rainbowPosition, rainbowInnerPos)
+        return currentApplejackPosition == applejackOuterPos ? rainbowInnerPos : rainbowOuterPos;
+    }
+
+    private float GetBeamTargetRotation(Note note, float fallback)
+    {
+        if (note.AdditionnalData == null || !note.AdditionnalData.TryGetValue("action", out string action))
+            return fallback;
+
+        return IsSeeSawAction(action)
+            ? GetBeamRotationToward(SeeSawJumper.RAINBOW_DASH)
+            : fallback;
+    }
+
+    private bool IsSeeSawAction(string action)
+    {
+        return IsTowardOuter(action) || IsTowardInner(action) || IsTowardOpposite(action);
+    }
+
+    private bool IsTowardOuter(string action)
+    {
+        return action is "see_saw_toward_outer" or "see_saw_toward_outer_big_leap";
+    }
+
+    private bool IsTowardInner(string action)
+    {
+        return action is "see_saw_toward_inner" or "see_saw_toward_inner_big_leap";
+    }
+
+    private bool IsTowardOpposite(string action)
+    {
+        return action is "see_saw_toward_opposite" or "see_saw_toward_opposite_big_leap";
+    }
+
+    private float GetBeamRotationBefore(Note targetNote)
+    {
+        float rotation = MathHelper.ToRadians(10);
+
+        foreach (Note note in _visualChartPlayer.Notes)
+        {
+            if (note == targetNote)
+                break;
+
+            rotation = GetBeamTargetRotation(note, rotation);
+        }
+
+        return rotation;
+    }
+
+    // La beam penche vers le cote logique du dernier qui a atterri.
+    private float GetBeamRotationToward(SeeSawJumper lander)
+    {
+        return lander == SeeSawJumper.RAINBOW_DASH
             ? MathHelper.ToRadians(10)
             : MathHelper.ToRadians(-10);
+    }
+
+    private void ResetAnimationStateForTimeline()
+    {
+        seeSawVisuals?.Reset();
+        RainbowState.ForceState("idle");
+
+        if (Vector2.Distance(Applejack.Position, applejackExitPos) < 0.01f)
+            ApplejackState.ForceState("start_idle");
+        else
+            ApplejackState.ForceState("idle");
     }
 
     private void ResetActors()
@@ -222,22 +380,28 @@ public class SeeSawScene : Scene
         if (GLOBALS.beatmapPlayer.Conductor != null && seeSawVisuals != null)
         {
             double songPosition = GLOBALS.beatmapPlayer.Conductor.SongPosition;
-            _visualChartPlayer?.Seek(songPosition);
-            seeSawVisuals.Reset();
+            bool rewound = !double.IsNaN(_lastSongPosition) && songPosition < _lastSongPosition - 0.001;
+
             ApplyTimelineBaseState(songPosition);
+
+            if (rewound)
+                ResetAnimationStateForTimeline();
+
+            _drivingVisualNote = FindDrivingVisualNote(songPosition);
             seeSawVisuals.Update(songPosition);
+            _lastSongPosition = songPosition;
         }
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        base.Draw(spriteBatch);
         GLOBALS.graphicsDevice.Clear(Color.Cyan);
 
         SeeSaw2.Draw(spriteBatch);
         SeeSaw1.Draw(spriteBatch);
         Applejack.Draw(spriteBatch);
         Rainbow.Draw(spriteBatch);
+        base.Draw(spriteBatch);
     }
 
     private void SetupAnimations()
@@ -259,6 +423,39 @@ public class SeeSawScene : Scene
                             ((AnimatedSprite) Rainbow.sprite).Restart();
                         }
                     }
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "jump",
+                    duration: 1,
+                    onEnter : () =>
+                    {
+                        Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-idle");
+                    },
+                    isLooping: true
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "land",
+                    duration: 0.25f,
+                    onEnter : () =>
+                    {
+                        Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-idle");
+                    },
+                    isLooping: false
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "fall",
+                    duration: 1,
+                    onEnter : () =>
+                    {
+                        Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-idle");
+                    },
+                    isLooping: true
                 )
             )
             .SetGlobalUpdate(globalUpdate: (gt) =>
@@ -287,9 +484,56 @@ public class SeeSawScene : Scene
                     }
                 )
             )
+            .AddState(
+                new AnimationState(
+                    name: "jump",
+                    duration: 1,
+                    onEnter : () =>
+                    {
+                        Applejack.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Applejack_jump1);
+                    },
+                    isLooping: false
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "fall",
+                    duration: 1,
+                    onEnter : () =>
+                    {
+                        Applejack.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Applejack_jump2);
+                    },
+                    isLooping: false
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "land",
+                    duration: 1,
+                    onEnter : () =>
+                    {
+                        Applejack.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("applejack-land");
+                        ((AnimatedSprite) Applejack.sprite).IsLooping = false;
+                        ((AnimatedSprite) Applejack.sprite).Restart();
+                    },
+                    isLooping: false
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "idle",
+                    duration: 1,
+                    onEnter : () =>
+                    {
+                        Applejack.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Applejack_true_idle);
+                    },
+                    isLooping: false
+                )
+            )
+            .AddTransition("land", "idle", () => ApplejackState.StateProgress >= 1f)
             .SetGlobalUpdate(globalUpdate: (gt) =>
             {
-                ((AnimatedSprite) Applejack.sprite)?.Update(gt);
+                if(Applejack.sprite is AnimatedSprite)((AnimatedSprite) Applejack.sprite)?.Update(gt);
                 return true;
             })
             .Build();

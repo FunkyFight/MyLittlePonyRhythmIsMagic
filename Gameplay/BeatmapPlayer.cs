@@ -104,6 +104,10 @@ public class BeatmapPlayer
 
     public void StartBeatmap(string song_path, Chart chart, ReactionRules rules, IReactionEvaluator reactionEvaluator)
     {
+        _startupDelay = 0;
+        _startupTimer = 0;
+        _startupComplete = true;
+
         Conductor = new Conductor(song_path, chart.BPM, chart.Offset);
         CurrentChart = chart;
         ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);

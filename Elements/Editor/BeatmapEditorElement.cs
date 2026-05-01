@@ -15,25 +15,30 @@ public sealed class BeatmapEditorElement
 {
     private readonly BeatmapPlayer _beatmapPlayer;
     private readonly DevUiRenderer _ui;
+    private readonly DevUiDropdown _variantDropdown;
     private readonly Texture2D _pixel;
     private readonly string _defaultSongPath;
     private readonly string _defaultChartPath;
     private readonly double _snapDivisions;
     private readonly List<string> _availableSongs = new();
+    private readonly List<string> _availableCharts = new();
     private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset" };
 
     private BeatmapEditorDocument _document;
     private EditorRhythmInputVisualElement _rhythmVisuals;
     private KeyboardState _previousKeyboard;
     private KeyboardState _keyboard;
-    private EditorNoteKind _selectedKind = EditorNoteKind.SeeSawTowardInner;
+    private EditorNoteKind _selectedKind = EditorNoteKind.SeeSaw;
+    private int _selectedVariantIndex = 1;
     private double _manualSongPosition;
     private double _visibleBeforeSeconds = 4;
     private double _visibleAfterSeconds = 4;
     private string _status = "Editor ready";
     private int _selectedSongIndex;
+    private int _selectedChartIndex;
     private int _selectedMetadataField;
     private bool _isEditingText;
+    private bool _isPreviewPlaying;
     private string _textBuffer = "";
 
     public BeatmapEditorElement(BeatmapPlayer beatmapPlayer, string songPath = "Songs/metronome.wav", string chartPath = "Beatmaps/editor_beatmap.xml", double firstBeatDelay = 0.078, double snapDivisions = 4)
@@ -43,16 +48,25 @@ public sealed class BeatmapEditorElement
         _defaultChartPath = chartPath;
         _snapDivisions = snapDivisions;
         _ui = new DevUiRenderer(GLOBALS.graphicsDevice);
+        _variantDropdown = new DevUiDropdown(_ui);
         _pixel = new Texture2D(GLOBALS.graphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
 
         Load();
     }
 
+    public bool IsPreviewPlaying => _isPreviewPlaying;
+
     public void Update(GameTime gameTime)
     {
         _previousKeyboard = _keyboard;
         _keyboard = Keyboard.GetState();
+
+        if (_isPreviewPlaying)
+        {
+            HandlePreviewCommands();
+            return;
+        }
 
         HandleCommands(gameTime);
 
@@ -69,6 +83,9 @@ public sealed class BeatmapEditorElement
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        if (_isPreviewPlaying)
+            return;
+
         DrawTimeline(spriteBatch);
         _rhythmVisuals?.Draw(spriteBatch);
         DrawHud(spriteBatch);
@@ -135,6 +152,12 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.PageDown))
             SelectSongRelative(1);
 
+        if (Pressed(Keys.PageUp) && IsControlDown())
+            SelectChartRelative(-1);
+
+        if (Pressed(Keys.PageDown) && IsControlDown())
+            SelectChartRelative(1);
+
         if (Pressed(Keys.F5))
             RefreshSongs();
 
@@ -143,13 +166,54 @@ public sealed class BeatmapEditorElement
 
         if (Pressed(Keys.OemMinus) || Pressed(Keys.Subtract))
             Zoom(0.5);
+
+        if (Pressed(Keys.P))
+            StartPreview();
+
+        UpdateVariantDropdown();
+    }
+
+    private void UpdateVariantDropdown()
+    {
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
+        if (_variantDropdown.Update(GetVariantDropdownBounds(), GetVariantNames(definition), _selectedVariantIndex))
+        {
+            _selectedVariantIndex = _variantDropdown.SelectedIndex;
+            _status = $"Selected {definition.DisplayName} variant {definition.GetVariant(_selectedVariantIndex).DisplayName}";
+        }
+    }
+
+    private void StartPreview()
+    {
+        double position = CurrentSongPosition();
+        _beatmapPlayer.StartBeatmap(_document.SongPath, _document.Chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
+        _beatmapPlayer.Conductor.Seek(position);
+        _isPreviewPlaying = true;
+        _status = "Preview playing — ESC to stop";
+    }
+
+    private void HandlePreviewCommands()
+    {
+        if (Pressed(Keys.Escape))
+            StopPreview();
+    }
+
+    private void StopPreview()
+    {
+        double position = _beatmapPlayer.Conductor?.SongPosition ?? _manualSongPosition;
+        _isPreviewPlaying = false;
+        RebuildPlayback(false);
+        Seek(position);
+        _status = $"Back to editor at {position:0.000}s";
     }
 
     private void Load()
     {
         RefreshSongs();
+        RefreshCharts();
         _document = BeatmapEditorDocument.LoadOrCreate(_defaultSongPath, _defaultChartPath, 100);
         SyncSelectedSongIndex();
+        SyncSelectedChartIndex();
         RebuildPlayback(false);
         _status = $"Loaded {_document.ChartPath}";
     }
@@ -157,6 +221,7 @@ public sealed class BeatmapEditorElement
     private void Save()
     {
         _document.Save();
+        SyncSelectedChartIndex();
         _status = $"Saved {_document.Chart.Notes.Count} notes";
     }
 
@@ -199,10 +264,10 @@ public sealed class BeatmapEditorElement
         EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
         double position = Snap(CurrentSongPosition());
 
-        if (_document.TryPlaceNote(definition, position, out _, out string reason))
+        if (_document.TryPlaceNote(definition, position, _selectedVariantIndex, out _, out string reason))
         {
             RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
-            _status = $"Placed {definition.DisplayName} at {position:0.000}s";
+            _status = $"Placed {GetSelectedNoteName(definition)} at {position:0.000}s";
         }
         else
         {
@@ -241,6 +306,7 @@ public sealed class BeatmapEditorElement
     private void Select(EditorNoteKind kind)
     {
         _selectedKind = kind;
+        _selectedVariantIndex = Math.Clamp(_selectedVariantIndex, 0, EditorNoteDefinitions.Get(kind).Variants.Count - 1);
         _status = $"Selected {EditorNoteDefinitions.Get(kind).DisplayName}";
     }
 
@@ -280,6 +346,44 @@ public sealed class BeatmapEditorElement
 
         int index = _availableSongs.FindIndex(path => string.Equals(NormalizePath(path), NormalizePath(_document.SongPath), StringComparison.OrdinalIgnoreCase));
         _selectedSongIndex = index >= 0 ? index : 0;
+    }
+
+    private void RefreshCharts()
+    {
+        _availableCharts.Clear();
+        if (Directory.Exists("Beatmaps"))
+        {
+            _availableCharts.AddRange(Directory.GetFiles("Beatmaps", "*.xml", SearchOption.AllDirectories)
+                .OrderBy(path => path));
+        }
+
+        if (_availableCharts.Count == 0)
+            _availableCharts.Add(_defaultChartPath);
+
+        SyncSelectedChartIndex();
+    }
+
+    private void SyncSelectedChartIndex()
+    {
+        if (_document == null || _availableCharts.Count == 0)
+        {
+            _selectedChartIndex = 0;
+            return;
+        }
+
+        int index = _availableCharts.FindIndex(path => string.Equals(NormalizePath(path), NormalizePath(_document.ChartPath), StringComparison.OrdinalIgnoreCase));
+        _selectedChartIndex = index >= 0 ? index : 0;
+    }
+
+    private void SelectChartRelative(int delta)
+    {
+        if (_availableCharts.Count == 0)
+            RefreshCharts();
+
+        _selectedChartIndex = PositiveModulo(_selectedChartIndex + delta, _availableCharts.Count);
+        string chartPath = _availableCharts[_selectedChartIndex];
+        _document.SetChartPath(chartPath);
+        _status = $"Chart {Path.GetFileName(chartPath)}";
     }
 
     private void SelectSongRelative(int delta)
@@ -394,6 +498,12 @@ public sealed class BeatmapEditorElement
         _ui.Fill(spriteBatch, area, new Color(12, 14, 20, 220));
         _ui.Stroke(spriteBatch, area, Color.White, 2);
 
+        if (_document.Chart.Offset >= start && _document.Chart.Offset <= end)
+        {
+            float firstBeatX = TimeToX(_document.Chart.Offset, start, end, area);
+            _ui.Line(spriteBatch, new Vector2(firstBeatX, area.Y - 6), new Vector2(firstBeatX, area.Bottom + 6), Color.Yellow, 4);
+        }
+
         double firstBeat = Math.Floor((start - _document.Chart.Offset) / _document.Crotchet) * _document.Crotchet + _document.Chart.Offset;
         for (double beat = firstBeat; beat <= end; beat += _document.Crotchet)
         {
@@ -419,11 +529,12 @@ public sealed class BeatmapEditorElement
         {
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
             float noteX = TimeToX(note.SongPosition, start, end, area);
-            float occupyStartX = TimeToX(definition.GetStart(note.SongPosition, _document.Crotchet), start, end, area);
-            float occupyEndX = TimeToX(definition.GetEnd(note.SongPosition, _document.Crotchet), start, end, area);
-            float hitStartX = TimeToX(definition.GetHitWindowStart(note.SongPosition, _document.Crotchet), start, end, area);
-            float hitEndX = TimeToX(definition.GetHitWindowEnd(note.SongPosition, _document.Crotchet), start, end, area);
-            Color color = GetNoteColor(definition.Kind);
+            float occupyStartX = TimeToX(_document.GetContextualStart(note, definition), start, end, area);
+            float occupyEndX = TimeToX(_document.GetContextualEnd(note, definition), start, end, area);
+            float hitStartX = TimeToX(_document.GetContextualHitWindowStart(note, definition), start, end, area);
+            float hitEndX = TimeToX(_document.GetContextualHitWindowEnd(note, definition), start, end, area);
+            int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+            Color color = GetNoteColor(definition.Kind, variantIndex);
 
             int occupyX = (int)Math.Clamp(occupyStartX, area.X, area.Right);
             int occupyRight = (int)Math.Clamp(occupyEndX, area.X, area.Right);
@@ -448,13 +559,17 @@ public sealed class BeatmapEditorElement
         string field = _metadataFields[_selectedMetadataField];
         string editLine = _isEditingText ? $"EDIT {field}: {_textBuffer}|" : $"META <TAB/F2> {field}: {GetMetadataValue(field)}";
         string songName = _availableSongs.Count > 0 ? Path.GetFileName(_availableSongs[_selectedSongIndex]) : Path.GetFileName(_document.SongPath);
+        string chartName = _availableCharts.Count > 0 ? Path.GetFileName(_availableCharts[_selectedChartIndex]) : Path.GetFileName(_document.ChartPath);
 
         _ui.Fill(spriteBatch, new Rectangle(20, viewport.Height - 146, viewport.Width - 40, 126), new Color(0, 0, 0, 180));
         _ui.Label(spriteBatch, $"{playing} T:{current:0.000}s BEAT:{((current - _document.Chart.Offset) / _document.Crotchet):0.00} BPM:{_document.Chart.BPM:0.##} OFFSET:{_document.Chart.Offset:0.000} NOTES:{_document.Chart.Notes.Count} {dirty}", new Vector2(34, viewport.Height - 132), Color.White, 2);
+        _ui.Label(spriteBatch, "VARIANT", new Vector2(GetVariantDropdownBounds().X - 104, viewport.Height - 132), Color.LightGreen, 2);
+        _variantDropdown.Draw(spriteBatch, GetVariantDropdownBounds(), GetVariantNames(selected), _selectedVariantIndex);
         _ui.Label(spriteBatch, $"NOTE <UP/DOWN> {selected.DisplayName}  SONG <PGUP/PGDN> {songName}", new Vector2(34, viewport.Height - 108), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, $"CHART <CTRL+PGUP/PGDN> {chartName}", new Vector2(34, viewport.Height - 96), Color.LightGreen, 2);
         _ui.Label(spriteBatch, editLine, new Vector2(34, viewport.Height - 84), _isEditingText ? Color.Yellow : Color.LightBlue, 2);
         _ui.Label(spriteBatch, $"STATUS: {_status}", new Vector2(34, viewport.Height - 60), Color.LightGray, 2);
-        _ui.Label(spriteBatch, "SPACE PLAY/PAUSE LEFT/RIGHT SEEK Q/D SCROLL ENTER PLACE DEL DELETE CTRL+S SAVE CTRL+L LOAD +/- ZOOM", new Vector2(34, viewport.Height - 36), Color.LightGray, 2);
+        _ui.Label(spriteBatch, "SPACE PLAY/PAUSE LEFT/RIGHT SEEK Q/D SCROLL ENTER PLACE DEL DELETE CTRL+S SAVE CTRL+L LOAD P PREVIEW ESC STOP +/- ZOOM", new Vector2(34, viewport.Height - 36), Color.LightGray, 2);
     }
 
     private float TimeToX(double songPosition, double start, double end, Rectangle area)
@@ -463,14 +578,39 @@ public sealed class BeatmapEditorElement
         return area.X + (float)(t * area.Width);
     }
 
-    private Color GetNoteColor(EditorNoteKind kind)
+    private Color GetNoteColor(EditorNoteKind kind, int variantIndex)
     {
-        return kind switch
+        if (kind == EditorNoteKind.SeeSaw)
         {
-            EditorNoteKind.SeeSawTowardOuter => Color.Orange,
-            EditorNoteKind.SeeSawTowardInner => Color.MediumPurple,
-            _ => Color.DeepSkyBlue
-        };
+            return variantIndex switch
+            {
+                0 or 3 => Color.Orange,
+                1 or 4 => Color.MediumPurple,
+                2 or 5 => Color.Gold,
+                _ => Color.Orange
+            };
+        }
+
+        return Color.DeepSkyBlue;
+    }
+
+    private string GetSelectedNoteName(EditorNoteDefinition definition)
+    {
+        if (definition.Variants.Count <= 1)
+            return definition.DisplayName;
+
+        return $"{definition.DisplayName} / {definition.GetVariant(_selectedVariantIndex).DisplayName}";
+    }
+
+    private Rectangle GetVariantDropdownBounds()
+    {
+        Viewport viewport = GLOBALS.graphicsDevice.Viewport;
+        return new Rectangle(viewport.Width - 304, viewport.Height - 138, 270, 24);
+    }
+
+    private IReadOnlyList<string> GetVariantNames(EditorNoteDefinition definition)
+    {
+        return definition.Variants.Select(variant => variant.DisplayName).ToArray();
     }
 
     private bool Pressed(Keys key)

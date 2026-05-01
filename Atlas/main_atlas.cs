@@ -4,7 +4,7 @@
  * Contains references to each image within the sprite sheet.
  *
  * https://www.codeandweb.com/texturepacker
- * $TexturePacker:SmartUpdate:57039cc9ad950e30cd984addbee17fdd:e204b135dd7a604a0c51a64e04d3a371:bb8c871ba50dcb594d48391b0a334787$
+ * $TexturePacker:SmartUpdate:5a0857bbf0ef6126944dd4430bd41a18:60bc0a1fbbce23d5bf08f4f47c070ea1:bb8c871ba50dcb594d48391b0a334787$
  *
  */
 namespace TexturePackerMonoGameDefinitions
@@ -14,6 +14,12 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Applejack_afk1 = "applejack afk1";
 		public const string Applejack_afk2 = "applejack afk2";
 		public const string Applejack_afk3 = "applejack afk3";
+		public const string Applejack_jump1 = "applejack-jump1";
+		public const string Applejack_jump2 = "applejack-jump2";
+		public const string Applejack_land1 = "applejack-land1";
+		public const string Applejack_land2 = "applejack-land2";
+		public const string Applejack_land3 = "applejack-land3";
+		public const string Applejack_true_idle = "applejack-true-idle";
 		public const string Rainbowdash_idle1 = "rainbowdash-idle1";
 		public const string Rainbowdash_idle2 = "rainbowdash-idle2";
 		public const string Rainbowdash_idle3 = "rainbowdash-idle3";
