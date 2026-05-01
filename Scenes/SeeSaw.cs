@@ -289,8 +289,13 @@ public class SeeSawScene : Scene
             new SeeSawJumpPath(applejackFromPos, applejackFromPos, applejackInnerPos, applejackOuterPos, counterJumpMultiplier),
             GetBeamRotationToward(SeeSawJumper.APPLEJACK));
 
-        double approachDuration = isBigLeap ? crotchet * 4.0 : applejackStationaryPath.GetApproachDuration(crotchet);
-        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, approachDuration: approachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier);
+        double approachDuration = isBigLeap
+            ? crotchet * 4.0
+            : (applejackStationaryPath.GetApproachDuration(crotchet) + rainbowPath.GetApproachDuration(crotchet)) / 2.0;
+        float handoffProgression = isBigLeap
+            ? 0.5f
+            : (float)((applejackStationaryPath.GetApproachDuration(crotchet) / 2.0) / approachDuration);
+        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, handoffProgression, handoffProgression, approachDuration: approachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier, counterJumpEndProgression: handoffProgression);
     }
 
     /// <summary>

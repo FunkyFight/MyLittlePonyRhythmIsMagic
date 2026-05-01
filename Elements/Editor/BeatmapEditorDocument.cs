@@ -243,7 +243,7 @@ public sealed class BeatmapEditorDocument
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(variant, state);
         bool afterUsesOuterTiming = GetAfterUsesOuterTiming(variant, state);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
-        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap);
+        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, afterUsesOuterTiming);
     }
 
     public double GetBlockingStart(ChartNote note, EditorNoteDefinition definition)
@@ -259,7 +259,7 @@ public sealed class BeatmapEditorDocument
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(variant, state);
         bool afterUsesOuterTiming = GetAfterUsesOuterTiming(variant, state);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
-        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap);
+        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, afterUsesOuterTiming);
     }
 
     public double GetContextualEnd(ChartNote note, EditorNoteDefinition definition)
@@ -277,7 +277,7 @@ public sealed class BeatmapEditorDocument
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(variant, state);
         bool afterUsesOuterTiming = GetAfterUsesOuterTiming(variant, state);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
-        return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap);
+        return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, afterUsesOuterTiming);
     }
 
     private ChartNote FindBlockingNote(EditorNoteDefinition placedDefinition, double songPosition, int variantIndex)
@@ -355,7 +355,7 @@ public sealed class BeatmapEditorDocument
         {
             SeeSawDirection.Outer => true,
             SeeSawDirection.Inner => false,
-            SeeSawDirection.Opposite => !state.ApplejackIsOuter,
+            SeeSawDirection.Opposite => state.RainbowIsOuter,
             _ => action.Apply(state).RainbowIsOuter
         };
     }

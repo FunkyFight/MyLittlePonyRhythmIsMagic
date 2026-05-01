@@ -9,7 +9,7 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
 
     public double GetStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
-        return context.SongPosition - GetBeforeBeats(context) * context.Crotchet;
+        return context.SongPosition - GetBeforeBeats(definition, context) * context.Crotchet;
     }
 
     public double GetEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
@@ -19,14 +19,17 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
 
     public double GetHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
-        return context.SongPosition - GetBeforeBeats(context) * context.Crotchet;
+        return context.SongPosition - GetBeforeBeats(definition, context) * context.Crotchet;
     }
 
     public double GetHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
-        double afterBeats = context.ForceBigLeapTiming
-            ? OuterBeforeBeats
-            : GetBeforeBeats(context.AfterUsesOuterTiming);
+        SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
+        double afterBeats = action.Direction == SeeSawDirection.Opposite
+            ? GetPhaseBeats(context.AfterUsesOuterTiming)
+            : context.ForceBigLeapTiming
+                ? OuterBeforeBeats
+                : GetBeforeBeats(context.AfterUsesOuterTiming);
 
         return context.SongPosition + afterBeats * context.Crotchet;
     }
@@ -39,5 +42,19 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
     private static double GetBeforeBeats(EditorNoteTimingContext context)
     {
         return context.ForceBigLeapTiming ? OuterBeforeBeats : GetBeforeBeats(context.BeforeUsesOuterTiming);
+    }
+
+    private static double GetBeforeBeats(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    {
+        SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
+        if (action.Direction == SeeSawDirection.Opposite)
+            return GetPhaseBeats(context.BeforeUsesOuterTiming) + GetPhaseBeats(context.AfterUsesOuterTiming);
+
+        return GetBeforeBeats(context);
+    }
+
+    private static double GetPhaseBeats(bool usesOuterTiming)
+    {
+        return GetBeforeBeats(usesOuterTiming) / 2.0;
     }
 }

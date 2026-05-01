@@ -41,5 +41,13 @@
         <Entry Key="action" Value="see_saw_toward_opposite" />
       </AdditionnalData>
     </Note>
+    <Note>
+      <SongPosition>12.9</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+      </AdditionnalData>
+    </Note>
   </Notes>
 </Chart>
