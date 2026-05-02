@@ -10,17 +10,17 @@ using GameCore.Scenes;
 using GameCore;
 
 /// <summary>
-/// Plays one See-Saw note animation against scene-owned actors.
+/// Joue l'animation visuelle d'une note See-Saw sur les acteurs possedes par la scene.
 /// </summary>
 /// <remarks>
-/// This class intentionally does not create or own GameObjects. The See-Saw scene owns
-/// Rainbow Dash, Applejack, and the beam; each visual note only mutates them while the
-/// scene says this note is the current driver. That guard is important because the
-/// VisualNoteManager may keep several notes alive at the same time for look-ahead.
+/// Cette classe ne cree pas et ne possede pas les GameObjects. La scene See-Saw possede
+/// Rainbow Dash, Applejack et la poutre; chaque note visuelle ne les modifie que lorsque la
+/// scene designe cette note comme conductrice. Ce guard est essentiel car le VisualNoteManager
+/// peut garder plusieurs notes actives en meme temps pour gerer le look-ahead et le look-behind.
 ///
-/// Timing is deterministic and based only on song position, not frame delta. This keeps
-/// editor scrubbing and rewinds stable: calling Update with the same song position should
-/// always place the actors in the same positions.
+/// Le timing est deterministe et depend uniquement de la position musicale, jamais du delta time
+/// de la frame. Cela rend le scrubbing editeur et les rewinds stables: appeler Update avec la
+/// meme position musicale doit toujours replacer les acteurs au meme endroit.
 /// </remarks>
 public class SeeSawVisualNote : VisualNote
 {
@@ -28,8 +28,8 @@ public class SeeSawVisualNote : VisualNote
     private const string FallState = "fall";
     private const string LandState = "land";
 
-    // The counter jumper performs the first half of the visual note. The main jumper then
-    // starts from _jumperStartProgression and lands exactly on Note.SongPosition.
+    // Le contre-sauteur joue la premiere partie de la note visuelle. Le sauteur principal
+    // commence ensuite a _jumperStartProgression et atterrit exactement a Note.SongPosition.
     private const float CounterJumpEndProgression = 0.5f;
 
     private readonly Dictionary<SeeSawJumper, GameObject> _jumpers;
@@ -37,6 +37,7 @@ public class SeeSawVisualNote : VisualNote
     private readonly SeeSawJumper _jumper;
     private readonly SeeSawJumpPath _jumperPath;
     private readonly SeeSawCounterJump? _counterJump;
+    private readonly SeeSawSimultaneousJump? _simultaneousJump;
     private readonly GameObject _seeSawBeam;
     private readonly Camera _sceneCamera;
     private readonly float _fromRotation;
@@ -65,23 +66,23 @@ public class SeeSawVisualNote : VisualNote
 
 
     /// <summary>
-    /// Creates a single-jumper See-Saw visual note from raw position values.
+    /// Cree une note visuelle See-Saw a un seul sauteur depuis des positions brutes.
     /// </summary>
-    /// <param name="logicalNote">Logical rhythm note represented by this visual.</param>
-    /// <param name="jumpers">Scene-owned jumper GameObjects indexed by jumper identity.</param>
-    /// <param name="animationStates">Scene-owned animation state machines indexed by jumper identity.</param>
-    /// <param name="jumper">The actor that performs the main jump and lands on the note hit time.</param>
-    /// <param name="fromPos">Stable position where the main jumper starts.</param>
-    /// <param name="toPos">Stable position where the main jumper lands.</param>
-    /// <param name="crotchet">Beat duration in seconds at the current BPM.</param>
-    /// <param name="seeSawBeam">Scene-owned beam object whose rotation is animated.</param>
-    /// <param name="sceneCamera">Scene camera available to camera-aware visual effects.</param>
-    /// <param name="fromRotation">Beam rotation before the visual applies state.</param>
-    /// <param name="targetRotation">Beam rotation after the main jumper lands.</param>
-    /// <param name="innerPos">Reference inner-side position for timing and jump height.</param>
-    /// <param name="outerPos">Reference outer-side position for timing and jump height.</param>
-    /// <param name="jumpHeightMultiplier">Multiplier applied to the derived vertical jump height.</param>
-    /// <param name="despawnDelay">Extra lifetime after the note ends.</param>
+    /// <param name="logicalNote">Note rythmique logique representee par ce visuel.</param>
+    /// <param name="jumpers">GameObjects des sauteurs possedes par la scene, indexes par identite.</param>
+    /// <param name="animationStates">Machines d'animation possedees par la scene, indexees par identite.</param>
+    /// <param name="jumper">Acteur qui effectue le saut principal et atterrit au temps de hit.</param>
+    /// <param name="fromPos">Position stable de depart du sauteur principal.</param>
+    /// <param name="toPos">Position stable d'atterrissage du sauteur principal.</param>
+    /// <param name="crotchet">Duree d'un beat en secondes au BPM courant.</param>
+    /// <param name="seeSawBeam">Poutre possedee par la scene dont la rotation est animee.</param>
+    /// <param name="sceneCamera">Camera de scene disponible pour les effets visuels qui en dependent.</param>
+    /// <param name="fromRotation">Rotation de la poutre avant application du visuel.</param>
+    /// <param name="targetRotation">Rotation de la poutre apres l'atterrissage du sauteur principal.</param>
+    /// <param name="innerPos">Reference du cote interieur pour calculer timing et hauteur de saut.</param>
+    /// <param name="outerPos">Reference du cote exterieur pour calculer timing et hauteur de saut.</param>
+    /// <param name="jumpHeightMultiplier">Multiplicateur applique a la hauteur verticale derivee.</param>
+    /// <param name="despawnDelay">Duree de vie supplementaire apres la fin de la note.</param>
     public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, Vector2 fromPos, Vector2 toPos, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, Vector2 innerPos, Vector2 outerPos, float jumpHeightMultiplier = 1f, double despawnDelay = 0)
         : this(logicalNote, jumpers, animationStates, jumper, fromPos, toPos, crotchet, seeSawBeam, sceneCamera, fromRotation, targetRotation, innerPos, outerPos, null, Vector2.Zero, Vector2.Zero, 0, Vector2.Zero, Vector2.Zero, DefaultCounterRotationProgression, DefaultJumperStartProgression, null, despawnDelay, null, jumpHeightMultiplier)
     {
@@ -93,24 +94,24 @@ public class SeeSawVisualNote : VisualNote
     }
 
     /// <summary>
-    /// Creates a guarded single-jumper See-Saw visual note from raw position values.
+    /// Cree une note visuelle See-Saw a un seul sauteur avec guard d'ownership.
     /// </summary>
-    /// <param name="logicalNote">Logical rhythm note represented by this visual.</param>
-    /// <param name="jumpers">Scene-owned jumper GameObjects indexed by jumper identity.</param>
-    /// <param name="animationStates">Scene-owned animation state machines indexed by jumper identity.</param>
-    /// <param name="jumper">The actor that performs the main jump and lands on the note hit time.</param>
-    /// <param name="fromPos">Stable position where the main jumper starts.</param>
-    /// <param name="toPos">Stable position where the main jumper lands.</param>
-    /// <param name="crotchet">Beat duration in seconds at the current BPM.</param>
-    /// <param name="seeSawBeam">Scene-owned beam object whose rotation is animated.</param>
-    /// <param name="sceneCamera">Scene camera available to camera-aware visual effects.</param>
-    /// <param name="fromRotation">Beam rotation before the visual applies state.</param>
-    /// <param name="targetRotation">Beam rotation after the main jumper lands.</param>
-    /// <param name="innerPos">Reference inner-side position for timing and jump height.</param>
-    /// <param name="outerPos">Reference outer-side position for timing and jump height.</param>
-    /// <param name="canApplyState">Predicate that decides whether this visual may mutate shared scene objects this frame.</param>
-    /// <param name="jumpHeightMultiplier">Multiplier applied to the derived vertical jump height.</param>
-    /// <param name="despawnDelay">Extra lifetime after the note ends.</param>
+    /// <param name="logicalNote">Note rythmique logique representee par ce visuel.</param>
+    /// <param name="jumpers">GameObjects des sauteurs possedes par la scene, indexes par identite.</param>
+    /// <param name="animationStates">Machines d'animation possedees par la scene, indexees par identite.</param>
+    /// <param name="jumper">Acteur qui effectue le saut principal et atterrit au temps de hit.</param>
+    /// <param name="fromPos">Position stable de depart du sauteur principal.</param>
+    /// <param name="toPos">Position stable d'atterrissage du sauteur principal.</param>
+    /// <param name="crotchet">Duree d'un beat en secondes au BPM courant.</param>
+    /// <param name="seeSawBeam">Poutre possedee par la scene dont la rotation est animee.</param>
+    /// <param name="sceneCamera">Camera de scene disponible pour les effets visuels qui en dependent.</param>
+    /// <param name="fromRotation">Rotation de la poutre avant application du visuel.</param>
+    /// <param name="targetRotation">Rotation de la poutre apres l'atterrissage du sauteur principal.</param>
+    /// <param name="innerPos">Reference du cote interieur pour calculer timing et hauteur de saut.</param>
+    /// <param name="outerPos">Reference du cote exterieur pour calculer timing et hauteur de saut.</param>
+    /// <param name="canApplyState">Predicate indiquant si ce visuel peut muter les objets partages cette frame.</param>
+    /// <param name="jumpHeightMultiplier">Multiplicateur applique a la hauteur verticale derivee.</param>
+    /// <param name="despawnDelay">Duree de vie supplementaire apres la fin de la note.</param>
     public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, Vector2 fromPos, Vector2 toPos, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, Vector2 innerPos, Vector2 outerPos, Func<bool> canApplyState, float jumpHeightMultiplier = 1f, double despawnDelay = 0)
         : this(logicalNote, jumpers, animationStates, jumper, fromPos, toPos, crotchet, seeSawBeam, sceneCamera, fromRotation, targetRotation, innerPos, outerPos, null, Vector2.Zero, Vector2.Zero, 0, Vector2.Zero, Vector2.Zero, DefaultCounterRotationProgression, DefaultJumperStartProgression, canApplyState, despawnDelay, null, jumpHeightMultiplier)
     {
@@ -122,33 +123,33 @@ public class SeeSawVisualNote : VisualNote
     }
 
     /// <summary>
-    /// Creates a See-Saw visual note with an optional counter jumper from raw position values.
+    /// Cree une note visuelle See-Saw avec un contre-sauteur optionnel depuis des positions brutes.
     /// </summary>
-    /// <param name="logicalNote">Logical rhythm note represented by this visual.</param>
-    /// <param name="jumpers">Scene-owned jumper GameObjects indexed by jumper identity.</param>
-    /// <param name="animationStates">Scene-owned animation state machines indexed by jumper identity.</param>
-    /// <param name="jumper">The actor that performs the main jump and lands on the note hit time.</param>
-    /// <param name="fromPos">Stable position where the main jumper starts.</param>
-    /// <param name="toPos">Stable position where the main jumper lands.</param>
-    /// <param name="crotchet">Beat duration in seconds at the current BPM.</param>
-    /// <param name="seeSawBeam">Scene-owned beam object whose rotation is animated.</param>
-    /// <param name="sceneCamera">Scene camera available to camera-aware visual effects.</param>
-    /// <param name="fromRotation">Beam rotation before the visual applies state.</param>
-    /// <param name="targetRotation">Beam rotation after the main jumper lands.</param>
-    /// <param name="innerPos">Main jumper inner-side reference position.</param>
-    /// <param name="outerPos">Main jumper outer-side reference position.</param>
-    /// <param name="counterJumper">Optional actor that performs the first-half counter jump.</param>
-    /// <param name="counterFromPos">Stable position where the counter jumper starts.</param>
-    /// <param name="counterToPos">Stable position where the counter jumper lands.</param>
-    /// <param name="counterTargetRotation">Beam rotation after the counter jumper lands.</param>
-    /// <param name="counterInnerPos">Counter jumper inner-side reference position.</param>
-    /// <param name="counterOuterPos">Counter jumper outer-side reference position.</param>
-    /// <param name="counterRotationProgression">Normalized note progress where the counter beam rotation applies.</param>
-    /// <param name="jumperStartProgression">Normalized note progress where the main jumper starts moving.</param>
-    /// <param name="canApplyState">Predicate that decides whether this visual may mutate shared scene objects this frame.</param>
-    /// <param name="despawnDelay">Extra lifetime after the note ends.</param>
-    /// <param name="approachDuration">Optional approach duration override in seconds.</param>
-    /// <param name="jumpHeightMultiplier">Multiplier applied to both derived vertical jump heights.</param>
+    /// <param name="logicalNote">Note rythmique logique representee par ce visuel.</param>
+    /// <param name="jumpers">GameObjects des sauteurs possedes par la scene, indexes par identite.</param>
+    /// <param name="animationStates">Machines d'animation possedees par la scene, indexees par identite.</param>
+    /// <param name="jumper">Acteur qui effectue le saut principal et atterrit au temps de hit.</param>
+    /// <param name="fromPos">Position stable de depart du sauteur principal.</param>
+    /// <param name="toPos">Position stable d'atterrissage du sauteur principal.</param>
+    /// <param name="crotchet">Duree d'un beat en secondes au BPM courant.</param>
+    /// <param name="seeSawBeam">Poutre possedee par la scene dont la rotation est animee.</param>
+    /// <param name="sceneCamera">Camera de scene disponible pour les effets visuels qui en dependent.</param>
+    /// <param name="fromRotation">Rotation de la poutre avant application du visuel.</param>
+    /// <param name="targetRotation">Rotation de la poutre apres l'atterrissage du sauteur principal.</param>
+    /// <param name="innerPos">Reference cote interieur du sauteur principal.</param>
+    /// <param name="outerPos">Reference cote exterieur du sauteur principal.</param>
+    /// <param name="counterJumper">Acteur optionnel qui joue le contre-saut de premiere moitie.</param>
+    /// <param name="counterFromPos">Position stable de depart du contre-sauteur.</param>
+    /// <param name="counterToPos">Position stable d'atterrissage du contre-sauteur.</param>
+    /// <param name="counterTargetRotation">Rotation de la poutre apres l'atterrissage du contre-sauteur.</param>
+    /// <param name="counterInnerPos">Reference cote interieur du contre-sauteur.</param>
+    /// <param name="counterOuterPos">Reference cote exterieur du contre-sauteur.</param>
+    /// <param name="counterRotationProgression">Progression normalisee ou la rotation de poutre du contre-sauteur s'applique.</param>
+    /// <param name="jumperStartProgression">Progression normalisee ou le sauteur principal commence a bouger.</param>
+    /// <param name="canApplyState">Predicate indiquant si ce visuel peut muter les objets partages cette frame.</param>
+    /// <param name="despawnDelay">Duree de vie supplementaire apres la fin de la note.</param>
+    /// <param name="approachDuration">Override optionnel de la duree d'approche, en secondes.</param>
+    /// <param name="jumpHeightMultiplier">Multiplicateur applique aux hauteurs verticales derivees.</param>
     public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, Vector2 fromPos, Vector2 toPos, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, Vector2 innerPos, Vector2 outerPos, SeeSawJumper? counterJumper, Vector2 counterFromPos, Vector2 counterToPos, float counterTargetRotation, Vector2 counterInnerPos, Vector2 counterOuterPos, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, float jumpHeightMultiplier = 1f, bool isBigLeap = false) 
         : this(
             logicalNote,
@@ -180,25 +181,25 @@ public class SeeSawVisualNote : VisualNote
     }
 
     /// <summary>
-    /// Creates a See-Saw visual note from explicit jump path objects.
+    /// Cree une note visuelle See-Saw depuis des objets de chemin de saut explicites.
     /// </summary>
-    /// <param name="logicalNote">Logical rhythm note represented by this visual.</param>
-    /// <param name="jumpers">Scene-owned jumper GameObjects indexed by jumper identity.</param>
-    /// <param name="animationStates">Scene-owned animation state machines indexed by jumper identity.</param>
-    /// <param name="jumper">The actor that performs the main jump and lands on the note hit time.</param>
-    /// <param name="jumperPath">Main jumper path.</param>
-    /// <param name="crotchet">Beat duration in seconds at the current BPM.</param>
-    /// <param name="seeSawBeam">Scene-owned beam object whose rotation is animated.</param>
-    /// <param name="sceneCamera">Scene camera available to camera-aware visual effects.</param>
-    /// <param name="fromRotation">Beam rotation before the visual applies state.</param>
-    /// <param name="targetRotation">Beam rotation after the main jumper lands.</param>
-    /// <param name="counterJump">Optional first-half counter jump.</param>
-    /// <param name="counterRotationProgression">Normalized note progress where the counter beam rotation applies.</param>
-    /// <param name="jumperStartProgression">Normalized note progress where the main jumper starts moving.</param>
-    /// <param name="canApplyState">Predicate that decides whether this visual may mutate shared scene objects this frame.</param>
-    /// <param name="despawnDelay">Extra lifetime after the note ends.</param>
-    /// <param name="approachDuration">Optional approach duration override in seconds.</param>
-    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression, bool counterIsBigLeap = false)
+    /// <param name="logicalNote">Note rythmique logique representee par ce visuel.</param>
+    /// <param name="jumpers">GameObjects des sauteurs possedes par la scene, indexes par identite.</param>
+    /// <param name="animationStates">Machines d'animation possedees par la scene, indexees par identite.</param>
+    /// <param name="jumper">Acteur qui effectue le saut principal et atterrit au temps de hit.</param>
+    /// <param name="jumperPath">Chemin du sauteur principal.</param>
+    /// <param name="crotchet">Duree d'un beat en secondes au BPM courant.</param>
+    /// <param name="seeSawBeam">Poutre possedee par la scene dont la rotation est animee.</param>
+    /// <param name="sceneCamera">Camera de scene disponible pour les effets visuels qui en dependent.</param>
+    /// <param name="fromRotation">Rotation de la poutre avant application du visuel.</param>
+    /// <param name="targetRotation">Rotation de la poutre apres l'atterrissage du sauteur principal.</param>
+    /// <param name="counterJump">Contre-saut optionnel de premiere moitie.</param>
+    /// <param name="counterRotationProgression">Progression normalisee ou la rotation de poutre du contre-sauteur s'applique.</param>
+    /// <param name="jumperStartProgression">Progression normalisee ou le sauteur principal commence a bouger.</param>
+    /// <param name="canApplyState">Predicate indiquant si ce visuel peut muter les objets partages cette frame.</param>
+    /// <param name="despawnDelay">Duree de vie supplementaire apres la fin de la note.</param>
+    /// <param name="approachDuration">Override optionnel de la duree d'approche, en secondes.</param>
+    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression, bool counterIsBigLeap = false, SeeSawSimultaneousJump? simultaneousJump = null)
         : base(logicalNote, approachDuration ?? jumperPath.GetApproachDuration(crotchet), despawnDelay)
     {
         _jumpers = jumpers;
@@ -212,6 +213,7 @@ public class SeeSawVisualNote : VisualNote
         _fromRotation = fromRotation;
         _targetRotation = targetRotation;
         _counterJump = counterJump;
+        _simultaneousJump = simultaneousJump;
         _counterRotationProgression = counterRotationProgression;
         _jumperStartProgression = jumperStartProgression;
         _counterJumpEndProgression = counterJumpEndProgression;
@@ -226,44 +228,41 @@ public class SeeSawVisualNote : VisualNote
     }
 
     /// <summary>
-    /// Scene camera passed by the owning scene for camera-aware visual effects.
+    /// Camera transmise par la scene proprietaire pour les effets visuels qui en dependent.
     /// </summary>
     public Camera SceneCamera => _sceneCamera;
 
     /// <summary>
-    /// Updates actor positions, beam rotation, and animation states for the given song time.
+    /// Met a jour les positions des acteurs, la rotation de poutre et les animations pour un temps musical donne.
     /// </summary>
-    /// <param name="currentSongPosition">Current song position in seconds.</param>
+    /// <param name="currentSongPosition">Position musicale courante, en secondes.</param>
     public override void Update(double currentSongPosition)
     {
         UpdateState(currentSongPosition);
 
-        // Rewinding can put the same visual note before a jump/land trigger that already
-        // fired. Reset the one-shot flags so animations can be replayed correctly.
-        if (!double.IsNaN(_lastSongPosition) && currentSongPosition < _lastSongPosition - 0.001)
+        // Un rewind peut replacer cette meme note avant un trigger jump/land deja joue.
+        // Les flags one-shot doivent etre remis a zero pour rejouer correctement les animations.
+        if (RhythmVisualUtils.HasRewound(currentSongPosition, _lastSongPosition))
             ResetAnimationTriggers();
 
         _lastSongPosition = currentSongPosition;
 
-        // Several visual notes can be alive at once. The scene decides which one owns
-        // the shared actors for this frame so overlapping notes do not fight each other.
-        if (!CanApplyState())
+        // Plusieurs notes visuelles peuvent etre vivantes en meme temps. La scene decide laquelle
+        // possede les acteurs partages sur cette frame pour eviter des mutations concurrentes.
+        if (!RhythmVisualUtils.CanApplyState(_canApplyState))
             return;
 
-        double startTime = Note.SongPosition - ApproachDuration;
-        double endTime = Note.SongPosition;
-
-        if (currentSongPosition < startTime)
+        if (RhythmVisualUtils.IsBeforeApproach(currentSongPosition, Note.SongPosition, ApproachDuration))
         {
-            // If the visual manager updates this note before its approach window, make sure
-            // no stale one-shot animation state leaks from a previous seek position.
+            // Si le manager met a jour cette note avant sa fenetre d'approche, aucun ancien
+            // trigger one-shot issu d'un seek precedent ne doit rester actif.
             ResetAnimationTriggers();
             return; 
         }
 
-        float progression = (float)((currentSongPosition - startTime) / (endTime - startTime));
+        float progression = RhythmVisualUtils.GetApproachProgress(currentSongPosition, Note.SongPosition, ApproachDuration);
 
-        if (currentSongPosition >= endTime)
+        if (RhythmVisualUtils.IsAtOrAfterHit(currentSongPosition, Note.SongPosition))
         {
             ApplyCompletedState();
             return;
@@ -271,6 +270,7 @@ public class SeeSawVisualNote : VisualNote
 
         ApplyCounterJump(progression);
         ApplyMainJump(progression);
+        ApplySimultaneousJump(progression);
         ApplyCameraJump(progression);
         ApplyBeamRotation(progression);
     }
@@ -279,30 +279,33 @@ public class SeeSawVisualNote : VisualNote
 
 
     /// <summary>
-    /// Checks whether this visual note currently owns the shared scene objects.
-    /// </summary>
-    /// <returns><c>true</c> if this visual may mutate actors and beam state; otherwise <c>false</c>.</returns>
-    private bool CanApplyState()
-    {
-        return _canApplyState == null || _canApplyState();
-    }
-
-    /// <summary>
-    /// Snaps all controlled actors and the beam to the exact final hit-time state.
+    /// Replace tous les acteurs controles et la poutre dans leur etat final exact au hit.
     /// </summary>
     private void ApplyCompletedState()
     {
-        // Completion is snapped instead of interpolated. This avoids tiny floating point
-        // offsets at the exact hit time, which matters because the scene rebuilds its base
-        // state from note targets every frame.
+        // L'etat final est snap plutot qu'interpole. Cela evite de minuscules offsets flottants
+        // au temps de hit, important car la scene reconstruit son etat stable chaque frame.
         if (_counterJump.HasValue)
         {
             SeeSawCounterJump counterJump = _counterJump.Value;
-            Land(counterJump.Jumper);
+            if (!IsStationaryPath(counterJump.Path))
+                Land(counterJump.Jumper);
+
             GetJumper(counterJump.Jumper).Position = counterJump.Path.To;
         }
 
-        Land(_jumper);
+        if (_simultaneousJump.HasValue)
+        {
+            SeeSawSimultaneousJump simultaneousJump = _simultaneousJump.Value;
+            if (!IsStationaryPath(simultaneousJump.Path))
+                Land(simultaneousJump.Jumper);
+
+            GetJumper(simultaneousJump.Jumper).Position = simultaneousJump.Path.To;
+        }
+
+        if (!IsStationaryPath(_jumperPath))
+            Land(_jumper);
+
         GetJumper(_jumper).Position = _jumperPath.To;
         _seeSawBeam.Rotation = _targetRotation;
     }
@@ -310,23 +313,30 @@ public class SeeSawVisualNote : VisualNote
     
 
     /// <summary>
-    /// Applies the optional first-half counter jump.
+    /// Applique le contre-saut optionnel de premiere moitie.
     /// </summary>
-    /// <param name="noteProgression">Normalized progress from approach start to hit time.</param>
+    /// <param name="noteProgression">Progression normalisee entre le debut d'approche et le hit.</param>
     private void ApplyCounterJump(float noteProgression)
     {
-        // Applejack's counter movement happens before Rainbow's movement for normal notes.
-        // For opposite notes this can be a stationary path, but it still triggers the same
-        // timing and beam handoff behavior.
+        // Le mouvement d'Applejack precede celui de Rainbow pour les notes normales.
+        // Pour les notes opposees, le chemin peut etre stationnaire mais conserve le meme timing
+        // et le meme comportement de passage de relais de la poutre.
         if (!_counterJump.HasValue)
             return;
 
         SeeSawCounterJump counterJump = _counterJump.Value;
 
+        if (IsStationaryPath(counterJump.Path))
+        {
+            GetJumper(counterJump.Jumper).Position = counterJump.Path.To;
+            return;
+        }
+
         if (noteProgression < _counterJumpEndProgression)
         {
             StartJump(counterJump.Jumper);
-            float jumpProgression = noteProgression / _counterJumpEndProgression;
+            float jumpProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, 0f, _counterJumpEndProgression);
+
             if (!_counterIsBigLeap)
                 ApplyJumpAnimation(counterJump.Jumper, jumpProgression);
 
@@ -340,8 +350,8 @@ public class SeeSawVisualNote : VisualNote
 
     private void ApplyCameraJump(float progression)
     {
-        // Only if it's a big leap, the camera must jump
-        if(!_isBigLeap) return;
+        // La camera ne participe qu'aux grands sauts. Certains constructeurs autorisent une camera nulle.
+        if(!_isBigLeap || _sceneCamera == null) return;
 
         if(progression < _jumperStartProgression)
         {
@@ -349,7 +359,7 @@ public class SeeSawVisualNote : VisualNote
             return;
         }
 
-        progression = (progression - _jumperStartProgression) / (1f - _jumperStartProgression);
+        progression = RhythmVisualUtils.GetPhaseProgress(progression, _jumperStartProgression, 1f);
 
         if(progression < 1f)
         {
@@ -369,22 +379,28 @@ public class SeeSawVisualNote : VisualNote
     }
 
     /// <summary>
-    /// Applies the main jumper arc once its configured handoff point has been reached.
+    /// Applique l'arc du sauteur principal lorsque son point de relais est atteint.
     /// </summary>
-    /// <param name="noteProgression">Normalized progress from approach start to hit time.</param>
+    /// <param name="noteProgression">Progression normalisee entre le debut d'approche et le hit.</param>
     private void ApplyMainJump(float noteProgression)
     {
-        // Keep the main jumper pinned to its previous stable position until its configured
-        // handoff point. This preserves the original choreography of Applejack landing first.
+        // Le sauteur principal reste fixe sur sa position stable precedente jusqu'au relais.
+        // Cela preserve la choregraphie ou Applejack atterrit avant Rainbow.
         if (noteProgression < _jumperStartProgression)
         {
             GetJumper(_jumper).Position = _jumperPath.From;
             return;
         }
 
+        if (IsStationaryPath(_jumperPath))
+        {
+            GetJumper(_jumper).Position = _jumperPath.To;
+            return;
+        }
+
         if(!_isBigLeap)
         {
-            float jumpProgression = (noteProgression - _jumperStartProgression) / (1f - _jumperStartProgression);
+            float jumpProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, _jumperStartProgression, 1f);
             if (jumpProgression >= LandTriggerProgression)
             {
                 Land(_jumper);
@@ -397,7 +413,7 @@ public class SeeSawVisualNote : VisualNote
             ApplyJump(GetJumper(_jumper), _jumperPath, jumpProgression);
         } else
         {
-            float bigLeapProgression = (noteProgression - _jumperStartProgression) / (1f - _jumperStartProgression);
+            float bigLeapProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, _jumperStartProgression, 1f);
             if (bigLeapProgression >= LandTriggerProgression)
             {
                 Land(_jumper);
@@ -405,33 +421,58 @@ public class SeeSawVisualNote : VisualNote
                 return;
             }
 
-            // 4. On lance les actions (écrit une seule fois, c'est plus propre !)
             ApplyJump(GetJumper(_jumper), _jumperPath, bigLeapProgression);
             StartJump(_jumper);
         }
     }
 
-    private static float EaseOutCubic(float t)
+    /// <summary>
+    /// Applique un second saut qui partage exactement la phase du sauteur principal.
+    /// </summary>
+    /// <param name="noteProgression">Progression normalisee entre le debut d'approche et le hit.</param>
+    private void ApplySimultaneousJump(float noteProgression)
     {
-        t = Math.Clamp(t, 0f, 1f);
-        float inverse = 1f - t;
-        return 1f - inverse * inverse * inverse;
-    }
+        if (!_simultaneousJump.HasValue)
+            return;
 
-    private static float SmoothStep(float t)
-    {
-        t = Math.Clamp(t, 0f, 1f);
-        return t * t * (3f - 2f * t);
+        SeeSawSimultaneousJump simultaneousJump = _simultaneousJump.Value;
+
+        if (noteProgression < _jumperStartProgression)
+        {
+            GetJumper(simultaneousJump.Jumper).Position = simultaneousJump.Path.From;
+            return;
+        }
+
+        if (IsStationaryPath(simultaneousJump.Path))
+        {
+            GetJumper(simultaneousJump.Jumper).Position = simultaneousJump.Path.To;
+            return;
+        }
+
+        float jumpProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, _jumperStartProgression, 1f);
+        if (jumpProgression >= LandTriggerProgression)
+        {
+            Land(simultaneousJump.Jumper);
+            GetJumper(simultaneousJump.Jumper).Position = simultaneousJump.Path.To;
+            return;
+        }
+
+        StartJump(simultaneousJump.Jumper);
+
+        if (!simultaneousJump.IsBigLeap)
+            ApplyJumpAnimation(simultaneousJump.Jumper, jumpProgression);
+
+        ApplyJump(GetJumper(simultaneousJump.Jumper), simultaneousJump.Path, jumpProgression);
     }
 
     /// <summary>
-    /// Applies the in-flight beam rotation before the main jumper lands.
+    /// Applique la rotation de poutre pendant le vol, avant l'atterrissage du sauteur principal.
     /// </summary>
-    /// <param name="noteProgression">Normalized progress from approach start to hit time.</param>
+    /// <param name="noteProgression">Progression normalisee entre le debut d'approche et le hit.</param>
     private void ApplyBeamRotation(float noteProgression)
     {
-        // The beam snaps to the counter lander's side at the handoff, then snaps to the main
-        // lander's side in ApplyCompletedState when the note reaches the hit time.
+        // La poutre snap du cote du contre-sauteur au relais, puis du cote du sauteur principal
+        // dans ApplyCompletedState lorsque la note atteint le temps de hit.
         if (!_counterJump.HasValue)
         {
             _seeSawBeam.Rotation = _fromRotation;
@@ -444,7 +485,7 @@ public class SeeSawVisualNote : VisualNote
     }
 
     /// <summary>
-    /// Clears one-shot jump and land trigger flags so animations can be replayed after a seek.
+    /// Reinitialise les flags de triggers jump/land pour rejouer les animations apres un seek.
     /// </summary>
     private void ResetAnimationTriggers()
     {
@@ -456,135 +497,106 @@ public class SeeSawVisualNote : VisualNote
 
 
     /// <summary>
-    /// Gets the scene-owned GameObject for a jumper identity.
+    /// Recupere le GameObject possede par la scene pour une identite de sauteur.
     /// </summary>
-    /// <param name="jumper">The jumper identity to resolve.</param>
-    /// <returns>The matching scene-owned GameObject.</returns>
+    /// <param name="jumper">Identite du sauteur a resoudre.</param>
+    /// <returns>GameObject correspondant possede par la scene.</returns>
     private GameObject GetJumper(SeeSawJumper jumper)
     {
         return _jumpers[jumper];
     }
 
     /// <summary>
-    /// Triggers the jump animation for a jumper once per forward pass.
+    /// Declenche l'animation de saut d'un sauteur une seule fois par passage vers l'avant.
     /// </summary>
-    /// <param name="jumper">The jumper whose jump animation should start.</param>
+    /// <param name="jumper">Sauteur dont l'animation de saut doit demarrer.</param>
     private void StartJump(SeeSawJumper jumper)
     {
-        // Jump and land are event-like animation changes. Position remains deterministic,
-        // but the animation state machine should only receive each trigger once per pass.
+        // Jump et land sont des changements d'animation de type evenement. La position reste
+        // deterministe, mais la state machine ne doit recevoir chaque trigger qu'une fois par passe.
         if (jumper == _jumper)
         {
-            if (_jumperJumpStarted)
+            if (!RhythmVisualUtils.TrySetTrigger(ref _jumperJumpStarted))
                 return;
-
-            _jumperJumpStarted = true;
         }
         else
         {
-            if (_counterJumpStarted)
+            if (!RhythmVisualUtils.TrySetTrigger(ref _counterJumpStarted))
                 return;
-
-            _counterJumpStarted = true;
         }
 
-        ForceAnimationState(jumper, JumpState);
+        RhythmVisualUtils.ForceAnimationState(_animationStates, jumper, JumpState);
     }
     
 
     /// <summary>
-    /// Triggers the land animation for a jumper once per forward pass.
+    /// Declenche l'animation d'atterrissage d'un sauteur une seule fois par passage vers l'avant.
     /// </summary>
-    /// <param name="jumper">The jumper whose land animation should play.</param>
+    /// <param name="jumper">Sauteur dont l'animation d'atterrissage doit etre jouee.</param>
     private void Land(SeeSawJumper jumper)
     {
         if (jumper == _jumper)
         {
-            if (_jumperLanded)
+            if (!RhythmVisualUtils.TrySetTrigger(ref _jumperLanded))
                 return;
-
-            _jumperLanded = true;
         }
         else
         {
-            if (_counterLanded)
+            if (!RhythmVisualUtils.TrySetTrigger(ref _counterLanded))
                 return;
-
-            _counterLanded = true;
         }
 
-        ForceAnimationState(jumper, LandState);
+        RhythmVisualUtils.ForceAnimationState(_animationStates, jumper, LandState, JumpState);
     }
 
     /// <summary>
-    /// Selects the jump or fall animation state from the current arc progress.
+    /// Selectionne l'etat d'animation jump ou fall selon la progression courante de l'arc.
     /// </summary>
-    /// <param name="jumper">The jumper being animated.</param>
-    /// <param name="jumpProgression">Normalized progress through that jumper's arc.</param>
+    /// <param name="jumper">Sauteur anime.</param>
+    /// <param name="jumpProgression">Progression normalisee dans l'arc de ce sauteur.</param>
     private void ApplyJumpAnimation(SeeSawJumper jumper, float jumpProgression)
     {
-        ForceAnimationState(jumper, jumpProgression < 0.5f ? JumpState : FallState);
+        RhythmVisualUtils.ForceAnimationState(_animationStates, jumper, jumpProgression < 0.5f ? JumpState : FallState);
     }
 
     /// <summary>
-    /// Forces a jumper animation state if the corresponding state machine exists.
+    /// Calcule la duree d'approche depuis une position de depart et les references de cote.
     /// </summary>
-    /// <param name="jumper">The jumper whose animation state should change.</param>
-    /// <param name="stateName">Animation state name to force.</param>
-    private void ForceAnimationState(SeeSawJumper jumper, string stateName)
-    {
-
-        if (_animationStates == null || !_animationStates.TryGetValue(jumper, out AnimationStateMachine stateMachine))
-            return;
-
-        if (stateMachine.CurrentState?.Name == stateName && stateName != LandState)
-            return;
-
-        // Re-entering the land state is needed to restart Applejack's landing animation when
-        // two notes land in close succession. Force through jump first because ForceState on
-        // the current state would otherwise be ignored by some state machine implementations.
-        if (stateMachine.CurrentState?.Name == stateName)
-            stateMachine.ForceState(JumpState);
-
-        stateMachine.ForceState(stateName);
-    }
-
-    /// <summary>
-    /// Computes the approach duration from a starting position and side references.
-    /// </summary>
-    /// <param name="crotchet">Beat duration in seconds at the current BPM.</param>
-    /// <param name="fromPos">Stable starting position.</param>
-    /// <param name="innerPos">Reference inner-side position.</param>
-    /// <param name="outerPos">Reference outer-side position.</param>
-    /// <returns>Two beats when starting from the inner side; three beats when starting from the outer side.</returns>
+    /// <param name="crotchet">Duree d'un beat en secondes au BPM courant.</param>
+    /// <param name="fromPos">Position stable de depart.</param>
+    /// <param name="innerPos">Reference du cote interieur.</param>
+    /// <param name="outerPos">Reference du cote exterieur.</param>
+    /// <returns>Deux beats si le depart est proche du cote interieur; quatre beats cote exterieur.</returns>
     public static double GetApproachDuration(double crotchet, Vector2 fromPos, Vector2 innerPos, Vector2 outerPos)
     {
         return new SeeSawJumpPath(fromPos, fromPos, innerPos, outerPos).GetApproachDuration(crotchet);
     }
 
     /// <summary>
-    /// Applies a sine-arc jump position to a GameObject.
+    /// Applique une position de saut en arc sinusoidal a un GameObject.
     /// </summary>
-    /// <param name="jumper">GameObject to move.</param>
-    /// <param name="path">Path containing start, end, and arc height.</param>
-    /// <param name="progression">Normalized progress through the jump arc.</param>
+    /// <param name="jumper">GameObject a deplacer.</param>
+    /// <param name="path">Chemin contenant depart, arrivee et hauteur d'arc.</param>
+    /// <param name="progression">Progression normalisee dans l'arc de saut.</param>
     private static void ApplyJump(GameObject jumper, SeeSawJumpPath path, float progression)
     {
-        // Horizontal movement is linear; vertical movement is a sine arc that starts and ends
-        // at ground level. The path decides the arc height from the jumper's starting side.
-        float heightMultiplier = (float)Math.Sin(progression * Math.PI);
+        // Le mouvement horizontal est lineaire; le mouvement vertical suit un arc sinusoidal
+        // qui commence et finit au sol. Le chemin porte la hauteur derivee du cote de depart.
+        RhythmVisualUtils.ApplySineArc(jumper, path.From, path.To, path.JumpHeight, progression);
+    }
 
-        Vector2 basePos = Vector2.Lerp(path.From, path.To, progression);
-        jumper.Position = new Vector2(basePos.X, basePos.Y - (path.JumpHeight * heightMultiplier));
+    private static bool IsStationaryPath(SeeSawJumpPath path)
+    {
+        return path.From == path.To && path.JumpHeight == 0f;
     }
 
     /// <summary>
-    /// Draws this visual note.
+    /// Dessine cette note visuelle.
     /// </summary>
-    /// <param name="spriteBatch">Sprite batch used for drawing.</param>
+    /// <param name="spriteBatch">SpriteBatch utilise pour le rendu.</param>
     /// <remarks>
-    /// See-Saw visual notes mutate scene-owned actors directly, so there is no independent
-    /// per-note sprite to draw here.
+    /// Les notes visuelles See-Saw mutent directement des acteurs possedes par la scene; il n'y a
+    /// donc pas de sprite independant propre a chaque note a dessiner ici.
     /// </remarks>
     public override void Draw(SpriteBatch spriteBatch)
     {
@@ -592,12 +604,12 @@ public class SeeSawVisualNote : VisualNote
 }
 
 /// <summary>
-/// Describes one deterministic jump arc between two stable See-Saw positions.
+/// Decrit un arc de saut deterministe entre deux positions stables du See-Saw.
 /// </summary>
 /// <remarks>
-/// The inner/outer references are not necessarily the path endpoints. They are used to infer
-/// whether the actor starts from the inner or outer side, which controls both arc height and
-/// approach duration. This mirrors the editor timing rules.
+/// Les references interieure/exterieure ne sont pas forcement les extremites du chemin. Elles
+/// servent a determiner si l'acteur part du cote interieur ou exterieur, ce qui controle a la fois
+/// la hauteur de l'arc et la duree d'approche. Cette regle doit rester alignee avec l'editeur.
 /// </remarks>
 public readonly struct SeeSawJumpPath
 {
@@ -605,13 +617,13 @@ public readonly struct SeeSawJumpPath
     private const double OuterApproachBeats = 4.0;
 
     /// <summary>
-    /// Creates a jump path and derives its arc height from the starting side.
+    /// Cree un chemin de saut et derive sa hauteur d'arc depuis le cote de depart.
     /// </summary>
-    /// <param name="from">Stable starting position.</param>
-    /// <param name="to">Stable landing position.</param>
-    /// <param name="innerReference">Reference inner-side position for this actor.</param>
-    /// <param name="outerReference">Reference outer-side position for this actor.</param>
-    /// <param name="jumpHeightMultiplier">Multiplier applied to the derived vertical jump height.</param>
+    /// <param name="from">Position stable de depart.</param>
+    /// <param name="to">Position stable d'atterrissage.</param>
+    /// <param name="innerReference">Reference du cote interieur pour cet acteur.</param>
+    /// <param name="outerReference">Reference du cote exterieur pour cet acteur.</param>
+    /// <param name="jumpHeightMultiplier">Multiplicateur applique a la hauteur verticale derivee.</param>
     public SeeSawJumpPath(Vector2 from, Vector2 to, Vector2 innerReference, Vector2 outerReference, float jumpHeightMultiplier = 1f)
     {
         From = from;
@@ -637,53 +649,89 @@ public readonly struct SeeSawJumpPath
         return new SeeSawJumpPath(from, to, innerReference, outerReference, jumpHeight, useExactJumpHeight: true);
     }
 
+    /// <summary>
+    /// Position stable de depart du saut.
+    /// </summary>
     public Vector2 From { get; }
+
+    /// <summary>
+    /// Position stable d'atterrissage du saut.
+    /// </summary>
     public Vector2 To { get; }
+
+    /// <summary>
+    /// Position de reference representant le cote interieur de l'acteur.
+    /// </summary>
     public Vector2 InnerReference { get; }
+
+    /// <summary>
+    /// Position de reference representant le cote exterieur de l'acteur.
+    /// </summary>
     public Vector2 OuterReference { get; }
+
+    /// <summary>
+    /// Multiplicateur applique lors du calcul automatique de la hauteur de saut.
+    /// </summary>
     public float JumpHeightMultiplier { get; }
+
+    /// <summary>
+    /// Hauteur maximale de l'arc de saut, en pixels.
+    /// </summary>
     public float JumpHeight { get; }
 
-    // A jumper starting from the inner side takes a shorter lead-in than one
-    // starting from the outer side. Editor timing uses the same rule.
+    // Un sauteur partant du cote interieur a un lead-in plus court qu'un depart cote exterieur.
+    // Le timing editeur utilise la meme regle.
     /// <summary>
-    /// Computes the approach duration for this path from its starting side.
+    /// Calcule la duree d'approche de ce chemin a partir de son cote de depart.
     /// </summary>
-    /// <param name="crotchet">Beat duration in seconds at the current BPM.</param>
-    /// <returns>Two beats when starting near inner; four beats when starting near outer.</returns>
+    /// <param name="crotchet">Duree d'un beat en secondes au BPM courant.</param>
+    /// <returns>Deux beats si le depart est proche de l'interieur; quatre beats s'il est proche de l'exterieur.</returns>
     public double GetApproachDuration(double crotchet)
     {
-        return crotchet * (StartsNearInner ? InnerApproachBeats : OuterApproachBeats);
+        return RhythmVisualUtils.ApproachDurationByNearestReference(crotchet, From, InnerReference, OuterReference, InnerApproachBeats, OuterApproachBeats);
     }
 
-    private bool StartsNearInner => Vector2.Distance(From, InnerReference) < Vector2.Distance(From, OuterReference);
-
     /// <summary>
-    /// Selects the vertical arc height from the starting side.
+    /// Selectionne la hauteur d'arc verticale selon le cote de depart.
     /// </summary>
-    /// <param name="fromPos">Stable starting position.</param>
-    /// <param name="innerPos">Reference inner-side position.</param>
-    /// <param name="outerPos">Reference outer-side position.</param>
-    /// <returns>Inner or outer jump height in pixels.</returns>
+    /// <param name="fromPos">Position stable de depart.</param>
+    /// <param name="innerPos">Reference du cote interieur.</param>
+    /// <param name="outerPos">Reference du cote exterieur.</param>
+    /// <returns>Hauteur de saut interieure ou exterieure, en pixels.</returns>
     private static float GetJumpHeight(Vector2 fromPos, Vector2 innerPos, Vector2 outerPos)
     {
-        float distToInner = Vector2.Distance(fromPos, innerPos);
-        float distToOuter = Vector2.Distance(fromPos, outerPos);
-        return (distToInner < distToOuter) ? SeeSawVisualNote.InnerJumpHeight : SeeSawVisualNote.OuterJumpHeight;
+        return RhythmVisualUtils.IsNearer(fromPos, innerPos, outerPos) ? SeeSawVisualNote.InnerJumpHeight : SeeSawVisualNote.OuterJumpHeight;
     }
 }
 
 /// <summary>
-/// Optional first-half jump performed by the other actor before the main jumper lands.
+/// Saut optionnel qui se deroule en meme temps que le sauteur principal.
+/// </summary>
+public readonly struct SeeSawSimultaneousJump
+{
+    public SeeSawSimultaneousJump(SeeSawJumper jumper, SeeSawJumpPath path, bool isBigLeap)
+    {
+        Jumper = jumper;
+        Path = path;
+        IsBigLeap = isBigLeap;
+    }
+
+    public SeeSawJumper Jumper { get; }
+    public SeeSawJumpPath Path { get; }
+    public bool IsBigLeap { get; }
+}
+
+/// <summary>
+/// Contre-saut optionnel effectue par l'autre acteur avant l'atterrissage du sauteur principal.
 /// </summary>
 public readonly struct SeeSawCounterJump
 {
     /// <summary>
-    /// Creates a counter jump configuration.
+    /// Cree une configuration de contre-saut.
     /// </summary>
-    /// <param name="jumper">Actor that performs the counter jump.</param>
-    /// <param name="path">Path followed by the counter jumper.</param>
-    /// <param name="targetRotation">Beam rotation after this counter jumper lands.</param>
+    /// <param name="jumper">Acteur qui effectue le contre-saut.</param>
+    /// <param name="path">Chemin suivi par le contre-sauteur.</param>
+    /// <param name="targetRotation">Rotation de poutre apres l'atterrissage de ce contre-sauteur.</param>
     public SeeSawCounterJump(SeeSawJumper jumper, SeeSawJumpPath path, float targetRotation)
     {
         Jumper = jumper;
@@ -691,13 +739,34 @@ public readonly struct SeeSawCounterJump
         TargetRotation = targetRotation;
     }
 
+    /// <summary>
+    /// Identite de l'acteur qui effectue le contre-saut.
+    /// </summary>
     public SeeSawJumper Jumper { get; }
+
+    /// <summary>
+    /// Chemin d'arc suivi par le contre-sauteur.
+    /// </summary>
     public SeeSawJumpPath Path { get; }
+
+    /// <summary>
+    /// Rotation de poutre appliquee lorsque le contre-sauteur a atterri.
+    /// </summary>
     public float TargetRotation { get; }
 }
 
+/// <summary>
+/// Identifie les acteurs pouvant participer a une choregraphie See-Saw.
+/// </summary>
 public enum SeeSawJumper
 {
+    /// <summary>
+    /// Applejack, utilisee comme contre-sauteuse dans les choregraphies actuelles.
+    /// </summary>
     APPLEJACK,
+
+    /// <summary>
+    /// Rainbow Dash, utilisee comme sauteuse principale dans les actions de chart actuelles.
+    /// </summary>
     RAINBOW_DASH
 }

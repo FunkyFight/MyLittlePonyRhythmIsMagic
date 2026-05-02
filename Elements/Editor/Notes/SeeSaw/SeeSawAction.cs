@@ -2,11 +2,22 @@ using System.Collections.Generic;
 
 namespace MLP_RiM.Elements.Editor;
 
+public enum SeeSawOppositeMode
+{
+    RainbowDash,
+    Applejack,
+    Both
+}
+
 public readonly struct SeeSawAction
 {
     public const string DataKey = "action";
     private const string BigLeapRainbowDashDataKey = "big_leap_rainbow_dash";
     private const string BigLeapApplejackDataKey = "big_leap_applejack";
+    private const string OppositeJumperDataKey = "opposite_jumper";
+    private const string ApplejackOppositeJumperValue = "applejack";
+    private const string RainbowDashOppositeJumperValue = "rainbow_dash";
+    private const string BothOppositeJumperValue = "both";
 
     public static readonly SeeSawAction TowardOuter = new("see_saw_toward_outer", SeeSawDirection.Outer, isBigLeap: false, hasBigCounterJump: false);
     public static readonly SeeSawAction TowardInner = new("see_saw_toward_inner", SeeSawDirection.Inner, isBigLeap: false, hasBigCounterJump: false);
@@ -35,13 +46,16 @@ public readonly struct SeeSawAction
     public SeeSawDirection Direction { get; }
     public bool IsBigLeap { get; }
     public bool HasBigCounterJump { get; }
+    public SeeSawOppositeMode OppositeMode { get; }
+    public SeeSawJumper OppositeJumper => OppositeMode == SeeSawOppositeMode.Applejack ? SeeSawJumper.APPLEJACK : SeeSawJumper.RAINBOW_DASH;
 
-    private SeeSawAction(string value, SeeSawDirection direction, bool isBigLeap, bool hasBigCounterJump)
+    private SeeSawAction(string value, SeeSawDirection direction, bool isBigLeap, bool hasBigCounterJump, SeeSawOppositeMode oppositeMode = SeeSawOppositeMode.RainbowDash)
     {
         Value = value;
         Direction = direction;
         IsBigLeap = isBigLeap;
         HasBigCounterJump = hasBigCounterJump;
+        OppositeMode = oppositeMode;
     }
 
     public static SeeSawAction FromVariant(EditorNoteVariant variant)
@@ -58,7 +72,7 @@ public readonly struct SeeSawAction
         {
             bool rainbowBigLeap = GetBigLeapRainbowDash(additionnalData) || action.IsBigLeap;
             bool applejackBigLeap = GetBigLeapApplejack(additionnalData) || action.HasBigCounterJump;
-            return action.WithBigLeapOptions(rainbowBigLeap, applejackBigLeap);
+            return action.WithBigLeapOptions(rainbowBigLeap, applejackBigLeap).WithOppositeMode(GetOppositeMode(additionnalData));
         }
 
         return TowardOuter;
@@ -94,6 +108,28 @@ public readonly struct SeeSawAction
         return GetBool(additionnalData, BigLeapApplejackDataKey);
     }
 
+    public static SeeSawJumper GetOppositeJumper(IReadOnlyDictionary<string, string> additionnalData)
+    {
+        return GetOppositeMode(additionnalData) == SeeSawOppositeMode.Applejack
+            ? SeeSawJumper.APPLEJACK
+            : SeeSawJumper.RAINBOW_DASH;
+    }
+
+    public static SeeSawOppositeMode GetOppositeMode(IReadOnlyDictionary<string, string> additionnalData)
+    {
+        if (additionnalData != null
+            && additionnalData.TryGetValue(OppositeJumperDataKey, out string value)
+            && value == ApplejackOppositeJumperValue)
+            return SeeSawOppositeMode.Applejack;
+
+        if (additionnalData != null
+            && additionnalData.TryGetValue(OppositeJumperDataKey, out value)
+            && value == BothOppositeJumperValue)
+            return SeeSawOppositeMode.Both;
+
+        return SeeSawOppositeMode.RainbowDash;
+    }
+
     public static SeeSawDirection GetBaseDirection(SeeSawDirection direction)
     {
         return direction switch
@@ -118,6 +154,30 @@ public readonly struct SeeSawAction
     public static void SetDirection(IDictionary<string, string> additionnalData, SeeSawDirection direction)
     {
         additionnalData[DataKey] = GetActionValue(GetBaseDirection(direction));
+
+        if (GetBaseDirection(direction) != SeeSawDirection.Opposite)
+            additionnalData.Remove(OppositeJumperDataKey);
+    }
+
+    public static void SetOppositeJumper(IDictionary<string, string> additionnalData, SeeSawJumper jumper)
+    {
+        SetOppositeMode(additionnalData, jumper == SeeSawJumper.APPLEJACK ? SeeSawOppositeMode.Applejack : SeeSawOppositeMode.RainbowDash);
+    }
+
+    public static void SetOppositeMode(IDictionary<string, string> additionnalData, SeeSawOppositeMode mode)
+    {
+        switch (mode)
+        {
+            case SeeSawOppositeMode.Applejack:
+                additionnalData[OppositeJumperDataKey] = ApplejackOppositeJumperValue;
+                break;
+            case SeeSawOppositeMode.Both:
+                additionnalData[OppositeJumperDataKey] = BothOppositeJumperValue;
+                break;
+            default:
+                additionnalData.Remove(OppositeJumperDataKey);
+                break;
+        }
     }
 
     public static void ToggleBigLeapRainbowDash(IDictionary<string, string> additionnalData)
@@ -132,7 +192,12 @@ public readonly struct SeeSawAction
 
     private SeeSawAction WithBigLeapOptions(bool rainbowBigLeap, bool applejackBigLeap)
     {
-        return new SeeSawAction(Value, GetDirectionWithBigLeap(Direction, rainbowBigLeap), rainbowBigLeap, applejackBigLeap);
+        return new SeeSawAction(Value, GetDirectionWithBigLeap(Direction, rainbowBigLeap), rainbowBigLeap, applejackBigLeap, OppositeMode);
+    }
+
+    private SeeSawAction WithOppositeMode(SeeSawOppositeMode oppositeMode)
+    {
+        return new SeeSawAction(Value, Direction, IsBigLeap, HasBigCounterJump, oppositeMode);
     }
 
     private static SeeSawDirection GetDirectionWithBigLeap(SeeSawDirection direction, bool isBigLeap)
@@ -183,7 +248,12 @@ public readonly struct SeeSawAction
         {
             SeeSawDirection.Outer or SeeSawDirection.OuterBigLeap => new SeeSawEditorState(rainbowIsOuter: true, applejackIsOuter: true),
             SeeSawDirection.Inner or SeeSawDirection.InnerBigLeap => new SeeSawEditorState(rainbowIsOuter: false, applejackIsOuter: false),
-            SeeSawDirection.Opposite or SeeSawDirection.OppositeBigLeap => new SeeSawEditorState(rainbowIsOuter: !state.ApplejackIsOuter, applejackIsOuter: state.ApplejackIsOuter),
+            SeeSawDirection.Opposite or SeeSawDirection.OppositeBigLeap => OppositeMode switch
+            {
+                SeeSawOppositeMode.Applejack => new SeeSawEditorState(rainbowIsOuter: state.RainbowIsOuter, applejackIsOuter: !state.RainbowIsOuter),
+                SeeSawOppositeMode.Both => new SeeSawEditorState(rainbowIsOuter: !state.RainbowIsOuter, applejackIsOuter: !state.ApplejackIsOuter),
+                _ => new SeeSawEditorState(rainbowIsOuter: !state.ApplejackIsOuter, applejackIsOuter: state.ApplejackIsOuter)
+            },
             _ => state
         };
     }

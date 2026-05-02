@@ -10,6 +10,7 @@ public sealed class DevUiFloatingWindow
 {
     private readonly DevUiRenderer _ui;
     private readonly DevUiDropdown _dropdown;
+    private string _openDropdownKey;
     private int _scrollOffset;
     private MouseState _previousMouse;
     private MouseState _mouse;
@@ -109,11 +110,16 @@ public sealed class DevUiFloatingWindow
             if (row.Kind == DevUiWindowRowKind.Dropdown && row.Options != null && contentBounds.Intersects(rowBounds))
             {
                 Rectangle dropdownBounds = GetDropdownBounds(rowBounds);
-                if (_dropdown.Update(dropdownBounds, row.Options, row.SelectedIndex, _mouse, leftClicked, wheelDelta))
+                bool isOpenRow = _openDropdownKey == row.Key;
+                if (_dropdown.Update(dropdownBounds, row.Options, row.SelectedIndex, _mouse, leftClicked, wheelDelta, isOpenRow))
                 {
                     row.Select?.Invoke(_dropdown.SelectedIndex);
+                    _openDropdownKey = null;
                     return true;
                 }
+
+                if (leftClicked && dropdownBounds.Contains(_mouse.Position))
+                    _openDropdownKey = _dropdown.IsOpen ? row.Key : null;
             }
 
             y += rowBounds.Height;
@@ -135,7 +141,8 @@ public sealed class DevUiFloatingWindow
             {
                 Rectangle dropdownBounds = GetDropdownBounds(rowBounds);
                 Rectangle listBounds = new(dropdownBounds.X, dropdownBounds.Y, dropdownBounds.Width, dropdownBounds.Height * (Math.Min(4, row.Options.Count) + 1));
-                return listBounds.Contains(_mouse.Position);
+                if (_openDropdownKey == row.Key)
+                    return listBounds.Contains(_mouse.Position);
             }
 
             y += rowBounds.Height;
@@ -168,7 +175,7 @@ public sealed class DevUiFloatingWindow
 
             case DevUiWindowRowKind.Dropdown:
                 _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X, bounds.Y + 7), Color.White, 2);
-                _dropdown.Draw(spriteBatch, GetDropdownBounds(bounds), row.Options, row.SelectedIndex);
+                _dropdown.Draw(spriteBatch, GetDropdownBounds(bounds), row.Options, row.SelectedIndex, _openDropdownKey == row.Key);
                 break;
 
             case DevUiWindowRowKind.Button:
@@ -254,8 +261,9 @@ public readonly struct DevUiWindowRow
     public IReadOnlyList<string> Options { get; }
     public int SelectedIndex { get; }
     public Action<int> Select { get; }
+    public string Key { get; }
 
-    private DevUiWindowRow(DevUiWindowRowKind kind, string text, bool isChecked = false, Action toggle = null, IReadOnlyList<string> options = null, int selectedIndex = 0, Action<int> select = null)
+    private DevUiWindowRow(DevUiWindowRowKind kind, string text, bool isChecked = false, Action toggle = null, IReadOnlyList<string> options = null, int selectedIndex = 0, Action<int> select = null, string key = null)
     {
         Kind = kind;
         Text = text;
@@ -264,6 +272,7 @@ public readonly struct DevUiWindowRow
         Options = options;
         SelectedIndex = selectedIndex;
         Select = select;
+        Key = key ?? text;
     }
 
     public static DevUiWindowRow Category(string text)
@@ -283,7 +292,12 @@ public readonly struct DevUiWindowRow
 
     public static DevUiWindowRow Dropdown(string text, IReadOnlyList<string> options, int selectedIndex, Action<int> select)
     {
-        return new DevUiWindowRow(DevUiWindowRowKind.Dropdown, text, options: options, selectedIndex: selectedIndex, select: select);
+        return Dropdown(text, text, options, selectedIndex, select);
+    }
+
+    public static DevUiWindowRow Dropdown(string key, string text, IReadOnlyList<string> options, int selectedIndex, Action<int> select)
+    {
+        return new DevUiWindowRow(DevUiWindowRowKind.Dropdown, text, options: options, selectedIndex: selectedIndex, select: select, key: key);
     }
 
     public static DevUiWindowRow Button(string text, Action click)

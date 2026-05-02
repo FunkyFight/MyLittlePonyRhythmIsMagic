@@ -22,6 +22,7 @@ public sealed class BeatmapEditorElement
     private readonly double _snapDivisions;
     private readonly List<string> _availableSongs = new();
     private readonly List<string> _availableCharts = new();
+    private readonly Dictionary<EditorNoteKind, Dictionary<string, string>> _lastCreatedNoteData = new();
     private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset" };
 
     private BeatmapEditorDocument _document;
@@ -78,11 +79,6 @@ public sealed class BeatmapEditorElement
         {
             _manualSongPosition = _beatmapPlayer.Conductor.SongPosition;
         }
-        else if (_beatmapPlayer.ChartPlayer != null)
-        {
-            _beatmapPlayer.ChartPlayer.Update(_manualSongPosition);
-            _beatmapPlayer.VisualNoteMng?.Update(_manualSongPosition);
-        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -129,7 +125,9 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.Down))
             SelectRelative(1);
 
-        if (Pressed(Keys.Enter) || Pressed(Keys.Insert))
+        if (Pressed(Keys.Enter) && _optionsIsCreation && _noteOptionsWindow.IsOpen)
+            CreatePendingNote();
+        else if (Pressed(Keys.Enter) || Pressed(Keys.Insert))
             PlaceSelectedNote();
 
         if (Pressed(Keys.Delete) || Pressed(Keys.Back))
@@ -200,7 +198,7 @@ public sealed class BeatmapEditorElement
 
         _optionsNote = note;
         EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(_optionsNote);
-        if (definition == null || !EditorNoteOptionsPanels.TryGet(definition.Kind, out _optionsPanel))
+        if (definition == null || !EditorNoteDefinitions.TryGetOptionsPanel(definition.Kind, out _optionsPanel))
         {
             _status = "No configurable note close enough";
             return false;
@@ -216,9 +214,12 @@ public sealed class BeatmapEditorElement
     private void OpenCreateNoteWindow(EditorNoteDefinition definition, double songPosition)
     {
         _optionsNote = definition.CreateChartNote(songPosition, _document.Crotchet, variantIndex: 0);
+        if (_lastCreatedNoteData.TryGetValue(definition.Kind, out Dictionary<string, string> lastData))
+            _optionsNote.AdditionnalData = new Dictionary<string, string>(lastData);
+
         _optionsDefinition = definition;
         _optionsIsCreation = true;
-        EditorNoteOptionsPanels.TryGet(definition.Kind, out _optionsPanel);
+        EditorNoteDefinitions.TryGetOptionsPanel(definition.Kind, out _optionsPanel);
         _noteOptionsWindow.Open();
         _status = $"Configure {definition.DisplayName} at {songPosition:0.000}s, then Create";
     }
@@ -279,8 +280,9 @@ public sealed class BeatmapEditorElement
     private void StartPreview()
     {
         double position = CurrentSongPosition();
-        _beatmapPlayer.StartBeatmap(_document.SongPath, _document.Chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
-        _beatmapPlayer.Conductor.Seek(position);
+        _beatmapPlayer.StartBeatmapPaused(_document.SongPath, _document.Chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
+        SyncPlaybackToEditorPosition(position, resetVisuals: true);
+        _beatmapPlayer.Conductor.Play();
         _isPreviewPlaying = true;
         _status = "Preview playing — ESC to stop";
     }
@@ -324,10 +326,8 @@ public sealed class BeatmapEditorElement
         bool shouldPlay = keepPlaying && _beatmapPlayer.Conductor != null && _beatmapPlayer.Conductor.isPlaying();
 
         _beatmapPlayer.StartBeatmapPaused(_document.SongPath, _document.Chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
-        _beatmapPlayer.Conductor.Seek(position);
-        _manualSongPosition = position;
         _rhythmVisuals = new EditorRhythmInputVisualElement(_beatmapPlayer, _pixel, _ui);
-        Seek(position, updateStatus: false);
+        SyncPlaybackToEditorPosition(position, resetVisuals: true);
 
         if (shouldPlay)
             _beatmapPlayer.Conductor.Play();
@@ -340,13 +340,14 @@ public sealed class BeatmapEditorElement
 
         if (_beatmapPlayer.Conductor.isPlaying())
         {
+            double position = _beatmapPlayer.Conductor.SongPosition;
             _beatmapPlayer.Conductor.Pause();
-            _manualSongPosition = _beatmapPlayer.Conductor.SongPosition;
+            SyncPlaybackToEditorPosition(position, resetVisuals: false);
             _status = "Paused";
         }
         else
         {
-            Seek(_manualSongPosition, updateStatus: false);
+            SyncPlaybackToEditorPosition(_manualSongPosition, resetVisuals: false);
             _beatmapPlayer.Conductor.Play();
             _status = "Playing";
         }
@@ -366,6 +367,7 @@ public sealed class BeatmapEditorElement
 
         if (_document.TryPlaceNote(_optionsDefinition, _optionsNote, out ChartNote placedNote, out string reason))
         {
+            _lastCreatedNoteData[_optionsDefinition.Kind] = new Dictionary<string, string>(placedNote.AdditionnalData ?? new Dictionary<string, string>());
             _optionsIsCreation = false;
             RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
             OpenNoteOptionsWindow(placedNote);
@@ -393,16 +395,22 @@ public sealed class BeatmapEditorElement
 
     private void Seek(double songPosition, bool updateStatus = true)
     {
-        _manualSongPosition = Math.Max(0, songPosition);
-        if (_beatmapPlayer.Conductor != null)
-            _beatmapPlayer.Conductor.Seek(_manualSongPosition);
-
-        _beatmapPlayer.ChartPlayer?.Seek(_manualSongPosition);
-        _beatmapPlayer.VisualNoteMng?.Reset();
-        _beatmapPlayer.VisualNoteMng?.Update(_manualSongPosition);
+        SyncPlaybackToEditorPosition(songPosition, resetVisuals: true);
 
         if (updateStatus)
             _status = $"Seek {_manualSongPosition:0.000}s";
+    }
+
+    private void SyncPlaybackToEditorPosition(double songPosition, bool resetVisuals)
+    {
+        _manualSongPosition = Math.Max(0, songPosition);
+        _beatmapPlayer.Conductor?.Seek(_manualSongPosition);
+        _beatmapPlayer.ChartPlayer?.Seek(_manualSongPosition);
+
+        if (resetVisuals)
+            _beatmapPlayer.VisualNoteMng?.Reset();
+
+        _beatmapPlayer.VisualNoteMng?.Update(_manualSongPosition);
     }
 
     private void Select(EditorNoteKind kind)
@@ -727,7 +735,7 @@ public sealed class BeatmapEditorElement
         return row.Kind switch
         {
             DevUiWindowRowKind.Checkbox => DevUiWindowRow.Checkbox(row.Text, row.IsChecked, () => ApplyNoteOption(_ => row.Toggle?.Invoke())),
-            DevUiWindowRowKind.Dropdown => DevUiWindowRow.Dropdown(row.Text, row.Options, row.SelectedIndex, index => ApplyNoteOption(_ => row.Select?.Invoke(index))),
+            DevUiWindowRowKind.Dropdown => DevUiWindowRow.Dropdown(row.Key, row.Text, row.Options, row.SelectedIndex, index => ApplyNoteOption(_ => row.Select?.Invoke(index))),
             _ => row
         };
     }

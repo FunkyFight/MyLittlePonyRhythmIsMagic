@@ -1,6 +1,15 @@
 namespace MLP_RiM.Elements.Editor;
 
-public interface IEditorNoteDefinitionProvider
+public interface IEditorNoteProvider
 {
-    EditorNoteDefinition Create();
+    EditorNoteDefinition Definition { get; }
+
+    IEditorNoteOptionsPanel OptionsPanel { get; }
+}
+
+public abstract class EditorNoteProvider : IEditorNoteProvider
+{
+    public abstract EditorNoteDefinition Definition { get; }
+
+    public virtual IEditorNoteOptionsPanel OptionsPanel => null;
 }

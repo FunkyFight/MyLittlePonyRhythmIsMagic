@@ -23,13 +23,13 @@ public sealed class DevUiDropdown
 
     public int SelectedIndex { get; private set; }
 
-    public bool Update(Rectangle bounds, IReadOnlyList<string> options, int selectedIndex, MouseState mouse, bool leftClicked, int wheelDelta)
+    public bool Update(Rectangle bounds, IReadOnlyList<string> options, int selectedIndex, MouseState mouse, bool leftClicked, int wheelDelta, bool isOpenRow)
     {
         SelectedIndex = Math.Clamp(selectedIndex, 0, Math.Max(0, options.Count - 1));
+        _isOpen = isOpenRow;
 
         if (options.Count == 0)
         {
-            _isOpen = false;
             _scrollOffset = 0;
             return false;
         }
@@ -71,16 +71,16 @@ public sealed class DevUiDropdown
         return false;
     }
 
-    public void Draw(SpriteBatch spriteBatch, Rectangle bounds, IReadOnlyList<string> options, int selectedIndex)
+    public void Draw(SpriteBatch spriteBatch, Rectangle bounds, IReadOnlyList<string> options, int selectedIndex, bool isOpen)
     {
         if (options.Count == 0)
             return;
 
         int clampedIndex = Math.Clamp(selectedIndex, 0, options.Count - 1);
         DrawItem(spriteBatch, bounds, options[clampedIndex], Color.Black * 0.85f, Color.LightGreen);
-        _ui.Label(spriteBatch, _isOpen ? "^" : "v", new Vector2(bounds.Right - 18, bounds.Y + 6), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, isOpen ? "^" : "v", new Vector2(bounds.Right - 18, bounds.Y + 6), Color.LightGreen, 2);
 
-        if (!_isOpen)
+        if (!isOpen)
             return;
 
         int visibleItems = GetVisibleItemCount(options);

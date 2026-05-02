@@ -10,6 +10,8 @@ namespace MLP_RiM.Elements.Editor;
 public sealed class BeatmapEditorDocument
 {
     private const double HitWindowEpsilonSeconds = 0.0005;
+    private const double SeeSawInnerBeforeBeats = 2.0;
+    private const double SeeSawOuterBeforeBeats = 4.0;
 
     public Chart Chart { get; private set; }
     public string SongPath { get; set; }
@@ -243,6 +245,9 @@ public sealed class BeatmapEditorDocument
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
+        if (IsSeeSawOpposite(action))
+            return note.SongPosition + GetOppositeAfterBeats(action, state) * Crotchet;
+
         bool rainbowTargetsOuter = GetRainbowTargetIsOuter(action, state);
         bool afterUsesOuterTiming = GetAfterUsesOuterTiming(action, state);
         return definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, rainbowTargetsOuter, action.IsBigLeap, afterUsesOuterTiming);
@@ -253,6 +258,9 @@ public sealed class BeatmapEditorDocument
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
+        if (IsSeeSawOpposite(action))
+            return note.SongPosition - GetOppositeApproachBeats(action, state) * Crotchet;
+
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
         bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
         return definition.GetStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
@@ -260,6 +268,9 @@ public sealed class BeatmapEditorDocument
 
     public double GetBlockingStart(ChartNote note, EditorNoteDefinition definition)
     {
+        if (definition.Kind == EditorNoteKind.SeeSaw)
+            return GetContextualStart(note, definition);
+
         return GetBlockingStart(definition, note.SongPosition);
     }
 
@@ -268,6 +279,9 @@ public sealed class BeatmapEditorDocument
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
+        if (IsSeeSawOpposite(action))
+            return note.SongPosition - GetOppositeApproachBeats(action, state) * Crotchet;
+
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
         bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
         return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
@@ -286,6 +300,9 @@ public sealed class BeatmapEditorDocument
         SeeSawEditorState state = GetSeeSawStateBefore(songPosition);
         EditorNoteVariant variant = definition.GetVariant(variantIndex);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
+        if (IsSeeSawOpposite(action))
+            return songPosition - GetOppositeApproachBeats(action, state) * Crotchet;
+
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
         bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
         return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming, forceBigLeapTiming: false, afterUsesOuterTiming: counterUsesOuterTiming);
@@ -353,8 +370,8 @@ public sealed class BeatmapEditorDocument
 
     private bool GetBeforeUsesOuterTiming(SeeSawAction action, SeeSawEditorState state)
     {
-        if (SeeSawAction.GetBaseDirection(action.Direction) == SeeSawDirection.Opposite)
-            return state.ApplejackIsOuter;
+        if (IsSeeSawOpposite(action))
+            return action.OppositeMode == SeeSawOppositeMode.Applejack ? state.RainbowIsOuter : state.ApplejackIsOuter;
 
         return state.RainbowIsOuter;
     }
@@ -365,17 +382,61 @@ public sealed class BeatmapEditorDocument
         {
             SeeSawDirection.Outer => true,
             SeeSawDirection.Inner => false,
-            SeeSawDirection.Opposite => state.RainbowIsOuter,
+            SeeSawDirection.Opposite => action.OppositeMode switch
+            {
+                SeeSawOppositeMode.Applejack => !state.RainbowIsOuter,
+                SeeSawOppositeMode.Both => !state.RainbowIsOuter,
+                _ => !state.ApplejackIsOuter
+            },
             _ => action.Apply(state).RainbowIsOuter
         };
     }
 
     private bool GetCounterUsesOuterTiming(SeeSawAction action, SeeSawEditorState state)
     {
-        if (SeeSawAction.GetBaseDirection(action.Direction) == SeeSawDirection.Opposite)
-            return state.RainbowIsOuter;
+        if (IsSeeSawOpposite(action))
+            return GetBeforeUsesOuterTiming(action, state);
 
         return state.ApplejackIsOuter;
+    }
+
+    private static bool IsSeeSawOpposite(SeeSawAction action)
+    {
+        return SeeSawAction.GetBaseDirection(action.Direction) == SeeSawDirection.Opposite;
+    }
+
+    private static double GetOppositeApproachBeats(SeeSawAction action, SeeSawEditorState state)
+    {
+        return action.OppositeMode switch
+        {
+            SeeSawOppositeMode.Applejack => GetActorPhaseBeats(state.ApplejackIsOuter, action.HasBigCounterJump)
+                + GetActorPhaseBeats(state.RainbowIsOuter, action.IsBigLeap),
+            SeeSawOppositeMode.Both => GetActorPhaseBeats(state.ApplejackIsOuter, action.HasBigCounterJump)
+                + GetActorPhaseBeats(state.RainbowIsOuter, action.IsBigLeap),
+            _ => GetActorPhaseBeats(state.ApplejackIsOuter, action.HasBigCounterJump)
+                + GetActorPhaseBeats(state.RainbowIsOuter, action.IsBigLeap)
+        };
+    }
+
+    private static double GetOppositeAfterBeats(SeeSawAction action, SeeSawEditorState state)
+    {
+        SeeSawEditorState targetState = action.Apply(state);
+        return action.OppositeMode switch
+        {
+            SeeSawOppositeMode.Applejack => GetActorPhaseBeats(targetState.RainbowIsOuter, action.IsBigLeap),
+            SeeSawOppositeMode.Both => GetActorPhaseBeats(targetState.RainbowIsOuter, action.IsBigLeap),
+            _ => GetActorPhaseBeats(targetState.RainbowIsOuter, action.IsBigLeap)
+        };
+    }
+
+    private static double GetActorApproachBeats(bool isOuter, bool isBigLeap)
+    {
+        return isBigLeap ? SeeSawOuterBeforeBeats / 2.0 : isOuter ? SeeSawOuterBeforeBeats : SeeSawInnerBeforeBeats;
+    }
+
+    private static double GetActorPhaseBeats(bool isOuter, bool isBigLeap)
+    {
+        return isBigLeap ? SeeSawOuterBeforeBeats / 2.0 : (isOuter ? SeeSawOuterBeforeBeats : SeeSawInnerBeforeBeats) / 2.0;
     }
 
     private void NormalizeChart()

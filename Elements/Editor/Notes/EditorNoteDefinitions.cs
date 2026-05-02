@@ -6,14 +6,18 @@ namespace MLP_RiM.Elements.Editor;
 
 public static class EditorNoteDefinitions
 {
-    private static readonly IReadOnlyList<IEditorNoteDefinitionProvider> Providers = new IEditorNoteDefinitionProvider[]
+    private static readonly IReadOnlyList<IEditorNoteProvider> Providers = new IEditorNoteProvider[]
     {
         new SeeSawEditorNote()
     };
 
     public static readonly IReadOnlyList<EditorNoteDefinition> All = Providers
-        .Select(provider => provider.Create())
+        .Select(provider => provider.Definition)
         .ToArray();
+
+    private static readonly IReadOnlyDictionary<EditorNoteKind, IEditorNoteOptionsPanel> OptionsPanels = Providers
+        .Where(provider => provider.OptionsPanel != null)
+        .ToDictionary(provider => provider.Definition.Kind, provider => provider.OptionsPanel);
 
     public static EditorNoteDefinition Get(EditorNoteKind kind)
     {
@@ -26,6 +30,11 @@ public static class EditorNoteDefinitions
             return null;
 
         return All.FirstOrDefault(definition => definition.Matches(note));
+    }
+
+    public static bool TryGetOptionsPanel(EditorNoteKind kind, out IEditorNoteOptionsPanel panel)
+    {
+        return OptionsPanels.TryGetValue(kind, out panel);
     }
 
     public static int FindVariantIndex(EditorNoteDefinition definition, ChartNote note)
