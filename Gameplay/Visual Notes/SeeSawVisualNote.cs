@@ -50,13 +50,15 @@ public class SeeSawVisualNote : VisualNote
     private readonly bool _counterIsBigLeap;
     private readonly bool _applyBeamRotation;
     private readonly Func<bool> _canApplyState;
+    private readonly Func<bool> _shouldPreserveRainbowFeedbackAnimation;
     private bool _isBigLeap;
     private bool _counterJumpStarted;
     private bool _counterLanded;
     private bool _jumperJumpStarted;
     private bool _jumperLanded;
     private bool _rainbowSnapLandRequested;
-    private bool _rainbowSnapLandCorrect;
+    private bool _rainbowFailRequested;
+    private bool _rainbowFeedbackStateApplied;
     private double _lastSongPosition = double.NaN;
 
     internal const float OuterJumpHeight = 450f;
@@ -68,6 +70,7 @@ public class SeeSawVisualNote : VisualNote
     private const float BigLeapCameraVerticalMargin = 160f;
     private const float LandTriggerProgression = 0.97f;
     internal const float CounterLandTriggerProgression = 0.47f;
+    private const double MissWindowSeconds = 0.25;
 
     internal static float GetCounterLandProgression(float counterJumpEndProgression)
     {
@@ -211,7 +214,7 @@ public class SeeSawVisualNote : VisualNote
     /// <param name="canApplyState">Predicate indiquant si ce visuel peut muter les objets partages cette frame.</param>
     /// <param name="despawnDelay">Duree de vie supplementaire apres la fin de la note.</param>
     /// <param name="approachDuration">Override optionnel de la duree d'approche, en secondes.</param>
-    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression, bool counterIsBigLeap = false, SeeSawSimultaneousJump? simultaneousJump = null, float? mainJumpStartProgression = null)
+    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression, bool counterIsBigLeap = false, SeeSawSimultaneousJump? simultaneousJump = null, float? mainJumpStartProgression = null, Func<bool> shouldPreserveRainbowFeedbackAnimation = null)
         : base(logicalNote, approachDuration ?? jumperPath.GetApproachDuration(crotchet), despawnDelay)
     {
         _jumpers = jumpers;
@@ -233,6 +236,7 @@ public class SeeSawVisualNote : VisualNote
         _counterIsBigLeap = counterIsBigLeap;
         _applyBeamRotation = seeSawBeam != null;
         _canApplyState = canApplyState;
+        _shouldPreserveRainbowFeedbackAnimation = shouldPreserveRainbowFeedbackAnimation;
         _isBigLeap = isBigLeap;
     }
 
@@ -248,8 +252,29 @@ public class SeeSawVisualNote : VisualNote
 
     public void SnapLandRainbow(bool correct)
     {
-        _rainbowSnapLandRequested = true;
-        _rainbowSnapLandCorrect = correct;
+        if (correct)
+        {
+            _rainbowSnapLandRequested = true;
+            _rainbowFeedbackStateApplied = false;
+            return;
+        }
+
+        _rainbowFailRequested = true;
+        _rainbowFeedbackStateApplied = false;
+    }
+
+    public void ApplyRainbowFeedbackState(bool correct)
+    {
+        SnapLandRainbow(correct);
+
+        if (_jumper == SeeSawJumper.RAINBOW_DASH)
+        {
+            ApplyRainbowFeedbackAnimationState(correct);
+            return;
+        }
+
+        if (!correct)
+            RhythmVisualUtils.ForceAnimationState(_animationStates, SeeSawJumper.RAINBOW_DASH, FailState);
     }
 
     /// <summary>
@@ -284,6 +309,12 @@ public class SeeSawVisualNote : VisualNote
 
         if (RhythmVisualUtils.IsAtOrAfterHit(currentSongPosition, Note.SongPosition))
         {
+            if (_jumper == SeeSawJumper.RAINBOW_DASH && !_rainbowSnapLandRequested && !_rainbowFailRequested)
+            {
+                ApplyRainbowPostHitMissWindow(currentSongPosition);
+                return;
+            }
+
             ApplyCompletedState();
             return;
         }
@@ -325,15 +356,13 @@ public class SeeSawVisualNote : VisualNote
 
         if (_jumper == SeeSawJumper.RAINBOW_DASH)
         {
-            if (_rainbowSnapLandRequested && _rainbowSnapLandCorrect)
+            if (_rainbowSnapLandRequested)
             {
-                Land(_jumper);
-                GetJumper(_jumper).Position = _jumperPath.To;
+                ApplyRainbowCompletedFeedbackState(correct: true);
             }
-            else if (_rainbowSnapLandRequested)
+            else if (_rainbowFailRequested)
             {
-                RhythmVisualUtils.ForceAnimationState(_animationStates, SeeSawJumper.RAINBOW_DASH, FailState);
-                GetJumper(_jumper).Position = _jumperPath.To;
+                ApplyRainbowCompletedFeedbackState(correct: false);
             }
         }
         else if (!IsStationaryPath(_jumperPath))
@@ -344,6 +373,62 @@ public class SeeSawVisualNote : VisualNote
 
         if (_applyBeamRotation)
             _seeSawBeam.Rotation = _targetRotation;
+    }
+
+    private void ApplyRainbowCompletedFeedbackState(bool correct)
+    {
+        if (!_rainbowFeedbackStateApplied)
+            ApplyRainbowFeedbackAnimationState(correct);
+
+        GetJumper(SeeSawJumper.RAINBOW_DASH).Position = _jumperPath.To;
+
+        if (_applyBeamRotation)
+            _seeSawBeam.Rotation = _targetRotation;
+    }
+
+    private void ApplyRainbowFeedbackAnimationState(bool correct)
+    {
+        RhythmVisualUtils.ForceAnimationState(_animationStates, SeeSawJumper.RAINBOW_DASH, correct ? LandState : FailState, correct ? JumpState : null);
+        _rainbowFeedbackStateApplied = true;
+    }
+
+    private void ApplyRainbowPostHitMissWindow(double currentSongPosition)
+    {
+        float unreactedProgression = GetRainbowUnreactedJumpProgression(
+            RhythmVisualUtils.GetUnclampedApproachProgress(currentSongPosition, Note.SongPosition, ApproachDuration));
+
+        StartJump(_jumper);
+        ApplyJumpAnimation(_jumper, unreactedProgression);
+        ApplyJump(GetJumper(_jumper), _jumperPath, unreactedProgression);
+
+        if (_applyBeamRotation)
+            _seeSawBeam.Rotation = GetBeamRotationBeforeRainbowLanding();
+    }
+
+    private float GetRainbowJumpProgression(float noteProgression)
+    {
+        return _rainbowSnapLandRequested || _rainbowFailRequested
+            ? RhythmVisualUtils.GetPhaseProgress(noteProgression, _mainJumpStartProgression, 1f)
+            : GetRainbowUnreactedJumpProgression(noteProgression);
+    }
+
+    private float GetRainbowUnreactedJumpProgression(double approachProgression)
+    {
+        double missProgressionExtension = ApproachDuration <= 0.0 ? 0.0 : MissWindowSeconds / ApproachDuration;
+        double phaseEnd = 1.0 + missProgressionExtension;
+
+        if (approachProgression <= _mainJumpStartProgression)
+            return 0f;
+
+        if (phaseEnd <= _mainJumpStartProgression)
+            return 1f;
+
+        return (float)((approachProgression - _mainJumpStartProgression) / (phaseEnd - _mainJumpStartProgression));
+    }
+
+    private float GetBeamRotationBeforeRainbowLanding()
+    {
+        return _counterJump.HasValue ? _counterJump.Value.TargetRotation : _fromRotation;
     }
 
     
@@ -443,7 +528,17 @@ public class SeeSawVisualNote : VisualNote
 
         if(!_isBigLeap)
         {
-            float jumpProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, _mainJumpStartProgression, 1f);
+            float jumpProgression = _jumper == SeeSawJumper.RAINBOW_DASH
+                ? GetRainbowJumpProgression(noteProgression)
+                : RhythmVisualUtils.GetPhaseProgress(noteProgression, _mainJumpStartProgression, 1f);
+            if (_jumper == SeeSawJumper.RAINBOW_DASH)
+            {
+                StartJump(_jumper);
+                ApplyJumpAnimation(_jumper, jumpProgression);
+                ApplyJump(GetJumper(_jumper), _jumperPath, jumpProgression);
+                return;
+            }
+
             if (_jumper != SeeSawJumper.RAINBOW_DASH && jumpProgression >= LandTriggerProgression)
             {
                 Land(_jumper);
@@ -456,7 +551,9 @@ public class SeeSawVisualNote : VisualNote
             ApplyJump(GetJumper(_jumper), _jumperPath, jumpProgression);
         } else
         {
-            float bigLeapProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, _mainJumpStartProgression, 1f);
+            float bigLeapProgression = _jumper == SeeSawJumper.RAINBOW_DASH
+                ? GetRainbowJumpProgression(noteProgression)
+                : RhythmVisualUtils.GetPhaseProgress(noteProgression, _mainJumpStartProgression, 1f);
             if (_jumper != SeeSawJumper.RAINBOW_DASH && bigLeapProgression >= LandTriggerProgression)
             {
                 Land(_jumper);
@@ -517,6 +614,16 @@ public class SeeSawVisualNote : VisualNote
         if (!_applyBeamRotation)
             return;
 
+        if (_jumper == SeeSawJumper.RAINBOW_DASH && !_rainbowSnapLandRequested && !_rainbowFailRequested)
+        {
+            if (_counterJump.HasValue && noteProgression >= GetCounterLandProgression(_counterJumpEndProgression))
+                _seeSawBeam.Rotation = _counterJump.Value.TargetRotation;
+            else
+                _seeSawBeam.Rotation = _fromRotation;
+
+            return;
+        }
+
         // La poutre snap en meme temps que les atterrissages anticipes des sauteurs.
         if (!_counterJump.HasValue)
         {
@@ -555,6 +662,7 @@ public class SeeSawVisualNote : VisualNote
         _counterLanded = false;
         _jumperJumpStarted = false;
         _jumperLanded = false;
+        _rainbowFeedbackStateApplied = false;
     }
 
 
@@ -618,6 +726,9 @@ public class SeeSawVisualNote : VisualNote
     /// <param name="jumpProgression">Progression normalisee dans l'arc de ce sauteur.</param>
     private void ApplyJumpAnimation(SeeSawJumper jumper, float jumpProgression)
     {
+        if (jumper == SeeSawJumper.RAINBOW_DASH && _shouldPreserveRainbowFeedbackAnimation?.Invoke() == true)
+            return;
+
         RhythmVisualUtils.ForceAnimationState(_animationStates, jumper, jumpProgression < 0.5f ? JumpState : FallState);
     }
 

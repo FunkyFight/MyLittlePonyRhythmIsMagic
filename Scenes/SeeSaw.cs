@@ -32,11 +32,12 @@ public class SeeSawScene : Scene
     private const string ActionDataKey = "action";
     private const string RainbowFailState = "fail";
     private const double MaxVisualLookAheadBeats = 4.0;
-    private const double HitOwnershipGraceSeconds = 0.05;
+    private const double MissWindowSeconds = 0.25;
     private const double RainbowFeedbackAnimationSeconds = 0.5;
     private const double NoteMatchEpsilonSeconds = 0.0005;
     private const float OuterJumpHandoffProgression = 0.4375f;
     private const float BeamTiltDegrees = 10f;
+    private static readonly double FeedbackVisualDespawnDelaySeconds = Math.Max(MissWindowSeconds, RainbowFeedbackAnimationSeconds);
 
     private Game1 game;
     public GameObject SeeSaw1;
@@ -52,6 +53,7 @@ public class SeeSawScene : Scene
     private readonly Dictionary<Note, SeeSawVisualNote> _seeSawVisualNotesByNote = new();
     private readonly HashSet<Note> _feedbackAppliedGameplayNotes = new();
     private readonly List<SeeSawPendingFeedback> _pendingFeedbacks = new();
+    private ChartPlayer _feedbackChartPlayer;
     private bool[] requestBop = [true, true];
 
     private int ponyScale = 3;
@@ -160,11 +162,16 @@ public class SeeSawScene : Scene
 
     private void SetupFeedbacks()
     {
+        if (_feedbackChartPlayer != null)
+            _feedbackChartPlayer.NoteReacted -= ApplyReactionFeedback;
+
         _feedbackAppliedGameplayNotes.Clear();
         _pendingFeedbacks.Clear();
         _preserveRainbowFeedbackUntilSongPosition = double.NaN;
 
-        GLOBALS.beatmapPlayer.ChartPlayer.NoteReacted += ApplyReactionFeedback;
+        _feedbackChartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
+        if (_feedbackChartPlayer != null)
+            _feedbackChartPlayer.NoteReacted += ApplyReactionFeedback;
     }
 
     /// <summary>
@@ -183,8 +190,8 @@ public class SeeSawScene : Scene
         _visualChartPlayer = new ChartPlayer(GLOBALS.beatmapPlayer.CurrentChart, Rhythm.Note.ReactionRules.RhythmHeavenLike());
         seeSawVisuals = new VisualNoteManager<SeeSawVisualNote>(_visualChartPlayer, note => CreateVisualNote(note, crotchet));
 
-        // Keep hit visuals alive for one frame after reaction so Rainbow can enter her land state.
-        seeSawVisuals.LookBehindSeconds = crotchet;
+        // Keep hit visuals alive through the auto-miss window so Rainbow can finish the fall.
+        seeSawVisuals.LookBehindSeconds = Math.Max(crotchet, MissWindowSeconds);
         seeSawVisuals.LookAheadSeconds = crotchet * MaxVisualLookAheadBeats;
         _lastSongPosition = double.NaN;
         _seeSawVisualNotesByNote.Clear();
@@ -298,8 +305,8 @@ public class SeeSawScene : Scene
     {
         bool appliedToReactedNote = ApplyReactedNoteFeedbacks();
 
-        if (!appliedToReactedNote && result == NoteReactionResult.MISS)
-            SnapLandRainbow(false);
+        if (!appliedToReactedNote && result == NoteReactionResult.MISS && TryFindRelevantMissFeedbackTarget(out Note visualNoteKey, out SeeSawVisualNote visualNote))
+            ApplyRainbowFeedback(visualNoteKey, visualNote, correct: false);
     }
 
     private bool ApplyReactedNoteFeedbacks()
@@ -350,10 +357,7 @@ public class SeeSawScene : Scene
 
     private void ApplyRainbowFeedback(Note visualNoteKey, SeeSawVisualNote visualNote, bool correct)
     {
-        visualNote.SnapLandRainbow(correct);
-
-        if (!correct)
-            RainbowState.ForceState(RainbowFailState);
+        visualNote.ApplyRainbowFeedbackState(correct);
 
         if (GLOBALS.beatmapPlayer.Conductor != null)
         {
@@ -374,6 +378,47 @@ public class SeeSawScene : Scene
 
             visualNoteKey = pair.Key;
             visualNote = pair.Value;
+            return true;
+        }
+
+        visualNoteKey = null;
+        visualNote = null;
+        return false;
+    }
+
+    private bool TryFindRelevantMissFeedbackTarget(out Note visualNoteKey, out SeeSawVisualNote visualNote)
+    {
+        ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
+        if (chartPlayer != null)
+        {
+            Note missedNote = null;
+
+            foreach (Note gameplayNote in chartPlayer.Notes)
+            {
+                if (!gameplayNote.HasReacted || !gameplayNote.HasBeenMissed || _feedbackAppliedGameplayNotes.Contains(gameplayNote) || !IsSeeSawNote(gameplayNote))
+                    continue;
+
+                if (missedNote == null || gameplayNote.SongPosition >= missedNote.SongPosition)
+                    missedNote = gameplayNote;
+            }
+
+            if (missedNote != null)
+            {
+                _feedbackAppliedGameplayNotes.Add(missedNote);
+                if (TryFindVisualFeedbackTarget(missedNote, out visualNoteKey, out visualNote))
+                    return true;
+
+                _pendingFeedbacks.Add(new SeeSawPendingFeedback(missedNote.SongPosition, GetActionValue(missedNote), correct: false));
+            }
+        }
+
+        Note fallbackNote = _drivingVisualNote;
+        if (fallbackNote == null && GLOBALS.beatmapPlayer.Conductor != null)
+            fallbackNote = FindDrivingVisualNote(GLOBALS.beatmapPlayer.Conductor.SongPosition);
+
+        if (fallbackNote != null && _seeSawVisualNotesByNote.TryGetValue(fallbackNote, out visualNote))
+        {
+            visualNoteKey = fallbackNote;
             return true;
         }
 
@@ -620,6 +665,8 @@ public class SeeSawScene : Scene
             counterRotationProgression,
             jumperStartProgression,
             canApplyState: () => ReferenceEquals(_drivingVisualNote, note),
+            shouldPreserveRainbowFeedbackAnimation: IsRainbowFeedbackAnimationPreserved,
+            despawnDelay: mainJumper == SeeSawJumper.RAINBOW_DASH ? FeedbackVisualDespawnDelaySeconds : 0,
             approachDuration: approachDuration, 
             isBigLeap: isBigLeap,
             jumpMultiplier: jumpMultiplier,
@@ -684,8 +731,8 @@ public class SeeSawScene : Scene
     /// <returns>The driving note for the current approach window, or <c>null</c> if none is active.</returns>
     private Note FindDrivingVisualNote(double songPosition)
     {
-        // A note that just hit keeps ownership only briefly so it can snap actors to the completed
-        // state. Keeping it for the full look-behind would freeze later notes during dense charts.
+        // A note that just hit keeps ownership through the miss window so no-input misses can
+        // continue the post-hit fall and snap automatically when ChartPlayer declares the miss.
         Note drivingNote = null;
 
         foreach (Note note in _visualChartPlayer.Notes)
@@ -695,7 +742,10 @@ public class SeeSawScene : Scene
 
             double start = RhythmVisualUtils.GetApproachStart(note.SongPosition, GetApproachDuration(note));
 
-            if (songPosition >= note.SongPosition && songPosition <= note.SongPosition + HitOwnershipGraceSeconds)
+            if (songPosition >= note.SongPosition
+                && songPosition <= note.SongPosition + MissWindowSeconds
+                && IsRainbowFeedbackDrivenNote(note)
+                && !ShouldPreserveRainbowFeedback(songPosition))
                 return note;
 
             if (songPosition >= start && songPosition < note.SongPosition)
@@ -712,6 +762,12 @@ public class SeeSawScene : Scene
     {
         return !double.IsNaN(_preserveRainbowFeedbackUntilSongPosition)
             && songPosition <= _preserveRainbowFeedbackUntilSongPosition;
+    }
+
+    private bool IsRainbowFeedbackAnimationPreserved()
+    {
+        return GLOBALS.beatmapPlayer.Conductor != null
+            && ShouldPreserveRainbowFeedback(GLOBALS.beatmapPlayer.Conductor.SongPosition);
     }
 
     /// <summary>
@@ -780,6 +836,12 @@ public class SeeSawScene : Scene
     private bool IsSeeSawNote(Note note)
     {
         return TryGetSeeSawAction(note, out _);
+    }
+
+    private bool IsRainbowFeedbackDrivenNote(Note note)
+    {
+        return TryGetSeeSawAction(note, out SeeSawAction action)
+            && GetBaseDirection(action.Direction) != SeeSawDirection.Exit;
     }
 
     /// <summary>
@@ -1035,6 +1097,11 @@ public class SeeSawScene : Scene
 
     public override void OnUnload()
     {
+        if (_feedbackChartPlayer != null)
+        {
+            _feedbackChartPlayer.NoteReacted -= ApplyReactionFeedback;
+            _feedbackChartPlayer = null;
+        }
     }
 
     /// <summary>
@@ -1140,6 +1207,7 @@ public class SeeSawScene : Scene
                     onEnter : () =>
                     {
                         Rainbow.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Rainbowdash_jump2);
+                        Rainbow.sprite.DrawOffset = new Vector2(0, 100);
                         Rainbow.sprite.CenterOrigin();
                     },
                     onExit: () => {},
