@@ -5,6 +5,7 @@ public enum SeeSawDirection
     Outer,
     Inner,
     Opposite,
+    Exit,
     OuterBigLeap,
     InnerBigLeap,
     OppositeBigLeap,

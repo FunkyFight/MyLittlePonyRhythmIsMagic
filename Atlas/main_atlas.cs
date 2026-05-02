@@ -20,6 +20,7 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Applejack_land2 = "applejack-land2";
 		public const string Applejack_land3 = "applejack-land3";
 		public const string Applejack_true_idle = "applejack-true-idle";
+		public const string Rainbowdash_fail = "rainbowdash-fail";
 		public const string Rainbowdash_idle1 = "rainbowdash-idle1";
 		public const string Rainbowdash_idle2 = "rainbowdash-idle2";
 		public const string Rainbowdash_idle3 = "rainbowdash-idle3";

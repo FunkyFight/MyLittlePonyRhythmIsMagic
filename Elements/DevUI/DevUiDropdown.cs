@@ -71,7 +71,7 @@ public sealed class DevUiDropdown
         return false;
     }
 
-    public void Draw(SpriteBatch spriteBatch, Rectangle bounds, IReadOnlyList<string> options, int selectedIndex, bool isOpen)
+    public void Draw(SpriteBatch spriteBatch, Rectangle bounds, IReadOnlyList<string> options, int selectedIndex, bool isOpen, bool drawList = true)
     {
         if (options.Count == 0)
             return;
@@ -80,9 +80,16 @@ public sealed class DevUiDropdown
         DrawItem(spriteBatch, bounds, options[clampedIndex], Color.Black * 0.85f, Color.LightGreen);
         _ui.Label(spriteBatch, isOpen ? "^" : "v", new Vector2(bounds.Right - 18, bounds.Y + 6), Color.LightGreen, 2);
 
-        if (!isOpen)
+        if (isOpen && drawList)
+            DrawList(spriteBatch, bounds, options, selectedIndex);
+    }
+
+    public void DrawList(SpriteBatch spriteBatch, Rectangle bounds, IReadOnlyList<string> options, int selectedIndex)
+    {
+        if (options.Count == 0)
             return;
 
+        int clampedIndex = Math.Clamp(selectedIndex, 0, options.Count - 1);
         int visibleItems = GetVisibleItemCount(options);
         for (int visibleIndex = 0; visibleIndex < visibleItems; visibleIndex++)
         {

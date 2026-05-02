@@ -98,6 +98,7 @@ public sealed class DevUiFloatingWindow
         }
 
         DrawScrollIndicator(spriteBatch, bounds, rows);
+        DrawOpenDropdownList(spriteBatch, bounds, rows);
     }
 
     private bool UpdateDropdownRows(Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows, bool leftClicked, int wheelDelta)
@@ -175,7 +176,7 @@ public sealed class DevUiFloatingWindow
 
             case DevUiWindowRowKind.Dropdown:
                 _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X, bounds.Y + 7), Color.White, 2);
-                _dropdown.Draw(spriteBatch, GetDropdownBounds(bounds), row.Options, row.SelectedIndex, _openDropdownKey == row.Key);
+                _dropdown.Draw(spriteBatch, GetDropdownBounds(bounds), row.Options, row.SelectedIndex, _openDropdownKey == row.Key, drawList: false);
                 break;
 
             case DevUiWindowRowKind.Button:
@@ -183,6 +184,26 @@ public sealed class DevUiFloatingWindow
                 _ui.Stroke(spriteBatch, bounds, Color.LightGreen, 2);
                 _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X + 10, bounds.Y + 8), Color.LightGreen, 2);
                 break;
+        }
+    }
+
+    private void DrawOpenDropdownList(SpriteBatch spriteBatch, Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows)
+    {
+        if (_openDropdownKey == null)
+            return;
+
+        Rectangle contentBounds = GetContentBounds(bounds);
+        int y = bounds.Y + 34 - _scrollOffset;
+        foreach (DevUiWindowRow row in rows)
+        {
+            Rectangle rowBounds = new(bounds.X + 12, y, bounds.Width - 24, GetRowHeight(row));
+            if (row.Kind == DevUiWindowRowKind.Dropdown && row.Options != null && _openDropdownKey == row.Key && contentBounds.Intersects(rowBounds))
+            {
+                _dropdown.DrawList(spriteBatch, GetDropdownBounds(rowBounds), row.Options, row.SelectedIndex);
+                return;
+            }
+
+            y += rowBounds.Height;
         }
     }
 

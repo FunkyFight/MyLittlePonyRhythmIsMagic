@@ -24,6 +24,7 @@ public sealed class BeatmapEditorElement
     private readonly List<string> _availableCharts = new();
     private readonly Dictionary<EditorNoteKind, Dictionary<string, string>> _lastCreatedNoteData = new();
     private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset" };
+    private const double ShiftSeekSongDurationRatio = 0.05;
 
     private BeatmapEditorDocument _document;
     private EditorRhythmInputVisualElement _rhythmVisuals;
@@ -39,6 +40,7 @@ public sealed class BeatmapEditorElement
     private int _selectedMetadataField;
     private bool _isEditingText;
     private bool _isPreviewPlaying;
+    private bool _editorPlaybackPlaying;
     private string _textBuffer = "";
     private ChartNote _optionsNote;
     private EditorNoteDefinition _optionsDefinition;
@@ -72,13 +74,9 @@ public sealed class BeatmapEditorElement
             return;
         }
 
+        AdvanceEditorPlayback();
         HandleCommands(gameTime);
         UpdateNoteOptionsWindow();
-
-        if (_beatmapPlayer.Conductor != null && _beatmapPlayer.Conductor.isPlaying())
-        {
-            _manualSongPosition = _beatmapPlayer.Conductor.SongPosition;
-        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -99,8 +97,6 @@ public sealed class BeatmapEditorElement
             return;
         }
 
-        double seekStep = IsDown(Keys.LeftShift) || IsDown(Keys.RightShift) ? _document.Crotchet : _document.Crotchet / _snapDivisions;
-
         if (Pressed(Keys.Space))
             TogglePlayback();
 
@@ -108,16 +104,27 @@ public sealed class BeatmapEditorElement
             Seek(0);
 
         if (Pressed(Keys.Left))
-            Seek(Snap(CurrentSongPosition() - seekStep));
+            Seek(GetSteppedSeekPosition(-1));
 
         if (Pressed(Keys.Right))
-            Seek(Snap(CurrentSongPosition() + seekStep));
+            Seek(GetSteppedSeekPosition(1));
 
-        if (IsDown(Keys.Q))
-            Seek(CurrentSongPosition() - gameTime.ElapsedGameTime.TotalSeconds * 4);
+        if (IsShiftDown())
+        {
+            if (Pressed(Keys.Q))
+                Seek(GetSteppedSeekPosition(-1));
 
-        if (IsDown(Keys.D))
-            Seek(CurrentSongPosition() + gameTime.ElapsedGameTime.TotalSeconds * 4);
+            if (Pressed(Keys.D))
+                Seek(GetSteppedSeekPosition(1));
+        }
+        else
+        {
+            if (IsDown(Keys.Q))
+                Seek(ClampSongPosition(CurrentSongPosition() - gameTime.ElapsedGameTime.TotalSeconds * 4));
+
+            if (IsDown(Keys.D))
+                Seek(ClampSongPosition(CurrentSongPosition() + gameTime.ElapsedGameTime.TotalSeconds * 4));
+        }
 
         if (Pressed(Keys.Up))
             SelectRelative(-1);
@@ -272,7 +279,7 @@ public sealed class BeatmapEditorElement
             }
 
             _document.MarkDirty();
-            RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
+            RebuildPlayback(_editorPlaybackPlaying);
             _status = $"Updated options at {_optionsNote.SongPosition:0.000}s";
         }
     }
@@ -280,6 +287,7 @@ public sealed class BeatmapEditorElement
     private void StartPreview()
     {
         double position = CurrentSongPosition();
+        _editorPlaybackPlaying = false;
         _beatmapPlayer.StartBeatmapPaused(_document.SongPath, _document.Chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
         SyncPlaybackToEditorPosition(position, resetVisuals: true);
         _beatmapPlayer.Conductor.Play();
@@ -297,6 +305,7 @@ public sealed class BeatmapEditorElement
     {
         double position = _beatmapPlayer.Conductor?.SongPosition ?? _manualSongPosition;
         _isPreviewPlaying = false;
+        _editorPlaybackPlaying = false;
         RebuildPlayback(false);
         Seek(position);
         _status = $"Back to editor at {position:0.000}s";
@@ -323,14 +332,18 @@ public sealed class BeatmapEditorElement
     private void RebuildPlayback(bool keepPlaying)
     {
         double position = CurrentSongPosition();
-        bool shouldPlay = keepPlaying && _beatmapPlayer.Conductor != null && _beatmapPlayer.Conductor.isPlaying();
+        bool shouldPlay = keepPlaying && !_isPreviewPlaying;
+        _editorPlaybackPlaying = false;
 
         _beatmapPlayer.StartBeatmapPaused(_document.SongPath, _document.Chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
         _rhythmVisuals = new EditorRhythmInputVisualElement(_beatmapPlayer, _pixel, _ui);
         SyncPlaybackToEditorPosition(position, resetVisuals: true);
 
         if (shouldPlay)
+        {
             _beatmapPlayer.Conductor.Play();
+            _editorPlaybackPlaying = true;
+        }
     }
 
     private void TogglePlayback()
@@ -338,17 +351,18 @@ public sealed class BeatmapEditorElement
         if (_beatmapPlayer.Conductor == null)
             return;
 
-        if (_beatmapPlayer.Conductor.isPlaying())
+        if (_editorPlaybackPlaying)
         {
-            double position = _beatmapPlayer.Conductor.SongPosition;
+            _editorPlaybackPlaying = false;
             _beatmapPlayer.Conductor.Pause();
-            SyncPlaybackToEditorPosition(position, resetVisuals: false);
+            SyncPlaybackToEditorPosition(_manualSongPosition, resetVisuals: false);
             _status = "Paused";
         }
         else
         {
             SyncPlaybackToEditorPosition(_manualSongPosition, resetVisuals: false);
             _beatmapPlayer.Conductor.Play();
+            _editorPlaybackPlaying = true;
             _status = "Playing";
         }
     }
@@ -369,7 +383,7 @@ public sealed class BeatmapEditorElement
         {
             _lastCreatedNoteData[_optionsDefinition.Kind] = new Dictionary<string, string>(placedNote.AdditionnalData ?? new Dictionary<string, string>());
             _optionsIsCreation = false;
-            RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
+            RebuildPlayback(_editorPlaybackPlaying);
             OpenNoteOptionsWindow(placedNote);
             _status = $"Created {GetSelectedNoteName(_optionsDefinition)} at {placedNote.SongPosition:0.000}s";
         }
@@ -384,7 +398,7 @@ public sealed class BeatmapEditorElement
         double position = CurrentSongPosition();
         if (_document.DeleteNearest(position, _document.Crotchet / _snapDivisions, out ChartNote deletedNote))
         {
-            RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
+            RebuildPlayback(_editorPlaybackPlaying);
             _status = $"Deleted note at {deletedNote.SongPosition:0.000}s";
         }
         else
@@ -397,14 +411,29 @@ public sealed class BeatmapEditorElement
     {
         SyncPlaybackToEditorPosition(songPosition, resetVisuals: true);
 
+        if (_editorPlaybackPlaying)
+            _beatmapPlayer.Conductor?.Play();
+
         if (updateStatus)
             _status = $"Seek {_manualSongPosition:0.000}s";
     }
 
+    private void AdvanceEditorPlayback()
+    {
+        if (!_editorPlaybackPlaying)
+            return;
+
+        _beatmapPlayer.Conductor?.Update();
+        _manualSongPosition = Math.Max(0, _beatmapPlayer.Conductor?.SongPosition ?? _manualSongPosition);
+        _beatmapPlayer.ChartPlayer?.Update(_manualSongPosition);
+        _beatmapPlayer.VisualNoteMng?.Update(_manualSongPosition);
+    }
+
     private void SyncPlaybackToEditorPosition(double songPosition, bool resetVisuals)
     {
-        _manualSongPosition = Math.Max(0, songPosition);
-        _beatmapPlayer.Conductor?.Seek(_manualSongPosition);
+        double targetPosition = Math.Max(0, songPosition);
+        _beatmapPlayer.Conductor?.Seek(targetPosition);
+        _manualSongPosition = Math.Max(0, _beatmapPlayer.Conductor?.SongPosition ?? targetPosition);
         _beatmapPlayer.ChartPlayer?.Seek(_manualSongPosition);
 
         if (resetVisuals)
@@ -555,12 +584,12 @@ public sealed class BeatmapEditorElement
         {
             _document.SetBpm(bpm);
             _beatmapPlayer.Conductor?.SetBpm(bpm);
-            RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
+            RebuildPlayback(_editorPlaybackPlaying);
         }
         else if (field == "Offset" && double.TryParse(_textBuffer, out double offset))
         {
             _document.SetOffset(offset);
-            RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
+            RebuildPlayback(_editorPlaybackPlaying);
         }
         else if (field == "BeatmapName")
             _document.SetMetadata(beatmapName: _textBuffer);
@@ -584,10 +613,36 @@ public sealed class BeatmapEditorElement
 
     private double CurrentSongPosition()
     {
-        if (_beatmapPlayer.Conductor != null && _beatmapPlayer.Conductor.isPlaying())
-            return _beatmapPlayer.Conductor.SongPosition;
-
         return _manualSongPosition;
+    }
+
+    private double GetSteppedSeekPosition(int direction)
+    {
+        double step = IsShiftDown()
+            ? GetShiftSeekStep()
+            : _document.Crotchet / _snapDivisions;
+
+        double position = CurrentSongPosition() + direction * step;
+        return IsShiftDown() ? ClampSongPosition(position) : Snap(position);
+    }
+
+    private double GetShiftSeekStep()
+    {
+        double songDuration = GetSongDurationSeconds();
+        return songDuration > 0 ? songDuration * ShiftSeekSongDurationRatio : _document.Crotchet;
+    }
+
+    private double ClampSongPosition(double songPosition)
+    {
+        songPosition = Math.Max(0, songPosition);
+
+        double songDuration = GetSongDurationSeconds();
+        return songDuration > 0 ? Math.Min(songPosition, songDuration) : songPosition;
+    }
+
+    private double GetSongDurationSeconds()
+    {
+        return Math.Max(0, _beatmapPlayer.Conductor?.Duration ?? 0);
     }
 
     private double Snap(double songPosition)
@@ -664,7 +719,7 @@ public sealed class BeatmapEditorElement
         double current = CurrentSongPosition();
         EditorNoteDefinition selected = EditorNoteDefinitions.Get(_selectedKind);
         string dirty = _document.IsDirty ? "DIRTY" : "SAVED";
-        string playing = _beatmapPlayer.Conductor?.isPlaying() == true ? "PLAY" : "PAUSE";
+        string playing = _editorPlaybackPlaying ? "PLAY" : "PAUSE";
         string field = _metadataFields[_selectedMetadataField];
         string editLine = _isEditingText ? $"EDIT {field}: {_textBuffer}|" : $"META <TAB/F2> {field}: {GetMetadataValue(field)}";
         string songName = _availableSongs.Count > 0 ? Path.GetFileName(_availableSongs[_selectedSongIndex]) : Path.GetFileName(_document.SongPath);
@@ -753,6 +808,11 @@ public sealed class BeatmapEditorElement
     private bool IsControlDown()
     {
         return IsDown(Keys.LeftControl) || IsDown(Keys.RightControl);
+    }
+
+    private bool IsShiftDown()
+    {
+        return IsDown(Keys.LeftShift) || IsDown(Keys.RightShift);
     }
 
     private int PositiveModulo(int value, int count)

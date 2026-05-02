@@ -300,6 +300,9 @@ public sealed class BeatmapEditorDocument
         SeeSawEditorState state = GetSeeSawStateBefore(songPosition);
         EditorNoteVariant variant = definition.GetVariant(variantIndex);
         SeeSawAction action = SeeSawAction.FromVariant(variant);
+        if (SeeSawAction.GetBaseDirection(action.Direction) == SeeSawDirection.Exit)
+            return songPosition - 2 * Crotchet;
+
         if (IsSeeSawOpposite(action))
             return songPosition - GetOppositeApproachBeats(action, state) * Crotchet;
 
@@ -388,6 +391,7 @@ public sealed class BeatmapEditorDocument
                 SeeSawOppositeMode.Both => !state.RainbowIsOuter,
                 _ => !state.ApplejackIsOuter
             },
+            SeeSawDirection.Exit => true,
             _ => action.Apply(state).RainbowIsOuter
         };
     }

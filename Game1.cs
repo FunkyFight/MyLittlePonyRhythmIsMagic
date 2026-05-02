@@ -56,6 +56,9 @@ public class Game1 : Core
             Console.WriteLine(result);
         };
 
+        // Visual help
+        GLOBALS.rhythmInputVisualElement = new RhythmInputVisualElement(GLOBALS.beatmapPlayer);
+
         DebugActivated = false;
 
     }
@@ -69,9 +72,13 @@ public class Game1 : Core
 
     protected override void Update(GameTime gameTime)
     {
+        // Non-preview editor playback owns conductor updates to avoid advancing rhythm state twice.
+        bool editorOwnsBeatmapPlayback = GLOBALS.beatmapEditorElement != null && !GLOBALS.beatmapEditorElement.IsPreviewPlaying;
 
-
-        GLOBALS.beatmapPlayer?.Update(gameTime);
+        if (editorOwnsBeatmapPlayback)
+            GLOBALS.beatmapEditorElement.Update(gameTime);
+        else
+            GLOBALS.beatmapPlayer?.Update(gameTime);
 
         _sceneManager.Update(gameTime);
 
@@ -84,10 +91,10 @@ public class Game1 : Core
         if (Pressed(Keys.F10))
             CopyMouseViewportCoordinates();
 
-        GLOBALS.beatmapEditorElement?.Update(gameTime);
-        handleInputs();
+        if (!editorOwnsBeatmapPlayback)
+            GLOBALS.beatmapEditorElement?.Update(gameTime);
 
-        
+        handleInputs();
 
         base.Update(gameTime);
     }
@@ -102,7 +109,11 @@ public class Game1 : Core
         GLOBALS.beatmapEditorElement?.Draw(SpriteBatch);
         if (_showMouseViewportCoordinates)
             GLOBALS.mouseViewportCoordinatesElement?.Draw(SpriteBatch);
+        
+        //GLOBALS.rhythmInputVisualElement?.Draw(SpriteBatch);
         SpriteBatch.End();
+
+
 
         base.Draw(gameTime);
     }

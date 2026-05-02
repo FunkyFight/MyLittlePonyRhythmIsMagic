@@ -6,7 +6,7 @@ using Rhythm.Note;
 using Rhythm.Note.Evaluator;
 using Rhythm.Note.Visual;
 
-public class BeatmapPlayer
+public class BeatmapPlayer : IDisposable
 {
     public Conductor Conductor {get; private set;}
     public ChartPlayer ChartPlayer {get; private set;}
@@ -57,6 +57,8 @@ public class BeatmapPlayer
 
     public void StartMetronomeDebugMap(Dictionary<string, string> additionnalData, double startupDelaySeconds = 5.0)
     {
+        DisposeConductor();
+
         _startupDelay = startupDelaySeconds;
         _startupTimer = 0;
         _startupComplete = false;
@@ -72,6 +74,8 @@ public class BeatmapPlayer
 
     public void StartSeeSawDebugMap(Dictionary<string, string> additionnalData, double startupDelaySeconds = 5.0)
     {
+        DisposeConductor();
+
         _startupDelay = startupDelaySeconds;
         _startupTimer = 0;
         _startupComplete = false;
@@ -104,6 +108,8 @@ public class BeatmapPlayer
 
     public void StartBeatmap(string song_path, Chart chart, ReactionRules rules, IReactionEvaluator reactionEvaluator)
     {
+        DisposeConductor();
+
         _startupDelay = 0;
         _startupTimer = 0;
         _startupComplete = true;
@@ -118,6 +124,8 @@ public class BeatmapPlayer
 
     public void StartBeatmapPaused(string songPath, Chart chart, ReactionRules rules, IReactionEvaluator reactionEvaluator, double firstBeatDelay = double.NaN)
     {
+        DisposeConductor();
+
         _startupDelay = 0;
         _startupTimer = 0;
         _startupComplete = true;
@@ -127,5 +135,19 @@ public class BeatmapPlayer
         CurrentChart = chart;
         ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);
         BeatmapStarted?.Invoke();
+    }
+
+    public void Dispose()
+    {
+        DisposeConductor();
+        GC.SuppressFinalize(this);
+    }
+
+    private void DisposeConductor()
+    {
+        Conductor?.Dispose();
+        Conductor = null;
+        ChartPlayer = null;
+        VisualNoteMng = null;
     }
 }

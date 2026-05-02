@@ -43,7 +43,7 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
 
     private static IReadOnlyList<string> GetDirectionNames()
     {
-        return new[] { "Outer", "Inner", "Opposite" };
+        return new[] { "Outer", "Inner", "Opposite", "Exit" };
     }
 
     private static IReadOnlyList<string> GetOppositeModeNames()
@@ -57,6 +57,7 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
         {
             SeeSawDirection.Inner => 1,
             SeeSawDirection.Opposite => 2,
+            SeeSawDirection.Exit => 3,
             _ => 0
         };
     }
@@ -67,6 +68,7 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
         {
             1 => SeeSawDirection.Inner,
             2 => SeeSawDirection.Opposite,
+            3 => SeeSawDirection.Exit,
             _ => SeeSawDirection.Outer
         };
     }

@@ -321,5 +321,419 @@
         <Entry Key="opposite_jumper" Value="applejack" />
       </AdditionnalData>
     </Note>
+    <Note>
+      <SongPosition>48.94555555555555</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>50.72333333333333</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>52.50111111111111</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="big_leap_applejack" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>53.39</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>54.278888888888886</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>56.056666666666665</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>56.94555555555555</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>58.278888888888886</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>59.61222222222222</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>61.39</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>62.278888888888886</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>63.16777777777777</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>64.05666666666666</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>64.94555555555554</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="opposite_jumper" Value="applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>66.27888888888889</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="opposite_jumper" Value="applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>67.61222222222221</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>69.39</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.27888888888889</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>71.16777777777777</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>72.50111111111111</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="big_leap_applejack" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.39</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>74.27888888888889</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>75.16777777777777</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>76.94555555555556</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>78.27888888888889</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="big_leap_applejack" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>79.16777777777777</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>80.05666666666666</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>81.83444444444444</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>83.61222222222221</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="big_leap_applejack" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>84.5011111111111</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>85.39</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>86.27888888888889</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="opposite_jumper" Value="applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>87.61222222222221</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="opposite_jumper" Value="applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>88.94555555555556</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>89.83444444444444</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>90.72333333333333</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>91.61222222222221</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="opposite_jumper" Value="applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>92.94555555555556</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>94.27888888888889</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>95.16777777777777</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>96.05666666666666</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>97.39</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>99.16777777777777</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>100.94555555555554</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>102.72333333333333</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>104.5011111111111</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>106.27888888888889</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>107.61222222222221</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>108.5011111111111</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_exit" />
+      </AdditionnalData>
+    </Note>
   </Notes>
 </Chart>

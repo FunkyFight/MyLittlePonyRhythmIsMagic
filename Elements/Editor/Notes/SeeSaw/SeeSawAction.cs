@@ -22,6 +22,7 @@ public readonly struct SeeSawAction
     public static readonly SeeSawAction TowardOuter = new("see_saw_toward_outer", SeeSawDirection.Outer, isBigLeap: false, hasBigCounterJump: false);
     public static readonly SeeSawAction TowardInner = new("see_saw_toward_inner", SeeSawDirection.Inner, isBigLeap: false, hasBigCounterJump: false);
     public static readonly SeeSawAction TowardOpposite = new("see_saw_toward_opposite", SeeSawDirection.Opposite, isBigLeap: false, hasBigCounterJump: false);
+    public static readonly SeeSawAction Exit = new("see_saw_exit", SeeSawDirection.Exit, isBigLeap: false, hasBigCounterJump: false);
     public static readonly SeeSawAction TowardOuterBigLeap = new("see_saw_toward_outer_big_leap", SeeSawDirection.OuterBigLeap, isBigLeap: true, hasBigCounterJump: false);
     public static readonly SeeSawAction TowardInnerBigLeap = new("see_saw_toward_inner_big_leap", SeeSawDirection.InnerBigLeap, isBigLeap: true, hasBigCounterJump: false);
     public static readonly SeeSawAction TowardOppositeBigLeap = new("see_saw_toward_opposite_big_leap", SeeSawDirection.OppositeBigLeap, isBigLeap: true, hasBigCounterJump: false);
@@ -34,6 +35,7 @@ public readonly struct SeeSawAction
         TowardOuter,
         TowardInner,
         TowardOpposite,
+        Exit,
         TowardOuterBigLeap,
         TowardInnerBigLeap,
         TowardOppositeBigLeap,
@@ -147,6 +149,7 @@ public readonly struct SeeSawAction
         {
             SeeSawDirection.Inner => "Inner",
             SeeSawDirection.Opposite => "Opposite",
+            SeeSawDirection.Exit => "Exit",
             _ => "Outer"
         };
     }
@@ -238,6 +241,7 @@ public readonly struct SeeSawAction
         {
             SeeSawDirection.Inner => TowardInner.Value,
             SeeSawDirection.Opposite => TowardOpposite.Value,
+            SeeSawDirection.Exit => Exit.Value,
             _ => TowardOuter.Value
         };
     }
@@ -248,6 +252,7 @@ public readonly struct SeeSawAction
         {
             SeeSawDirection.Outer or SeeSawDirection.OuterBigLeap => new SeeSawEditorState(rainbowIsOuter: true, applejackIsOuter: true),
             SeeSawDirection.Inner or SeeSawDirection.InnerBigLeap => new SeeSawEditorState(rainbowIsOuter: false, applejackIsOuter: false),
+            SeeSawDirection.Exit => new SeeSawEditorState(state.RainbowIsOuter, applejackIsOuter: true),
             SeeSawDirection.Opposite or SeeSawDirection.OppositeBigLeap => OppositeMode switch
             {
                 SeeSawOppositeMode.Applejack => new SeeSawEditorState(rainbowIsOuter: state.RainbowIsOuter, applejackIsOuter: !state.RainbowIsOuter),

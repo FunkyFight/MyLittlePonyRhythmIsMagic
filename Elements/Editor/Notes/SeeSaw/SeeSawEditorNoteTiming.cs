@@ -25,11 +25,14 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
     public double GetHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
         SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
+        if (GetBaseDirection(action.Direction) == SeeSawDirection.Exit)
+            return context.SongPosition;
+
         double afterBeats = GetBaseDirection(action.Direction) == SeeSawDirection.Opposite
-            ? GetPhaseBeats(context.AfterUsesOuterTiming)
-            : context.ForceBigLeapTiming
-                ? OuterBeforeBeats / 2.0
-                : GetBeforeBeats(context.AfterUsesOuterTiming);
+                ? GetPhaseBeats(context.AfterUsesOuterTiming)
+                : context.ForceBigLeapTiming
+                    ? OuterBeforeBeats / 2.0
+                    : GetBeforeBeats(context.AfterUsesOuterTiming);
 
         return context.SongPosition + afterBeats * context.Crotchet;
     }
@@ -51,7 +54,13 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
             : GetPhaseBeats(context.BeforeUsesOuterTiming);
 
         if (!context.ForceBigLeapTiming)
+        {
+            SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
+            if (GetBaseDirection(action.Direction) == SeeSawDirection.Exit)
+                return OuterBeforeBeats / 2.0;
+
             return counterBeats + GetPhaseBeats(context.AfterUsesOuterTiming);
+        }
 
         return counterBeats + OuterBeforeBeats / 2.0;
 
