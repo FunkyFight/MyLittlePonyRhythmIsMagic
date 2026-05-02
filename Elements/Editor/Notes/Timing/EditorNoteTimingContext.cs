@@ -9,8 +9,9 @@ public readonly struct EditorNoteTimingContext
     public bool RainbowTargetsOuter { get; }
     public bool ForceBigLeapTiming { get; }
     public bool AfterUsesOuterTiming { get; }
+    public bool CounterBigLeapTiming { get; }
 
-    public EditorNoteTimingContext(double songPosition, double crotchet, int variantIndex = 0, bool beforeUsesOuterTiming = false, bool rainbowTargetsOuter = false, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false)
+    public EditorNoteTimingContext(double songPosition, double crotchet, int variantIndex = 0, bool beforeUsesOuterTiming = false, bool rainbowTargetsOuter = false, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false, bool counterBigLeapTiming = false)
     {
         SongPosition = songPosition;
         Crotchet = crotchet;
@@ -19,5 +20,6 @@ public readonly struct EditorNoteTimingContext
         RainbowTargetsOuter = rainbowTargetsOuter;
         ForceBigLeapTiming = forceBigLeapTiming;
         AfterUsesOuterTiming = afterUsesOuterTiming;
+        CounterBigLeapTiming = counterBigLeapTiming;
     }
 }

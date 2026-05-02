@@ -23,6 +23,11 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Rainbowdash_idle1 = "rainbowdash-idle1";
 		public const string Rainbowdash_idle2 = "rainbowdash-idle2";
 		public const string Rainbowdash_idle3 = "rainbowdash-idle3";
+		public const string Rainbowdash_jump1 = "rainbowdash-jump1";
+		public const string Rainbowdash_jump2 = "rainbowdash-jump2";
+		public const string Rainbowdash_land1 = "rainbowdash-land1";
+		public const string Rainbowdash_land2 = "rainbowdash-land2";
+		public const string Rainbowdash_land3 = "rainbowdash-land3";
 		public const string Sprite_0001 = "Sprite-0001";
 		public const string Sprite_0002 = "Sprite-0002";
 	}

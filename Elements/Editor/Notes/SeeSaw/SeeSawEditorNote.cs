@@ -9,12 +9,7 @@ public sealed class SeeSawEditorNote : IEditorNoteDefinitionProvider
             .HitWindow(beforeBeats: 0, afterBeats: 4)
             .Timing(new SeeSawEditorNoteTiming())
             .Matches(SeeSawChartNoteMatcher.Matches)
-            .Variant("SeeSawTowardOuter", SeeSawAction.TowardOuter.ToAdditionnalData())
-            .Variant("SeeSawTowardInner", SeeSawAction.TowardInner.ToAdditionnalData())
-            .Variant("SeeSawTowardOpposite", SeeSawAction.TowardOpposite.ToAdditionnalData())
-            .Variant("SeeSawTowardOuterBigLeap", SeeSawAction.TowardOuterBigLeap.ToAdditionnalData())
-            .Variant("SeeSawTowardInnerBigLeap", SeeSawAction.TowardInnerBigLeap.ToAdditionnalData())
-            .Variant("SeeSawTowardOppositeBigLeap", SeeSawAction.TowardOppositeBigLeap.ToAdditionnalData())
+            .Variant("Default", SeeSawAction.TowardOuter.ToAdditionnalData())
             .Build();
     }
 }

@@ -56,6 +56,8 @@ public class Game1 : Core
             Console.WriteLine(result);
         };
 
+        DebugActivated = false;
+
     }
 
     protected override void LoadContent()

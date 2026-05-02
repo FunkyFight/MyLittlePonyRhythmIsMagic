@@ -44,6 +44,7 @@ public class SeeSawVisualNote : VisualNote
     private readonly float _counterRotationProgression;
     private readonly float _jumperStartProgression;
     private readonly float _counterJumpEndProgression;
+    private readonly bool _counterIsBigLeap;
     private readonly Func<bool> _canApplyState;
     private bool _isBigLeap;
     private bool _counterJumpStarted;
@@ -54,12 +55,11 @@ public class SeeSawVisualNote : VisualNote
 
     internal const float OuterJumpHeight = 450f;
     internal const float InnerJumpHeight = 180f;
+    internal const float BigLeapJumpHeight = OuterJumpHeight * 4f;
     private const float DefaultCounterRotationProgression = 0.5f;
     private const float DefaultJumperStartProgression = 0.5f;
     private const float BigLeapCameraVerticalMargin = 160f;
-    private const float BigLeapApexProgression = 0.5f;
-    private const float BigLeapAscentEndProgression = 0.25f;
-    private const float BigLeapHoverEndProgression = 0.75f;
+    private const float LandTriggerProgression = 0.98f;
 
 
 
@@ -198,13 +198,15 @@ public class SeeSawVisualNote : VisualNote
     /// <param name="canApplyState">Predicate that decides whether this visual may mutate shared scene objects this frame.</param>
     /// <param name="despawnDelay">Extra lifetime after the note ends.</param>
     /// <param name="approachDuration">Optional approach duration override in seconds.</param>
-    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression)
+    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression, bool counterIsBigLeap = false)
         : base(logicalNote, approachDuration ?? jumperPath.GetApproachDuration(crotchet), despawnDelay)
     {
         _jumpers = jumpers;
         _animationStates = animationStates;
         _jumper = jumper;
-        _jumperPath = new SeeSawJumpPath(jumperPath.From, jumperPath.To, jumperPath.InnerReference, jumperPath.OuterReference, jumpMultiplier);
+        _jumperPath = jumpMultiplier > 1f
+            ? SeeSawJumpPath.WithJumpHeight(jumperPath.From, jumperPath.To, jumperPath.InnerReference, jumperPath.OuterReference, BigLeapJumpHeight)
+            : jumperPath;
         _seeSawBeam = seeSawBeam;
         _sceneCamera = sceneCamera;
         _fromRotation = fromRotation;
@@ -213,6 +215,7 @@ public class SeeSawVisualNote : VisualNote
         _counterRotationProgression = counterRotationProgression;
         _jumperStartProgression = jumperStartProgression;
         _counterJumpEndProgression = counterJumpEndProgression;
+        _counterIsBigLeap = counterIsBigLeap;
         _canApplyState = canApplyState;
         _isBigLeap = isBigLeap;
     }
@@ -324,7 +327,9 @@ public class SeeSawVisualNote : VisualNote
         {
             StartJump(counterJump.Jumper);
             float jumpProgression = noteProgression / _counterJumpEndProgression;
-            ApplyJumpAnimation(counterJump.Jumper, jumpProgression);
+            if (!_counterIsBigLeap)
+                ApplyJumpAnimation(counterJump.Jumper, jumpProgression);
+
             ApplyJump(GetJumper(counterJump.Jumper), counterJump.Path, jumpProgression);
             return;
         }
@@ -346,23 +351,11 @@ public class SeeSawVisualNote : VisualNote
 
         progression = (progression - _jumperStartProgression) / (1f - _jumperStartProgression);
 
-        if(progression < BigLeapAscentEndProgression) 
+        if(progression < 1f)
         {
-            float camProgression = progression / BigLeapAscentEndProgression;
-            float camT = Interpolation.EaseOutQuad(camProgression);
+            float camT = (float)Math.Sin(progression * Math.PI);
 
             _sceneCamera.Position = new Vector2(0, Single.Lerp(0, GetBigLeapCameraTargetY(), camT));
-        }
-        else if(progression < BigLeapHoverEndProgression)
-        {
-            _sceneCamera.Position = new Vector2(0, GetBigLeapCameraTargetY());
-        }
-        else if(progression < 1f)
-        {
-            float camProgression = (progression - BigLeapHoverEndProgression) / (1f - BigLeapHoverEndProgression);
-            float camT = SmoothStep(camProgression);
-
-            _sceneCamera.Position = new Vector2(0, Single.Lerp(GetBigLeapCameraTargetY(), 0, camT));
         }
         else
         {
@@ -392,31 +385,28 @@ public class SeeSawVisualNote : VisualNote
         if(!_isBigLeap)
         {
             float jumpProgression = (noteProgression - _jumperStartProgression) / (1f - _jumperStartProgression);
+            if (jumpProgression >= LandTriggerProgression)
+            {
+                Land(_jumper);
+                GetJumper(_jumper).Position = _jumperPath.To;
+                return;
+            }
+
             StartJump(_jumper);
             ApplyJumpAnimation(_jumper, jumpProgression);
             ApplyJump(GetJumper(_jumper), _jumperPath, jumpProgression);
         } else
         {
             float bigLeapProgression = (noteProgression - _jumperStartProgression) / (1f - _jumperStartProgression);
-            float jumpProgression;
-
-            if(bigLeapProgression < BigLeapAscentEndProgression)
+            if (bigLeapProgression >= LandTriggerProgression)
             {
-                float ascentProgression = bigLeapProgression / BigLeapAscentEndProgression;
-                jumpProgression = Single.Lerp(0f, BigLeapApexProgression, Interpolation.EaseOutQuad(ascentProgression));
-            }
-            else if(bigLeapProgression < BigLeapHoverEndProgression)
-            {
-                jumpProgression = BigLeapApexProgression;
-            }
-            else
-            {
-                float fallProgression = (bigLeapProgression - BigLeapHoverEndProgression) / (1f - BigLeapHoverEndProgression);
-                jumpProgression = Single.Lerp(BigLeapApexProgression, 1f, SmoothStep(fallProgression));
+                Land(_jumper);
+                GetJumper(_jumper).Position = _jumperPath.To;
+                return;
             }
 
             // 4. On lance les actions (écrit une seule fois, c'est plus propre !)
-            ApplyJump(GetJumper(_jumper), _jumperPath, jumpProgression);
+            ApplyJump(GetJumper(_jumper), _jumperPath, bigLeapProgression);
             StartJump(_jumper);
         }
     }
@@ -463,6 +453,7 @@ public class SeeSawVisualNote : VisualNote
         _jumperJumpStarted = false;
         _jumperLanded = false;
     }
+
 
     /// <summary>
     /// Gets the scene-owned GameObject for a jumper identity.
@@ -542,10 +533,6 @@ public class SeeSawVisualNote : VisualNote
     /// <param name="stateName">Animation state name to force.</param>
     private void ForceAnimationState(SeeSawJumper jumper, string stateName)
     {
-        // Rainbow currently has no distinct fall sprite. Keeping this guard here makes it
-        // clear that adding a Rainbow fall animation only requires removing this exception.
-        if (jumper != SeeSawJumper.APPLEJACK && stateName == FallState)
-            return;
 
         if (_animationStates == null || !_animationStates.TryGetValue(jumper, out AnimationStateMachine stateMachine))
             return;
@@ -633,6 +620,21 @@ public readonly struct SeeSawJumpPath
         OuterReference = outerReference;
         JumpHeightMultiplier = jumpHeightMultiplier;
         JumpHeight = GetJumpHeight(from, innerReference, outerReference) * jumpHeightMultiplier;
+    }
+
+    private SeeSawJumpPath(Vector2 from, Vector2 to, Vector2 innerReference, Vector2 outerReference, float jumpHeight, bool useExactJumpHeight)
+    {
+        From = from;
+        To = to;
+        InnerReference = innerReference;
+        OuterReference = outerReference;
+        JumpHeightMultiplier = 1f;
+        JumpHeight = jumpHeight;
+    }
+
+    public static SeeSawJumpPath WithJumpHeight(Vector2 from, Vector2 to, Vector2 innerReference, Vector2 outerReference, float jumpHeight)
+    {
+        return new SeeSawJumpPath(from, to, innerReference, outerReference, jumpHeight, useExactJumpHeight: true);
     }
 
     public Vector2 From { get; }

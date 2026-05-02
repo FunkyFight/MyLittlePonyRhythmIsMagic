@@ -6,7 +6,7 @@ public static class SeeSawChartNoteMatcher
 {
     public static bool Matches(ChartNote note)
     {
-        return note.AdditionnalData != null
+        return note?.AdditionnalData != null
             && note.AdditionnalData.TryGetValue("action", out string action)
             && SeeSawAction.TryParse(action, out _);
     }

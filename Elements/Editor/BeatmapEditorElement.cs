@@ -15,7 +15,7 @@ public sealed class BeatmapEditorElement
 {
     private readonly BeatmapPlayer _beatmapPlayer;
     private readonly DevUiRenderer _ui;
-    private readonly DevUiDropdown _variantDropdown;
+    private readonly DevUiFloatingWindow _noteOptionsWindow;
     private readonly Texture2D _pixel;
     private readonly string _defaultSongPath;
     private readonly string _defaultChartPath;
@@ -29,7 +29,6 @@ public sealed class BeatmapEditorElement
     private KeyboardState _previousKeyboard;
     private KeyboardState _keyboard;
     private EditorNoteKind _selectedKind = EditorNoteKind.SeeSaw;
-    private int _selectedVariantIndex = 1;
     private double _manualSongPosition;
     private double _visibleBeforeSeconds = 4;
     private double _visibleAfterSeconds = 4;
@@ -40,6 +39,10 @@ public sealed class BeatmapEditorElement
     private bool _isEditingText;
     private bool _isPreviewPlaying;
     private string _textBuffer = "";
+    private ChartNote _optionsNote;
+    private EditorNoteDefinition _optionsDefinition;
+    private IEditorNoteOptionsPanel _optionsPanel;
+    private bool _optionsIsCreation;
 
     public BeatmapEditorElement(BeatmapPlayer beatmapPlayer, string songPath = "Songs/metronome.wav", string chartPath = "Beatmaps/editor_beatmap.xml", double firstBeatDelay = 0.078, double snapDivisions = 4)
     {
@@ -48,7 +51,7 @@ public sealed class BeatmapEditorElement
         _defaultChartPath = chartPath;
         _snapDivisions = snapDivisions;
         _ui = new DevUiRenderer(GLOBALS.graphicsDevice);
-        _variantDropdown = new DevUiDropdown(_ui);
+        _noteOptionsWindow = new DevUiFloatingWindow(_ui);
         _pixel = new Texture2D(GLOBALS.graphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
 
@@ -69,6 +72,7 @@ public sealed class BeatmapEditorElement
         }
 
         HandleCommands(gameTime);
+        UpdateNoteOptionsWindow();
 
         if (_beatmapPlayer.Conductor != null && _beatmapPlayer.Conductor.isPlaying())
         {
@@ -146,6 +150,9 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.F2))
             BeginMetadataEdit();
 
+        if (Pressed(Keys.F3))
+            ToggleNoteOptionsWindow();
+
         if (Pressed(Keys.PageUp))
             SelectSongRelative(-1);
 
@@ -170,16 +177,102 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.P))
             StartPreview();
 
-        UpdateVariantDropdown();
     }
 
-    private void UpdateVariantDropdown()
+    private void ToggleNoteOptionsWindow()
     {
-        EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
-        if (_variantDropdown.Update(GetVariantDropdownBounds(), GetVariantNames(definition), _selectedVariantIndex))
+        if (_noteOptionsWindow.IsOpen)
         {
-            _selectedVariantIndex = _variantDropdown.SelectedIndex;
-            _status = $"Selected {definition.DisplayName} variant {definition.GetVariant(_selectedVariantIndex).DisplayName}";
+            _noteOptionsWindow.Close();
+            return;
+        }
+
+        OpenNoteOptionsWindow(_document.FindNearest(CurrentSongPosition(), _document.Crotchet / _snapDivisions));
+    }
+
+    private bool OpenNoteOptionsWindow(ChartNote note)
+    {
+        if (note == null)
+        {
+            _status = "No configurable note close enough";
+            return false;
+        }
+
+        _optionsNote = note;
+        EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(_optionsNote);
+        if (definition == null || !EditorNoteOptionsPanels.TryGet(definition.Kind, out _optionsPanel))
+        {
+            _status = "No configurable note close enough";
+            return false;
+        }
+
+        _optionsDefinition = definition;
+        _optionsIsCreation = false;
+        _noteOptionsWindow.Open();
+        _status = $"Options for {definition.DisplayName} at {_optionsNote.SongPosition:0.000}s";
+        return true;
+    }
+
+    private void OpenCreateNoteWindow(EditorNoteDefinition definition, double songPosition)
+    {
+        _optionsNote = definition.CreateChartNote(songPosition, _document.Crotchet, variantIndex: 0);
+        _optionsDefinition = definition;
+        _optionsIsCreation = true;
+        EditorNoteOptionsPanels.TryGet(definition.Kind, out _optionsPanel);
+        _noteOptionsWindow.Open();
+        _status = $"Configure {definition.DisplayName} at {songPosition:0.000}s, then Create";
+    }
+
+    private void ApplyNoteOption(Action<ChartNote> apply)
+    {
+        ChartNote note = ResolveOptionsNote();
+        if (note == null)
+            return;
+
+        apply(note);
+    }
+
+    private ChartNote ResolveOptionsNote()
+    {
+        if (_optionsIsCreation)
+            return _optionsNote;
+
+        ChartNote note = _optionsNote;
+        if (note == null || !_document.Chart.Notes.Contains(note))
+            note = _document.FindNearest(CurrentSongPosition(), _document.Crotchet / _snapDivisions);
+
+        if (note == null)
+            return null;
+
+        _optionsNote = note;
+        return note;
+    }
+
+    private void UpdateNoteOptionsWindow()
+    {
+        if (!_noteOptionsWindow.IsOpen)
+            return;
+
+        if (_optionsNote == null || _optionsDefinition == null || (!_optionsIsCreation && !_document.Chart.Notes.Contains(_optionsNote)))
+        {
+            _noteOptionsWindow.Close();
+            return;
+        }
+
+        bool wasCreation = _optionsIsCreation;
+        if (_noteOptionsWindow.Update(GetNoteOptionsWindowBounds(), GetNoteOptionRows()))
+        {
+            if (wasCreation)
+            {
+                if (_optionsIsCreation)
+                    _status = $"Updated pending {_optionsDefinition.DisplayName}";
+
+                return;
+            }
+
+            _document.MarkDirty();
+            RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
+            _status = $"Updated options at {_optionsNote.SongPosition:0.000}s";
         }
     }
 
@@ -263,11 +356,20 @@ public sealed class BeatmapEditorElement
     {
         EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
         double position = Snap(CurrentSongPosition());
+        OpenCreateNoteWindow(definition, position);
+    }
 
-        if (_document.TryPlaceNote(definition, position, _selectedVariantIndex, out _, out string reason))
+    private void CreatePendingNote()
+    {
+        if (!_optionsIsCreation || _optionsNote == null || _optionsDefinition == null)
+            return;
+
+        if (_document.TryPlaceNote(_optionsDefinition, _optionsNote, out ChartNote placedNote, out string reason))
         {
+            _optionsIsCreation = false;
             RebuildPlayback(_beatmapPlayer.Conductor?.isPlaying() == true);
-            _status = $"Placed {GetSelectedNoteName(definition)} at {position:0.000}s";
+            OpenNoteOptionsWindow(placedNote);
+            _status = $"Created {GetSelectedNoteName(_optionsDefinition)} at {placedNote.SongPosition:0.000}s";
         }
         else
         {
@@ -306,7 +408,6 @@ public sealed class BeatmapEditorElement
     private void Select(EditorNoteKind kind)
     {
         _selectedKind = kind;
-        _selectedVariantIndex = Math.Clamp(_selectedVariantIndex, 0, EditorNoteDefinitions.Get(kind).Variants.Count - 1);
         _status = $"Selected {EditorNoteDefinitions.Get(kind).DisplayName}";
     }
 
@@ -563,13 +664,12 @@ public sealed class BeatmapEditorElement
 
         _ui.Fill(spriteBatch, new Rectangle(20, viewport.Height - 146, viewport.Width - 40, 126), new Color(0, 0, 0, 180));
         _ui.Label(spriteBatch, $"{playing} T:{current:0.000}s BEAT:{((current - _document.Chart.Offset) / _document.Crotchet):0.00} BPM:{_document.Chart.BPM:0.##} OFFSET:{_document.Chart.Offset:0.000} NOTES:{_document.Chart.Notes.Count} {dirty}", new Vector2(34, viewport.Height - 132), Color.White, 2);
-        _ui.Label(spriteBatch, "VARIANT", new Vector2(GetVariantDropdownBounds().X - 104, viewport.Height - 132), Color.LightGreen, 2);
-        _variantDropdown.Draw(spriteBatch, GetVariantDropdownBounds(), GetVariantNames(selected), _selectedVariantIndex);
         _ui.Label(spriteBatch, $"NOTE <UP/DOWN> {selected.DisplayName}  SONG <PGUP/PGDN> {songName}", new Vector2(34, viewport.Height - 108), Color.LightGreen, 2);
         _ui.Label(spriteBatch, $"CHART <CTRL+PGUP/PGDN> {chartName}", new Vector2(34, viewport.Height - 96), Color.LightGreen, 2);
         _ui.Label(spriteBatch, editLine, new Vector2(34, viewport.Height - 84), _isEditingText ? Color.Yellow : Color.LightBlue, 2);
         _ui.Label(spriteBatch, $"STATUS: {_status}", new Vector2(34, viewport.Height - 60), Color.LightGray, 2);
-        _ui.Label(spriteBatch, "SPACE PLAY/PAUSE LEFT/RIGHT SEEK Q/D SCROLL ENTER PLACE DEL DELETE CTRL+S SAVE CTRL+L LOAD P PREVIEW ESC STOP +/- ZOOM", new Vector2(34, viewport.Height - 36), Color.LightGray, 2);
+        _ui.Label(spriteBatch, "SPACE PLAY/PAUSE LEFT/RIGHT SEEK Q/D SCROLL ENTER PLACE DEL DELETE F3 OPTIONS CTRL+S SAVE CTRL+L LOAD P PREVIEW ESC STOP +/- ZOOM", new Vector2(34, viewport.Height - 36), Color.LightGray, 2);
+        _noteOptionsWindow.Draw(spriteBatch, GetNoteOptionsWindowBounds(), _optionsPanel?.Title ?? "NOTE OPTIONS", GetNoteOptionRows());
     }
 
     private float TimeToX(double songPosition, double start, double end, Rectangle area)
@@ -596,21 +696,40 @@ public sealed class BeatmapEditorElement
 
     private string GetSelectedNoteName(EditorNoteDefinition definition)
     {
-        if (definition.Variants.Count <= 1)
-            return definition.DisplayName;
-
-        return $"{definition.DisplayName} / {definition.GetVariant(_selectedVariantIndex).DisplayName}";
+        return definition.DisplayName;
     }
 
-    private Rectangle GetVariantDropdownBounds()
+    private Rectangle GetNoteOptionsWindowBounds()
     {
         Viewport viewport = GLOBALS.graphicsDevice.Viewport;
-        return new Rectangle(viewport.Width - 304, viewport.Height - 138, 270, 24);
+        return new Rectangle(viewport.Width - 390, 210, 350, 230);
     }
 
-    private IReadOnlyList<string> GetVariantNames(EditorNoteDefinition definition)
+    private IReadOnlyList<DevUiWindowRow> GetNoteOptionRows()
     {
-        return definition.Variants.Select(variant => variant.DisplayName).ToArray();
+        if (_optionsNote == null)
+            return Array.Empty<DevUiWindowRow>();
+
+        IReadOnlyList<DevUiWindowRow> rows = _optionsPanel?.BuildRows(new EditorNoteOptionsContext(_optionsNote, _document, GetNoteOptionsWindowBounds(), ResolveOptionsNote)) ?? Array.Empty<DevUiWindowRow>();
+        List<DevUiWindowRow> wrappedRows = new();
+
+        if (_optionsIsCreation)
+            wrappedRows.Add(DevUiWindowRow.Button("CREATE", CreatePendingNote));
+
+        for (int i = 0; i < rows.Count; i++)
+            wrappedRows.Add(WrapNoteOptionRow(rows[i]));
+
+        return wrappedRows;
+    }
+
+    private DevUiWindowRow WrapNoteOptionRow(DevUiWindowRow row)
+    {
+        return row.Kind switch
+        {
+            DevUiWindowRowKind.Checkbox => DevUiWindowRow.Checkbox(row.Text, row.IsChecked, () => ApplyNoteOption(_ => row.Toggle?.Invoke())),
+            DevUiWindowRowKind.Dropdown => DevUiWindowRow.Dropdown(row.Text, row.Options, row.SelectedIndex, index => ApplyNoteOption(_ => row.Select?.Invoke(index))),
+            _ => row
+        };
     }
 
     private bool Pressed(Keys key)

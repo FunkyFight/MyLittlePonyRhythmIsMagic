@@ -4,14 +4,19 @@ namespace MLP_RiM.Elements.Editor;
 
 public readonly struct SeeSawAction
 {
-    private const string DataKey = "action";
+    public const string DataKey = "action";
+    private const string BigLeapRainbowDashDataKey = "big_leap_rainbow_dash";
+    private const string BigLeapApplejackDataKey = "big_leap_applejack";
 
-    public static readonly SeeSawAction TowardOuter = new("see_saw_toward_outer", SeeSawDirection.Outer, isBigLeap: false);
-    public static readonly SeeSawAction TowardInner = new("see_saw_toward_inner", SeeSawDirection.Inner, isBigLeap: false);
-    public static readonly SeeSawAction TowardOpposite = new("see_saw_toward_opposite", SeeSawDirection.Opposite, isBigLeap: false);
-    public static readonly SeeSawAction TowardOuterBigLeap = new("see_saw_toward_outer_big_leap", SeeSawDirection.OuterBigLeap, isBigLeap: true);
-    public static readonly SeeSawAction TowardInnerBigLeap = new("see_saw_toward_inner_big_leap", SeeSawDirection.InnerBigLeap, isBigLeap: true);
-    public static readonly SeeSawAction TowardOppositeBigLeap = new("see_saw_toward_opposite_big_leap", SeeSawDirection.OppositeBigLeap, isBigLeap: true);
+    public static readonly SeeSawAction TowardOuter = new("see_saw_toward_outer", SeeSawDirection.Outer, isBigLeap: false, hasBigCounterJump: false);
+    public static readonly SeeSawAction TowardInner = new("see_saw_toward_inner", SeeSawDirection.Inner, isBigLeap: false, hasBigCounterJump: false);
+    public static readonly SeeSawAction TowardOpposite = new("see_saw_toward_opposite", SeeSawDirection.Opposite, isBigLeap: false, hasBigCounterJump: false);
+    public static readonly SeeSawAction TowardOuterBigLeap = new("see_saw_toward_outer_big_leap", SeeSawDirection.OuterBigLeap, isBigLeap: true, hasBigCounterJump: false);
+    public static readonly SeeSawAction TowardInnerBigLeap = new("see_saw_toward_inner_big_leap", SeeSawDirection.InnerBigLeap, isBigLeap: true, hasBigCounterJump: false);
+    public static readonly SeeSawAction TowardOppositeBigLeap = new("see_saw_toward_opposite_big_leap", SeeSawDirection.OppositeBigLeap, isBigLeap: true, hasBigCounterJump: false);
+    public static readonly SeeSawAction TowardOuterBigLeapWithBigCounter = new("see_saw_toward_outer_big_leap_counter_big_leap", SeeSawDirection.OuterBigLeap, isBigLeap: true, hasBigCounterJump: true);
+    public static readonly SeeSawAction TowardInnerBigLeapWithBigCounter = new("see_saw_toward_inner_big_leap_counter_big_leap", SeeSawDirection.InnerBigLeap, isBigLeap: true, hasBigCounterJump: true);
+    public static readonly SeeSawAction TowardOppositeBigLeapWithBigCounter = new("see_saw_toward_opposite_big_leap_counter_big_leap", SeeSawDirection.OppositeBigLeap, isBigLeap: true, hasBigCounterJump: true);
 
     private static readonly IReadOnlyList<SeeSawAction> KnownActions = new[]
     {
@@ -20,24 +25,41 @@ public readonly struct SeeSawAction
         TowardOpposite,
         TowardOuterBigLeap,
         TowardInnerBigLeap,
-        TowardOppositeBigLeap
+        TowardOppositeBigLeap,
+        TowardOuterBigLeapWithBigCounter,
+        TowardInnerBigLeapWithBigCounter,
+        TowardOppositeBigLeapWithBigCounter
     };
 
     public string Value { get; }
     public SeeSawDirection Direction { get; }
     public bool IsBigLeap { get; }
+    public bool HasBigCounterJump { get; }
 
-    private SeeSawAction(string value, SeeSawDirection direction, bool isBigLeap)
+    private SeeSawAction(string value, SeeSawDirection direction, bool isBigLeap, bool hasBigCounterJump)
     {
         Value = value;
         Direction = direction;
         IsBigLeap = isBigLeap;
+        HasBigCounterJump = hasBigCounterJump;
     }
 
     public static SeeSawAction FromVariant(EditorNoteVariant variant)
     {
         if (variant.AdditionnalData.TryGetValue(DataKey, out string value) && TryParse(value, out SeeSawAction action))
             return action;
+
+        return TowardOuter;
+    }
+
+    public static SeeSawAction FromAdditionnalData(IReadOnlyDictionary<string, string> additionnalData)
+    {
+        if (additionnalData != null && additionnalData.TryGetValue(DataKey, out string value) && TryParse(value, out SeeSawAction action))
+        {
+            bool rainbowBigLeap = GetBigLeapRainbowDash(additionnalData) || action.IsBigLeap;
+            bool applejackBigLeap = GetBigLeapApplejack(additionnalData) || action.HasBigCounterJump;
+            return action.WithBigLeapOptions(rainbowBigLeap, applejackBigLeap);
+        }
 
         return TowardOuter;
     }
@@ -60,6 +82,99 @@ public readonly struct SeeSawAction
     public IReadOnlyDictionary<string, string> ToAdditionnalData()
     {
         return new Dictionary<string, string> { [DataKey] = Value };
+    }
+
+    public static bool GetBigLeapRainbowDash(IReadOnlyDictionary<string, string> additionnalData)
+    {
+        return GetBool(additionnalData, BigLeapRainbowDashDataKey);
+    }
+
+    public static bool GetBigLeapApplejack(IReadOnlyDictionary<string, string> additionnalData)
+    {
+        return GetBool(additionnalData, BigLeapApplejackDataKey);
+    }
+
+    public static SeeSawDirection GetBaseDirection(SeeSawDirection direction)
+    {
+        return direction switch
+        {
+            SeeSawDirection.OuterBigLeap => SeeSawDirection.Outer,
+            SeeSawDirection.InnerBigLeap => SeeSawDirection.Inner,
+            SeeSawDirection.OppositeBigLeap => SeeSawDirection.Opposite,
+            _ => direction
+        };
+    }
+
+    public static string GetDirectionDisplayName(SeeSawDirection direction)
+    {
+        return GetBaseDirection(direction) switch
+        {
+            SeeSawDirection.Inner => "Inner",
+            SeeSawDirection.Opposite => "Opposite",
+            _ => "Outer"
+        };
+    }
+
+    public static void SetDirection(IDictionary<string, string> additionnalData, SeeSawDirection direction)
+    {
+        additionnalData[DataKey] = GetActionValue(GetBaseDirection(direction));
+    }
+
+    public static void ToggleBigLeapRainbowDash(IDictionary<string, string> additionnalData)
+    {
+        SetBool(additionnalData, BigLeapRainbowDashDataKey, !GetBigLeapRainbowDash((IReadOnlyDictionary<string, string>)additionnalData));
+    }
+
+    public static void ToggleBigLeapApplejack(IDictionary<string, string> additionnalData)
+    {
+        SetBool(additionnalData, BigLeapApplejackDataKey, !GetBigLeapApplejack((IReadOnlyDictionary<string, string>)additionnalData));
+    }
+
+    private SeeSawAction WithBigLeapOptions(bool rainbowBigLeap, bool applejackBigLeap)
+    {
+        return new SeeSawAction(Value, GetDirectionWithBigLeap(Direction, rainbowBigLeap), rainbowBigLeap, applejackBigLeap);
+    }
+
+    private static SeeSawDirection GetDirectionWithBigLeap(SeeSawDirection direction, bool isBigLeap)
+    {
+        SeeSawDirection baseDirection = GetBaseDirection(direction);
+
+        if (!isBigLeap)
+            return baseDirection;
+
+        return baseDirection switch
+        {
+            SeeSawDirection.Outer => SeeSawDirection.OuterBigLeap,
+            SeeSawDirection.Inner => SeeSawDirection.InnerBigLeap,
+            SeeSawDirection.Opposite => SeeSawDirection.OppositeBigLeap,
+            _ => baseDirection
+        };
+    }
+
+    private static bool GetBool(IReadOnlyDictionary<string, string> additionnalData, string key)
+    {
+        return additionnalData != null
+            && additionnalData.TryGetValue(key, out string value)
+            && bool.TryParse(value, out bool result)
+            && result;
+    }
+
+    private static void SetBool(IDictionary<string, string> additionnalData, string key, bool value)
+    {
+        if (value)
+            additionnalData[key] = "true";
+        else
+            additionnalData.Remove(key);
+    }
+
+    private static string GetActionValue(SeeSawDirection direction)
+    {
+        return GetBaseDirection(direction) switch
+        {
+            SeeSawDirection.Inner => TowardInner.Value,
+            SeeSawDirection.Opposite => TowardOpposite.Value,
+            _ => TowardOuter.Value
+        };
     }
 
     public SeeSawEditorState Apply(SeeSawEditorState state)

@@ -25,10 +25,10 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
     public double GetHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
         SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
-        double afterBeats = action.Direction == SeeSawDirection.Opposite
+        double afterBeats = GetBaseDirection(action.Direction) == SeeSawDirection.Opposite
             ? GetPhaseBeats(context.AfterUsesOuterTiming)
             : context.ForceBigLeapTiming
-                ? OuterBeforeBeats
+                ? OuterBeforeBeats / 2.0
                 : GetBeforeBeats(context.AfterUsesOuterTiming);
 
         return context.SongPosition + afterBeats * context.Crotchet;
@@ -46,11 +46,26 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
 
     private static double GetBeforeBeats(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
-        SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
-        if (!action.IsBigLeap)
-            return GetPhaseBeats(context.BeforeUsesOuterTiming) + GetPhaseBeats(context.AfterUsesOuterTiming);
+        double counterBeats = context.CounterBigLeapTiming
+            ? OuterBeforeBeats / 2.0
+            : GetPhaseBeats(context.BeforeUsesOuterTiming);
 
-        return GetBeforeBeats(context);
+        if (!context.ForceBigLeapTiming)
+            return counterBeats + GetPhaseBeats(context.AfterUsesOuterTiming);
+
+        return counterBeats + OuterBeforeBeats / 2.0;
+
+    }
+
+    private static SeeSawDirection GetBaseDirection(SeeSawDirection direction)
+    {
+        return direction switch
+        {
+            SeeSawDirection.OuterBigLeap => SeeSawDirection.Outer,
+            SeeSawDirection.InnerBigLeap => SeeSawDirection.Inner,
+            SeeSawDirection.OppositeBigLeap => SeeSawDirection.Opposite,
+            _ => direction
+        };
     }
 
     private static double GetPhaseBeats(bool usesOuterTiming)

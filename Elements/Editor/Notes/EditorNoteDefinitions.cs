@@ -22,6 +22,9 @@ public static class EditorNoteDefinitions
 
     public static EditorNoteDefinition FromChartNote(ChartNote note)
     {
+        if (note == null)
+            return null;
+
         return All.FirstOrDefault(definition => definition.Matches(note));
     }
 
@@ -33,6 +36,16 @@ public static class EditorNoteDefinitions
         for (int i = 0; i < definition.Variants.Count; i++)
         {
             EditorNoteVariant variant = definition.Variants[i];
+            if (definition.Kind == EditorNoteKind.SeeSaw
+                && variant.AdditionnalData.TryGetValue("action", out string variantAction)
+                && note.AdditionnalData.TryGetValue("action", out string noteAction)
+                && SeeSawAction.TryParse(noteAction, out SeeSawAction parsedAction)
+                && SeeSawAction.TryParse(variantAction, out SeeSawAction parsedVariantAction)
+                && SeeSawAction.GetBaseDirection(parsedAction.Direction) == SeeSawAction.GetBaseDirection(parsedVariantAction.Direction))
+            {
+                return i;
+            }
+
             if (variant.AdditionnalData.All(pair => note.AdditionnalData.TryGetValue(pair.Key, out string value) && value == pair.Value))
                 return i;
         }

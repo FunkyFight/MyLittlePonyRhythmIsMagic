@@ -110,6 +110,7 @@ public class SeeSawScene : Scene
 
         SeeSaw2.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
         Rainbow.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
+        Applejack.Rotation = -MathHelper.ToRadians(BeamTiltDegrees);
 
         SetupAnimations();
         seeSawAnimationStates = new Dictionary<SeeSawJumper, AnimationStateMachine>
@@ -150,7 +151,8 @@ public class SeeSawScene : Scene
         _visualChartPlayer = new ChartPlayer(GLOBALS.beatmapPlayer.CurrentChart, Rhythm.Note.ReactionRules.RhythmHeavenLike());
         seeSawVisuals = new VisualNoteManager<SeeSawVisualNote>(_visualChartPlayer, note => CreateVisualNote(note, crotchet));
 
-        seeSawVisuals.LookBehindSeconds = 0;
+        // Keep hit visuals alive for one frame after reaction so Rainbow can enter her land state.
+        seeSawVisuals.LookBehindSeconds = crotchet;
         seeSawVisuals.LookAheadSeconds = crotchet * MaxVisualLookAheadBeats;
         _lastSongPosition = double.NaN;
     }
@@ -176,8 +178,8 @@ public class SeeSawScene : Scene
         Vector2 rainbowFromPos = GetRainbowPositionBefore(note);
         Vector2 applejackFromPos = GetApplejackPositionBefore(note);
         float fromRotation = GetBeamRotationBefore(note);
-        float counterJumpMultiplier = action.IsBigLeap && WasPreviousSeeSawActionBigLeap(note) ? 4f : 1f;
-        bool previousWasBigLeap = action.IsBigLeap && WasPreviousSeeSawActionBigLeap(note);
+        float counterJumpMultiplier = action.HasBigCounterJump ? 4f : 1f;
+        double? bigLeapCounterJumpDuration = action.HasBigCounterJump ? crotchet * 2.0 : null;
 
         return action.Direction switch
         {
@@ -211,11 +213,10 @@ public class SeeSawScene : Scene
                 applejackFromPos,
                 applejackOuterPos,
                 fromRotation,
-                approachDuration: crotchet * 4.0,
                 isBigLeap: true,
                 jumpMultiplier: 4,
                 counterJumpMultiplier: counterJumpMultiplier,
-                counterJumpDuration: previousWasBigLeap ? crotchet * 4.0 : (double?)null),
+                counterJumpDuration: bigLeapCounterJumpDuration),
 
             SeeSawDirection.InnerBigLeap => CreatePairedJumpVisual(
                 note,
@@ -225,13 +226,12 @@ public class SeeSawScene : Scene
                 applejackFromPos,
                 applejackInnerPos,
                 fromRotation,
-                approachDuration: crotchet * 4.0,
                 isBigLeap: true,
                 jumpMultiplier: 4,
                 counterJumpMultiplier: counterJumpMultiplier,
-                counterJumpDuration: previousWasBigLeap ? crotchet * 4.0 : (double?)null),
+                counterJumpDuration: bigLeapCounterJumpDuration),
 
-            SeeSawDirection.OppositeBigLeap => CreateOppositeJumpVisual(note, crotchet, rainbowFromPos, applejackFromPos, fromRotation, isBigLeap: true, jumpMultiplier: 4, counterJumpMultiplier: counterJumpMultiplier, counterJumpDuration: previousWasBigLeap ? crotchet * 4.0 : (double?)null),
+            SeeSawDirection.OppositeBigLeap => CreateOppositeJumpVisual(note, crotchet, rainbowFromPos, applejackFromPos, fromRotation, isBigLeap: true, jumpMultiplier: 4, counterJumpMultiplier: counterJumpMultiplier, counterJumpDuration: bigLeapCounterJumpDuration),
             _ => null
         };
     }
@@ -254,19 +254,23 @@ public class SeeSawScene : Scene
     {
         // Paired jumps are the standard choreography: Applejack jumps first, the beam tilts
         // toward her landing side, then Rainbow jumps and owns the final hit timing.
-        SeeSawJumpPath rainbowPath = new(rainbowFromPos, rainbowToPos, rainbowInnerPos, rainbowOuterPos);
+        SeeSawJumpPath rainbowPath = jumpMultiplier > 1f
+            ? SeeSawJumpPath.WithJumpHeight(rainbowFromPos, rainbowToPos, rainbowInnerPos, rainbowOuterPos, SeeSawVisualNote.BigLeapJumpHeight)
+            : new SeeSawJumpPath(rainbowFromPos, rainbowToPos, rainbowInnerPos, rainbowOuterPos);
         SeeSawCounterJump applejackCounterJump = new(
             SeeSawJumper.APPLEJACK,
-            new SeeSawJumpPath(applejackFromPos, applejackToPos, applejackInnerPos, applejackOuterPos, counterJumpMultiplier),
+            counterJumpMultiplier > 1f
+                ? SeeSawJumpPath.WithJumpHeight(applejackFromPos, applejackToPos, applejackInnerPos, applejackOuterPos, SeeSawVisualNote.BigLeapJumpHeight)
+                : new SeeSawJumpPath(applejackFromPos, applejackToPos, applejackInnerPos, applejackOuterPos),
             GetBeamRotationToward(SeeSawJumper.APPLEJACK));
 
         double visualApproachDuration = approachDuration ?? rainbowPath.GetApproachDuration(crotchet);
         float handoffProgression = jumperStartProgression;
 
-        if (!isBigLeap && !approachDuration.HasValue && !counterJumpDuration.HasValue)
+        if (!approachDuration.HasValue)
         {
-            double applejackPhaseDuration = applejackCounterJump.Path.GetApproachDuration(crotchet) / 2.0;
-            double rainbowPhaseDuration = rainbowPath.GetApproachDuration(crotchet) / 2.0;
+            double applejackPhaseDuration = counterJumpDuration ?? applejackCounterJump.Path.GetApproachDuration(crotchet) / 2.0;
+            double rainbowPhaseDuration = isBigLeap ? crotchet * 2.0 : rainbowPath.GetApproachDuration(crotchet) / 2.0;
             visualApproachDuration = applejackPhaseDuration + rainbowPhaseDuration;
             handoffProgression = (float)(applejackPhaseDuration / visualApproachDuration);
             counterRotationProgression = handoffProgression;
@@ -276,7 +280,7 @@ public class SeeSawScene : Scene
             ? (float)(counterJumpDuration.Value / visualApproachDuration)
             : handoffProgression;
 
-        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, counterRotationProgression, handoffProgression, approachDuration: visualApproachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier, counterJumpEndProgression: counterJumpEndProgression);
+        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, counterRotationProgression, handoffProgression, approachDuration: visualApproachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier, counterJumpEndProgression: counterJumpEndProgression, counterIsBigLeap: counterJumpMultiplier > 1f);
     }
 
     /// <summary>
@@ -293,20 +297,23 @@ public class SeeSawScene : Scene
         // Opposite means Rainbow lands on the side opposite Applejack's current stable side.
         // Applejack does not move for this action.
         Vector2 rainbowTargetPos = GetOppositeRainbowPosition(applejackFromPos);
-        SeeSawJumpPath rainbowPath = new(rainbowFromPos, rainbowTargetPos, rainbowInnerPos, rainbowOuterPos);
+        SeeSawJumpPath rainbowPath = jumpMultiplier > 1f
+            ? SeeSawJumpPath.WithJumpHeight(rainbowFromPos, rainbowTargetPos, rainbowInnerPos, rainbowOuterPos, SeeSawVisualNote.BigLeapJumpHeight)
+            : new SeeSawJumpPath(rainbowFromPos, rainbowTargetPos, rainbowInnerPos, rainbowOuterPos);
         SeeSawJumpPath applejackStationaryPath = new(applejackFromPos, applejackFromPos, applejackInnerPos, applejackOuterPos);
         SeeSawCounterJump applejackCounterJump = new(
             SeeSawJumper.APPLEJACK,
-            new SeeSawJumpPath(applejackFromPos, applejackFromPos, applejackInnerPos, applejackOuterPos, counterJumpMultiplier),
+            counterJumpMultiplier > 1f
+                ? SeeSawJumpPath.WithJumpHeight(applejackFromPos, applejackFromPos, applejackInnerPos, applejackOuterPos, SeeSawVisualNote.BigLeapJumpHeight)
+                : new SeeSawJumpPath(applejackFromPos, applejackFromPos, applejackInnerPos, applejackOuterPos),
             GetBeamRotationToward(SeeSawJumper.APPLEJACK));
 
-        double approachDuration = isBigLeap
-            ? crotchet * 4.0
-            : (applejackStationaryPath.GetApproachDuration(crotchet) + rainbowPath.GetApproachDuration(crotchet)) / 2.0;
-        float handoffProgression = isBigLeap
-            ? 0.5f
-            : (float)((applejackStationaryPath.GetApproachDuration(crotchet) / 2.0) / approachDuration);
-        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, handoffProgression, handoffProgression, approachDuration: approachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier, counterJumpEndProgression: handoffProgression);
+        double applejackPhaseDuration = counterJumpDuration ?? applejackStationaryPath.GetApproachDuration(crotchet) / 2.0;
+        double rainbowPhaseDuration = isBigLeap ? crotchet * 2.0 : rainbowPath.GetApproachDuration(crotchet) / 2.0;
+        double approachDuration = applejackPhaseDuration + rainbowPhaseDuration;
+        float handoffProgression = (float)(applejackPhaseDuration / approachDuration);
+
+        return CreateRainbowDrivenVisual(note, crotchet, rainbowPath, applejackCounterJump, fromRotation, handoffProgression, handoffProgression, approachDuration: approachDuration, isBigLeap: isBigLeap, jumpMultiplier: jumpMultiplier, counterJumpEndProgression: handoffProgression, counterIsBigLeap: counterJumpMultiplier > 1f);
     }
 
     /// <summary>
@@ -322,7 +329,7 @@ public class SeeSawScene : Scene
     /// <param name="jumperStartProgression">Normalized note progress where Rainbow Dash starts jumping.</param>
     /// <param name="approachDuration">Optional duration override for actions whose cue timing is not based on Rainbow Dash.</param>
     /// <returns>A configured <see cref="SeeSawVisualNote"/>.</returns>
-    private SeeSawVisualNote CreateRainbowDrivenVisual(Note note, double crotchet, SeeSawJumpPath rainbowPath, SeeSawCounterJump? applejackCounterJump, float fromRotation, float counterRotationProgression = 0.5f, float jumperStartProgression = 0.5f, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1f, float counterJumpEndProgression = 0.5f)
+    private SeeSawVisualNote CreateRainbowDrivenVisual(Note note, double crotchet, SeeSawJumpPath rainbowPath, SeeSawCounterJump? applejackCounterJump, float fromRotation, float counterRotationProgression = 0.5f, float jumperStartProgression = 0.5f, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1f, float counterJumpEndProgression = 0.5f, bool counterIsBigLeap = false)
     {
         // Rainbow is always the main jumper for these chart actions. The final beam rotation
         // is therefore the Rainbow side, while Applejack's optional counter jump controls the
@@ -345,7 +352,8 @@ public class SeeSawScene : Scene
             approachDuration: approachDuration, 
             isBigLeap: isBigLeap,
             jumpMultiplier: jumpMultiplier,
-            counterJumpEndProgression: counterJumpEndProgression);
+            counterJumpEndProgression: counterJumpEndProgression,
+            counterIsBigLeap: counterIsBigLeap);
     }
 
     /// <summary>
@@ -391,6 +399,7 @@ public class SeeSawScene : Scene
         // Only the latest note whose active window contains the cursor may drive shared objects.
         // Older overlapping visuals stay alive, but their canApplyState guard prevents mutations.
         Note drivingNote = null;
+        double crotchet = 60.0 / GLOBALS.beatmapPlayer.Conductor.BPM;
 
         foreach (Note note in _visualChartPlayer.Notes)
         {
@@ -398,10 +407,11 @@ public class SeeSawScene : Scene
                 continue;
 
             double start = note.SongPosition - GetApproachDuration(note);
-            if (songPosition >= start && songPosition <= note.SongPosition)
+            double end = note.SongPosition + crotchet;
+            if (songPosition >= start && songPosition <= end)
                 drivingNote = note;
 
-            if (note.SongPosition > songPosition)
+            if (start > songPosition)
                 break;
         }
 
@@ -421,23 +431,25 @@ public class SeeSawScene : Scene
         // but the lead-in length follows Applejack's current stable position.
         if (TryGetSeeSawAction(note, out SeeSawAction action))
         {
-            if (action.IsBigLeap)
-                return crotchet * 4.0;
-
             if (GetBaseDirection(action.Direction) == SeeSawDirection.Opposite)
             {
                 Vector2 applejackFromPosition = GetApplejackPositionBefore(note);
                 Vector2 oppositeRainbowFromPosition = GetRainbowPositionBefore(note);
                 Vector2 rainbowTargetPosition = GetOppositeRainbowPosition(applejackFromPosition);
-                double applejackPhaseDuration = SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPosition, applejackInnerPos, applejackOuterPos) / 2.0;
-                double rainbowPhaseDuration = new SeeSawJumpPath(oppositeRainbowFromPosition, rainbowTargetPosition, rainbowInnerPos, rainbowOuterPos).GetApproachDuration(crotchet) / 2.0;
+                double applejackPhaseDuration = action.HasBigCounterJump
+                    ? crotchet * 2.0
+                    : SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPosition, applejackInnerPos, applejackOuterPos) / 2.0;
+                double rainbowPhaseDuration = action.IsBigLeap ? crotchet * 2.0 : new SeeSawJumpPath(oppositeRainbowFromPosition, rainbowTargetPosition, rainbowInnerPos, rainbowOuterPos).GetApproachDuration(crotchet) / 2.0;
                 return applejackPhaseDuration + rainbowPhaseDuration;
             }
 
             Vector2 pairedRainbowFromPosition = GetRainbowPositionBefore(note);
             Vector2 applejackFromPositionForPairedJump = GetApplejackPositionBefore(note);
-            return (SeeSawVisualNote.GetApproachDuration(crotchet, pairedRainbowFromPosition, rainbowInnerPos, rainbowOuterPos)
-                + SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPositionForPairedJump, applejackInnerPos, applejackOuterPos)) / 2.0;
+            double pairedApplejackPhaseDuration = action.HasBigCounterJump
+                ? crotchet * 2.0
+                : SeeSawVisualNote.GetApproachDuration(crotchet, applejackFromPositionForPairedJump, applejackInnerPos, applejackOuterPos) / 2.0;
+            double pairedRainbowPhaseDuration = action.IsBigLeap ? crotchet * 2.0 : SeeSawVisualNote.GetApproachDuration(crotchet, pairedRainbowFromPosition, rainbowInnerPos, rainbowOuterPos) / 2.0;
+            return pairedApplejackPhaseDuration + pairedRainbowPhaseDuration;
         }
 
         Vector2 rainbowFromPosition = GetRainbowPositionBefore(note);
@@ -555,26 +567,6 @@ public class SeeSawScene : Scene
         };
     }
 
-    private bool WasPreviousSeeSawActionBigLeap(Note targetNote)
-    {
-        SeeSawAction previousAction = default;
-        bool hasPreviousAction = false;
-
-        foreach (Note note in _visualChartPlayer.Notes)
-        {
-            if (note == targetNote || Math.Abs(note.SongPosition - targetNote.SongPosition) <= 0.0005)
-                break;
-
-            if (TryGetSeeSawAction(note, out SeeSawAction action))
-            {
-                previousAction = action;
-                hasPreviousAction = true;
-            }
-        }
-
-        return hasPreviousAction && previousAction.IsBigLeap;
-    }
-
     /// <summary>
     /// Gets the Rainbow Dash side opposite Applejack's stable side.
     /// </summary>
@@ -610,8 +602,9 @@ public class SeeSawScene : Scene
         // strings. This avoids runtime/editor drift when new variants are added.
         if (note.AdditionnalData != null
             && note.AdditionnalData.TryGetValue(ActionDataKey, out string actionValue)
-            && SeeSawAction.TryParse(actionValue, out action))
+            && SeeSawAction.TryParse(actionValue, out _))
         {
+            action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
             return true;
         }
 
@@ -760,7 +753,7 @@ public class SeeSawScene : Scene
                     duration: 1,
                     onEnter : () =>
                     {
-                        Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-idle");
+                        Rainbow.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Rainbowdash_jump1);
                     },
                     isLooping: true
                 )
@@ -768,10 +761,14 @@ public class SeeSawScene : Scene
             .AddState(
                 new AnimationState(
                     name: "land",
-                    duration: 0.25f,
+                    duration: 1f,
                     onEnter : () =>
                     {
-                        Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-idle");
+                        Rainbow.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
+                        Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-land");
+                        Rainbow.sprite.DrawOffset = new Vector2(0, 20);
+                        ((AnimatedSprite) Rainbow.sprite).Restart();
+                        
                     },
                     isLooping: false
                 )
@@ -782,14 +779,17 @@ public class SeeSawScene : Scene
                     duration: 1,
                     onEnter : () =>
                     {
-                        Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-idle");
+                        Rainbow.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Rainbowdash_jump2);
+                        Rainbow.sprite.CenterOrigin();
                     },
-                    isLooping: true
+                    onExit: () => {},
+                    isLooping: false
                 )
             )
+            .AddTransition("land", "idle", () => RainbowState.StateProgress >= 1f)
             .SetGlobalUpdate(globalUpdate: (gt) =>
             {
-                ((AnimatedSprite) Rainbow.sprite)?.Update(gt);
+                if(Rainbow.sprite is AnimatedSprite)((AnimatedSprite) Rainbow.sprite)?.Update(gt);
                 return true;
             })
             .Build();

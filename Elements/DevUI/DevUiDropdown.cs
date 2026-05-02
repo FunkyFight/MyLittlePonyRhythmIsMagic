@@ -13,8 +13,6 @@ public sealed class DevUiDropdown
     private readonly DevUiRenderer _ui;
     private bool _isOpen;
     private int _scrollOffset;
-    private MouseState _previousMouse;
-    private MouseState _mouse;
 
     public DevUiDropdown(DevUiRenderer ui)
     {
@@ -25,10 +23,8 @@ public sealed class DevUiDropdown
 
     public int SelectedIndex { get; private set; }
 
-    public bool Update(Rectangle bounds, IReadOnlyList<string> options, int selectedIndex)
+    public bool Update(Rectangle bounds, IReadOnlyList<string> options, int selectedIndex, MouseState mouse, bool leftClicked, int wheelDelta)
     {
-        _previousMouse = _mouse;
-        _mouse = Mouse.GetState();
         SelectedIndex = Math.Clamp(selectedIndex, 0, Math.Max(0, options.Count - 1));
 
         if (options.Count == 0)
@@ -41,13 +37,13 @@ public sealed class DevUiDropdown
         int visibleItems = GetVisibleItemCount(options);
         _scrollOffset = Math.Clamp(_scrollOffset, 0, Math.Max(0, options.Count - visibleItems));
 
-        if (_isOpen && MouseOverList(bounds, visibleItems))
-            ApplyScroll(options.Count, visibleItems);
+        if (_isOpen && MouseOverList(bounds, visibleItems, mouse.Position))
+            ApplyScroll(options.Count, visibleItems, wheelDelta);
 
-        if (!LeftClicked())
+        if (!leftClicked)
             return false;
 
-        Point mousePoint = _mouse.Position;
+        Point mousePoint = mouse.Position;
         if (bounds.Contains(mousePoint))
         {
             _isOpen = !_isOpen;
@@ -107,25 +103,19 @@ public sealed class DevUiDropdown
         _ui.Label(spriteBatch, text, new Vector2(bounds.X + 8, bounds.Y + 6), textColor, 2);
     }
 
-    private bool LeftClicked()
-    {
-        return _mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released;
-    }
-
     private int GetVisibleItemCount(IReadOnlyList<string> options)
     {
         return Math.Min(MaxVisibleItems, options.Count);
     }
 
-    private bool MouseOverList(Rectangle bounds, int visibleItems)
+    private bool MouseOverList(Rectangle bounds, int visibleItems, Point mousePosition)
     {
         Rectangle listBounds = new(bounds.X, bounds.Bottom, bounds.Width, bounds.Height * visibleItems);
-        return listBounds.Contains(_mouse.Position);
+        return listBounds.Contains(mousePosition);
     }
 
-    private void ApplyScroll(int optionCount, int visibleItems)
+    private void ApplyScroll(int optionCount, int visibleItems, int wheelDelta)
     {
-        int wheelDelta = _mouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
         if (wheelDelta == 0)
             return;
 

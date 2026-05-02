@@ -90,11 +90,43 @@
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>22.9</SongPosition>
+      <SongPosition>22.4</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer_big_leap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>24.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner_big_leap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_opposite_big_leap_counter_big_leap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.4</SongPosition>
+      <HoldDuration>0</HoldDuration>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="action" Value="see_saw_toward_inner_big_leap_counter_big_leap" />
       </AdditionnalData>
     </Note>
   </Notes>
