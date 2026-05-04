@@ -8,7 +8,33 @@ namespace MLP_RiM.Elements.Editor;
 public enum EditorNoteKind
 {
     RhythmInput,
-    SeeSaw
+    SeeSaw,
+    SeaponyParade
+}
+
+public sealed class EditorNotePlacement
+{
+    public EditorNotePlacement(EditorNoteDefinition definition, ChartNote note)
+    {
+        Definition = definition;
+        Note = note;
+    }
+
+    public EditorNoteDefinition Definition { get; }
+    public ChartNote Note { get; }
+}
+
+public interface IEditorNotePlacementStrategy
+{
+    IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, double crotchet);
+}
+
+public sealed class SingleEditorNotePlacementStrategy : IEditorNotePlacementStrategy
+{
+    public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, double crotchet)
+    {
+        return new[] { new EditorNotePlacement(definition, sourceNote) };
+    }
 }
 
 public sealed class EditorNoteVariant
@@ -36,13 +62,14 @@ public sealed class EditorNoteDefinition
     public IReadOnlyList<EditorNoteVariant> Variants { get; }
     private IEditorNoteTiming Timing { get; }
     private Func<ChartNote, bool> MatchesChartNote { get; }
+    private IEditorNotePlacementStrategy PlacementStrategy { get; }
 
     public EditorNoteDefinition(EditorNoteKind kind, string displayName, string inputAction, double holdBeats, double occupyBeforeBeats, double occupyAfterBeats, double hitWindowBeforeBeats, double hitWindowAfterBeats, IReadOnlyList<EditorNoteVariant> variants)
-        : this(kind, displayName, inputAction, holdBeats, occupyBeforeBeats, occupyAfterBeats, hitWindowBeforeBeats, hitWindowAfterBeats, variants, new FixedEditorNoteTiming(), _ => false)
+        : this(kind, displayName, inputAction, holdBeats, occupyBeforeBeats, occupyAfterBeats, hitWindowBeforeBeats, hitWindowAfterBeats, variants, new FixedEditorNoteTiming(), _ => false, new SingleEditorNotePlacementStrategy())
     {
     }
 
-    public EditorNoteDefinition(EditorNoteKind kind, string displayName, string inputAction, double holdBeats, double occupyBeforeBeats, double occupyAfterBeats, double hitWindowBeforeBeats, double hitWindowAfterBeats, IReadOnlyList<EditorNoteVariant> variants, IEditorNoteTiming timing, Func<ChartNote, bool> matchesChartNote)
+    public EditorNoteDefinition(EditorNoteKind kind, string displayName, string inputAction, double holdBeats, double occupyBeforeBeats, double occupyAfterBeats, double hitWindowBeforeBeats, double hitWindowAfterBeats, IReadOnlyList<EditorNoteVariant> variants, IEditorNoteTiming timing, Func<ChartNote, bool> matchesChartNote, IEditorNotePlacementStrategy placementStrategy)
     {
         Kind = kind;
         DisplayName = displayName;
@@ -55,6 +82,7 @@ public sealed class EditorNoteDefinition
         Variants = variants;
         Timing = timing;
         MatchesChartNote = matchesChartNote;
+        PlacementStrategy = placementStrategy;
     }
 
     public bool Matches(ChartNote note)
@@ -72,6 +100,11 @@ public sealed class EditorNoteDefinition
             InputActionToPress = InputAction,
             AdditionnalData = variant.AdditionnalData.ToDictionary(pair => pair.Key, pair => pair.Value)
         };
+    }
+
+    public IReadOnlyList<EditorNotePlacement> CreatePlacements(ChartNote sourceNote, double crotchet)
+    {
+        return PlacementStrategy.CreatePlacements(this, sourceNote, crotchet);
     }
 
     public EditorNoteVariant GetVariant(int variantIndex)

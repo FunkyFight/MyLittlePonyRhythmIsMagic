@@ -11,6 +11,7 @@ public class BeatmapPlayer : IDisposable
     public Conductor Conductor {get; private set;}
     public ChartPlayer ChartPlayer {get; private set;}
     public Chart CurrentChart {get; private set;}
+    public bool HasAChartLoaded { get; private set; }
     public VisualNoteManager<VisualNote> VisualNoteMng {get; set;}
 
     public event Action BeatmapStarted;
@@ -67,6 +68,7 @@ public class BeatmapPlayer : IDisposable
 
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = Chart.CreateMetronome(bpm, 200, startupDelaySeconds, additionnalData);
+        HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(CurrentChart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
         BeatmapStarted?.Invoke();
@@ -101,6 +103,7 @@ public class BeatmapPlayer : IDisposable
 
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = chart;
+        HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
         BeatmapStarted?.Invoke();
@@ -116,6 +119,7 @@ public class BeatmapPlayer : IDisposable
 
         Conductor = new Conductor(song_path, chart.BPM, chart.Offset);
         CurrentChart = chart;
+        HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);
         Conductor.Play();
         BeatmapStarted?.Invoke();
@@ -133,6 +137,7 @@ public class BeatmapPlayer : IDisposable
         double beatDelay = double.IsNaN(firstBeatDelay) ? chart.Offset : firstBeatDelay;
         Conductor = new Conductor(songPath, chart.BPM, beatDelay);
         CurrentChart = chart;
+        HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);
         BeatmapStarted?.Invoke();
     }
@@ -147,6 +152,8 @@ public class BeatmapPlayer : IDisposable
     {
         Conductor?.Dispose();
         Conductor = null;
+        CurrentChart = null;
+        HasAChartLoaded = false;
         ChartPlayer = null;
         VisualNoteMng = null;
     }

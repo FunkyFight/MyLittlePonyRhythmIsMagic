@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,9 +12,13 @@ public sealed class DevUiFloatingWindow
     private readonly DevUiRenderer _ui;
     private readonly DevUiDropdown _dropdown;
     private string _openDropdownKey;
+    private string _editingFloatKey;
+    private string _floatEditBuffer = "";
     private int _scrollOffset;
     private MouseState _previousMouse;
     private MouseState _mouse;
+    private KeyboardState _previousKeyboard;
+    private KeyboardState _keyboard;
 
     public DevUiFloatingWindow(DevUiRenderer ui)
     {
@@ -22,31 +27,50 @@ public sealed class DevUiFloatingWindow
     }
 
     public bool IsOpen { get; private set; }
+    public bool IsEditingTextInput => _editingFloatKey != null;
 
     public void Open()
     {
         IsOpen = true;
+        ResetInputState();
     }
 
     public void Close()
     {
         IsOpen = false;
         _scrollOffset = 0;
+        _openDropdownKey = null;
+        _editingFloatKey = null;
+        _floatEditBuffer = "";
     }
 
     public bool Update(Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows)
     {
         _previousMouse = _mouse;
         _mouse = Mouse.GetState();
+        _previousKeyboard = _keyboard;
+        _keyboard = Keyboard.GetState();
 
         if (!IsOpen)
             return false;
 
         ApplyScroll(bounds, rows);
 
-        bool leftClicked = LeftClicked();
+        bool leftClicked = LeftPressed();
         int wheelDelta = _mouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
         bool mouseOverOpenDropdown = MouseOverOpenDropdown(bounds, rows);
+
+        if (_editingFloatKey != null)
+        {
+            if (UpdateFloatEdit(rows))
+                return true;
+
+            if (leftClicked && MouseOverEditingFloatRow(bounds, rows))
+                return false;
+
+            if (leftClicked && !TryCommitFloatEdit(rows))
+                return false;
+        }
 
         if (UpdateDropdownRows(bounds, rows, leftClicked, wheelDelta))
             return true;
@@ -64,7 +88,19 @@ public sealed class DevUiFloatingWindow
         foreach (DevUiWindowRow row in rows)
         {
             Rectangle rowBounds = new(bounds.X + 12, y, bounds.Width - 24, GetRowHeight(row));
-            if ((row.Kind == DevUiWindowRowKind.Checkbox || row.Kind == DevUiWindowRowKind.Button) && GetContentBounds(bounds).Intersects(rowBounds) && rowBounds.Contains(_mouse.Position))
+            if (!IsClickableRow(row) || !GetContentBounds(bounds).Intersects(rowBounds) || !rowBounds.Contains(_mouse.Position))
+            {
+                y += rowBounds.Height;
+                continue;
+            }
+
+            if (row.Kind == DevUiWindowRowKind.FloatInput)
+            {
+                BeginFloatEdit(row);
+                return false;
+            }
+
+            if (row.Kind == DevUiWindowRowKind.Checkbox || row.Kind == DevUiWindowRowKind.Button)
             {
                 row.Toggle?.Invoke();
                 return true;
@@ -179,6 +215,11 @@ public sealed class DevUiFloatingWindow
                 _dropdown.Draw(spriteBatch, GetDropdownBounds(bounds), row.Options, row.SelectedIndex, _openDropdownKey == row.Key, drawList: false);
                 break;
 
+            case DevUiWindowRowKind.FloatInput:
+                _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X, bounds.Y + 7), Color.White, 2);
+                DrawFloatInput(spriteBatch, GetDropdownBounds(bounds), row);
+                break;
+
             case DevUiWindowRowKind.Button:
                 _ui.Fill(spriteBatch, bounds, new Color(18, 36, 24, 245));
                 _ui.Stroke(spriteBatch, bounds, Color.LightGreen, 2);
@@ -267,10 +308,158 @@ public sealed class DevUiFloatingWindow
         return new Rectangle(rowBounds.Right - 150, rowBounds.Y + 2, 150, 24);
     }
 
-    private bool LeftClicked()
+    private void ResetInputState()
     {
-        return _mouse.LeftButton == ButtonState.Released && _previousMouse.LeftButton == ButtonState.Pressed;
+        _mouse = Mouse.GetState();
+        _previousMouse = _mouse;
+        _keyboard = Keyboard.GetState();
+        _previousKeyboard = _keyboard;
     }
+
+    private static bool IsClickableRow(DevUiWindowRow row)
+    {
+        return row.Kind == DevUiWindowRowKind.Button
+            || row.Kind == DevUiWindowRowKind.Checkbox
+            || row.Kind == DevUiWindowRowKind.FloatInput;
+    }
+
+    private void BeginFloatEdit(DevUiWindowRow row)
+    {
+        _openDropdownKey = null;
+        _editingFloatKey = row.Key;
+        _floatEditBuffer = row.FloatValue.ToString("0.###", CultureInfo.InvariantCulture);
+    }
+
+    private bool UpdateFloatEdit(IReadOnlyList<DevUiWindowRow> rows)
+    {
+        if (Pressed(Keys.Enter))
+            return TryCommitFloatEdit(rows);
+
+        if (Pressed(Keys.Escape))
+        {
+            _editingFloatKey = null;
+            return false;
+        }
+
+        if (Pressed(Keys.Back) && _floatEditBuffer.Length > 0)
+            _floatEditBuffer = _floatEditBuffer[..^1];
+
+        foreach (Keys key in _keyboard.GetPressedKeys())
+        {
+            if (_previousKeyboard.IsKeyDown(key))
+                continue;
+
+            if (TryKeyToChar(key, out char c))
+                _floatEditBuffer += c;
+        }
+
+        return false;
+    }
+
+    private bool TryCommitFloatEdit(IReadOnlyList<DevUiWindowRow> rows)
+    {
+        if (!TryGetEditingFloatRow(rows, out DevUiWindowRow row))
+        {
+            _editingFloatKey = null;
+            return true;
+        }
+
+        if (!double.TryParse(_floatEditBuffer, NumberStyles.Float, CultureInfo.InvariantCulture, out double value)
+            || double.IsNaN(value)
+            || double.IsInfinity(value))
+        {
+            return false;
+        }
+
+        row.SetFloat?.Invoke(value);
+        _editingFloatKey = null;
+        return true;
+    }
+
+    private bool TryGetEditingFloatRow(IReadOnlyList<DevUiWindowRow> rows, out DevUiWindowRow row)
+    {
+        foreach (DevUiWindowRow candidate in rows)
+        {
+            if (candidate.Kind == DevUiWindowRowKind.FloatInput && candidate.Key == _editingFloatKey)
+            {
+                row = candidate;
+                return true;
+            }
+        }
+
+        row = default;
+        return false;
+    }
+
+    private bool MouseOverEditingFloatRow(Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows)
+    {
+        int y = bounds.Y + 34 - _scrollOffset;
+        foreach (DevUiWindowRow row in rows)
+        {
+            Rectangle rowBounds = new(bounds.X + 12, y, bounds.Width - 24, GetRowHeight(row));
+            if (row.Kind == DevUiWindowRowKind.FloatInput
+                && row.Key == _editingFloatKey
+                && GetContentBounds(bounds).Intersects(rowBounds)
+                && rowBounds.Contains(_mouse.Position))
+            {
+                return true;
+            }
+
+            y += rowBounds.Height;
+        }
+
+        return false;
+    }
+
+    private void DrawFloatInput(SpriteBatch spriteBatch, Rectangle bounds, DevUiWindowRow row)
+    {
+        bool isEditing = _editingFloatKey == row.Key;
+        string text = isEditing ? _floatEditBuffer + "|" : row.FloatValue.ToString("0.###", CultureInfo.InvariantCulture);
+        Color border = isEditing ? Color.Yellow : Color.LightGreen;
+        Color textColor = isEditing ? Color.Yellow : Color.LightGreen;
+
+        _ui.Fill(spriteBatch, bounds, Color.Black * 0.85f);
+        _ui.Stroke(spriteBatch, bounds, border, 1);
+        _ui.Label(spriteBatch, text, new Vector2(bounds.X + 8, bounds.Y + 6), textColor, 2);
+    }
+
+    private bool Pressed(Keys key)
+    {
+        return _keyboard.IsKeyDown(key) && !_previousKeyboard.IsKeyDown(key);
+    }
+
+    private bool TryKeyToChar(Keys key, out char c)
+    {
+        c = '\0';
+
+        if (key >= Keys.D0 && key <= Keys.D9)
+        {
+            c = (char)('0' + (key - Keys.D0));
+            return true;
+        }
+
+        if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
+        {
+            c = (char)('0' + (key - Keys.NumPad0));
+            return true;
+        }
+
+        c = key switch
+        {
+            Keys.OemPeriod or Keys.Decimal => '.',
+            Keys.OemComma => '.',
+            Keys.OemMinus or Keys.Subtract => '-',
+            _ => '\0'
+        };
+
+        return c != '\0';
+    }
+
+    private bool LeftPressed()
+    {
+        return _mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released;
+    }
+
 }
 
 public readonly struct DevUiWindowRow
@@ -283,8 +472,10 @@ public readonly struct DevUiWindowRow
     public int SelectedIndex { get; }
     public Action<int> Select { get; }
     public string Key { get; }
+    public double FloatValue { get; }
+    public Action<double> SetFloat { get; }
 
-    private DevUiWindowRow(DevUiWindowRowKind kind, string text, bool isChecked = false, Action toggle = null, IReadOnlyList<string> options = null, int selectedIndex = 0, Action<int> select = null, string key = null)
+    private DevUiWindowRow(DevUiWindowRowKind kind, string text, bool isChecked = false, Action toggle = null, IReadOnlyList<string> options = null, int selectedIndex = 0, Action<int> select = null, string key = null, double floatValue = 0, Action<double> setFloat = null)
     {
         Kind = kind;
         Text = text;
@@ -294,6 +485,8 @@ public readonly struct DevUiWindowRow
         SelectedIndex = selectedIndex;
         Select = select;
         Key = key ?? text;
+        FloatValue = floatValue;
+        SetFloat = setFloat;
     }
 
     public static DevUiWindowRow Category(string text)
@@ -326,6 +519,11 @@ public readonly struct DevUiWindowRow
         return new DevUiWindowRow(DevUiWindowRowKind.Button, text, toggle: click);
     }
 
+    public static DevUiWindowRow FloatInput(string key, string text, double value, Action<double> setFloat)
+    {
+        return new DevUiWindowRow(DevUiWindowRowKind.FloatInput, text, key: key, floatValue: value, setFloat: setFloat);
+    }
+
 }
 
 public enum DevUiWindowRowKind
@@ -334,5 +532,6 @@ public enum DevUiWindowRowKind
     Title,
     Checkbox,
     Dropdown,
+    FloatInput,
     Button
 }

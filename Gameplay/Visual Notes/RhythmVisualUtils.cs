@@ -23,6 +23,21 @@ public static class RhythmVisualUtils
     public const double DefaultRewindThreshold = 0.001;
 
     /// <summary>
+    /// Indique si la position de la musique se trouve dans la time window où la visual note est censée bouger
+    /// </summary>
+    /// <param name="currentSongPosition">Position musicale courante, en secondes.</param>
+    /// <param name="noteSongPosition">Position musicale de la note de référence, en secondes</param>
+    /// <param name="approachDuration">Durée du visuel d'approche avant hit, en secondes</param>
+    /// <param name="despawnDelay">Durée du visuel de post-hit, en secondes</param>
+    /// <returns><c>true</c> si la position se trouve dans l'intervalle</returns>
+    public static bool IsInTimeWindow(double currentSongPosition, double noteSongPosition, double approachDuration, double despawnDelay, bool despawnIncluded = false)
+    {
+        if(!despawnIncluded) return currentSongPosition >= noteSongPosition - approachDuration && currentSongPosition < noteSongPosition + despawnDelay;
+        if(despawnIncluded) return currentSongPosition >= noteSongPosition - approachDuration && currentSongPosition <= noteSongPosition + despawnDelay;
+        return false;
+    }
+
+    /// <summary>
     /// Indique si la lecture musicale est revenue en arriere depuis la derniere mise a jour.
     /// </summary>
     /// <param name="currentSongPosition">Position musicale courante, en secondes.</param>
@@ -277,5 +292,34 @@ public static class RhythmVisualUtils
             return;
 
         ForceAnimationState(stateMachine, stateName, reenterViaState);
+    }
+
+    /**
+    * Computes the normalized progression of a value between a start and an end.
+    *
+    * The returned value is clamped between 0 and 1:
+    * - returns 0 when current is before or equal to start
+    * - returns a value between 0 and 1 when current is between start and end
+    * - returns 1 when current is after or equal to end
+    *
+    * Example:
+    * GetProgression(10, 14, 12) returns 0.5
+    *
+    * If end is lower than or equal to start, the interval is considered invalid.
+    * In that case, the function returns 0 before the end point and 1 once the
+    * current value reaches or passes it.
+    *
+    * @param start   The beginning of the interval.
+    * @param end     The end of the interval.
+    * @param current The current value to evaluate.
+    *
+    * @return A normalized progression value between 0 and 1.
+    */
+    public static double GetProgression(double start, double end, double current)
+    {
+        if (end <= start)
+            return current >= end ? 1.0 : 0.0;
+
+        return Math.Clamp((current - start) / (end - start), 0.0, 1.0);
     }
 }

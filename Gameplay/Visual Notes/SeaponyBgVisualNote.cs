@@ -1,0 +1,52 @@
+using System;
+using GameCore;
+using GameCore.Animation;
+using GameCore.GameObjects;
+using Microsoft.Xna.Framework.Graphics;
+using Rhythm.Note;
+using Rhythm.Note.Visual;
+
+public class SeaponyBgVisualNote : VisualNote
+{
+
+    private InfiniteScrollBackground _background;
+    private int _backgroundScrollDestinationBeat;
+
+    private bool _wasControlling = false;
+
+    public SeaponyBgVisualNote(Note logicalNote, double approachDuration, InfiniteScrollBackground background, int backgroundScrollDestinationBeat, double despawnDelay = 0) : base(logicalNote, approachDuration, despawnDelay)
+    {
+        this._background = background;
+        this._backgroundScrollDestinationBeat = backgroundScrollDestinationBeat;
+    }
+
+    public override void Update(double currentSongPosition)
+    {
+        base.Update(currentSongPosition);
+
+        bool inTimeWindow = RhythmVisualUtils.IsInTimeWindow(currentSongPosition, Note.SongPosition, ApproachDuration, DespawnDelay, true);
+        bool inAtOrAfterHit = RhythmVisualUtils.IsAtOrAfterHit(currentSongPosition, Note.SongPosition);
+
+        if(!inTimeWindow || !inAtOrAfterHit) return;
+
+        switch(Note.AdditionnalData["action"])
+        {
+            case "seapony_parade_swim":
+                handleSwim(currentSongPosition);
+                break;
+        }
+    }
+
+    private void handleSwim(double currentSongPosition)
+    {
+        float despawnDelayProgression = (float) RhythmVisualUtils.GetProgression(Note.SongPosition, Note.SongPosition + DespawnDelay, currentSongPosition);
+        float interpolated = Interpolation.EaseOutQuart(despawnDelayProgression);
+        float backgroundScrollBeat = Single.Lerp(_backgroundScrollDestinationBeat - 1, _backgroundScrollDestinationBeat, interpolated);
+
+        _background.Progression = backgroundScrollBeat;
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+    }
+}

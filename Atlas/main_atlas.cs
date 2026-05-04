@@ -20,6 +20,13 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Applejack_land2 = "applejack-land2";
 		public const string Applejack_land3 = "applejack-land3";
 		public const string Applejack_true_idle = "applejack-true-idle";
+		public const string Coral1 = "coral1";
+		public const string Coral2 = "coral2";
+		public const string Coral3 = "coral3";
+		public const string Coral4 = "coral4";
+		public const string Coral5 = "coral5";
+		public const string Coral6 = "coral6";
+		public const string Coral7 = "coral7";
 		public const string Rainbowdash_fail = "rainbowdash-fail";
 		public const string Rainbowdash_idle1 = "rainbowdash-idle1";
 		public const string Rainbowdash_idle2 = "rainbowdash-idle2";
@@ -29,7 +36,18 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Rainbowdash_land1 = "rainbowdash-land1";
 		public const string Rainbowdash_land2 = "rainbowdash-land2";
 		public const string Rainbowdash_land3 = "rainbowdash-land3";
+		public const string Sand1 = "sand1";
+		public const string Sand2 = "sand2";
+		public const string Sand3 = "sand3";
 		public const string Sprite_0001 = "Sprite-0001";
 		public const string Sprite_0002 = "Sprite-0002";
+		public const string Template_pony_idle1 = "template-pony-idle1";
+		public const string Template_pony_idle2 = "template-pony-idle2";
+		public const string Template_pony_star = "template-pony-star";
+		public const string Template_pony_swim1 = "template-pony-swim1";
+		public const string Template_pony_swim2 = "template-pony-swim2";
+		public const string Template_pony_tap1 = "template-pony-tap1";
+		public const string Template_pony_tap2 = "template-pony-tap2";
+		
 	}
 }

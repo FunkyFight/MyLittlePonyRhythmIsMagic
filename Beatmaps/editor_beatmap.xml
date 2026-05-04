@@ -1,738 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SongName>metronome</SongName>
-  <BeatmapName>editor_beatmap</BeatmapName>
-  <Beatmapper>Unknown</Beatmapper>
-  <ArtistName>Unknown</ArtistName>
-  <MusicName>metronome</MusicName>
-  <SongPath>Songs\Babs Seed.mp3</SongPath>
-  <BPM>135</BPM>
-  <Offset>1.39</Offset>
+  <SongName>pet games club penguin ost</SongName>
+  <BeatmapName>seapony parade</BeatmapName>
+  <Beatmapper>funkyfight</Beatmapper>
+  <ArtistName>norrie henderson</ArtistName>
+  <MusicName>pet games club penguin ost</MusicName>
+  <SongPath>Songs\Pet Games - Club Penguin OST.mp3</SongPath>
+  <BPM>140</BPM>
+  <Offset>0.62</Offset>
   <Notes>
     <Note>
-      <SongPosition>1.39</SongPosition>
+      <SongPosition>3.1914285714285713</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>3.1677777777777774</SongPosition>
+      <SongPosition>4.048571428571428</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>4.945555555555555</SongPosition>
+      <SongPosition>4.905714285714286</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>5.834444444444444</SongPosition>
+      <SongPosition>5.7628571428571425</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>6.723333333333333</SongPosition>
+      <SongPosition>6.62</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>7.612222222222221</SongPosition>
+      <SongPosition>7.477142857142857</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>9.39</SongPosition>
+      <SongPosition>8.334285714285713</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>10.723333333333333</SongPosition>
+      <SongPosition>9.19142857142857</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>11.612222222222222</SongPosition>
+      <SongPosition>10.048571428571428</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>12.945555555555556</SongPosition>
+      <SongPosition>10.905714285714284</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="both" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>14.278888888888888</SongPosition>
+      <SongPosition>11.762857142857142</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>15.612222222222222</SongPosition>
+      <SongPosition>12.62</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>17.39</SongPosition>
+      <SongPosition>13.477142857142855</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>18.27888888888889</SongPosition>
+      <SongPosition>14.334285714285713</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>19.16777777777778</SongPosition>
+      <SongPosition>15.19142857142857</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="applejack" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>20.50111111111111</SongPosition>
+      <SongPosition>16.048571428571428</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>21.834444444444443</SongPosition>
+      <SongPosition>16.905714285714286</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>22.723333333333333</SongPosition>
+      <SongPosition>17.762857142857143</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>23.612222222222222</SongPosition>
+      <SongPosition>18.62</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>24.50111111111111</SongPosition>
+      <SongPosition>19.47714285714286</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>25.39</SongPosition>
+      <SongPosition>20.334285714285713</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>26.723333333333333</SongPosition>
+      <SongPosition>21.19142857142857</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>28.50111111111111</SongPosition>
+      <SongPosition>22.048571428571428</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>29.39</SongPosition>
+      <SongPosition>22.905714285714286</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>30.278888888888886</SongPosition>
+      <SongPosition>23.762857142857143</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>31.167777777777776</SongPosition>
+      <SongPosition>24.62</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>32.94555555555555</SongPosition>
+      <SongPosition>25.477142857142855</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>34.72333333333333</SongPosition>
+      <SongPosition>26.334285714285713</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>35.61222222222222</SongPosition>
+      <SongPosition>27.19142857142857</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
     <Note>
-      <SongPosition>37.39</SongPosition>
+      <SongPosition>28.048571428571428</SongPosition>
       <HoldDuration>0</HoldDuration>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>38.278888888888886</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>39.16777777777778</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>40.50111111111111</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>41.83444444444444</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>43.16777777777778</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>44.94555555555555</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>45.83444444444444</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>47.61222222222222</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="applejack" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>48.94555555555555</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>50.72333333333333</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>52.50111111111111</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>53.39</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>54.278888888888886</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>56.056666666666665</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>56.94555555555555</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>58.278888888888886</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>59.61222222222222</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>61.39</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>62.278888888888886</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>63.16777777777777</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>64.05666666666666</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>64.94555555555554</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="applejack" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>66.27888888888889</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="applejack" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>67.61222222222221</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>69.39</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>70.27888888888889</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>71.16777777777777</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>72.50111111111111</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>73.39</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>74.27888888888889</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>75.16777777777777</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>76.94555555555556</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="big_leap_applejack" Value="true" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>78.27888888888889</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>79.16777777777777</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>80.05666666666666</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>81.83444444444444</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>83.61222222222221</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>84.5011111111111</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>85.39</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>86.27888888888889</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="applejack" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>87.61222222222221</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="applejack" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>88.94555555555556</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>89.83444444444444</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>90.72333333333333</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>91.61222222222221</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="opposite_jumper" Value="applejack" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>92.94555555555556</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>94.27888888888889</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>95.16777777777777</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>96.05666666666666</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>97.39</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>99.16777777777777</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-        <Entry Key="big_leap_applejack" Value="true" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>100.94555555555554</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>102.72333333333333</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_outer" />
-        <Entry Key="big_leap_applejack" Value="true" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>104.5011111111111</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-        <Entry Key="big_leap_applejack" Value="true" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>106.27888888888889</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_opposite" />
-        <Entry Key="big_leap_applejack" Value="true" />
-        <Entry Key="big_leap_rainbow_dash" Value="true" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>107.61222222222221</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_toward_inner" />
-      </AdditionnalData>
-    </Note>
-    <Note>
-      <SongPosition>108.5011111111111</SongPosition>
-      <HoldDuration>0</HoldDuration>
-      <InputActionToPress>ReactMain</InputActionToPress>
-      <AdditionnalData>
-        <Entry Key="action" Value="see_saw_exit" />
+        <Entry Key="action" Value="seapony_parade_swim" />
       </AdditionnalData>
     </Note>
   </Notes>

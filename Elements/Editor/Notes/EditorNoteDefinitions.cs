@@ -8,7 +8,8 @@ public static class EditorNoteDefinitions
 {
     private static readonly IReadOnlyList<IEditorNoteProvider> Providers = new IEditorNoteProvider[]
     {
-        new SeeSawEditorNote()
+        new SeeSawEditorNote(),
+        new SeaPonyParadeNoteEditor()
     };
 
     public static readonly IReadOnlyList<EditorNoteDefinition> All = Providers

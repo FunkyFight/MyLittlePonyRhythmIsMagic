@@ -42,22 +42,21 @@ public class Game1 : Core
         // Beatmap
         GLOBALS.beatmapPlayer = new BeatmapPlayer();
         
+        // Beatmap editor
+        GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
 
         // Scene
         _sceneManager = new SceneManager();
-        _sceneManager.SetScene(new SeeSawScene(this));
+        _sceneManager.SetScene(new SeaPonyParade());
 
 
-        // Beatmap editor
-        GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
+        
         GLOBALS.mouseViewportCoordinatesElement = new MouseViewportCoordinatesElement(GraphicsDevice);
         GLOBALS.beatmapPlayer.ChartPlayer.NoteReacted += (result) =>
         {
             Console.WriteLine(result);
         };
 
-        // Visual help
-        GLOBALS.rhythmInputVisualElement = new RhythmInputVisualElement(GLOBALS.beatmapPlayer);
 
         DebugActivated = false;
 
@@ -127,7 +126,10 @@ public class Game1 : Core
 
         if(GLOBALS.beatmapPlayer != null && GLOBALS.beatmapPlayer.Conductor != null && GLOBALS.beatmapPlayer.Conductor.isPlaying())
         {
-            if(_inputActionManager.IsPressedOnce("ReactMain")) GLOBALS.beatmapPlayer.ChartPlayer.React("ReactMain", GLOBALS.beatmapPlayer.Conductor.SongPosition);
+            if(_inputActionManager.IsPressedOnce("ReactMain")) 
+            {
+                GLOBALS.beatmapPlayer.ChartPlayer.React("ReactMain", GLOBALS.beatmapPlayer.Conductor.SongPosition);
+            }
         }
     }
 
