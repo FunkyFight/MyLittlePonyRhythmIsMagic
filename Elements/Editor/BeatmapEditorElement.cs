@@ -28,6 +28,8 @@ public sealed class BeatmapEditorElement
     private readonly IEditorNoteOptionsPanel _intervalOptionsPanel = new IntervalEditorNoteOptionsPanel();
     private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset" };
     private const double ShiftSeekSongDurationRatio = 0.05;
+    private const double HeldArrowSeekInitialDelaySeconds = 0.25;
+    private const double HeldArrowSeekRepeatSeconds = 0.075;
 
     private BeatmapEditorDocument _document;
     private EditorRhythmInputVisualElement _rhythmVisuals;
@@ -55,6 +57,10 @@ public sealed class BeatmapEditorElement
     private double _pendingIntervalDurationBeats;
     private bool _isCreatingNewBeatmap;
     private string _newBeatmapNameBuffer = "";
+    private double _heldLeftSeekSeconds;
+    private double _heldRightSeekSeconds;
+    private bool _leftSeekRepeated;
+    private bool _rightSeekRepeated;
 
     public BeatmapEditorElement(BeatmapPlayer beatmapPlayer, string songPath = "Songs/metronome.wav", string chartPath = "Beatmaps/editor_beatmap.xml", double firstBeatDelay = 0.078, double snapDivisions = 4)
     {
@@ -72,6 +78,7 @@ public sealed class BeatmapEditorElement
     }
 
     public bool IsPreviewPlaying => _isPreviewPlaying;
+    public bool IsEditorPlaybackPlaying => _editorPlaybackPlaying;
 
     public void Update(GameTime gameTime)
     {
@@ -126,6 +133,9 @@ public sealed class BeatmapEditorElement
             return;
         }
 
+        if (Pressed(Keys.Escape) && TryCancelPendingCreation())
+            return;
+
         if (Pressed(Keys.Space))
             TogglePlayback();
 
@@ -137,6 +147,9 @@ public sealed class BeatmapEditorElement
 
         if (Pressed(Keys.Right))
             Seek(GetSteppedSeekPosition(1));
+
+        HandleHeldArrowSeek(gameTime, Keys.Left, -1, ref _heldLeftSeekSeconds, ref _leftSeekRepeated);
+        HandleHeldArrowSeek(gameTime, Keys.Right, 1, ref _heldRightSeekSeconds, ref _rightSeekRepeated);
 
         if (IsShiftDown())
         {
@@ -188,7 +201,10 @@ public sealed class BeatmapEditorElement
             RebuildPlayback(false);
 
         if (Pressed(Keys.Tab))
-            SelectNextMetadataField();
+        {
+            if (!TrySelectNextFirstOptionsDropdownValue())
+                SelectNextMetadataField();
+        }
 
         if (Pressed(Keys.F2))
             BeginMetadataEdit();
@@ -578,12 +594,11 @@ public sealed class BeatmapEditorElement
             return;
 
         Dictionary<string, string> creationData = GetNoteCreationData(_optionsNote);
+        bool wasIntervalCreation = _optionsIsIntervalCreation;
         if (_optionsIsIntervalCreation)
             StoreLastIntervalData(_optionsNote);
 
-        IReadOnlyList<EditorNotePlacement> placements = _optionsIsIntervalCreation
-            ? CreateIntervalPlacements(_optionsDefinition, _optionsNote)
-            : _optionsDefinition.CreatePlacements(_optionsNote, _document.Crotchet);
+        IReadOnlyList<EditorNotePlacement> placements = _optionsDefinition.CreatePlacements(_optionsNote, CreatePlacementContext());
         if (_document.TryPlaceNotes(placements, out IReadOnlyList<ChartNote> placedNotes, out string reason))
         {
             _lastCreatedNoteData[_optionsDefinition.Kind] = creationData;
@@ -599,9 +614,12 @@ public sealed class BeatmapEditorElement
             ChartNote firstNote = placedNotes[0];
             ChartNote lastNote = placedNotes[placedNotes.Count - 1];
             string creationName = GetSelectedNoteName(_optionsDefinition);
-            _status = placedNotes.Count == 1
-                ? $"Created {GetSelectedNoteName(_optionsDefinition)} at {firstNote.SongPosition:0.000}s"
-                : $"Created interval {creationName}: {placedNotes.Count} notes from {firstNote.SongPosition:0.000}s to {lastNote.SongPosition:0.000}s";
+            if (placedNotes.Count == 1)
+                _status = $"Created {creationName} at {firstNote.SongPosition:0.000}s";
+            else if (wasIntervalCreation)
+                _status = $"Created interval {creationName}: {placedNotes.Count} notes from {firstNote.SongPosition:0.000}s to {lastNote.SongPosition:0.000}s";
+            else
+                _status = $"Created {creationName}: {placedNotes.Count} notes from {firstNote.SongPosition:0.000}s to {lastNote.SongPosition:0.000}s";
         }
         else
         {
@@ -609,45 +627,38 @@ public sealed class BeatmapEditorElement
         }
     }
 
-    private IReadOnlyList<EditorNotePlacement> CreateIntervalPlacements(EditorNoteDefinition definition, ChartNote sourceNote)
+    private bool TryCancelPendingCreation()
     {
-        double crotchet = _document.Crotchet;
-        if (crotchet <= 0)
-            return Array.Empty<EditorNotePlacement>();
-
-        double start = Math.Max(0, sourceNote.SongPosition);
-        double durationBeats = Math.Max(0, IntervalEditorNoteProvider.GetDurationBeats(sourceNote.AdditionnalData));
-        double stepBeats = IntervalEditorNoteProvider.GetStepBeats(sourceNote.AdditionnalData);
-        double end = start + durationBeats * crotchet;
-        double stepSeconds = stepBeats * crotchet;
-
-        List<EditorNotePlacement> placements = new();
-        for (double time = start; time <= end + 0.000001; time += stepSeconds)
+        if (_isSelectingIntervalRange)
         {
-            ChartNote note = CloneNoteForInterval(sourceNote, time);
-            placements.Add(new EditorNotePlacement(definition, note));
+            _isSelectingIntervalRange = false;
+            _intervalRangeStart = null;
+            _status = "Interval cancelled";
+            return true;
         }
 
-        return placements;
+        if (!_optionsIsCreation)
+            return false;
+
+        string cancelledName = _optionsIsIntervalCreation ? "Interval" : _optionsDefinition?.DisplayName ?? "Note";
+        _optionsNote = null;
+        _optionsDefinition = null;
+        _optionsPanel = null;
+        _optionsIsCreation = false;
+        _optionsIsIntervalCreation = false;
+        _noteOptionsWindow.Close();
+        _status = $"{cancelledName} creation cancelled";
+        return true;
     }
 
-    private static ChartNote CloneNoteForInterval(ChartNote sourceNote, double songPosition)
+    private EditorNotePlacementContext CreatePlacementContext()
     {
-        return new ChartNote
-        {
-            SongPosition = Math.Max(0, songPosition),
-            HoldDuration = sourceNote.HoldDuration,
-            InputActionToPress = sourceNote.InputActionToPress,
-            AdditionnalData = GetNoteCreationData(sourceNote)
-        };
+        return new EditorNotePlacementContext(_document.Crotchet, _document.Chart.Notes);
     }
 
     private static Dictionary<string, string> GetNoteCreationData(ChartNote note)
     {
-        Dictionary<string, string> data = new(note.AdditionnalData ?? new Dictionary<string, string>());
-        data.Remove(IntervalEditorNoteProvider.DurationBeatsKey);
-        data.Remove(IntervalEditorNoteProvider.StepBeatsKey);
-        return data;
+        return EditorNotePlacementData.CreateStoredAdditionnalData(note);
     }
 
     private void StoreLastIntervalData(ChartNote note)
@@ -678,12 +689,21 @@ public sealed class BeatmapEditorElement
     private void Seek(double songPosition, bool updateStatus = true)
     {
         SyncPlaybackToEditorPosition(songPosition, resetVisuals: true);
+        UpdatePendingCreationPosition();
 
         if (_editorPlaybackPlaying)
             _beatmapPlayer.Conductor?.Play();
 
         if (updateStatus)
             _status = $"Seek {_manualSongPosition:0.000}s";
+    }
+
+    private void UpdatePendingCreationPosition()
+    {
+        if (!_optionsIsCreation || _optionsIsIntervalCreation || _optionsNote == null)
+            return;
+
+        _optionsNote.SongPosition = Snap(CurrentSongPosition());
     }
 
     private void AdvanceEditorPlayback()
@@ -810,6 +830,25 @@ public sealed class BeatmapEditorElement
         _status = $"Metadata field {_metadataFields[_selectedMetadataField]}";
     }
 
+    private bool TrySelectNextFirstOptionsDropdownValue()
+    {
+        if (!_noteOptionsWindow.IsOpen)
+            return false;
+
+        foreach (DevUiWindowRow row in GetNoteOptionRows())
+        {
+            if (row.Kind != DevUiWindowRowKind.Dropdown || row.Options == null || row.Options.Count == 0)
+                continue;
+
+            int nextIndex = PositiveModulo(row.SelectedIndex + 1, row.Options.Count);
+            row.Select?.Invoke(nextIndex);
+            _status = $"{row.Text}: {row.Options[nextIndex]}";
+            return true;
+        }
+
+        return false;
+    }
+
     private void BeginMetadataEdit()
     {
         _textBuffer = GetMetadataValue(_metadataFields[_selectedMetadataField]);
@@ -892,6 +931,32 @@ public sealed class BeatmapEditorElement
 
         double position = CurrentSongPosition() + direction * step;
         return IsShiftDown() ? ClampSongPosition(position) : Snap(position);
+    }
+
+    private void HandleHeldArrowSeek(GameTime gameTime, Keys key, int direction, ref double heldSeconds, ref bool repeated)
+    {
+        if (!IsDown(key))
+        {
+            heldSeconds = 0;
+            repeated = false;
+            return;
+        }
+
+        if (Pressed(key))
+        {
+            heldSeconds = 0;
+            repeated = false;
+            return;
+        }
+
+        heldSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+        double threshold = repeated ? HeldArrowSeekRepeatSeconds : HeldArrowSeekInitialDelaySeconds;
+        if (heldSeconds < threshold)
+            return;
+
+        heldSeconds -= threshold;
+        repeated = true;
+        Seek(GetSteppedSeekPosition(direction));
     }
 
     private double GetShiftSeekStep()
@@ -977,6 +1042,8 @@ public sealed class BeatmapEditorElement
             float occupyEndX = TimeToX(_document.GetContextualEnd(note, definition), start, end, area);
             float hitStartX = TimeToX(_document.GetContextualHitWindowStart(note, definition), start, end, area);
             float hitEndX = TimeToX(_document.GetContextualHitWindowEnd(note, definition), start, end, area);
+            float sameVariantHitStartX = TimeToX(_document.GetContextualSameVariantHitWindowStart(note, definition), start, end, area);
+            float sameVariantHitEndX = TimeToX(_document.GetContextualSameVariantHitWindowEnd(note, definition), start, end, area);
             int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
             Color color = GetNoteColor(definition.Kind, variantIndex);
 
@@ -984,8 +1051,14 @@ public sealed class BeatmapEditorElement
             int occupyRight = (int)Math.Clamp(occupyEndX, area.X, area.Right);
             int hitX = (int)Math.Clamp(hitStartX, area.X, area.Right);
             int hitRight = (int)Math.Clamp(hitEndX, area.X, area.Right);
+            int sameVariantHitX = (int)Math.Clamp(sameVariantHitStartX, area.X, area.Right);
+            int sameVariantHitRight = (int)Math.Clamp(sameVariantHitEndX, area.X, area.Right);
+            bool hasDistinctSameVariantHitWindow = Math.Abs(sameVariantHitStartX - hitStartX) > 0.5f || Math.Abs(sameVariantHitEndX - hitEndX) > 0.5f;
             _ui.Fill(spriteBatch, new Rectangle(occupyX, area.Y + 96, Math.Max(2, occupyRight - occupyX), 18), color * 0.35f);
-            _ui.Fill(spriteBatch, new Rectangle(hitX, area.Y + 118, Math.Max(2, hitRight - hitX), 10), Color.Red * 0.5f);
+            if (hasDistinctSameVariantHitWindow)
+                _ui.Fill(spriteBatch, new Rectangle(sameVariantHitX, area.Y + 118, Math.Max(2, sameVariantHitRight - sameVariantHitX), 10), Color.Gold * 0.6f);
+
+            _ui.Fill(spriteBatch, new Rectangle(hitX, hasDistinctSameVariantHitWindow ? area.Y + 130 : area.Y + 118, Math.Max(2, hitRight - hitX), 10), Color.Red * 0.5f);
             _ui.Fill(spriteBatch, new Rectangle((int)noteX - 5, area.Y + 58, 10, 68), color);
         }
 
@@ -1000,7 +1073,7 @@ public sealed class BeatmapEditorElement
         if (!_optionsIsCreation || !_optionsIsIntervalCreation || _optionsNote == null || _optionsDefinition == null)
             return;
 
-        IReadOnlyList<EditorNotePlacement> placements = CreateIntervalPlacements(_optionsDefinition, _optionsNote);
+        IReadOnlyList<EditorNotePlacement> placements = _optionsDefinition.CreatePlacements(_optionsNote, CreatePlacementContext());
         foreach (EditorNotePlacement placement in placements)
         {
             ChartNote note = placement.Note;

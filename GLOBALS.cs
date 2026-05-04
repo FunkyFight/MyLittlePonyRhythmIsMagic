@@ -17,4 +17,6 @@ public static class GLOBALS
     public static RhythmInputVisualElement rhythmInputVisualElement;
     public static MouseViewportCoordinatesElement mouseViewportCoordinatesElement;
     public static BeatmapEditorElement beatmapEditorElement;
+
+    public static float SfxVolume { get; set; } = 0.0f;
 }

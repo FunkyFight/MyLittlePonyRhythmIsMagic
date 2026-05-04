@@ -24,16 +24,88 @@ public sealed class EditorNotePlacement
     public ChartNote Note { get; }
 }
 
+public sealed class EditorNotePlacementContext
+{
+    public EditorNotePlacementContext(double crotchet, IReadOnlyList<ChartNote> existingNotes)
+    {
+        Crotchet = crotchet;
+        ExistingNotes = existingNotes ?? Array.Empty<ChartNote>();
+    }
+
+    public double Crotchet { get; }
+    public IReadOnlyList<ChartNote> ExistingNotes { get; }
+}
+
 public interface IEditorNotePlacementStrategy
 {
-    IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, double crotchet);
+    IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, EditorNotePlacementContext context);
 }
 
 public sealed class SingleEditorNotePlacementStrategy : IEditorNotePlacementStrategy
 {
-    public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, double crotchet)
+    public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, EditorNotePlacementContext context)
     {
-        return new[] { new EditorNotePlacement(definition, sourceNote) };
+        if (definition == null || sourceNote == null || context == null)
+            return Array.Empty<EditorNotePlacement>();
+
+        return EditorNotePlacementData.CreateNotesFromSource(sourceNote, context.Crotchet, time => EditorNotePlacementData.CloneForPlacement(sourceNote, time))
+            .Select(note => new EditorNotePlacement(definition, note))
+            .ToArray();
+    }
+}
+
+internal static class EditorNotePlacementData
+{
+    private const double InclusiveEndEpsilonSeconds = 0.000001;
+
+    public static bool HasIntervalConfiguration(ChartNote note)
+    {
+        return note?.AdditionnalData != null
+            && (note.AdditionnalData.ContainsKey(IntervalEditorNoteProvider.DurationBeatsKey)
+                || note.AdditionnalData.ContainsKey(IntervalEditorNoteProvider.StepBeatsKey));
+    }
+
+    public static IReadOnlyList<ChartNote> CreateNotesFromSource(ChartNote sourceNote, double crotchet, Func<double, ChartNote> createNote)
+    {
+        if (sourceNote == null || createNote == null)
+            return Array.Empty<ChartNote>();
+
+        double start = Math.Max(0, sourceNote.SongPosition);
+        if (!HasIntervalConfiguration(sourceNote))
+            return new[] { createNote(start) };
+
+        if (crotchet <= 0)
+            return Array.Empty<ChartNote>();
+
+        double durationBeats = Math.Max(0, IntervalEditorNoteProvider.GetDurationBeats(sourceNote.AdditionnalData));
+        double stepBeats = IntervalEditorNoteProvider.GetStepBeats(sourceNote.AdditionnalData);
+        double end = start + durationBeats * crotchet;
+        double stepSeconds = stepBeats * crotchet;
+
+        List<ChartNote> notes = new();
+        for (double time = start; time <= end + InclusiveEndEpsilonSeconds; time += stepSeconds)
+            notes.Add(createNote(Math.Max(0, time)));
+
+        return notes;
+    }
+
+    public static ChartNote CloneForPlacement(ChartNote sourceNote, double songPosition)
+    {
+        return new ChartNote
+        {
+            SongPosition = Math.Max(0, songPosition),
+            HoldDuration = sourceNote?.HoldDuration ?? 0,
+            InputActionToPress = sourceNote?.InputActionToPress,
+            AdditionnalData = CreateStoredAdditionnalData(sourceNote)
+        };
+    }
+
+    public static Dictionary<string, string> CreateStoredAdditionnalData(ChartNote note)
+    {
+        Dictionary<string, string> data = new(note?.AdditionnalData ?? new Dictionary<string, string>());
+        data.Remove(IntervalEditorNoteProvider.DurationBeatsKey);
+        data.Remove(IntervalEditorNoteProvider.StepBeatsKey);
+        return data;
     }
 }
 
@@ -59,17 +131,24 @@ public sealed class EditorNoteDefinition
     public double OccupyAfterBeats { get; }
     public double HitWindowBeforeBeats { get; }
     public double HitWindowAfterBeats { get; }
+    public double SameVariantHitWindowBeforeBeats { get; }
+    public double SameVariantHitWindowAfterBeats { get; }
     public IReadOnlyList<EditorNoteVariant> Variants { get; }
     private IEditorNoteTiming Timing { get; }
     private Func<ChartNote, bool> MatchesChartNote { get; }
     private IEditorNotePlacementStrategy PlacementStrategy { get; }
 
     public EditorNoteDefinition(EditorNoteKind kind, string displayName, string inputAction, double holdBeats, double occupyBeforeBeats, double occupyAfterBeats, double hitWindowBeforeBeats, double hitWindowAfterBeats, IReadOnlyList<EditorNoteVariant> variants)
-        : this(kind, displayName, inputAction, holdBeats, occupyBeforeBeats, occupyAfterBeats, hitWindowBeforeBeats, hitWindowAfterBeats, variants, new FixedEditorNoteTiming(), _ => false, new SingleEditorNotePlacementStrategy())
+        : this(kind, displayName, inputAction, holdBeats, occupyBeforeBeats, occupyAfterBeats, hitWindowBeforeBeats, hitWindowAfterBeats, null, null, variants, new FixedEditorNoteTiming(), _ => false, new SingleEditorNotePlacementStrategy())
     {
     }
 
     public EditorNoteDefinition(EditorNoteKind kind, string displayName, string inputAction, double holdBeats, double occupyBeforeBeats, double occupyAfterBeats, double hitWindowBeforeBeats, double hitWindowAfterBeats, IReadOnlyList<EditorNoteVariant> variants, IEditorNoteTiming timing, Func<ChartNote, bool> matchesChartNote, IEditorNotePlacementStrategy placementStrategy)
+        : this(kind, displayName, inputAction, holdBeats, occupyBeforeBeats, occupyAfterBeats, hitWindowBeforeBeats, hitWindowAfterBeats, null, null, variants, timing, matchesChartNote, placementStrategy)
+    {
+    }
+
+    public EditorNoteDefinition(EditorNoteKind kind, string displayName, string inputAction, double holdBeats, double occupyBeforeBeats, double occupyAfterBeats, double hitWindowBeforeBeats, double hitWindowAfterBeats, double? sameVariantHitWindowBeforeBeats, double? sameVariantHitWindowAfterBeats, IReadOnlyList<EditorNoteVariant> variants, IEditorNoteTiming timing, Func<ChartNote, bool> matchesChartNote, IEditorNotePlacementStrategy placementStrategy)
     {
         Kind = kind;
         DisplayName = displayName;
@@ -79,6 +158,8 @@ public sealed class EditorNoteDefinition
         OccupyAfterBeats = occupyAfterBeats;
         HitWindowBeforeBeats = hitWindowBeforeBeats;
         HitWindowAfterBeats = hitWindowAfterBeats;
+        SameVariantHitWindowBeforeBeats = sameVariantHitWindowBeforeBeats ?? hitWindowBeforeBeats;
+        SameVariantHitWindowAfterBeats = sameVariantHitWindowAfterBeats ?? hitWindowAfterBeats;
         Variants = variants;
         Timing = timing;
         MatchesChartNote = matchesChartNote;
@@ -102,9 +183,9 @@ public sealed class EditorNoteDefinition
         };
     }
 
-    public IReadOnlyList<EditorNotePlacement> CreatePlacements(ChartNote sourceNote, double crotchet)
+    public IReadOnlyList<EditorNotePlacement> CreatePlacements(ChartNote sourceNote, EditorNotePlacementContext context)
     {
-        return PlacementStrategy.CreatePlacements(this, sourceNote, crotchet);
+        return PlacementStrategy.CreatePlacements(this, sourceNote, context);
     }
 
     public EditorNoteVariant GetVariant(int variantIndex)
@@ -125,9 +206,24 @@ public sealed class EditorNoteDefinition
         return Timing.GetStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet));
     }
 
+    public double GetStart(double noteSongPosition, double crotchet, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, getRelativeNote: getRelativeNote));
+    }
+
     public double GetEnd(double noteSongPosition, double crotchet)
     {
         return Timing.GetEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet));
+    }
+
+    public double GetEnd(double noteSongPosition, double crotchet, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, getRelativeNote: getRelativeNote));
+    }
+
+    public double GetEnd(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote));
     }
 
     public double GetHitWindowStart(double noteSongPosition, double crotchet)
@@ -135,23 +231,83 @@ public sealed class EditorNoteDefinition
         return Timing.GetHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet));
     }
 
+    public double GetHitWindowStart(double noteSongPosition, double crotchet, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, getRelativeNote: getRelativeNote));
+    }
+
     public double GetHitWindowEnd(double noteSongPosition, double crotchet)
     {
         return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet));
     }
 
+    public double GetHitWindowEnd(double noteSongPosition, double crotchet, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, getRelativeNote: getRelativeNote));
+    }
+
+    public double GetHitWindowEnd(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote));
+    }
+
+    public double GetSameVariantHitWindowStart(double noteSongPosition, double crotchet)
+    {
+        return Timing.GetSameVariantHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet));
+    }
+
+    public double GetSameVariantHitWindowStart(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetSameVariantHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote));
+    }
+
+    public double GetSameVariantHitWindowEnd(double noteSongPosition, double crotchet)
+    {
+        return Timing.GetSameVariantHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet));
+    }
+
+    public double GetSameVariantHitWindowEnd(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote)
+    {
+        return Timing.GetSameVariantHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote));
+    }
+
     public double GetStart(double noteSongPosition, double crotchet, int variantIndex, bool beforeUsesOuterTiming, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false, bool counterBigLeapTiming = false)
     {
-        return Timing.GetStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming, counterBigLeapTiming: counterBigLeapTiming));
+        return Timing.GetStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming: beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming, counterBigLeapTiming: counterBigLeapTiming));
+    }
+
+    public double GetStart(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote, bool beforeUsesOuterTiming, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false, bool counterBigLeapTiming = false)
+    {
+        return Timing.GetStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming, counterBigLeapTiming: counterBigLeapTiming));
     }
 
     public double GetHitWindowStart(double noteSongPosition, double crotchet, int variantIndex, bool beforeUsesOuterTiming, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false, bool counterBigLeapTiming = false)
     {
-        return Timing.GetHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming, counterBigLeapTiming: counterBigLeapTiming));
+        return Timing.GetHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, beforeUsesOuterTiming: beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming, counterBigLeapTiming: counterBigLeapTiming));
+    }
+
+    public double GetHitWindowStart(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote, bool beforeUsesOuterTiming, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false, bool counterBigLeapTiming = false)
+    {
+        return Timing.GetHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming, counterBigLeapTiming: counterBigLeapTiming));
+    }
+
+    public double GetSameVariantHitWindowStart(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote, bool beforeUsesOuterTiming, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false, bool counterBigLeapTiming = false)
+    {
+        return Timing.GetSameVariantHitWindowStart(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: beforeUsesOuterTiming, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming, counterBigLeapTiming: counterBigLeapTiming));
     }
 
     public double GetHitWindowEnd(double noteSongPosition, double crotchet, int variantIndex, bool rainbowTargetsOuter, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false)
     {
         return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, rainbowTargetsOuter: rainbowTargetsOuter, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming));
+    }
+
+    public double GetHitWindowEnd(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote, bool rainbowTargetsOuter, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false)
+    {
+        return Timing.GetHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote, rainbowTargetsOuter: rainbowTargetsOuter, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming));
+    }
+
+    public double GetSameVariantHitWindowEnd(double noteSongPosition, double crotchet, int variantIndex, Func<int, ChartNote> getRelativeNote, bool rainbowTargetsOuter, bool forceBigLeapTiming = false, bool afterUsesOuterTiming = false)
+    {
+        return Timing.GetSameVariantHitWindowEnd(this, new EditorNoteTimingContext(noteSongPosition, crotchet, variantIndex, getRelativeNote, rainbowTargetsOuter: rainbowTargetsOuter, forceBigLeapTiming: forceBigLeapTiming, afterUsesOuterTiming: afterUsesOuterTiming));
     }
 }

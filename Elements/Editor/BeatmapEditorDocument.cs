@@ -145,12 +145,12 @@ public sealed class BeatmapEditorDocument
             normalizedPlacements.Add(new EditorNotePlacement(placement.Definition, note));
         }
 
+        IReadOnlyList<ChartNote> contextualNotes = CreateContextualNotes(normalizedPlacements);
         for (int i = 0; i < normalizedPlacements.Count; i++)
         {
             EditorNotePlacement placement = normalizedPlacements[i];
-            int variantIndex = EditorNoteDefinitions.FindVariantIndex(placement.Definition, placement.Note);
 
-            if (FindBlockingNote(placement.Definition, placement.Note.SongPosition, variantIndex) is ChartNote blocker)
+            if (FindBlockingNote(placement, contextualNotes) is ChartNote blocker)
             {
                 EditorNoteDefinition blockerDefinition = EditorNoteDefinitions.FromChartNote(blocker);
                 reason = $"Blocked by {blockerDefinition?.DisplayName ?? "note"} at {blocker.SongPosition:0.000}s";
@@ -159,7 +159,7 @@ public sealed class BeatmapEditorDocument
 
             for (int j = 0; j < i; j++)
             {
-                if (PlacementsBlockEachOther(placement, normalizedPlacements[j]))
+                if (PlacementsBlockEachOther(placement, normalizedPlacements[j], contextualNotes))
                 {
                     reason = $"Generated notes overlap at {placement.Note.SongPosition:0.000}s";
                     return false;
@@ -291,10 +291,12 @@ public sealed class BeatmapEditorDocument
         if (definition == null)
             return note.SongPosition;
 
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetHitWindowEnd(note.SongPosition, Crotchet);
-
+        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+
+        if (definition.Kind != EditorNoteKind.SeeSaw)
+            return definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote);
+
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
         if (IsSeeSawOpposite(action))
@@ -302,7 +304,28 @@ public sealed class BeatmapEditorDocument
 
         bool rainbowTargetsOuter = GetRainbowTargetIsOuter(action, state);
         bool afterUsesOuterTiming = GetAfterUsesOuterTiming(action, state);
-        return definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, rainbowTargetsOuter, action.IsBigLeap, afterUsesOuterTiming);
+        return definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote, rainbowTargetsOuter, action.IsBigLeap, afterUsesOuterTiming);
+    }
+
+    public double GetContextualSameVariantHitWindowEnd(ChartNote note, EditorNoteDefinition definition)
+    {
+        if (definition == null)
+            return note.SongPosition;
+
+        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+
+        if (definition.Kind != EditorNoteKind.SeeSaw)
+            return definition.GetSameVariantHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote);
+
+        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
+        SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
+        if (IsSeeSawOpposite(action))
+            return note.SongPosition + GetOppositeAfterBeats(action, state) * Crotchet;
+
+        bool rainbowTargetsOuter = GetRainbowTargetIsOuter(action, state);
+        bool afterUsesOuterTiming = GetAfterUsesOuterTiming(action, state);
+        return definition.GetSameVariantHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote, rainbowTargetsOuter, action.IsBigLeap, afterUsesOuterTiming);
     }
 
     public double GetContextualStart(ChartNote note, EditorNoteDefinition definition)
@@ -310,10 +333,12 @@ public sealed class BeatmapEditorDocument
         if (definition == null)
             return note.SongPosition;
 
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetStart(note.SongPosition, Crotchet);
-
+        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+
+        if (definition.Kind != EditorNoteKind.SeeSaw)
+            return definition.GetStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
         if (IsSeeSawOpposite(action))
@@ -321,7 +346,7 @@ public sealed class BeatmapEditorDocument
 
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
         bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
-        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
+        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
     }
 
     public double GetBlockingStart(ChartNote note, EditorNoteDefinition definition)
@@ -332,7 +357,7 @@ public sealed class BeatmapEditorDocument
         if (definition.Kind == EditorNoteKind.SeeSaw)
             return GetContextualStart(note, definition);
 
-        return GetBlockingStart(definition, note.SongPosition);
+        return GetBlockingStart(definition, note);
     }
 
     public double GetContextualHitWindowStart(ChartNote note, EditorNoteDefinition definition)
@@ -340,10 +365,12 @@ public sealed class BeatmapEditorDocument
         if (definition == null)
             return note.SongPosition;
 
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetHitWindowStart(note.SongPosition, Crotchet);
-
+        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+
+        if (definition.Kind != EditorNoteKind.SeeSaw)
+            return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+
         SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
         SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
         if (IsSeeSawOpposite(action))
@@ -351,7 +378,28 @@ public sealed class BeatmapEditorDocument
 
         bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
         bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
-        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
+        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
+    }
+
+    public double GetContextualSameVariantHitWindowStart(ChartNote note, EditorNoteDefinition definition)
+    {
+        if (definition == null)
+            return note.SongPosition;
+
+        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+
+        if (definition.Kind != EditorNoteKind.SeeSaw)
+            return definition.GetSameVariantHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+
+        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
+        SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
+        if (IsSeeSawOpposite(action))
+            return note.SongPosition - GetOppositeApproachBeats(action, state) * Crotchet;
+
+        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
+        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
+        return definition.GetSameVariantHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
     }
 
     public double GetContextualEnd(ChartNote note, EditorNoteDefinition definition)
@@ -362,7 +410,7 @@ public sealed class BeatmapEditorDocument
         if (definition.Kind == EditorNoteKind.SeeSaw)
             return note.SongPosition;
 
-        return definition.GetEnd(note.SongPosition, Crotchet);
+        return definition.GetEnd(note.SongPosition, Crotchet, EditorNoteDefinitions.FindVariantIndex(definition, note), CreateRelativeNoteGetter(note));
     }
 
     public double GetContextualStart(EditorNoteDefinition definition, double songPosition, int variantIndex)
@@ -387,18 +435,18 @@ public sealed class BeatmapEditorDocument
         return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming, forceBigLeapTiming: false, afterUsesOuterTiming: counterUsesOuterTiming);
     }
 
-    private ChartNote FindBlockingNote(EditorNoteDefinition placedDefinition, double songPosition, int variantIndex)
+    private ChartNote FindBlockingNote(EditorNotePlacement placed, IReadOnlyList<ChartNote> contextualNotes)
     {
-        double placedStart = GetBlockingStart(placedDefinition, songPosition);
-        double placedEnd = GetBlockingEnd(placedDefinition, songPosition);
-
         foreach (ChartNote note in Chart.Notes)
         {
             EditorNoteDefinition existingDefinition = EditorNoteDefinitions.FromChartNote(note);
-            double existingStart = GetBlockingStart(existingDefinition, note.SongPosition);
-            double existingEnd = GetBlockingEnd(existingDefinition, note.SongPosition);
+            bool sameVariantWindow = AreSameDefinitionAndVariant(placed.Definition, placed.Note, existingDefinition, note);
+            double placedStart = GetBlockingStart(placed.Definition, placed.Note, sameVariantWindow, contextualNotes);
+            double placedEnd = GetBlockingEnd(placed.Definition, placed.Note, sameVariantWindow, contextualNotes);
+            double existingStart = GetBlockingStart(existingDefinition, note, sameVariantWindow, contextualNotes);
+            double existingEnd = GetBlockingEnd(existingDefinition, note, sameVariantWindow, contextualNotes);
 
-            if (TouchesAllowedBoundary(placedDefinition, existingDefinition, placedStart, placedEnd, existingStart, existingEnd))
+            if (TouchesAllowedBoundary(placed.Definition, existingDefinition, placedStart, placedEnd, existingStart, existingEnd))
                 continue;
 
             if (placedStart < existingEnd - HitWindowEpsilonSeconds && placedEnd > existingStart + HitWindowEpsilonSeconds)
@@ -408,17 +456,29 @@ public sealed class BeatmapEditorDocument
         return null;
     }
 
-    private bool PlacementsBlockEachOther(EditorNotePlacement placed, EditorNotePlacement existing)
+    private bool PlacementsBlockEachOther(EditorNotePlacement placed, EditorNotePlacement existing, IReadOnlyList<ChartNote> contextualNotes)
     {
-        double placedStart = GetBlockingStart(placed.Definition, placed.Note.SongPosition);
-        double placedEnd = GetBlockingEnd(placed.Definition, placed.Note.SongPosition);
-        double existingStart = GetBlockingStart(existing.Definition, existing.Note.SongPosition);
-        double existingEnd = GetBlockingEnd(existing.Definition, existing.Note.SongPosition);
+        bool sameVariantWindow = AreSameDefinitionAndVariant(placed.Definition, placed.Note, existing.Definition, existing.Note);
+        double placedStart = GetBlockingStart(placed.Definition, placed.Note, sameVariantWindow, contextualNotes);
+        double placedEnd = GetBlockingEnd(placed.Definition, placed.Note, sameVariantWindow, contextualNotes);
+        double existingStart = GetBlockingStart(existing.Definition, existing.Note, sameVariantWindow, contextualNotes);
+        double existingEnd = GetBlockingEnd(existing.Definition, existing.Note, sameVariantWindow, contextualNotes);
 
         if (TouchesAllowedBoundary(placed.Definition, existing.Definition, placedStart, placedEnd, existingStart, existingEnd))
             return false;
 
         return placedStart < existingEnd - HitWindowEpsilonSeconds && placedEnd > existingStart + HitWindowEpsilonSeconds;
+    }
+
+    private static bool AreSameDefinitionAndVariant(EditorNoteDefinition aDefinition, ChartNote aNote, EditorNoteDefinition bDefinition, ChartNote bNote)
+    {
+        if (aDefinition == null || bDefinition == null || aNote == null || bNote == null)
+            return false;
+
+        if (!ReferenceEquals(aDefinition, bDefinition) && aDefinition.Kind != bDefinition.Kind)
+            return false;
+
+        return EditorNoteDefinitions.FindVariantIndex(aDefinition, aNote) == EditorNoteDefinitions.FindVariantIndex(bDefinition, bNote);
     }
 
     private bool TouchesAllowedBoundary(EditorNoteDefinition placedDefinition, EditorNoteDefinition existingDefinition, double placedStart, double placedEnd, double existingStart, double existingEnd)
@@ -434,26 +494,122 @@ public sealed class BeatmapEditorDocument
             || Math.Abs(existingStart - placedEnd) <= HitWindowEpsilonSeconds;
     }
 
-    private double GetBlockingStart(EditorNoteDefinition definition, double songPosition)
+    private double GetBlockingStart(EditorNoteDefinition definition, ChartNote note)
     {
-        if (definition == null)
-            return songPosition;
-
-        if (definition.Kind == EditorNoteKind.SeeSaw)
-            return songPosition - 2 * Crotchet;
-
-        return definition.GetHitWindowStart(songPosition, Crotchet);
+        return GetBlockingStart(definition, note, sameVariantWindow: false, Chart.Notes);
     }
 
-    private double GetBlockingEnd(EditorNoteDefinition definition, double songPosition)
+    private double GetBlockingStart(EditorNoteDefinition definition, ChartNote note, bool sameVariantWindow)
+    {
+        return GetBlockingStart(definition, note, sameVariantWindow, Chart.Notes);
+    }
+
+    private double GetBlockingStart(EditorNoteDefinition definition, ChartNote note, bool sameVariantWindow, IReadOnlyList<ChartNote> contextualNotes)
     {
         if (definition == null)
-            return songPosition;
+            return note.SongPosition;
 
         if (definition.Kind == EditorNoteKind.SeeSaw)
-            return songPosition;
+            return note.SongPosition - 2 * Crotchet;
 
-        return definition.GetHitWindowEnd(songPosition, Crotchet);
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note, contextualNotes);
+        return sameVariantWindow
+            ? definition.GetSameVariantHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false)
+            : definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+    }
+
+    private double GetBlockingEnd(EditorNoteDefinition definition, ChartNote note)
+    {
+        return GetBlockingEnd(definition, note, sameVariantWindow: false, Chart.Notes);
+    }
+
+    private double GetBlockingEnd(EditorNoteDefinition definition, ChartNote note, bool sameVariantWindow)
+    {
+        return GetBlockingEnd(definition, note, sameVariantWindow, Chart.Notes);
+    }
+
+    private double GetBlockingEnd(EditorNoteDefinition definition, ChartNote note, bool sameVariantWindow, IReadOnlyList<ChartNote> contextualNotes)
+    {
+        if (definition == null)
+            return note.SongPosition;
+
+        if (definition.Kind == EditorNoteKind.SeeSaw)
+            return note.SongPosition;
+
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note, contextualNotes);
+        return sameVariantWindow
+            ? definition.GetSameVariantHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote)
+            : definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote);
+    }
+
+    private Func<int, ChartNote> CreateRelativeNoteGetter(ChartNote note)
+    {
+        return CreateRelativeNoteGetter(note, Chart.Notes);
+    }
+
+    private static Func<int, ChartNote> CreateRelativeNoteGetter(ChartNote note, IReadOnlyList<ChartNote> notes)
+    {
+        int index = IndexOfReference(notes, note);
+        return offset =>
+        {
+            int relativeIndex = index + offset;
+            return index >= 0 && relativeIndex >= 0 && relativeIndex < notes.Count ? notes[relativeIndex] : null;
+        };
+    }
+
+    private IReadOnlyList<ChartNote> CreateContextualNotes(IReadOnlyList<EditorNotePlacement> placements)
+    {
+        List<ContextualNoteEntry> entries = new();
+        int order = 0;
+
+        foreach (ChartNote note in Chart.Notes)
+            entries.Add(new ContextualNoteEntry(note, isGenerated: false, order++));
+
+        foreach (EditorNotePlacement placement in placements)
+            entries.Add(new ContextualNoteEntry(placement.Note, isGenerated: true, order++));
+
+        entries.Sort(CompareContextualNoteEntries);
+        return entries.Select(entry => entry.Note).ToList();
+    }
+
+    private static int CompareContextualNoteEntries(ContextualNoteEntry a, ContextualNoteEntry b)
+    {
+        int byTime = a.Note.SongPosition.CompareTo(b.Note.SongPosition);
+        if (byTime != 0)
+            return byTime;
+
+        int byGenerated = a.IsGenerated.CompareTo(b.IsGenerated);
+        return byGenerated != 0 ? byGenerated : a.Order.CompareTo(b.Order);
+    }
+
+    private static int IndexOfReference(IReadOnlyList<ChartNote> notes, ChartNote note)
+    {
+        if (notes == null || note == null)
+            return -1;
+
+        for (int i = 0; i < notes.Count; i++)
+        {
+            if (ReferenceEquals(notes[i], note))
+                return i;
+        }
+
+        return -1;
+    }
+
+    private readonly struct ContextualNoteEntry
+    {
+        public ContextualNoteEntry(ChartNote note, bool isGenerated, int order)
+        {
+            Note = note;
+            IsGenerated = isGenerated;
+            Order = order;
+        }
+
+        public ChartNote Note { get; }
+        public bool IsGenerated { get; }
+        public int Order { get; }
     }
 
     private SeeSawEditorState GetSeeSawStateBefore(double songPosition)

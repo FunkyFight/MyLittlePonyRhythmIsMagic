@@ -118,9 +118,9 @@ public abstract class IntervalEditorNoteProvider : EditorNoteProvider
             _provider = provider;
         }
 
-        public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, double crotchet)
+        public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, EditorNotePlacementContext context)
         {
-            return _provider.CreateIntervalPlacements(sourceNote, crotchet);
+            return _provider.CreateIntervalPlacements(sourceNote, context?.Crotchet ?? 0);
         }
     }
 }

@@ -14,6 +14,8 @@ public sealed class EditorNoteDefinitionBuilder
     private double _occupyAfterBeats;
     private double _hitWindowBeforeBeats;
     private double _hitWindowAfterBeats;
+    private double? _sameVariantHitWindowBeforeBeats;
+    private double? _sameVariantHitWindowAfterBeats;
     private readonly List<EditorNoteVariant> _variants = new();
     private IEditorNoteTiming _timing = new FixedEditorNoteTiming();
     private Func<ChartNote, bool> _matchesChartNote = _ => false;
@@ -96,6 +98,13 @@ public sealed class EditorNoteDefinitionBuilder
     {
         _hitWindowBeforeBeats = beforeBeats;
         _hitWindowAfterBeats = afterBeats;
+        return this;
+    }
+
+    public EditorNoteDefinitionBuilder SameVariantHitWindow(double beforeBeats, double afterBeats)
+    {
+        _sameVariantHitWindowBeforeBeats = beforeBeats;
+        _sameVariantHitWindowAfterBeats = afterBeats;
         return this;
     }
 
@@ -187,6 +196,6 @@ public sealed class EditorNoteDefinitionBuilder
             ? _variants.ToArray()
             : new[] { new EditorNoteVariant("Default", new Dictionary<string, string>()) };
 
-        return new EditorNoteDefinition(_kind, _displayName, _inputAction, _holdBeats, _occupyBeforeBeats, _occupyAfterBeats, _hitWindowBeforeBeats, _hitWindowAfterBeats, variants, _timing, _matchesChartNote, _placementStrategy);
+        return new EditorNoteDefinition(_kind, _displayName, _inputAction, _holdBeats, _occupyBeforeBeats, _occupyAfterBeats, _hitWindowBeforeBeats, _hitWindowAfterBeats, _sameVariantHitWindowBeforeBeats, _sameVariantHitWindowAfterBeats, variants, _timing, _matchesChartNote, _placementStrategy);
     }
 }

@@ -25,6 +25,9 @@
 /processorParam:TextureFormat=Color
 /build:atlas/main_atlas.png
 
+#begin atlas/main_atlas.txt
+/copy:atlas/main_atlas.txt
+
 #begin atlas/xbox_controller.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -39,9 +42,6 @@
 
 #begin atlas/xbox_controller.txt
 /copy:atlas/xbox_controller.txt
-
-#begin atlas/main_atlas.txt
-/copy:atlas/main_atlas.txt
 
 #begin InputActions.xml
 /copy:InputActions.xml

@@ -37,6 +37,16 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
         return context.SongPosition + afterBeats * context.Crotchet;
     }
 
+    public double GetSameVariantHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    {
+        return GetHitWindowStart(definition, context);
+    }
+
+    public double GetSameVariantHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    {
+        return GetHitWindowEnd(definition, context);
+    }
+
     private static double GetBeforeBeats(bool beforeUsesOuterTiming)
     {
         return beforeUsesOuterTiming ? OuterBeforeBeats : InnerBeforeBeats;

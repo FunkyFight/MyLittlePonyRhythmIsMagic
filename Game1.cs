@@ -58,7 +58,7 @@ public class Game1 : Core
         };
 
 
-        DebugActivated = false;
+        DebugActivated = true;
 
     }
 
@@ -73,6 +73,10 @@ public class Game1 : Core
     {
         // Non-preview editor playback owns conductor updates to avoid advancing rhythm state twice.
         bool editorOwnsBeatmapPlayback = GLOBALS.beatmapEditorElement != null && !GLOBALS.beatmapEditorElement.IsPreviewPlaying;
+        GLOBALS.SfxVolume = GLOBALS.beatmapEditorElement != null
+            && (GLOBALS.beatmapEditorElement.IsPreviewPlaying || GLOBALS.beatmapEditorElement.IsEditorPlaybackPlaying)
+            ? 1.0f
+            : 0.0f;
 
         if (editorOwnsBeatmapPlayback)
             GLOBALS.beatmapEditorElement.Update(gameTime);

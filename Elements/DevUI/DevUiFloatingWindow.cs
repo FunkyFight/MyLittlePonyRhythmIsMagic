@@ -55,10 +55,12 @@ public sealed class DevUiFloatingWindow
             return false;
 
         ApplyScroll(bounds, rows);
+        EnsureOpenDropdownRowExists(bounds, rows);
 
         bool leftClicked = LeftPressed();
         int wheelDelta = _mouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
-        bool mouseOverOpenDropdown = MouseOverOpenDropdown(bounds, rows);
+        bool hadOpenDropdown = _openDropdownKey != null;
+        bool mouseOverOpenDropdownBeforeUpdate = MouseOverOpenDropdown(bounds, rows);
 
         if (_editingFloatKey != null)
         {
@@ -74,6 +76,18 @@ public sealed class DevUiFloatingWindow
 
         if (UpdateDropdownRows(bounds, rows, leftClicked, wheelDelta))
             return true;
+
+        bool mouseOverOpenDropdown = MouseOverOpenDropdown(bounds, rows);
+
+        if (leftClicked && hadOpenDropdown && !mouseOverOpenDropdownBeforeUpdate)
+        {
+            if (!bounds.Contains(_mouse.Position))
+                Close();
+            else
+                _openDropdownKey = null;
+
+            return false;
+        }
 
         if (leftClicked && !bounds.Contains(_mouse.Position) && !mouseOverOpenDropdown)
         {
@@ -144,20 +158,34 @@ public sealed class DevUiFloatingWindow
         foreach (DevUiWindowRow row in rows)
         {
             Rectangle rowBounds = new(bounds.X + 12, y, bounds.Width - 24, GetRowHeight(row));
-            if (row.Kind == DevUiWindowRowKind.Dropdown && row.Options != null && contentBounds.Intersects(rowBounds))
+            if (row.Kind != DevUiWindowRowKind.Dropdown || row.Options == null)
             {
-                Rectangle dropdownBounds = GetDropdownBounds(rowBounds);
-                bool isOpenRow = _openDropdownKey == row.Key;
-                if (_dropdown.Update(dropdownBounds, row.Options, row.SelectedIndex, _mouse, leftClicked, wheelDelta, isOpenRow))
-                {
-                    row.Select?.Invoke(_dropdown.SelectedIndex);
-                    _openDropdownKey = null;
-                    return true;
-                }
-
-                if (leftClicked && dropdownBounds.Contains(_mouse.Position))
-                    _openDropdownKey = _dropdown.IsOpen ? row.Key : null;
+                y += rowBounds.Height;
+                continue;
             }
+
+            bool isOpenRow = _openDropdownKey == row.Key;
+            bool isVisibleRow = contentBounds.Intersects(rowBounds);
+            bool clickedDropdown = isVisibleRow && leftClicked && GetDropdownBounds(rowBounds).Contains(_mouse.Position);
+
+            if (!isOpenRow && !clickedDropdown)
+            {
+                y += rowBounds.Height;
+                continue;
+            }
+
+            Rectangle dropdownBounds = GetDropdownBounds(rowBounds);
+            if (_dropdown.Update(dropdownBounds, row.Options, row.SelectedIndex, _mouse, leftClicked, wheelDelta, isOpenRow && isVisibleRow))
+            {
+                row.Select?.Invoke(_dropdown.SelectedIndex);
+                _openDropdownKey = null;
+                return true;
+            }
+
+            if (isVisibleRow)
+                _openDropdownKey = _dropdown.IsOpen ? row.Key : null;
+            else
+                _openDropdownKey = null;
 
             y += rowBounds.Height;
         }
@@ -167,25 +195,57 @@ public sealed class DevUiFloatingWindow
 
     private bool MouseOverOpenDropdown(Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows)
     {
-        if (!_dropdown.IsOpen)
+        if (_openDropdownKey == null)
             return false;
 
+        if (!TryGetOpenDropdownRow(bounds, rows, out Rectangle rowBounds, out DevUiWindowRow openDropdownRow))
+            return false;
+
+        Rectangle dropdownBounds = GetDropdownBounds(rowBounds);
+        int visibleItems = Math.Min(4, openDropdownRow.Options.Count);
+        Rectangle listBounds = new(dropdownBounds.X, dropdownBounds.Y, dropdownBounds.Width, dropdownBounds.Height * (visibleItems + 1));
+        return listBounds.Contains(_mouse.Position);
+    }
+
+    private bool TryGetOpenDropdownRow(Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows, out Rectangle rowBounds, out DevUiWindowRow row)
+    {
+        row = default;
+        rowBounds = default;
+
+        if (_openDropdownKey == null)
+            return false;
+
+        Rectangle contentBounds = GetContentBounds(bounds);
         int y = bounds.Y + 34 - _scrollOffset;
-        foreach (DevUiWindowRow row in rows)
+
+        foreach (DevUiWindowRow candidate in rows)
         {
-            Rectangle rowBounds = new(bounds.X + 12, y, bounds.Width - 24, GetRowHeight(row));
-            if (row.Kind == DevUiWindowRowKind.Dropdown && row.Options != null)
+            Rectangle candidateBounds = new(bounds.X + 12, y, bounds.Width - 24, GetRowHeight(candidate));
+            if (candidate.Key == _openDropdownKey && candidate.Kind == DevUiWindowRowKind.Dropdown && candidate.Options != null)
             {
-                Rectangle dropdownBounds = GetDropdownBounds(rowBounds);
-                Rectangle listBounds = new(dropdownBounds.X, dropdownBounds.Y, dropdownBounds.Width, dropdownBounds.Height * (Math.Min(4, row.Options.Count) + 1));
-                if (_openDropdownKey == row.Key)
-                    return listBounds.Contains(_mouse.Position);
+                if (contentBounds.Intersects(candidateBounds))
+                {
+                    row = candidate;
+                    rowBounds = candidateBounds;
+                    return true;
+                }
+
+                return false;
             }
 
-            y += rowBounds.Height;
+            y += candidateBounds.Height;
         }
 
         return false;
+    }
+
+    private void EnsureOpenDropdownRowExists(Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows)
+    {
+        if (_openDropdownKey == null)
+            return;
+
+        if (!TryGetOpenDropdownRow(bounds, rows, out _, out _))
+            _openDropdownKey = null;
     }
 
     private void DrawRow(SpriteBatch spriteBatch, Rectangle bounds, DevUiWindowRow row)
@@ -231,6 +291,9 @@ public sealed class DevUiFloatingWindow
     private void DrawOpenDropdownList(SpriteBatch spriteBatch, Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows)
     {
         if (_openDropdownKey == null)
+            return;
+
+        if (!TryGetOpenDropdownRow(bounds, rows, out _, out _))
             return;
 
         Rectangle contentBounds = GetContentBounds(bounds);
