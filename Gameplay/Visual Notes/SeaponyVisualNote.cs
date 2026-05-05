@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using GameCore;
 using GameCore.Animation;
 using GameCore.Audio;
@@ -14,10 +14,16 @@ public class SeaponyVisualNote : VisualNote
     private const string ActionDataKey = "action";
     private const string SwimAction = "seapony_parade_swim";
     private const string RollAction = "seapony_parade_roll";
+    private const string TapTapAction = "seapony_parade_tap_tap";
     private const string IdleState = "idle";
     private const string SwimAnticipationState = "swim_anticipation";
     private const string SwimState = "swim";
     private const string RollState = "roll";
+    private const string UptapState = "uptap";
+    private const string DowntapState = "downtap";
+    private const float TapTapGroupOffsetX = 64f;
+    private const float TapTapPairOffsetX = 42f;
+    private const float TapTapRightFacingDowntapBackOffsetX = TapTapPairOffsetX;
 
     public float RollTargetRotation { get; private set; }
 
@@ -25,34 +31,43 @@ public class SeaponyVisualNote : VisualNote
     private readonly double _crotchet;
     private readonly int _rollIndexInSequence;
     private readonly int _rollsRemainingInSequence;
+    private readonly int _tapTapIndexInSequence;
+    private readonly int _tapTapHitsRemainingInSequence;
     private readonly Func<int, Note, bool> _canRollProvider;
     private readonly Func<Note, bool> _hasSuccessfulReactionProvider;
+    private readonly Func<Note, bool> _hasPerfectReactionProvider;
     private readonly Func<bool> _canApplyState;
 
     private Scene _scene;
     private GameObject _seaPony;
     private AnimationStateMachine _seaPonyStateMachine;
     private int _seaPonyIndex;
+    private readonly Vector2 _baseSeaPonyPosition;
 
     private int _backgroundScrollDestinationBeat;
 
     private bool _wasControlling = false;
     private double _lastSongPosition = double.NaN;
+    private int _lastTapTapHitsPassed = int.MinValue;
 
     public bool _canRoll = true;
 
-    public SeaponyVisualNote(Note logicalNote, double approachDuration, Scene scene, GameObject seaPony, AnimationStateMachine seaPonyStateMachine, int seaPonyIndex, double crotchet, float rollTargetRotation = 0f, double despawnDelay = 0, bool canRoll = true, int rollIndexInSequence = 0, int rollsRemainingInSequence = 0, Func<int, Note, bool> canRollProvider = null, Func<Note, bool> hasSuccessfulReactionProvider = null, Func<bool> canApplyState = null) : base(logicalNote, approachDuration, despawnDelay)
+    public SeaponyVisualNote(Note logicalNote, double approachDuration, Scene scene, GameObject seaPony, AnimationStateMachine seaPonyStateMachine, int seaPonyIndex, double crotchet, float rollTargetRotation = 0f, double despawnDelay = 0, bool canRoll = true, int rollIndexInSequence = 0, int rollsRemainingInSequence = 0, Func<int, Note, bool> canRollProvider = null, Func<Note, bool> hasSuccessfulReactionProvider = null, Func<Note, bool> hasPerfectReactionProvider = null, Func<bool> canApplyState = null, int tapTapIndexInSequence = 0, int tapTapHitsRemainingInSequence = 1, Vector2? baseSeaPonyPosition = null) : base(logicalNote, approachDuration, despawnDelay)
     {
         this._scene = scene;
         this._seaPony = seaPony;
         this._seaPonyIndex = seaPonyIndex;
         this._seaPonyStateMachine = seaPonyStateMachine;
+        _baseSeaPonyPosition = baseSeaPonyPosition ?? seaPony?.Position ?? Vector2.Zero;
         _rollTargetRotation = rollTargetRotation;
         _crotchet = crotchet;
         _rollIndexInSequence = rollIndexInSequence;
         _rollsRemainingInSequence = rollsRemainingInSequence;
+        _tapTapIndexInSequence = tapTapIndexInSequence;
+        _tapTapHitsRemainingInSequence = tapTapHitsRemainingInSequence;
         _canRollProvider = canRollProvider;
         _hasSuccessfulReactionProvider = hasSuccessfulReactionProvider;
+        _hasPerfectReactionProvider = hasPerfectReactionProvider;
         _canApplyState = canApplyState;
         this.RollTargetRotation = rollTargetRotation;
         this._canRoll = canRoll;
@@ -63,7 +78,11 @@ public class SeaponyVisualNote : VisualNote
         base.Update(currentSongPosition);
 
         if(RhythmVisualUtils.HasRewound(currentSongPosition, _lastSongPosition))
+        {
+            resetTapTapScale();
             _wasControlling = false;
+            _lastTapTapHitsPassed = int.MinValue;
+        }
 
         if(!tryGetAction(out string action))
         {
@@ -73,8 +92,14 @@ public class SeaponyVisualNote : VisualNote
 
         bool inTimeWindow = RhythmVisualUtils.IsInTimeWindow(currentSongPosition, Note.SongPosition, ApproachDuration, DespawnDelay);
 
+        if(action == TapTapAction)
+            handleTapTapSfx(currentSongPosition);
+
         if(!RhythmVisualUtils.CanApplyState(_canApplyState))
         {
+            if(action == TapTapAction && _wasControlling && !hasNextTapTapTakenOver(currentSongPosition))
+                resetTapTapScale();
+
             _wasControlling = false;
             _lastSongPosition = currentSongPosition;
             return;
@@ -88,6 +113,10 @@ public class SeaponyVisualNote : VisualNote
 
             case RollAction:
                 handleRoll(inTimeWindow, currentSongPosition);
+                break;
+
+            case TapTapAction:
+                handleTapTap(inTimeWindow, currentSongPosition);
                 break;
 
             default:
@@ -108,6 +137,7 @@ public class SeaponyVisualNote : VisualNote
                 RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, IdleState);
                 _wasControlling = false;
                 _seaPony.Rotation = 0;
+                resetTapTapScale();
             }
 
             return;
@@ -121,11 +151,13 @@ public class SeaponyVisualNote : VisualNote
                 {
                     RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, IdleState);
                     _seaPony.Rotation = MathHelper.ToRadians(_rollTargetRotation);
+                    resetTapTapScale();
                 }
                 else
                 {
                     RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, IdleState);
                     _seaPony.Rotation = 0;
+                    resetTapTapScale();
                 }
 
                 _wasControlling = false;
@@ -133,6 +165,8 @@ public class SeaponyVisualNote : VisualNote
 
             return;
         }
+
+        resetTapTapScale();
 
         if(_rollIndexInSequence == 0)
         {
@@ -145,8 +179,8 @@ public class SeaponyVisualNote : VisualNote
             return;
         }
 
-        if(_rollsRemainingInSequence <= 2)
-            playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/BubbleHeavy.wav");
+        if(_rollsRemainingInSequence == 1)
+            playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/AndStop.wav");
 
         double rollDuration = DespawnDelay <= double.Epsilon ? ApproachDuration : DespawnDelay;
         double rollStartSongPosition = Note.SongPosition;
@@ -156,6 +190,14 @@ public class SeaponyVisualNote : VisualNote
         {
             if(!canRoll())
             {
+                if(!Note.HasReacted && _rollIndexInSequence > 0)
+                {
+                    RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, RollState);
+                    _seaPony.Rotation = MathHelper.ToRadians(startRoll);
+                    _wasControlling = true;
+                    return;
+                }
+
                 RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, IdleState);
                 _seaPony.Rotation = 0;
                 _wasControlling = true;
@@ -192,11 +234,14 @@ public class SeaponyVisualNote : VisualNote
             if(_wasControlling)
             {
                 RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, IdleState);
+                resetTapTapScale();
                 _wasControlling = false;
             }
 
             return;
         }
+
+        resetTapTapScale();
 
 
         if(Progress <= double.Epsilon)
@@ -235,6 +280,157 @@ public class SeaponyVisualNote : VisualNote
         }
     }
 
+    private void handleTapTap(bool inTimeWindow, double currentSongPosition)
+    {
+        if(!inTimeWindow)
+        {
+            if(_wasControlling)
+            {
+                RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, IdleState);
+                resetTapTapScale();
+                _wasControlling = false;
+            }
+
+            return;
+        }
+
+        int hitsPassed = getTapTapHitsPassed(currentSongPosition);
+        if(_wasControlling && _lastTapTapHitsPassed == hitsPassed)
+        {
+            applyTapTapOrientation(hitsPassed);
+            return;
+        }
+
+        RhythmVisualUtils.ForceAnimationState(_seaPonyStateMachine, getTapTapState(hitsPassed));
+        applyTapTapOrientation(hitsPassed);
+        _lastTapTapHitsPassed = hitsPassed;
+        _wasControlling = true;
+    }
+
+    private int getTapTapHitsPassed(double currentSongPosition)
+    {
+        return currentSongPosition >= Note.SongPosition ? _tapTapIndexInSequence + 1 : _tapTapIndexInSequence;
+    }
+
+    private void handleTapTapSfx(double currentSongPosition)
+    {
+        if(_tapTapIndexInSequence == 0)
+        {
+            playSfxOnForwardCross(Note.SongPosition - 2 * _crotchet, currentSongPosition, "SFX/seapony_parade_roll.wav");
+            playSfxOnForwardCross(Note.SongPosition - _crotchet, currentSongPosition, "SFX/seapony_parade_roll.wav");
+        }
+
+        playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/seapony_parade_roll.wav");
+        if(_tapTapHitsRemainingInSequence == 1)
+            playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/AndStop.wav");
+    }
+
+    private void applyTapTapOrientation(int hitsPassed)
+    {
+        if(_seaPony == null)
+            return;
+
+        Vector2 positiveScale = getPositiveSeaPonyScale();
+        _seaPony.Scale = positiveScale;
+        if(_seaPony.sprite != null)
+            _seaPony.sprite.Effects = isTapTapLeftFacingPony() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+        applyTapTapPosition(hitsPassed);
+        _seaPony.Rotation = 0f;
+    }
+
+    private void applyTapTapPosition(int hitsPassed)
+    {
+        if(_seaPony != null)
+            _seaPony.Position = _baseSeaPonyPosition + new Vector2(getTapTapOffsetX(hitsPassed), 0f);
+    }
+
+    private float getTapTapOffsetX(int hitsPassed)
+    {
+        int visualSeaPonyIndex = getVisualSeaPonyIndex();
+        float pairOffset = visualSeaPonyIndex % 2 == 0 ? TapTapPairOffsetX : -TapTapPairOffsetX;
+
+        if(isRightFacingPonyRecedingOnDowntap(visualSeaPonyIndex, hitsPassed))
+            pairOffset -= TapTapRightFacingDowntapBackOffsetX;
+
+        return TapTapGroupOffsetX + pairOffset;
+    }
+
+    private void resetTapTapScale()
+    {
+        if(_seaPony == null)
+            return;
+
+        _seaPony.Scale = getPositiveSeaPonyScale();
+        if(_seaPony.sprite != null)
+            _seaPony.sprite.Effects = SpriteEffects.None;
+
+        _seaPony.Position = _baseSeaPonyPosition;
+        _lastTapTapHitsPassed = int.MinValue;
+    }
+
+    private Vector2 getPositiveSeaPonyScale()
+    {
+        if(_seaPony == null)
+            return Vector2.One;
+
+        float scaleX = Math.Abs(_seaPony.Scale.X);
+        float scaleY = Math.Abs(_seaPony.Scale.Y);
+        if(scaleX <= float.Epsilon)
+            scaleX = scaleY > float.Epsilon ? scaleY : 1f;
+        if(scaleY <= float.Epsilon)
+            scaleY = scaleX;
+
+        return new Vector2(scaleX, scaleY);
+    }
+
+    private bool isTapTapLeftFacingPony()
+    {
+        return getVisualSeaPonyIndex() % 2 != 0;
+    }
+
+    private bool isPerfectLockedTapTapPony()
+    {
+        return getVisualSeaPonyIndex() == 2;
+    }
+
+    private bool isRightFacingPonyRecedingOnDowntap(int visualSeaPonyIndex, int hitsPassed)
+    {
+        return (visualSeaPonyIndex == 0 || visualSeaPonyIndex == 2)
+            && getTapTapState(hitsPassed) == DowntapState;
+    }
+
+    private bool hasNextTapTapTakenOver(double currentSongPosition)
+    {
+        return IsTapTapNote(NextNote) && currentSongPosition >= NextNote.SongPosition;
+    }
+
+    private static bool IsTapTapNote(Note note)
+    {
+        return note?.AdditionnalData != null
+            && note.AdditionnalData.TryGetValue(ActionDataKey, out string action)
+            && action == TapTapAction;
+    }
+
+    private string getTapTapState(int hitsPassed)
+    {
+        bool invertBasePose = hitsPassed % 2 != 0;
+        bool useDowntap = isTapTapLeftFacingPony() != invertBasePose;
+        return useDowntap ? DowntapState : UptapState;
+    }
+
+    private int getVisualSeaPonyIndex()
+    {
+        return _seaPonyIndex switch
+        {
+            3 => 0,
+            2 => 1,
+            1 => 2,
+            0 => 3,
+            _ => _seaPonyIndex
+        };
+    }
+
     private void playSfxOnForwardCross(double cuePosition, double currentSongPosition, string filePath)
     {
         if(_seaPonyIndex != 0)
@@ -244,7 +440,7 @@ public class SeaponyVisualNote : VisualNote
             return;
 
         if(_lastSongPosition < cuePosition && currentSongPosition >= cuePosition && GLOBALS.SfxVolume > 0)
-            SFX.Play(_scene, filePath, GLOBALS.SfxVolume);
+            SFX.Play(_scene, filePath, 4);
     }
 
     private bool canRoll()
@@ -257,15 +453,22 @@ public class SeaponyVisualNote : VisualNote
         return _hasSuccessfulReactionProvider?.Invoke(Note) == true;
     }
 
+    private bool hasPerfectReaction()
+    {
+        return _hasPerfectReactionProvider?.Invoke(Note) == true;
+    }
+
     private bool tryGetAction(out string action)
     {
         action = string.Empty;
         return Note.AdditionnalData != null
             && Note.AdditionnalData.TryGetValue(ActionDataKey, out action)
-            && (action == SwimAction || action == RollAction);
+            && (action == SwimAction || action == RollAction || action == TapTapAction);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
     }
 }
+
+

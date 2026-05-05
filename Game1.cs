@@ -47,7 +47,7 @@ public class Game1 : Core
 
         // Scene
         _sceneManager = new SceneManager();
-        _sceneManager.SetScene(new SeaPonyParade());
+        _sceneManager.SetScene(new SeeSawScene(this));
 
 
         

@@ -8,16 +8,20 @@ using Rhythm.Note.Visual;
 
 public class SeaponyBgVisualNote : VisualNote
 {
+    private const string ActionDataKey = "action";
+    private const string SwimAction = "seapony_parade_swim";
+    private const string RollAction = "seapony_parade_roll";
+    private const string TapTapAction = "seapony_parade_tap_tap";
 
     private InfiniteScrollBackground _background;
     private int _backgroundScrollDestinationBeat;
+    private readonly Func<bool> _canApplyState;
 
-    private bool _wasControlling = false;
-
-    public SeaponyBgVisualNote(Note logicalNote, double approachDuration, InfiniteScrollBackground background, int backgroundScrollDestinationBeat, double despawnDelay = 0) : base(logicalNote, approachDuration, despawnDelay)
+    public SeaponyBgVisualNote(Note logicalNote, double approachDuration, InfiniteScrollBackground background, int backgroundScrollDestinationBeat, double despawnDelay = 0, Func<bool> canApplyState = null) : base(logicalNote, approachDuration, despawnDelay)
     {
         this._background = background;
         this._backgroundScrollDestinationBeat = backgroundScrollDestinationBeat;
+        _canApplyState = canApplyState;
     }
 
     public override void Update(double currentSongPosition)
@@ -28,16 +32,19 @@ public class SeaponyBgVisualNote : VisualNote
         bool inAtOrAfterHit = RhythmVisualUtils.IsAtOrAfterHit(currentSongPosition, Note.SongPosition);
 
         if(!inTimeWindow || !inAtOrAfterHit) return;
+        if(!RhythmVisualUtils.CanApplyState(_canApplyState)) return;
 
-        switch(Note.AdditionnalData["action"])
+        switch(Note.AdditionnalData[ActionDataKey])
         {
-            case "seapony_parade_swim":
-                handleSwim(currentSongPosition);
+            case SwimAction:
+            case RollAction:
+            case TapTapAction:
+                handleScroll(currentSongPosition);
                 break;
         }
     }
 
-    private void handleSwim(double currentSongPosition)
+    private void handleScroll(double currentSongPosition)
     {
         float despawnDelayProgression = (float) RhythmVisualUtils.GetProgression(Note.SongPosition, Note.SongPosition + DespawnDelay, currentSongPosition);
         float interpolated = Interpolation.EaseOutQuart(despawnDelayProgression);

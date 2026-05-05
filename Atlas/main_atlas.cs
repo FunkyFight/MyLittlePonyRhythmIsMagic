@@ -19,6 +19,13 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Applejack_land1 = "applejack-land1";
 		public const string Applejack_land2 = "applejack-land2";
 		public const string Applejack_land3 = "applejack-land3";
+		public const string Applejack_pony_idle1 = "applejack-pony-idle1";
+		public const string Applejack_pony_idle2 = "applejack-pony-idle2";
+		public const string Applejack_pony_star = "applejack-pony-star";
+		public const string Applejack_pony_swim1 = "applejack-pony-swim1";
+		public const string Applejack_pony_swim2 = "applejack-pony-swim2";
+		public const string Applejack_pony_tap1 = "applejack-pony-tap1";
+		public const string Applejack_pony_tap2 = "applejack-pony-tap2";
 		public const string Applejack_true_idle = "applejack-true-idle";
 		public const string Coral1 = "coral1";
 		public const string Coral2 = "coral2";
@@ -27,6 +34,13 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Coral5 = "coral5";
 		public const string Coral6 = "coral6";
 		public const string Coral7 = "coral7";
+		public const string Pinkiepie_pony_idle1 = "pinkiepie-pony-idle1";
+		public const string Pinkiepie_pony_idle2 = "pinkiepie-pony-idle2";
+		public const string Pinkiepie_pony_star = "pinkiepie-pony-star";
+		public const string Pinkiepie_pony_swim1 = "pinkiepie-pony-swim1";
+		public const string Pinkiepie_pony_swim2 = "pinkiepie-pony-swim2";
+		public const string Pinkiepie_pony_tap1 = "pinkiepie-pony-tap1";
+		public const string Pinkiepie_pony_tap2 = "pinkiepie-pony-tap2";
 		public const string Rainbowdash_fail = "rainbowdash-fail";
 		public const string Rainbowdash_idle1 = "rainbowdash-idle1";
 		public const string Rainbowdash_idle2 = "rainbowdash-idle2";

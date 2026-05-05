@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using GameCore.Animation;
 using GameCore.Audio;
@@ -20,16 +20,44 @@ public class SeaPonyParade : Scene
     private const string ActionDataKey = "action";
     private const string SwimAction = "seapony_parade_swim";
     private const string RollAction = "seapony_parade_roll";
+    private const string TapTapAction = "seapony_parade_tap_tap";
 
     // Objects
     private Viewport _viewport;
     private GameObject[] _seaPonies = new GameObject[SeaPonyCount];
+    private Vector2[] _seaPonyBasePositions = new Vector2[SeaPonyCount];
     private AnimationStateMachine[] _seaPoniesAnimationStates = new AnimationStateMachine[SeaPonyCount];
+    private static readonly Dictionary<string, string>[] _seaPoniesSkins =
+        new Dictionary<string, string>[]
+        {
+            new Dictionary<string, string>
+            {
+                { "idle", MainAtlas.Pinkiepie_pony_idle1 },
+                { "swim_anticipation", MainAtlas.Pinkiepie_pony_swim1 },
+                { "swim", MainAtlas.Pinkiepie_pony_swim2 },
+                { "roll", MainAtlas.Pinkiepie_pony_star },
+                { "uptap", MainAtlas.Pinkiepie_pony_tap1 },
+                { "downtap", MainAtlas.Pinkiepie_pony_tap2 },
+            },
+            new Dictionary<string, string>(),
+            new Dictionary<string, string>
+            {
+                { "idle", MainAtlas.Applejack_pony_idle1 },
+                { "swim_anticipation", MainAtlas.Applejack_pony_swim1 },
+                { "swim", MainAtlas.Applejack_pony_swim2 },
+                { "roll", MainAtlas.Applejack_pony_star },
+                { "uptap", MainAtlas.Applejack_pony_tap1 },
+                { "downtap", MainAtlas.Applejack_pony_tap2 }
+            },
+            new Dictionary<string, string>(),
+        };
     private HashSet<Note> _authorizedRollNotes = new HashSet<Note>();
     private HashSet<Note> _successfulReactionNotes = new HashSet<Note>();
+    private HashSet<Note> _perfectReactionNotes = new HashSet<Note>();
     private Note[] _drivingSeaPonyNotes = new Note[SeaPonyCount];
     private VisualNoteManager<SeaponyVisualNote>[] _seaPoniesVisualNotes = new VisualNoteManager<SeaponyVisualNote>[SeaPonyCount];
     private ChartPlayer _reactionChartPlayer;
+    private Note _drivingBackgroundNote;
     private double _lastSeaPonySongPosition = double.NaN;
 
     private InfiniteScrollBackground _infiniteScrollBg;
@@ -72,6 +100,7 @@ public class SeaPonyParade : Scene
         if(result == NoteReactionResult.MISS)
         {
             _successfulReactionNotes.Remove(note);
+            _perfectReactionNotes.Remove(note);
             _authorizedRollNotes.Remove(note);
             return;
         }
@@ -85,9 +114,20 @@ public class SeaPonyParade : Scene
             case RollAction:
                 _authorizedRollNotes.Add(note);
                 break;
+
+            case TapTapAction:
+                _successfulReactionNotes.Add(note);
+                if(result == NoteReactionResult.PERFECT)
+                {
+                    _perfectReactionNotes.Add(note);
+                    int clapIndex = Random.Shared.Next(1, 5);
+                    SFX.Play(this, $"SFX/clap{clapIndex}.wav", 4);
+                }
+                break;
         }
 
-        SFX.Play(this, "SFX/BubbleSwim.wav", GLOBALS.SfxVolume);
+        if(action != TapTapAction)
+            SFX.Play(this, "SFX/BubbleSwim.wav", GLOBALS.SfxVolume);
     }
 
     private void unsubscribeReactionChartPlayer()
@@ -194,8 +234,10 @@ public class SeaPonyParade : Scene
             // Create object
             GameObject seaPony = new GameObject(GLOBALS.main_atlas.CreateAnimatedSprite("template-pony-idle"));
             seaPony.Position = new Vector2(4 * _viewport.Width / 5 - ((GLOBALS.graphicsDevice.Viewport.Width / 5) * i), _viewport.Height / 2);
+            _seaPonyBasePositions[i] = seaPony.Position;
             seaPony.Scale = Vector2.One * SCALE;
             seaPony.sprite.CenterOrigin();
+            int seaPonyId = i;
 
             GameObjects.Add(seaPony);
             _seaPonies[i] = seaPony;
@@ -208,7 +250,7 @@ public class SeaPonyParade : Scene
                     isLooping: false,
                     onEnter: () =>
                     {
-                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Template_pony_idle1);
+                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(getSeaPonyAtlasRegion(seaPonyId, "idle"));
                         seaPony.sprite.CenterOrigin();
                     }
                 ))
@@ -218,7 +260,7 @@ public class SeaPonyParade : Scene
                     isLooping: false,
                     onEnter: () =>
                     {
-                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Template_pony_swim1);
+                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(getSeaPonyAtlasRegion(seaPonyId, "swim_anticipation"));
                         seaPony.sprite.CenterOrigin();
                         seaPony.sprite.DrawOffset = new Vector2(80, 0);
                     })
@@ -229,7 +271,7 @@ public class SeaPonyParade : Scene
                     isLooping: false,
                     onEnter: () =>
                     {
-                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Template_pony_swim2);
+                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(getSeaPonyAtlasRegion(seaPonyId, "swim"));
                         seaPony.sprite.CenterOrigin();
                     })
                 )
@@ -239,22 +281,29 @@ public class SeaPonyParade : Scene
                     isLooping: false,
                     onEnter: () =>
                     {
-                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Template_pony_star);
+                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(getSeaPonyAtlasRegion(seaPonyId, "roll"));
                         seaPony.sprite.CenterOrigin();
-                        seaPony.sprite.Origin -= new Vector2(8, 10);
                         seaPony.sprite.DrawOffset += new Vector2(15, 0);
                     }
                 ))
                 .AddState(new AnimationState(
-                    "preclap",
+                    "uptap",
                     1,
                     isLooping: false,
                     onEnter: () =>
                     {
-                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Template_pony_star);
+                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(getSeaPonyAtlasRegion(seaPonyId, "uptap"));
                         seaPony.sprite.CenterOrigin();
-                        seaPony.sprite.Origin -= new Vector2(8, 10);
-                        seaPony.sprite.DrawOffset += new Vector2(15, 0);
+                    }
+                ))
+                .AddState(new AnimationState(
+                    "downtap",
+                    1,
+                    isLooping: false,
+                    onEnter: () =>
+                    {
+                        seaPony.sprite = GLOBALS.main_atlas.CreateSprite(getSeaPonyAtlasRegion(seaPonyId, "downtap"));
+                        seaPony.sprite.CenterOrigin();
                     }
                 ))
                 .SetGlobalUpdate(time =>
@@ -268,6 +317,35 @@ public class SeaPonyParade : Scene
 
                 animationState.ForceState("idle");
                 _seaPoniesAnimationStates[i] = animationState;
+        }
+    }
+
+    private static string getSeaPonyAtlasRegion(int seaPonyId, string state)
+    {
+        if(seaPonyId >= 0
+            && seaPonyId < _seaPoniesSkins.Length
+            && _seaPoniesSkins[seaPonyId].TryGetValue(state, out string atlasRegion)
+            && !string.IsNullOrEmpty(atlasRegion))
+        {
+            return atlasRegion;
+        }
+
+        switch(state)
+        {
+            case "idle":
+                return MainAtlas.Template_pony_idle1;
+            case "swim_anticipation":
+                return MainAtlas.Template_pony_swim1;
+            case "swim":
+                return MainAtlas.Template_pony_swim2;
+            case "roll":
+                return MainAtlas.Template_pony_star;
+            case "uptap":
+                return MainAtlas.Template_pony_tap1;
+            case "downtap":
+                return MainAtlas.Template_pony_tap2;
+            default:
+                return MainAtlas.Template_pony_idle1;
         }
     }
 
@@ -294,14 +372,17 @@ public class SeaPonyParade : Scene
                 switch(action)
                 {
                     case SwimAction:
-                        return new SeaponyVisualNote(note, crotchet, this, seaPony, animationState, seaPonyId, crotchet, despawnDelay: crotchet, hasSuccessfulReactionProvider: hasSuccessfulReaction, canApplyState: () => canSeaPonyApplyState(seaPonyId, note));
+                        return new SeaponyVisualNote(note, crotchet, this, seaPony, animationState, seaPonyId, crotchet, despawnDelay: crotchet, hasSuccessfulReactionProvider: hasSuccessfulReaction, canApplyState: () => canSeaPonyApplyState(seaPonyId, note), baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId]);
                     case RollAction:
-                        return new SeaponyVisualNote(note, crotchet * 2, this, seaPony, animationState, seaPonyId, crotchet, getRollTargetRotation(note), getRollDespawnDelay(note), rollIndexInSequence: getRollIndexInSequence(note), rollsRemainingInSequence: getRollsRemainingInSequence(note), canRollProvider: canSeaPonyRoll, canApplyState: () => canSeaPonyApplyState(seaPonyId, note));
+                        return new SeaponyVisualNote(note, crotchet * 2, this, seaPony, animationState, seaPonyId, crotchet, getRollTargetRotation(note), getRollDespawnDelay(note), rollIndexInSequence: getRollIndexInSequence(note), rollsRemainingInSequence: getRollsRemainingInSequence(note), canRollProvider: canSeaPonyRoll, canApplyState: () => canSeaPonyApplyState(seaPonyId, note), baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId]);
+                    case TapTapAction:
+                        int tapTapHitsRemaining = getTapTapHitsRemainingInSequence(note);
+                        return new SeaponyVisualNote(note, crotchet * 2, this, seaPony, animationState, seaPonyId, crotchet, despawnDelay: getTapTapDespawnDelay(note), tapTapIndexInSequence: getTapTapIndexInSequence(note), tapTapHitsRemainingInSequence: tapTapHitsRemaining, hasSuccessfulReactionProvider: hasSuccessfulReaction, hasPerfectReactionProvider: hasPerfectReaction, canApplyState: () => canSeaPonyApplyState(seaPonyId, note), baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId]);
                 }
                 return null;
             });
             
-            visualNoteManager.LookBehindSeconds = crotchet * 2;
+            visualNoteManager.LookBehindSeconds = crotchet * 3;
             _seaPoniesVisualNotes[i] = visualNoteManager;
             
         }
@@ -311,10 +392,10 @@ public class SeaPonyParade : Scene
 
         _infiniteScrollBgVisualNotes = new VisualNoteManager<SeaponyBgVisualNote>(chartPlayer, (note) =>
         {
-            if(!TryGetSeaponyAction(note, out string action) || action != SwimAction)
+            if(!TryGetSeaponyAction(note, out string action))
                 return null;
 
-            return new SeaponyBgVisualNote(note, crotchet, _infiniteScrollBg, getBackgroundScrollDestinationBeat(note), crotchet);
+            return new SeaponyBgVisualNote(note, crotchet, _infiniteScrollBg, getBackgroundScrollDestinationBeat(note), getBackgroundScrollDuration(action), canApplyState: () => ReferenceEquals(_drivingBackgroundNote, note));
         });
 
         _infiniteScrollBgVisualNotes.LookBehindSeconds = crotchet * 2;
@@ -328,6 +409,11 @@ public class SeaPonyParade : Scene
     private bool hasSuccessfulReaction(Note note)
     {
         return note != null && note.HasReacted && _successfulReactionNotes.Contains(note);
+    }
+
+    private bool hasPerfectReaction(Note note)
+    {
+        return note != null && note.HasReacted && _perfectReactionNotes.Contains(note);
     }
 
     private bool canSeaPonyApplyState(int seaPonyIndex, Note note)
@@ -385,16 +471,45 @@ public class SeaPonyParade : Scene
         return postHitNote ?? approachNote;
     }
 
+    private Note findDrivingBackgroundNote(double songPosition)
+    {
+        ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
+        if(chartPlayer == null || GLOBALS.beatmapPlayer.Conductor == null)
+            return null;
+
+        Note drivingNote = null;
+        foreach(Note note in chartPlayer.Notes)
+        {
+            if(!TryGetSeaponyAction(note, out string action))
+                continue;
+
+            double scrollEnd = note.SongPosition + getBackgroundScrollDuration(action);
+            if(songPosition >= note.SongPosition && songPosition <= scrollEnd)
+                drivingNote = note;
+
+            if(note.SongPosition > songPosition)
+                break;
+        }
+
+        return drivingNote;
+    }
+
     private double getSeaponyApproachDuration(string action)
     {
         double crotchet = GLOBALS.beatmapPlayer.Conductor == null ? 0 : GLOBALS.beatmapPlayer.Conductor.Crotchet;
-        return action == RollAction ? crotchet * 2 : crotchet;
+        return action == RollAction || action == TapTapAction ? crotchet * 2 : crotchet;
     }
 
     private double getSeaponyDespawnDelay(string action, Note note)
     {
         double crotchet = GLOBALS.beatmapPlayer.Conductor == null ? 0 : GLOBALS.beatmapPlayer.Conductor.Crotchet;
-        return action == RollAction ? getRollDespawnDelay(note) : crotchet;
+        if(action == RollAction)
+            return getRollDespawnDelay(note);
+
+        if(action == TapTapAction)
+            return getTapTapDespawnDelay(note);
+
+        return crotchet;
     }
 
     private void resetDrivingSeaPonyNotes()
@@ -406,13 +521,21 @@ public class SeaPonyParade : Scene
     {
         _authorizedRollNotes.Clear();
         _successfulReactionNotes.Clear();
+        _perfectReactionNotes.Clear();
         resetDrivingSeaPonyNotes();
+        _drivingBackgroundNote = null;
         _lastSeaPonySongPosition = double.NaN;
 
         for(int i = 0; i < SeaPonyCount; i++)
         {
             if(_seaPonies[i] != null)
+            {
+                _seaPonies[i].Position = _seaPonyBasePositions[i];
                 _seaPonies[i].Rotation = 0;
+                _seaPonies[i].Scale = Vector2.One * SCALE;
+                if(_seaPonies[i].sprite != null)
+                    _seaPonies[i].sprite.Effects = SpriteEffects.None;
+            }
 
             RhythmVisualUtils.ForceAnimationState(_seaPoniesAnimationStates[i], "idle");
         }
@@ -428,7 +551,14 @@ public class SeaPonyParade : Scene
             RhythmVisualUtils.ForceAnimationState(_seaPoniesAnimationStates[i], "idle");
 
             if(_seaPonies[i] != null)
+            {
+                _seaPonies[i].Position = _seaPonyBasePositions[i];
+                _seaPonies[i].Scale = Vector2.One * SCALE;
+                if(_seaPonies[i].sprite != null)
+                    _seaPonies[i].sprite.Effects = SpriteEffects.None;
+
                 _seaPonies[i].Rotation = getStableSeaPonyRotation(i, songPosition);
+            }
         }
     }
 
@@ -460,7 +590,7 @@ public class SeaPonyParade : Scene
         return note != null
             && note.AdditionnalData != null
             && note.AdditionnalData.TryGetValue(ActionDataKey, out action)
-            && (action == SwimAction || action == RollAction);
+            && (action == SwimAction || action == RollAction || action == TapTapAction);
     }
 
     private float getRollTargetRotation(Note note)
@@ -587,23 +717,109 @@ public class SeaPonyParade : Scene
         return paddingBeats * GLOBALS.beatmapPlayer.Conductor.Crotchet;
     }
 
-    private int getBackgroundScrollDestinationBeat(Note note)
+    private int getTapTapIndexInSequence(Note note)
     {
-        int swimNoteIndex = 0;
+        int index = 0;
 
         foreach(Note candidate in GLOBALS.beatmapPlayer.ChartPlayer.Notes)
         {
-            if(candidate.AdditionnalData != null
-                && candidate.AdditionnalData.TryGetValue(ActionDataKey, out string action)
-                && action == SwimAction)
+            if(ReferenceEquals(candidate, note))
+                break;
+
+            if(IsSeaponyAction(candidate, TapTapAction))
             {
-                swimNoteIndex++;
+                index++;
+                continue;
             }
 
-            if(ReferenceEquals(candidate, note)) return swimNoteIndex;
+            index = 0;
         }
 
-        return swimNoteIndex;
+        return index;
+    }
+
+    private int getTapTapHitsRemainingInSequence(Note note)
+    {
+        int remaining = 0;
+        bool foundNote = false;
+
+        foreach(Note candidate in GLOBALS.beatmapPlayer.ChartPlayer.Notes)
+        {
+            if(ReferenceEquals(candidate, note))
+                foundNote = true;
+
+            if(!foundNote)
+                continue;
+
+            if(IsSeaponyAction(candidate, TapTapAction))
+            {
+                remaining++;
+                continue;
+            }
+
+            break;
+        }
+
+        return remaining;
+    }
+
+    private double getTapTapDespawnDelay(Note note)
+    {
+        bool foundNote = false;
+
+        foreach(Note candidate in GLOBALS.beatmapPlayer.ChartPlayer.Notes)
+        {
+            if(ReferenceEquals(candidate, note))
+            {
+                foundNote = true;
+                continue;
+            }
+
+            if(!foundNote)
+                continue;
+
+            if(IsSeaponyAction(candidate, TapTapAction))
+                return candidate.SongPosition - note.SongPosition;
+
+            break;
+        }
+
+        return 2 * GLOBALS.beatmapPlayer.Conductor.Crotchet;
+    }
+
+    private static bool IsSeaponyAction(Note note, string expectedAction)
+    {
+        return note?.AdditionnalData != null
+            && note.AdditionnalData.TryGetValue(ActionDataKey, out string action)
+            && action == expectedAction;
+    }
+
+    private int getBackgroundScrollDestinationBeat(Note note)
+    {
+        int seaponyNoteIndex = 0;
+
+        foreach(Note candidate in GLOBALS.beatmapPlayer.ChartPlayer.Notes)
+        {
+            if(TryGetSeaponyAction(candidate, out _))
+            {
+                seaponyNoteIndex++;
+            }
+
+            if(ReferenceEquals(candidate, note)) return seaponyNoteIndex;
+        }
+
+        return seaponyNoteIndex;
+    }
+
+    private double getBackgroundScrollDuration(string action)
+    {
+        double crotchet = GLOBALS.beatmapPlayer.Conductor == null ? 0 : GLOBALS.beatmapPlayer.Conductor.Crotchet;
+        return action switch
+        {
+            RollAction => crotchet * 0.5,
+            TapTapAction => crotchet * 2,
+            _ => crotchet
+        };
     }
 
     public override void OnUnload()
@@ -632,9 +848,11 @@ public class SeaPonyParade : Scene
         {
             _authorizedRollNotes.Clear();
             _successfulReactionNotes.Clear();
+            _perfectReactionNotes.Clear();
         }
 
         updateDrivingSeaPonyNotes(songPos);
+        _drivingBackgroundNote = findDrivingBackgroundNote(songPos);
         applyBaseStateForIdleSeaPonies(songPos);
 
         for(int i = 0; i < SeaPonyCount; i++)
@@ -660,3 +878,5 @@ public class SeaPonyParade : Scene
     }
 
 }
+
+

@@ -28,13 +28,20 @@ public sealed class SeaponyParadeEditorNotePlacementStrategy : IEditorNotePlacem
     private const string ActionKey = "action";
     private const string SwimAction = "seapony_parade_swim";
     private const string RollAction = "seapony_parade_roll";
+    private const string TapTapAction = "seapony_parade_tap_tap";
+    private const double TapTapSecondHitOffsetBeats = 0.5;
+    private const double TapTapPairStepBeats = 1.5;
 
     public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, EditorNotePlacementContext context)
     {
         if (definition == null || sourceNote == null || context == null)
             return Array.Empty<EditorNotePlacement>();
 
-        if (GetAction(sourceNote) != RollAction)
+        string action = GetAction(sourceNote);
+        if (action == TapTapAction)
+            return CreateTapTapPlacements(definition, sourceNote, context);
+
+        if (action != RollAction)
         {
             ChartNote note = EditorNotePlacementData.CloneForPlacement(sourceNote, sourceNote.SongPosition);
             return new[] { new EditorNotePlacement(definition, note) };
@@ -59,11 +66,55 @@ public sealed class SeaponyParadeEditorNotePlacementStrategy : IEditorNotePlacem
             .ToArray();
     }
 
+    private static IReadOnlyList<EditorNotePlacement> CreateTapTapPlacements(EditorNoteDefinition definition, ChartNote sourceNote, EditorNotePlacementContext context)
+    {
+        if (context.Crotchet <= 0)
+            return Array.Empty<EditorNotePlacement>();
+
+        if (!EditorNotePlacementData.HasIntervalConfiguration(sourceNote))
+        {
+            return new[]
+            {
+                new EditorNotePlacement(definition, CreateTapTapNote(sourceNote, sourceNote.SongPosition)),
+                new EditorNotePlacement(definition, CreateTapTapNote(sourceNote, sourceNote.SongPosition + TapTapSecondHitOffsetBeats * context.Crotchet))
+            };
+        }
+
+        double start = Math.Max(0, sourceNote.SongPosition);
+        double end = start + Math.Max(0, IntervalEditorNoteProvider.GetDurationBeats(sourceNote.AdditionnalData)) * context.Crotchet;
+        double secondHitOffset = TapTapSecondHitOffsetBeats * context.Crotchet;
+        double pairStep = TapTapPairStepBeats * context.Crotchet;
+        const double inclusiveEndEpsilonSeconds = 0.000001;
+
+        List<ChartNote> tapTapNotes = new();
+        for (double pairStart = start; pairStart <= end + inclusiveEndEpsilonSeconds; pairStart += pairStep)
+        {
+            tapTapNotes.Add(CreateTapTapNote(sourceNote, pairStart));
+
+            double secondHit = pairStart + secondHitOffset;
+            if (secondHit <= end + inclusiveEndEpsilonSeconds)
+                tapTapNotes.Add(CreateTapTapNote(sourceNote, secondHit));
+        }
+
+        return tapTapNotes
+            .OrderBy(note => note.SongPosition)
+            .Select(note => new EditorNotePlacement(definition, note))
+            .ToArray();
+    }
+
     private static ChartNote CreateRollNote(ChartNote sourceNote, double songPosition)
     {
         ChartNote note = EditorNotePlacementData.CloneForPlacement(sourceNote, songPosition);
         note.AdditionnalData ??= new Dictionary<string, string>();
         note.AdditionnalData[ActionKey] = RollAction;
+        return note;
+    }
+
+    private static ChartNote CreateTapTapNote(ChartNote sourceNote, double songPosition)
+    {
+        ChartNote note = EditorNotePlacementData.CloneForPlacement(sourceNote, songPosition);
+        note.AdditionnalData ??= new Dictionary<string, string>();
+        note.AdditionnalData[ActionKey] = TapTapAction;
         return note;
     }
 

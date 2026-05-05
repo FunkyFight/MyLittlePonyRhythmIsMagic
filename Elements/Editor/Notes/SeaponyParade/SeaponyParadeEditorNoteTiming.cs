@@ -5,6 +5,7 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
 {
     private const string SwimAction = "seapony_parade_swim";
     private const string RollAction = "seapony_parade_roll";
+    private const string TapTapAction = "seapony_parade_tap_tap";
 
     public double GetEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
@@ -17,6 +18,9 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
                 return IsRollAfter(context)
                     ? context.GetNoteAfter(1).SongPosition
                     : context.SongPosition + GetRollStopCueBeats(context) * context.Crotchet;
+
+            case TapTapAction:
+                return context.SongPosition + 2 * context.Crotchet;
         }
 
         return context.SongPosition;
@@ -33,6 +37,9 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
                 return IsRollAfter(context)
                     ? context.GetNoteAfter(1).SongPosition
                     : GetEnd(definition, context) + context.Crotchet;
+
+            case TapTapAction:
+                return context.SongPosition + 2 * context.Crotchet;
         }
 
         return context.SongPosition;
@@ -44,6 +51,7 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
         {
             case SwimAction:
             case RollAction:
+            case TapTapAction:
                 return context.SongPosition;
         }
 
@@ -61,6 +69,11 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
                 return IsRollBefore(context)
                     ? context.SongPosition
                     : context.SongPosition - 2 * context.Crotchet;
+
+            case TapTapAction:
+                return IsTapTapBefore(context)
+                    ? context.SongPosition
+                    : context.SongPosition - 2 * context.Crotchet;
         }
 
         return context.SongPosition;
@@ -68,7 +81,8 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
 
     public double GetSameVariantHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
-        if(GetSelectedAction(definition, context) == RollAction)
+        string action = GetSelectedAction(definition, context);
+        if(action == RollAction || action == TapTapAction)
             return context.SongPosition;
 
         return GetHitWindowStart(definition, context);
@@ -76,8 +90,14 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
 
     public double GetSameVariantHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
     {
-        if(GetSelectedAction(definition, context) == RollAction)
+        string action = GetSelectedAction(definition, context);
+        if(action == RollAction)
             return context.SongPosition + context.Crotchet;
+
+        if(action == TapTapAction)
+            return IsNextTapTapInSamePair(context)
+                ? context.SongPosition + 0.5 * context.Crotchet
+                : context.SongPosition + context.Crotchet;
 
         return GetHitWindowEnd(definition, context);
     }
@@ -104,6 +124,31 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
         return note?.AdditionnalData != null
             && note.AdditionnalData.TryGetValue("action", out string action)
             && action == RollAction;
+    }
+
+    private static bool IsTapTapBefore(EditorNoteTimingContext context)
+    {
+        return IsTapTap(context.GetNoteBefore(1));
+    }
+
+    private static bool IsTapTapAfter(EditorNoteTimingContext context)
+    {
+        return IsTapTap(context.GetNoteAfter(1));
+    }
+
+    private static bool IsNextTapTapInSamePair(EditorNoteTimingContext context)
+    {
+        ChartNote nextNote = context.GetNoteAfter(1);
+        return nextNote != null
+            && IsTapTap(nextNote)
+            && nextNote.SongPosition <= context.SongPosition + 0.5 * context.Crotchet + 0.000001;
+    }
+
+    private static bool IsTapTap(ChartNote note)
+    {
+        return note?.AdditionnalData != null
+            && note.AdditionnalData.TryGetValue("action", out string action)
+            && action == TapTapAction;
     }
 
     private static int GetRollStopCueBeats(EditorNoteTimingContext context)
