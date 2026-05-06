@@ -10,7 +10,7 @@ public sealed class EditorRhythmInputVisualNote : VisualNote
     private readonly Texture2D _pixel;
     private readonly Vector2 _reactionOrigin;
 
-    public EditorRhythmInputVisualNote(Note logicalNote, Texture2D pixel, Vector2 reactionOrigin) : base(logicalNote, 2, 2)
+    public EditorRhythmInputVisualNote(Note logicalNote, double crotchet, Texture2D pixel, Vector2 reactionOrigin) : base(logicalNote, crotchet * 2, crotchet * 2)
     {
         _pixel = pixel;
         _reactionOrigin = reactionOrigin;

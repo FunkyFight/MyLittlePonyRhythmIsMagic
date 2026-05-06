@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/MLP_RiM.csproj",
+                "D:/Données/Documents/stupid monogame projects/MLP_RiM/MLP_RiM/MLP_RiM.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/MLP_RiM.csproj",
+                "D:/Données/Documents/stupid monogame projects/MLP_RiM/MLP_RiM/MLP_RiM.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/MLP_RiM.csproj"
+                "D:/Données/Documents/stupid monogame projects/MLP_RiM/MLP_RiM/MLP_RiM.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace MLP_RiM.Elements.Editor;
 
 public sealed class SeeSawEditorNote : EditorNoteProvider
@@ -7,8 +9,15 @@ public sealed class SeeSawEditorNote : EditorNoteProvider
         .HitWindow(beforeBeats: 0, afterBeats: 4)
         .Timing(new SeeSawEditorNoteTiming())
         .Matches(SeeSawChartNoteMatcher.Matches)
-        .Variant("Default", SeeSawAction.TowardOuter.ToAdditionnalData())
+        .Variant("Default", CreateDefaultData())
         .Build();
 
     public override IEditorNoteOptionsPanel OptionsPanel { get; } = new SeeSawEditorNoteOptionsPanel();
+
+    private static IReadOnlyDictionary<string, string> CreateDefaultData()
+    {
+        Dictionary<string, string> data = new();
+        SeeSawAction.SetPattern(data, SeeSawPatternKind.LongLong);
+        return data;
+    }
 }

@@ -52,9 +52,10 @@ public class Game1 : Core
 
         
         GLOBALS.mouseViewportCoordinatesElement = new MouseViewportCoordinatesElement(GraphicsDevice);
-        GLOBALS.beatmapPlayer.ChartPlayer.NoteReacted += (result) =>
+        GLOBALS.beatmapPlayer.BeatmapStarted += () =>
         {
-            Console.WriteLine(result);
+            if (GLOBALS.beatmapPlayer.ChartPlayer != null)
+                GLOBALS.beatmapPlayer.ChartPlayer.NoteReacted += result => Console.WriteLine(result);
         };
 
 

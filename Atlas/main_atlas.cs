@@ -4,7 +4,7 @@
  * Contains references to each image within the sprite sheet.
  *
  * https://www.codeandweb.com/texturepacker
- * $TexturePacker:SmartUpdate:5a0857bbf0ef6126944dd4430bd41a18:60bc0a1fbbce23d5bf08f4f47c070ea1:bb8c871ba50dcb594d48391b0a334787$
+ * $TexturePacker:SmartUpdate:cc3a84bc931346b68a4d19a7644d4076:12bf6cae04e4e5b01b9fd69d24ea2a3e:bb8c871ba50dcb594d48391b0a334787$
  *
  */
 namespace TexturePackerMonoGameDefinitions
@@ -41,6 +41,7 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Pinkiepie_pony_swim2 = "pinkiepie-pony-swim2";
 		public const string Pinkiepie_pony_tap1 = "pinkiepie-pony-tap1";
 		public const string Pinkiepie_pony_tap2 = "pinkiepie-pony-tap2";
+		public const string Rainbow_trail = "rainbow_trail";
 		public const string Rainbowdash_fail = "rainbowdash-fail";
 		public const string Rainbowdash_idle1 = "rainbowdash-idle1";
 		public const string Rainbowdash_idle2 = "rainbowdash-idle2";
@@ -62,6 +63,5 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Template_pony_swim2 = "template-pony-swim2";
 		public const string Template_pony_tap1 = "template-pony-tap1";
 		public const string Template_pony_tap2 = "template-pony-tap2";
-		
 	}
 }

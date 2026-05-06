@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace MLP_RiM.Elements.Editor;
@@ -12,6 +13,7 @@ public enum SeeSawOppositeMode
 public readonly struct SeeSawAction
 {
     public const string DataKey = "action";
+    public const string PatternDataKey = "pattern";
     private const string BigLeapRainbowDashDataKey = "big_leap_rainbow_dash";
     private const string BigLeapApplejackDataKey = "big_leap_applejack";
     private const string OppositeJumperDataKey = "opposite_jumper";
@@ -62,10 +64,7 @@ public readonly struct SeeSawAction
 
     public static SeeSawAction FromVariant(EditorNoteVariant variant)
     {
-        if (variant.AdditionnalData.TryGetValue(DataKey, out string value) && TryParse(value, out SeeSawAction action))
-            return action;
-
-        return TowardOuter;
+        return FromAdditionnalData(variant.AdditionnalData);
     }
 
     public static SeeSawAction FromAdditionnalData(IReadOnlyDictionary<string, string> additionnalData)
@@ -76,6 +75,11 @@ public readonly struct SeeSawAction
             bool applejackBigLeap = GetBigLeapApplejack(additionnalData) || action.HasBigCounterJump;
             return action.WithBigLeapOptions(rainbowBigLeap, applejackBigLeap).WithOppositeMode(GetOppositeMode(additionnalData));
         }
+
+        if (additionnalData != null)
+            return TowardOuter
+                .WithBigLeapOptions(GetBigLeapRainbowDash(additionnalData), GetBigLeapApplejack(additionnalData))
+                .WithOppositeMode(GetOppositeMode(additionnalData));
 
         return TowardOuter;
     }
@@ -92,6 +96,18 @@ public readonly struct SeeSawAction
         }
 
         action = default;
+        return false;
+    }
+
+    public static bool TryGetPattern(IReadOnlyDictionary<string, string> additionnalData, out SeeSawPatternKind pattern)
+    {
+        if (additionnalData != null
+            && additionnalData.TryGetValue(PatternDataKey, out string value)
+            && Enum.TryParse(value, out pattern)
+            && Enum.IsDefined(typeof(SeeSawPatternKind), pattern))
+            return true;
+
+        pattern = default;
         return false;
     }
 
@@ -162,6 +178,20 @@ public readonly struct SeeSawAction
             additionnalData.Remove(OppositeJumperDataKey);
     }
 
+    public static void SetPattern(IDictionary<string, string> additionnalData, SeeSawPatternKind pattern)
+    {
+        bool rainbowTargetsOuter = pattern == SeeSawPatternKind.LongLong
+            || pattern == SeeSawPatternKind.ShortLong;
+
+        SetDirection(additionnalData, rainbowTargetsOuter ? SeeSawDirection.Outer : SeeSawDirection.Inner);
+        additionnalData[PatternDataKey] = pattern.ToString();
+    }
+
+    public static void ClearPattern(IDictionary<string, string> additionnalData)
+    {
+        additionnalData.Remove(PatternDataKey);
+    }
+
     public static void SetOppositeJumper(IDictionary<string, string> additionnalData, SeeSawJumper jumper)
     {
         SetOppositeMode(additionnalData, jumper == SeeSawJumper.APPLEJACK ? SeeSawOppositeMode.Applejack : SeeSawOppositeMode.RainbowDash);
@@ -191,6 +221,16 @@ public readonly struct SeeSawAction
     public static void ToggleBigLeapApplejack(IDictionary<string, string> additionnalData)
     {
         SetBool(additionnalData, BigLeapApplejackDataKey, !GetBigLeapApplejack((IReadOnlyDictionary<string, string>)additionnalData));
+    }
+
+    public static void SetBigLeapRainbowDash(IDictionary<string, string> additionnalData, bool value)
+    {
+        SetBool(additionnalData, BigLeapRainbowDashDataKey, value);
+    }
+
+    public static void SetBigLeapApplejack(IDictionary<string, string> additionnalData, bool value)
+    {
+        SetBool(additionnalData, BigLeapApplejackDataKey, value);
     }
 
     private SeeSawAction WithBigLeapOptions(bool rainbowBigLeap, bool applejackBigLeap)

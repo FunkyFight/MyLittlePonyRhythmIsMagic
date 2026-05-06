@@ -356,7 +356,6 @@ public class SeaPonyParade : Scene
 
         resetDrivingSeaPonyNotes();
         ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
-        double crotchet = GLOBALS.beatmapPlayer.Conductor.Crotchet;
 
         for(int i = 0; i < SeaPonyCount; i++)
         {
@@ -369,6 +368,7 @@ public class SeaPonyParade : Scene
                 if(!TryGetSeaponyAction(note, out string action))
                     return null;
 
+                double crotchet = getCrotchetAt(note);
                 switch(action)
                 {
                     case SwimAction:
@@ -382,7 +382,8 @@ public class SeaPonyParade : Scene
                 return null;
             });
             
-            visualNoteManager.LookBehindSeconds = crotchet * 3;
+            visualNoteManager.LookAheadSeconds = getMaxCrotchet() * 2;
+            visualNoteManager.LookBehindSeconds = getMaxCrotchet() * 3;
             _seaPoniesVisualNotes[i] = visualNoteManager;
             
         }
@@ -395,10 +396,12 @@ public class SeaPonyParade : Scene
             if(!TryGetSeaponyAction(note, out string action))
                 return null;
 
-            return new SeaponyBgVisualNote(note, crotchet, _infiniteScrollBg, getBackgroundScrollDestinationBeat(note), getBackgroundScrollDuration(action), canApplyState: () => ReferenceEquals(_drivingBackgroundNote, note));
+            double crotchet = getCrotchetAt(note);
+            return new SeaponyBgVisualNote(note, crotchet, _infiniteScrollBg, getBackgroundScrollDestinationBeat(note), getBackgroundScrollDuration(action, note), canApplyState: () => ReferenceEquals(_drivingBackgroundNote, note));
         });
 
-        _infiniteScrollBgVisualNotes.LookBehindSeconds = crotchet * 2;
+        _infiniteScrollBgVisualNotes.LookAheadSeconds = getMaxCrotchet() * 2;
+        _infiniteScrollBgVisualNotes.LookBehindSeconds = getMaxCrotchet() * 2;
     }
 
     private bool canSeaPonyRoll(int seaPonyIndex, Note note)
@@ -444,7 +447,7 @@ public class SeaPonyParade : Scene
             if(!TryGetSeaponyAction(note, out string action))
                 continue;
 
-            double approachDuration = getSeaponyApproachDuration(action);
+            double approachDuration = getSeaponyApproachDuration(action, note);
             double despawnDelay = getSeaponyDespawnDelay(action, note);
             double approachStart = note.SongPosition - approachDuration;
             double despawnEnd = note.SongPosition + despawnDelay;
@@ -483,7 +486,7 @@ public class SeaPonyParade : Scene
             if(!TryGetSeaponyAction(note, out string action))
                 continue;
 
-            double scrollEnd = note.SongPosition + getBackgroundScrollDuration(action);
+            double scrollEnd = note.SongPosition + getBackgroundScrollDuration(action, note);
             if(songPosition >= note.SongPosition && songPosition <= scrollEnd)
                 drivingNote = note;
 
@@ -494,15 +497,15 @@ public class SeaPonyParade : Scene
         return drivingNote;
     }
 
-    private double getSeaponyApproachDuration(string action)
+    private double getSeaponyApproachDuration(string action, Note note)
     {
-        double crotchet = GLOBALS.beatmapPlayer.Conductor == null ? 0 : GLOBALS.beatmapPlayer.Conductor.Crotchet;
+        double crotchet = getCrotchetAt(note);
         return action == RollAction || action == TapTapAction ? crotchet * 2 : crotchet;
     }
 
     private double getSeaponyDespawnDelay(string action, Note note)
     {
-        double crotchet = GLOBALS.beatmapPlayer.Conductor == null ? 0 : GLOBALS.beatmapPlayer.Conductor.Crotchet;
+        double crotchet = getCrotchetAt(note);
         if(action == RollAction)
             return getRollDespawnDelay(note);
 
@@ -714,7 +717,7 @@ public class SeaPonyParade : Scene
             paddingBeats = 1;
         }
 
-        return paddingBeats * GLOBALS.beatmapPlayer.Conductor.Crotchet;
+        return paddingBeats * getCrotchetAt(note);
     }
 
     private int getTapTapIndexInSequence(Note note)
@@ -784,7 +787,7 @@ public class SeaPonyParade : Scene
             break;
         }
 
-        return 2 * GLOBALS.beatmapPlayer.Conductor.Crotchet;
+        return 2 * getCrotchetAt(note);
     }
 
     private static bool IsSeaponyAction(Note note, string expectedAction)
@@ -811,15 +814,28 @@ public class SeaPonyParade : Scene
         return seaponyNoteIndex;
     }
 
-    private double getBackgroundScrollDuration(string action)
+    private double getBackgroundScrollDuration(string action, Note note)
     {
-        double crotchet = GLOBALS.beatmapPlayer.Conductor == null ? 0 : GLOBALS.beatmapPlayer.Conductor.Crotchet;
+        double crotchet = getCrotchetAt(note);
         return action switch
         {
             RollAction => crotchet * 0.5,
             TapTapAction => crotchet * 2,
             _ => crotchet
         };
+    }
+
+    private double getCrotchetAt(Note note)
+    {
+        if(note == null)
+            return getMaxCrotchet();
+
+        return GLOBALS.beatmapPlayer?.GetCrotchetAt(note.SongPosition) ?? 0.6;
+    }
+
+    private double getMaxCrotchet()
+    {
+        return GLOBALS.beatmapPlayer?.GetMaxCrotchet() ?? 0.6;
     }
 
     public override void OnUnload()

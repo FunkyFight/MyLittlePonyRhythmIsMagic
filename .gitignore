@@ -1,0 +1,52 @@
+# Build outputs
+bin/
+obj/
+artifacts/
+.kilo-build/
+
+# MonoGame Content Pipeline generated files
+Content/bin/
+Content/obj/
+*.xnb
+*.mgcontent
+
+# .NET generated files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+project.assets.json
+project.nuget.cache
+*.nuget.dgspec.json
+*.nuget.g.props
+*.nuget.g.targets
+
+# IDE/editor files
+.vs/
+.idea/
+*.swp
+*.swo
+*~
+
+# Visual Studio Code local settings
+.vscode/*.user
+.vscode/settings.json
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Local environment/secrets
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.Development.json

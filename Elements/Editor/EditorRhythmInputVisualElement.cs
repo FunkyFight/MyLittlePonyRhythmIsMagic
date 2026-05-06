@@ -28,11 +28,12 @@ public sealed class EditorRhythmInputVisualElement
         VisualNoteManager<VisualNote> visualNoteManager = new(_beatmapPlayer.ChartPlayer, note =>
             new EditorRhythmInputVisualNote(
                 note,
+                _beatmapPlayer.GetCrotchetAt(note.SongPosition),
                 _pixel,
                 new Vector2(GLOBALS.graphicsDevice.Viewport.Width / 2f, GLOBALS.graphicsDevice.Viewport.Height / 2f + GLOBALS.graphicsDevice.Viewport.Height / 4f)));
 
-        visualNoteManager.LookBehindSeconds = 2;
-        visualNoteManager.LookAheadSeconds = 4;
+        visualNoteManager.LookBehindSeconds = _beatmapPlayer.GetMaxCrotchet() * 2;
+        visualNoteManager.LookAheadSeconds = _beatmapPlayer.GetMaxCrotchet() * 4;
         _beatmapPlayer.VisualNoteMng = visualNoteManager;
     }
 

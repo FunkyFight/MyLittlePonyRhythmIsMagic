@@ -19,6 +19,7 @@ public class BeatmapPlayer : IDisposable
     private double _startupDelay;
     private double _startupTimer;
     private bool _startupComplete;
+    private ChartTempoMap _tempoMap;
 
     public BeatmapPlayer(Conductor conductor, ChartPlayer chartPlayer)
     {
@@ -50,6 +51,7 @@ public class BeatmapPlayer : IDisposable
         if(Conductor.isPlaying())
         {
             Conductor.Update();
+            ApplyChartEffectsAt(Conductor.SongPosition);
             ChartPlayer?.Update(Conductor.SongPosition);
             VisualNoteMng?.Update(Conductor.SongPosition);
         }
@@ -68,6 +70,7 @@ public class BeatmapPlayer : IDisposable
 
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = Chart.CreateMetronome(bpm, 200, startupDelaySeconds, additionnalData);
+        _tempoMap = new ChartTempoMap(CurrentChart);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(CurrentChart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
@@ -103,6 +106,7 @@ public class BeatmapPlayer : IDisposable
 
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = chart;
+        _tempoMap = new ChartTempoMap(CurrentChart);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
@@ -119,8 +123,10 @@ public class BeatmapPlayer : IDisposable
 
         Conductor = new Conductor(song_path, chart.BPM, chart.Offset);
         CurrentChart = chart;
+        _tempoMap = new ChartTempoMap(CurrentChart);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);
+        ApplyChartEffectsAt(0);
         Conductor.Play();
         BeatmapStarted?.Invoke();
 
@@ -137,9 +143,57 @@ public class BeatmapPlayer : IDisposable
         double beatDelay = double.IsNaN(firstBeatDelay) ? chart.Offset : firstBeatDelay;
         Conductor = new Conductor(songPath, chart.BPM, beatDelay);
         CurrentChart = chart;
+        _tempoMap = new ChartTempoMap(CurrentChart);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);
+        ApplyChartEffectsAt(0);
         BeatmapStarted?.Invoke();
+    }
+
+    public void ApplyChartEffectsAt(double songPosition)
+    {
+        if (Conductor == null || CurrentChart == null)
+            return;
+
+        double bpm = GetBpmAt(songPosition);
+        if (Math.Abs(Conductor.BPM - bpm) > 0.0005)
+            Conductor.SetBpm(bpm);
+    }
+
+    public double GetBpmAt(double songPosition)
+    {
+        if (CurrentChart == null)
+            return Conductor?.BPM ?? 100;
+
+        return GetTempoMap().GetBpmAt(songPosition);
+    }
+
+    public double GetCrotchetAt(double songPosition)
+    {
+        return CurrentChart == null
+            ? Conductor?.Crotchet ?? 0.6
+            : GetTempoMap().GetCrotchetAt(songPosition);
+    }
+
+    public double GetBeatAt(double songPosition)
+    {
+        return CurrentChart == null
+            ? songPosition / (Conductor?.Crotchet ?? 0.6)
+            : GetTempoMap().GetBeatAt(songPosition);
+    }
+
+    public double GetSongPositionAtBeat(double beat)
+    {
+        return CurrentChart == null
+            ? beat * (Conductor?.Crotchet ?? 0.6)
+            : GetTempoMap().GetSongPositionAtBeat(beat);
+    }
+
+    public double GetMaxCrotchet()
+    {
+        return CurrentChart == null
+            ? Conductor?.Crotchet ?? 0.6
+            : GetTempoMap().GetMaxCrotchet();
     }
 
     public void Dispose()
@@ -153,8 +207,17 @@ public class BeatmapPlayer : IDisposable
         Conductor?.Dispose();
         Conductor = null;
         CurrentChart = null;
+        _tempoMap = null;
         HasAChartLoaded = false;
         ChartPlayer = null;
         VisualNoteMng = null;
+    }
+
+    private ChartTempoMap GetTempoMap()
+    {
+        if (_tempoMap == null)
+            _tempoMap = new ChartTempoMap(CurrentChart);
+
+        return _tempoMap;
     }
 }

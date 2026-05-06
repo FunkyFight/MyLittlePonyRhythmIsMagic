@@ -10,8 +10,6 @@ namespace MLP_RiM.Elements.Editor;
 public sealed class BeatmapEditorDocument
 {
     private const double HitWindowEpsilonSeconds = 0.0005;
-    private const double SeeSawInnerBeforeBeats = 2.0;
-    private const double SeeSawOuterBeforeBeats = 4.0;
 
     public Chart Chart { get; private set; }
     public string SongPath { get; set; }
@@ -30,17 +28,19 @@ public sealed class BeatmapEditorDocument
 
     public static BeatmapEditorDocument CreateNew(string songPath, string chartPath, double bpm = 100)
     {
+        string songName = string.IsNullOrWhiteSpace(songPath) ? "Untitled" : Path.GetFileNameWithoutExtension(songPath);
         return new BeatmapEditorDocument(new Chart
         {
-            SongName = Path.GetFileNameWithoutExtension(songPath),
+            SongName = songName,
             BeatmapName = Path.GetFileNameWithoutExtension(chartPath),
             Beatmapper = "Unknown",
             ArtistName = "Unknown",
-            MusicName = Path.GetFileNameWithoutExtension(songPath),
+            MusicName = songName,
             SongPath = songPath,
             BPM = bpm,
             Offset = 0.078,
-            Notes = new List<ChartNote>()
+            Notes = new List<ChartNote>(),
+            Effects = new List<ChartEffect>()
         }, songPath, chartPath);
     }
 
@@ -89,7 +89,9 @@ public sealed class BeatmapEditorDocument
         if (!string.IsNullOrWhiteSpace(directory))
             Directory.CreateDirectory(directory);
 
+        SynchronizeAllNoteDurations();
         SortNotes();
+        SortEffects();
 
         string tempPath = ChartPath + ".tmp";
         using (FileStream stream = File.Create(tempPath))
@@ -105,7 +107,7 @@ public sealed class BeatmapEditorDocument
     public bool TryPlaceNote(EditorNoteDefinition definition, double songPosition, int variantIndex, out ChartNote placedNote, out string reason)
     {
         songPosition = Math.Max(0, songPosition);
-        return TryPlaceNote(definition, definition.CreateChartNote(songPosition, Crotchet, variantIndex), out placedNote, out reason);
+        return TryPlaceNote(definition, definition.CreateChartNote(songPosition, GetCrotchetAt(songPosition), variantIndex), out placedNote, out reason);
     }
 
     public bool TryPlaceNote(EditorNoteDefinition definition, ChartNote note, out ChartNote placedNote, out string reason)
@@ -142,6 +144,7 @@ public sealed class BeatmapEditorDocument
             note.SongPosition = Math.Max(0, note.SongPosition);
             note.InputActionToPress ??= placement.Definition.InputAction;
             note.AdditionnalData ??= new Dictionary<string, string>();
+            SynchronizeNoteDuration(note, placement.Definition);
             normalizedPlacements.Add(new EditorNotePlacement(placement.Definition, note));
         }
 
@@ -167,8 +170,20 @@ public sealed class BeatmapEditorDocument
             }
         }
 
+        if (normalizedPlacements.Any(placement => placement.Definition.Kind == EditorNoteKind.SeeSaw))
+        {
+            ChartNote firstSeeSawNote = normalizedPlacements.First(placement => placement.Definition.Kind == EditorNoteKind.SeeSaw).Note;
+            SeeSawTimeline previewTimeline = SeeSawChartCompiler.CompileContextualChartNotes(contextualNotes, GetBeatAt, GetSongPositionAtBeat);
+            if (previewTimeline.Errors.Count > 0)
+            {
+                reason = previewTimeline.Errors[0];
+                return false;
+            }
+        }
+
         List<ChartNote> notes = normalizedPlacements.Select(placement => placement.Note).ToList();
         Chart.Notes.AddRange(notes);
+        SynchronizeAllNoteDurations();
         SortNotes();
         IsDirty = true;
         placedNotes = notes;
@@ -187,8 +202,133 @@ public sealed class BeatmapEditorDocument
         return true;
     }
 
+    public bool MoveNote(ChartNote note, double songPosition)
+    {
+        if (note == null || !Chart.Notes.Contains(note))
+            return false;
+
+        note.SongPosition = Math.Max(0, songPosition);
+        SynchronizeNoteDuration(note, EditorNoteDefinitions.FromChartNote(note));
+        SortNotes();
+        IsDirty = true;
+        return true;
+    }
+
+    public bool TryPlaceEffect(ChartEffect effect, out ChartEffect placedEffect, out string reason)
+    {
+        placedEffect = null;
+        if (effect == null)
+        {
+            reason = "Invalid effect";
+            return false;
+        }
+
+        NormalizeEffect(effect);
+        Chart.Effects.Add(effect);
+        SynchronizeAllNoteDurations();
+        SortEffects();
+        IsDirty = true;
+        placedEffect = effect;
+        reason = null;
+        return true;
+    }
+
+    public bool DeleteNearestEffect(double songPosition, double maxDistanceSeconds, out ChartEffect deletedEffect)
+    {
+        deletedEffect = FindNearestEffect(songPosition, maxDistanceSeconds);
+        if (deletedEffect == null)
+            return false;
+
+        Chart.Effects.Remove(deletedEffect);
+        SynchronizeAllNoteDurations();
+        IsDirty = true;
+        return true;
+    }
+
+    public bool MoveEffect(ChartEffect effect, double songPosition, bool sectionOffsetFollowsPosition)
+    {
+        if (effect == null || !Chart.Effects.Contains(effect))
+            return false;
+
+        effect.SongPosition = Math.Max(0, songPosition);
+        if (sectionOffsetFollowsPosition)
+            effect.SetSectionOffset(0);
+
+        SynchronizeAllNoteDurations();
+        SortEffects();
+        IsDirty = true;
+        return true;
+    }
+
+    public int NormalizeSeeSawNotesToGrid(double snapDivisions)
+    {
+        double divisions = GetEffectiveSnapDivisions(snapDivisions);
+        ChartTempoMap tempoMap = CreateTempoMap();
+        int normalizedCount = 0;
+
+        foreach (ChartNote note in Chart.Notes)
+        {
+            EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
+            if (definition?.Kind != EditorNoteKind.SeeSaw)
+                continue;
+
+            double beat = tempoMap.GetBeatAt(note.SongPosition);
+            if (double.IsNaN(beat) || double.IsInfinity(beat))
+                continue;
+
+            double snappedBeat = QuantizeBeat(beat, divisions);
+            double snappedSongPosition = Math.Max(0, tempoMap.GetSongPositionAtBeat(snappedBeat));
+            if (Math.Abs(note.SongPosition - snappedSongPosition) <= 0.000000001)
+                continue;
+
+            note.SongPosition = snappedSongPosition;
+            normalizedCount++;
+        }
+
+        if (normalizedCount > 0)
+        {
+            SynchronizeAllNoteDurations();
+            SortNotes();
+            IsDirty = true;
+        }
+
+        return normalizedCount;
+    }
+
+    public int NormalizeBpmChangesToNearestGlobalBeat()
+    {
+        int normalizedCount = 0;
+        foreach (ChartEffect effect in Chart.Effects.Where(effect => effect?.IsBpmChange == true).ToList())
+        {
+            ChartTempoMap tempoMap = CreateTempoMap();
+            double beat = tempoMap.GetBeatAt(effect.SongPosition);
+            if (double.IsNaN(beat) || double.IsInfinity(beat))
+                continue;
+
+            double snappedBeat = Math.Round(beat, MidpointRounding.AwayFromZero);
+            double snappedSongPosition = Math.Max(0, tempoMap.GetSongPositionAtBeat(snappedBeat));
+            if (Math.Abs(effect.SongPosition - snappedSongPosition) <= 0.000000001)
+                continue;
+
+            effect.SongPosition = snappedSongPosition;
+            effect.SetSectionOffset(0);
+            normalizedCount++;
+            SortEffects();
+        }
+
+        if (normalizedCount > 0)
+        {
+            SynchronizeAllNoteDurations();
+            SortEffects();
+            IsDirty = true;
+        }
+
+        return normalizedCount;
+    }
+
     public void MarkDirty()
     {
+        SynchronizeAllNoteDurations();
         IsDirty = true;
     }
 
@@ -199,6 +339,16 @@ public sealed class BeatmapEditorDocument
             .Where(item => item.Distance <= maxDistanceSeconds)
             .OrderBy(item => item.Distance)
             .Select(item => item.Note)
+            .FirstOrDefault();
+    }
+
+    public ChartEffect FindNearestEffect(double songPosition, double maxDistanceSeconds)
+    {
+        return Chart.Effects
+            .Select(effect => new { Effect = effect, Distance = Math.Abs(effect.SongPosition - songPosition) })
+            .Where(item => item.Distance <= maxDistanceSeconds)
+            .OrderBy(item => item.Distance)
+            .Select(item => item.Effect)
             .FirstOrDefault();
     }
 
@@ -226,12 +376,52 @@ public sealed class BeatmapEditorDocument
         }
     }
 
+    public IEnumerable<ChartEffect> GetEffectsInWindow(double startSongPosition, double endSongPosition)
+    {
+        foreach (ChartEffect effect in Chart.Effects)
+        {
+            if (effect.SongPosition >= startSongPosition && effect.SongPosition <= endSongPosition)
+                yield return effect;
+        }
+    }
+
+    public double GetBpmAt(double songPosition)
+    {
+        return CreateTempoMap().GetBpmAt(songPosition);
+    }
+
+    public double GetCrotchetAt(double songPosition)
+    {
+        return CreateTempoMap().GetCrotchetAt(songPosition);
+    }
+
+    public double GetTempoAnchorAt(double songPosition)
+    {
+        return CreateTempoMap().GetTempoAnchorAt(songPosition);
+    }
+
+    public double GetBeatAt(double songPosition)
+    {
+        return CreateTempoMap().GetBeatAt(songPosition);
+    }
+
+    public double GetSongPositionAtBeat(double beat)
+    {
+        return CreateTempoMap().GetSongPositionAtBeat(beat);
+    }
+
+    public IEnumerable<EditorTempoSegment> GetTempoSegments(double startSongPosition, double endSongPosition)
+    {
+        return CreateTempoMap().GetTempoSegments(startSongPosition, endSongPosition);
+    }
+
     public void SetBpm(double bpm)
     {
         if (bpm <= 0)
             return;
 
         Chart.BPM = bpm;
+        SynchronizeAllNoteDurations();
         IsDirty = true;
     }
 
@@ -293,18 +483,12 @@ public sealed class BeatmapEditorDocument
 
         Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        double crotchet = GetCrotchetAt(note.SongPosition);
 
         if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote);
+            return definition.GetHitWindowEnd(note.SongPosition, crotchet, variantIndex, getRelativeNote);
 
-        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
-        SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
-        if (IsSeeSawOpposite(action))
-            return note.SongPosition + GetOppositeAfterBeats(action, state) * Crotchet;
-
-        bool rainbowTargetsOuter = GetRainbowTargetIsOuter(action, state);
-        bool afterUsesOuterTiming = GetAfterUsesOuterTiming(action, state);
-        return definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote, rainbowTargetsOuter, action.IsBigLeap, afterUsesOuterTiming);
+        return GetSongPositionAtBeat(GetSeeSawTiming(note).EndBeat);
     }
 
     public double GetContextualSameVariantHitWindowEnd(ChartNote note, EditorNoteDefinition definition)
@@ -314,18 +498,12 @@ public sealed class BeatmapEditorDocument
 
         Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        double crotchet = GetCrotchetAt(note.SongPosition);
 
         if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetSameVariantHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote);
+            return definition.GetSameVariantHitWindowEnd(note.SongPosition, crotchet, variantIndex, getRelativeNote);
 
-        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
-        SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
-        if (IsSeeSawOpposite(action))
-            return note.SongPosition + GetOppositeAfterBeats(action, state) * Crotchet;
-
-        bool rainbowTargetsOuter = GetRainbowTargetIsOuter(action, state);
-        bool afterUsesOuterTiming = GetAfterUsesOuterTiming(action, state);
-        return definition.GetSameVariantHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote, rainbowTargetsOuter, action.IsBigLeap, afterUsesOuterTiming);
+        return GetSongPositionAtBeat(GetSeeSawTiming(note).EndBeat);
     }
 
     public double GetContextualStart(ChartNote note, EditorNoteDefinition definition)
@@ -335,18 +513,12 @@ public sealed class BeatmapEditorDocument
 
         Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        double crotchet = GetCrotchetAt(note.SongPosition);
 
         if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+            return definition.GetStart(note.SongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
 
-        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
-        SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
-        if (IsSeeSawOpposite(action))
-            return note.SongPosition - GetOppositeApproachBeats(action, state) * Crotchet;
-
-        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
-        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
-        return definition.GetStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
+        return GetSongPositionAtBeat(GetSeeSawTiming(note).PrepStartBeat);
     }
 
     public double GetBlockingStart(ChartNote note, EditorNoteDefinition definition)
@@ -367,18 +539,12 @@ public sealed class BeatmapEditorDocument
 
         Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        double crotchet = GetCrotchetAt(note.SongPosition);
 
         if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+            return definition.GetHitWindowStart(note.SongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
 
-        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
-        SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
-        if (IsSeeSawOpposite(action))
-            return note.SongPosition - GetOppositeApproachBeats(action, state) * Crotchet;
-
-        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
-        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
-        return definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
+        return GetSongPositionAtBeat(GetSeeSawTiming(note).PrepStartBeat);
     }
 
     public double GetContextualSameVariantHitWindowStart(ChartNote note, EditorNoteDefinition definition)
@@ -388,18 +554,12 @@ public sealed class BeatmapEditorDocument
 
         Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note);
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        double crotchet = GetCrotchetAt(note.SongPosition);
 
         if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetSameVariantHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+            return definition.GetSameVariantHitWindowStart(note.SongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
 
-        SeeSawEditorState state = GetSeeSawStateBefore(note.SongPosition);
-        SeeSawAction action = SeeSawAction.FromAdditionnalData(note.AdditionnalData);
-        if (IsSeeSawOpposite(action))
-            return note.SongPosition - GetOppositeApproachBeats(action, state) * Crotchet;
-
-        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
-        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
-        return definition.GetSameVariantHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming, action.IsBigLeap, counterUsesOuterTiming, action.HasBigCounterJump);
+        return GetSongPositionAtBeat(GetSeeSawTiming(note).PrepStartBeat);
     }
 
     public double GetContextualEnd(ChartNote note, EditorNoteDefinition definition)
@@ -408,9 +568,9 @@ public sealed class BeatmapEditorDocument
             return note.SongPosition;
 
         if (definition.Kind == EditorNoteKind.SeeSaw)
-            return note.SongPosition;
+            return GetSongPositionAtBeat(GetSeeSawTiming(note).EndBeat);
 
-        return definition.GetEnd(note.SongPosition, Crotchet, EditorNoteDefinitions.FindVariantIndex(definition, note), CreateRelativeNoteGetter(note));
+        return definition.GetEnd(note.SongPosition, GetCrotchetAt(note.SongPosition), EditorNoteDefinitions.FindVariantIndex(definition, note), CreateRelativeNoteGetter(note));
     }
 
     public double GetContextualStart(EditorNoteDefinition definition, double songPosition, int variantIndex)
@@ -419,20 +579,10 @@ public sealed class BeatmapEditorDocument
             return songPosition;
 
         if (definition.Kind != EditorNoteKind.SeeSaw)
-            return definition.GetStart(songPosition, Crotchet);
+            return definition.GetStart(songPosition, GetCrotchetAt(songPosition));
 
-        SeeSawEditorState state = GetSeeSawStateBefore(songPosition);
         EditorNoteVariant variant = definition.GetVariant(variantIndex);
-        SeeSawAction action = SeeSawAction.FromVariant(variant);
-        if (SeeSawAction.GetBaseDirection(action.Direction) == SeeSawDirection.Exit)
-            return songPosition - 2 * Crotchet;
-
-        if (IsSeeSawOpposite(action))
-            return songPosition - GetOppositeApproachBeats(action, state) * Crotchet;
-
-        bool beforeUsesOuterTiming = GetBeforeUsesOuterTiming(action, state);
-        bool counterUsesOuterTiming = GetCounterUsesOuterTiming(action, state);
-        return definition.GetStart(songPosition, Crotchet, variantIndex, beforeUsesOuterTiming, forceBigLeapTiming: false, afterUsesOuterTiming: counterUsesOuterTiming);
+        return GetSongPositionAtBeat(SeeSawChartCompiler.GetPreviewTiming(Chart.Notes, variant.AdditionnalData, songPosition, GetBeatAt).PrepStartBeat);
     }
 
     private ChartNote FindBlockingNote(EditorNotePlacement placed, IReadOnlyList<ChartNote> contextualNotes)
@@ -489,8 +639,7 @@ public sealed class BeatmapEditorDocument
         if (placedDefinition.Kind != EditorNoteKind.SeeSaw || existingDefinition.Kind != EditorNoteKind.SeeSaw)
             return false;
 
-        return Math.Abs(placedEnd - existingEnd) <= HitWindowEpsilonSeconds
-            || Math.Abs(placedStart - existingEnd) <= HitWindowEpsilonSeconds
+        return Math.Abs(placedStart - existingEnd) <= HitWindowEpsilonSeconds
             || Math.Abs(existingStart - placedEnd) <= HitWindowEpsilonSeconds;
     }
 
@@ -510,13 +659,14 @@ public sealed class BeatmapEditorDocument
             return note.SongPosition;
 
         if (definition.Kind == EditorNoteKind.SeeSaw)
-            return note.SongPosition - 2 * Crotchet;
+            return GetSongPositionAtBeat(GetSeeSawTiming(note, contextualNotes).PrepStartBeat);
 
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
         Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note, contextualNotes);
+        double crotchet = GetCrotchetAt(note.SongPosition);
         return sameVariantWindow
-            ? definition.GetSameVariantHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false)
-            : definition.GetHitWindowStart(note.SongPosition, Crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
+            ? definition.GetSameVariantHitWindowStart(note.SongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false)
+            : definition.GetHitWindowStart(note.SongPosition, crotchet, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
     }
 
     private double GetBlockingEnd(EditorNoteDefinition definition, ChartNote note)
@@ -535,13 +685,14 @@ public sealed class BeatmapEditorDocument
             return note.SongPosition;
 
         if (definition.Kind == EditorNoteKind.SeeSaw)
-            return note.SongPosition;
+            return GetSongPositionAtBeat(GetSeeSawTiming(note, contextualNotes).EndBeat);
 
         int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
         Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(note, contextualNotes);
+        double crotchet = GetCrotchetAt(note.SongPosition);
         return sameVariantWindow
-            ? definition.GetSameVariantHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote)
-            : definition.GetHitWindowEnd(note.SongPosition, Crotchet, variantIndex, getRelativeNote);
+            ? definition.GetSameVariantHitWindowEnd(note.SongPosition, crotchet, variantIndex, getRelativeNote)
+            : definition.GetHitWindowEnd(note.SongPosition, crotchet, variantIndex, getRelativeNote);
     }
 
     private Func<int, ChartNote> CreateRelativeNoteGetter(ChartNote note)
@@ -612,97 +763,81 @@ public sealed class BeatmapEditorDocument
         public int Order { get; }
     }
 
-    private SeeSawEditorState GetSeeSawStateBefore(double songPosition)
+    private SeeSawCompiledEventTiming GetSeeSawTiming(ChartNote note)
     {
-        SeeSawEditorState state = new(rainbowIsOuter: true, applejackIsOuter: false);
-
-        foreach (ChartNote note in Chart.Notes.Where(note => note.SongPosition < songPosition - HitWindowEpsilonSeconds).OrderBy(note => note.SongPosition))
-        {
-            if (note.AdditionnalData == null || !note.AdditionnalData.TryGetValue("action", out string actionValue))
-                continue;
-
-            if (SeeSawAction.TryParse(actionValue, out _))
-                state = SeeSawAction.FromAdditionnalData(note.AdditionnalData).Apply(state);
-        }
-
-        return state;
+        return GetSeeSawTiming(note, Chart.Notes);
     }
 
-    private bool GetRainbowTargetIsOuter(SeeSawAction action, SeeSawEditorState state)
+    private SeeSawCompiledEventTiming GetSeeSawTiming(ChartNote note, IReadOnlyList<ChartNote> contextualNotes)
     {
-        return action.Apply(state).RainbowIsOuter;
+        SeeSawCompiledEventTiming timing = SeeSawChartCompiler.GetTimingForChartNote(contextualNotes ?? Chart.Notes, note, GetBeatAt);
+        if (timing.IsSeeSaw)
+            return timing;
+
+        double beat = GetBeatAt(note.SongPosition);
+        return new SeeSawCompiledEventTiming(
+            idealPrepStartBeat: beat,
+            prepStartBeat: beat,
+            cueBeat: beat,
+            playerHitBeat: beat,
+            endBeat: beat,
+            isSeeSaw: false,
+            isExit: false,
+            isValid: true,
+            invalidReason: null,
+            pattern: SeeSawPatternKind.LongLong,
+            launchSide: SeeSawSide.Outer,
+            targetSide: SeeSawSide.Outer,
+            applejackTargetSide: SeeSawSide.Outer);
     }
 
-    private bool GetBeforeUsesOuterTiming(SeeSawAction action, SeeSawEditorState state)
+    private ChartTempoMap CreateTempoMap()
     {
-        if (IsSeeSawOpposite(action))
-            return action.OppositeMode == SeeSawOppositeMode.Applejack ? state.RainbowIsOuter : state.ApplejackIsOuter;
-
-        return state.RainbowIsOuter;
+        return new ChartTempoMap(Chart);
     }
 
-    private bool GetAfterUsesOuterTiming(SeeSawAction action, SeeSawEditorState state)
+    private static double GetEffectiveSnapDivisions(double snapDivisions)
     {
-        return SeeSawAction.GetBaseDirection(action.Direction) switch
-        {
-            SeeSawDirection.Outer => true,
-            SeeSawDirection.Inner => false,
-            SeeSawDirection.Opposite => action.OppositeMode switch
-            {
-                SeeSawOppositeMode.Applejack => !state.RainbowIsOuter,
-                SeeSawOppositeMode.Both => !state.RainbowIsOuter,
-                _ => !state.ApplejackIsOuter
-            },
-            SeeSawDirection.Exit => true,
-            _ => action.Apply(state).RainbowIsOuter
-        };
+        return !double.IsNaN(snapDivisions) && !double.IsInfinity(snapDivisions) && snapDivisions > 0
+            ? snapDivisions
+            : 1.0;
     }
 
-    private bool GetCounterUsesOuterTiming(SeeSawAction action, SeeSawEditorState state)
+    private static double QuantizeBeat(double beat, double divisions)
     {
-        if (IsSeeSawOpposite(action))
-            return GetBeforeUsesOuterTiming(action, state);
-
-        return state.ApplejackIsOuter;
+        double step = 1.0 / Math.Max(1.0, divisions);
+        return Math.Round(beat / step, MidpointRounding.AwayFromZero) * step;
     }
 
-    private static bool IsSeeSawOpposite(SeeSawAction action)
+    private void SynchronizeAllNoteDurations()
     {
-        return SeeSawAction.GetBaseDirection(action.Direction) == SeeSawDirection.Opposite;
+        if (Chart?.Notes == null)
+            return;
+
+        foreach (ChartNote note in Chart.Notes)
+            SynchronizeNoteDuration(note, EditorNoteDefinitions.FromChartNote(note));
     }
 
-    private static double GetOppositeApproachBeats(SeeSawAction action, SeeSawEditorState state)
+    private void SynchronizeNoteDuration(ChartNote note, EditorNoteDefinition definition)
     {
-        return action.OppositeMode switch
-        {
-            SeeSawOppositeMode.Applejack => GetActorPhaseBeats(state.ApplejackIsOuter, action.HasBigCounterJump)
-                + GetActorPhaseBeats(state.RainbowIsOuter, action.IsBigLeap),
-            SeeSawOppositeMode.Both => GetActorPhaseBeats(state.ApplejackIsOuter, action.HasBigCounterJump)
-                + GetActorPhaseBeats(state.RainbowIsOuter, action.IsBigLeap),
-            _ => GetActorPhaseBeats(state.ApplejackIsOuter, action.HasBigCounterJump)
-                + GetActorPhaseBeats(state.RainbowIsOuter, action.IsBigLeap)
-        };
+        if (note == null || definition == null)
+            return;
+
+        note.HoldDuration = definition.HoldBeats * GetCrotchetAt(note.SongPosition);
     }
 
-    private static double GetOppositeAfterBeats(SeeSawAction action, SeeSawEditorState state)
+    private void NormalizeEffect(ChartEffect effect)
     {
-        SeeSawEditorState targetState = action.Apply(state);
-        return action.OppositeMode switch
-        {
-            SeeSawOppositeMode.Applejack => GetActorPhaseBeats(targetState.RainbowIsOuter, action.IsBigLeap),
-            SeeSawOppositeMode.Both => GetActorPhaseBeats(targetState.RainbowIsOuter, action.IsBigLeap),
-            _ => GetActorPhaseBeats(targetState.RainbowIsOuter, action.IsBigLeap)
-        };
-    }
+        effect.SongPosition = Math.Max(0, effect.SongPosition);
+        if (string.IsNullOrWhiteSpace(effect.EffectType))
+            effect.EffectType = ChartEffect.BpmChangeEffectType;
 
-    private static double GetActorApproachBeats(bool isOuter, bool isBigLeap)
-    {
-        return isBigLeap ? SeeSawOuterBeforeBeats / 2.0 : isOuter ? SeeSawOuterBeforeBeats : SeeSawInnerBeforeBeats;
-    }
+        effect.Data ??= new Dictionary<string, string>();
+        if (effect.IsBpmChange && !effect.TryGetBpm(out _))
+            effect.SetBpm(GetBpmAt(effect.SongPosition));
 
-    private static double GetActorPhaseBeats(bool isOuter, bool isBigLeap)
-    {
-        return isBigLeap ? SeeSawOuterBeforeBeats / 2.0 : (isOuter ? SeeSawOuterBeforeBeats : SeeSawInnerBeforeBeats) / 2.0;
+        if (effect.IsBpmChange && !effect.TryGetSectionOffset(out _))
+            effect.SetSectionOffset(0);
     }
 
     private void NormalizeChart()
@@ -734,6 +869,7 @@ public sealed class BeatmapEditorDocument
             Chart.BPM = 100;
 
         Chart.Notes ??= new List<ChartNote>();
+        Chart.Effects ??= new List<ChartEffect>();
 
         foreach (ChartNote note in Chart.Notes)
         {
@@ -741,11 +877,44 @@ public sealed class BeatmapEditorDocument
             note.AdditionnalData ??= new Dictionary<string, string>();
         }
 
+        Chart.Effects = Chart.Effects.Where(effect => effect != null).ToList();
+        foreach (ChartEffect effect in Chart.Effects)
+            NormalizeEffect(effect);
+
+        SynchronizeAllNoteDurations();
         SortNotes();
+        SortEffects();
     }
 
     private void SortNotes()
     {
         Chart.Notes = Chart.Notes.OrderBy(note => note.SongPosition).ToList();
     }
+
+    private void SortEffects()
+    {
+        Chart.Effects = Chart.Effects.OrderBy(effect => effect.SongPosition).ToList();
+    }
+}
+
+public readonly struct EditorTempoSegment
+{
+    public EditorTempoSegment(double anchor, double sourceSongPosition, double startSongPosition, double endSongPosition, double bpm, bool anchorIsRelativeToSegmentStart)
+    {
+        Anchor = anchor;
+        SourceSongPosition = sourceSongPosition;
+        StartSongPosition = startSongPosition;
+        EndSongPosition = endSongPosition;
+        Bpm = bpm;
+        AnchorIsRelativeToSegmentStart = anchorIsRelativeToSegmentStart;
+    }
+
+    public double Anchor { get; }
+    public double SourceSongPosition { get; }
+    public double StartSongPosition { get; }
+    public double EndSongPosition { get; }
+    public double Bpm { get; }
+    public bool AnchorIsRelativeToSegmentStart { get; }
+    public double AnchorSongPosition => AnchorIsRelativeToSegmentStart ? SourceSongPosition + Anchor : Anchor;
+    public double Crotchet => Bpm > 0 ? 60.0 / Bpm : 0.6;
 }

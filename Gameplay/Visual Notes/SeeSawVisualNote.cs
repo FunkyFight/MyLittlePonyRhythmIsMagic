@@ -69,6 +69,7 @@ public class SeeSawVisualNote : VisualNote
     private const float DefaultJumperStartProgression = 0.5f;
     private const float BigLeapCameraVerticalMargin = 160f;
     private const float LandTriggerProgression = 0.97f;
+    private const float BeamRotationEaseProgression = 0.08f;
     internal const float CounterLandTriggerProgression = 0.47f;
     private const double MissWindowSeconds = 0.25;
 
@@ -334,6 +335,8 @@ public class SeeSawVisualNote : VisualNote
     /// </summary>
     private void ApplyCompletedState()
     {
+        ResetBigLeapCamera();
+
         // L'etat final est snap plutot qu'interpole. Cela evite de minuscules offsets flottants
         // au temps de hit, important car la scene reconstruit son etat stable chaque frame.
         if (_counterJump.HasValue)
@@ -394,6 +397,8 @@ public class SeeSawVisualNote : VisualNote
 
     private void ApplyRainbowPostHitMissWindow(double currentSongPosition)
     {
+        ResetBigLeapCamera();
+
         float unreactedProgression = GetRainbowUnreactedJumpProgression(
             RhythmVisualUtils.GetUnclampedApproachProgress(currentSongPosition, Note.SongPosition, ApproachDuration));
 
@@ -506,6 +511,12 @@ public class SeeSawVisualNote : VisualNote
         return GetJumper(_jumper).Position.Y - BigLeapCameraVerticalMargin;
     }
 
+    private void ResetBigLeapCamera()
+    {
+        if (_isBigLeap && _sceneCamera != null)
+            _sceneCamera.Position = Vector2.Zero;
+    }
+
     /// <summary>
     /// Applique l'arc du sauteur principal lorsque son point de relais est atteint.
     /// </summary>
@@ -616,8 +627,8 @@ public class SeeSawVisualNote : VisualNote
 
         if (_jumper == SeeSawJumper.RAINBOW_DASH && !_rainbowSnapLandRequested && !_rainbowFailRequested)
         {
-            if (_counterJump.HasValue && noteProgression >= GetCounterLandProgression(_counterJumpEndProgression))
-                _seeSawBeam.Rotation = _counterJump.Value.TargetRotation;
+            if (_counterJump.HasValue)
+                _seeSawBeam.Rotation = EaseBeamRotation(_fromRotation, _counterJump.Value.TargetRotation, noteProgression, GetCounterLandProgression(_counterJumpEndProgression));
             else
                 _seeSawBeam.Rotation = _fromRotation;
 
@@ -628,29 +639,39 @@ public class SeeSawVisualNote : VisualNote
         if (!_counterJump.HasValue)
         {
             float jumpProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, _mainJumpStartProgression, 1f);
-            _seeSawBeam.Rotation = jumpProgression >= LandTriggerProgression
-                ? _targetRotation
-                : _fromRotation;
+            _seeSawBeam.Rotation = EaseBeamRotation(_fromRotation, _targetRotation, jumpProgression, LandTriggerProgression);
             return;
         }
 
         float counterLandProgression = GetCounterLandProgression(_counterJumpEndProgression);
-        if (noteProgression >= counterLandProgression && noteProgression < _jumperStartProgression)
+        if (noteProgression < _jumperStartProgression)
         {
-            _seeSawBeam.Rotation = _counterJump.Value.TargetRotation;
+            _seeSawBeam.Rotation = EaseBeamRotation(_fromRotation, _counterJump.Value.TargetRotation, noteProgression, counterLandProgression);
             return;
         }
 
         if (noteProgression >= _jumperStartProgression)
         {
             float mainJumpProgression = RhythmVisualUtils.GetPhaseProgress(noteProgression, _jumperStartProgression, 1f);
-            _seeSawBeam.Rotation = mainJumpProgression >= LandTriggerProgression
-                ? _targetRotation
-                : _counterJump.Value.TargetRotation;
+            _seeSawBeam.Rotation = EaseBeamRotation(_counterJump.Value.TargetRotation, _targetRotation, mainJumpProgression, LandTriggerProgression);
             return;
         }
 
         _seeSawBeam.Rotation = _fromRotation;
+    }
+
+    private static float EaseBeamRotation(float fromRotation, float targetRotation, float progression, float targetProgression)
+    {
+        if (progression >= targetProgression)
+            return targetRotation;
+
+        float easeStart = Math.Max(0f, targetProgression - BeamRotationEaseProgression);
+        if (progression <= easeStart)
+            return fromRotation;
+
+        float t = RhythmVisualUtils.GetPhaseProgress(progression, easeStart, targetProgression);
+        t = t * t * (3f - 2f * t);
+        return MathHelper.Lerp(fromRotation, targetRotation, t);
     }
 
     /// <summary>
