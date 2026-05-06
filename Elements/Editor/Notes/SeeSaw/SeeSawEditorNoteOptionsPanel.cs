@@ -116,16 +116,17 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
 
     private static SeeSawCompiledEventTiming GetCurrentTiming(EditorNoteOptionsContext context)
     {
-        SeeSawCompiledEventTiming timing = SeeSawChartCompiler.GetTimingForChartNote(context.Document.Chart.Notes, context.Note, context.Document.GetBeatAt);
+        double leadInBeats = ChartTiming.GetLeadInBeats(context.Document.Chart);
+        SeeSawCompiledEventTiming timing = SeeSawChartCompiler.GetTimingForChartNote(context.Document.Chart.Notes, context.Note, context.Document.GetBeatAt, leadInBeats);
         if (timing.IsSeeSaw)
             return timing;
 
-        return SeeSawChartCompiler.GetPreviewTiming(context.Document.Chart.Notes, context.Note.AdditionnalData, context.Note.SongPosition, context.Document.GetBeatAt);
+        return SeeSawChartCompiler.GetPreviewTiming(context.Document.Chart.Notes, context.Note.AdditionnalData, context.Note.SongPosition, context.Document.GetBeatAt, leadInBeats);
     }
 
     private static SeeSawLogicalState GetCurrentState(EditorNoteOptionsContext context)
     {
-        return SeeSawChartCompiler.GetStateBefore(context.Document.Chart.Notes, context.Note.SongPosition, context.Document.GetBeatAt);
+        return SeeSawChartCompiler.GetStateBefore(context.Document.Chart.Notes, context.Note.SongPosition, context.Document.GetBeatAt, ChartTiming.GetLeadInBeats(context.Document.Chart));
     }
 
     private static string FormatBeat(double beat)

@@ -31,7 +31,7 @@ public class SeeSawScene : Scene
     private AnimationStateMachine ApplejackState;
     private bool[] requestBop = [true, true];
     private readonly int ponyScale = 3;
-    private readonly int seeSawScale = 1;
+    private readonly int seeSawScale = 3;
 
     private Vector2 applejackOuterPos;
     private Vector2 applejackInnerPos;
@@ -54,8 +54,8 @@ public class SeeSawScene : Scene
     {
         Viewport vp = GLOBALS.graphicsDevice.Viewport;
 
-        SeeSaw1 = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Sprite_0001)));
-        SeeSaw2 = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Sprite_0002)));
+        SeeSaw1 = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Stand)));
+        SeeSaw2 = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Planks_idle)));
         Applejack = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Applejack_afk1)));
         Rainbow = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Rainbowdash_idle1)));
 
@@ -67,7 +67,7 @@ public class SeeSawScene : Scene
         Applejack.Scale = new Vector2(ponyScale, ponyScale);
         Rainbow.Scale = new Vector2(ponyScale, ponyScale);
 
-        SeeSaw2.Position = new Vector2(vp.Width * 0.4914f, vp.Height * 0.8008f);
+        SeeSaw2.Position = new Vector2(vp.Width * 0.4898f, vp.Height * 0.823f)
         SeeSaw1.Position = new Vector2(vp.Width / 2, vp.Height / 2 + (vp.Height / 5) * 1.5f);
         Rainbow.Position = new Vector2(vp.Width * 0.6351f, vp.Height * 0.4902f);
         Applejack.Position = new Vector2(vp.Width * 0.0289f, vp.Height * 0.6139f);
@@ -98,8 +98,8 @@ public class SeeSawScene : Scene
         GameObjects.Add(rainbowTrail);
         GameObjects.Add(Rainbow);
         GameObjects.Add(Applejack);
-        GameObjects.Add(SeeSaw1);
         GameObjects.Add(SeeSaw2);
+        GameObjects.Add(SeeSaw1);
     }
 
     private void OnBeatmapStarted()
@@ -120,8 +120,9 @@ public class SeeSawScene : Scene
         }
 
         SeeSawLayout layout = new(applejackOuterPos, applejackInnerPos, applejackExitPos, rainbowOuterPos, rainbowInnerPos);
-        double baseCrotchet = GLOBALS.beatmapPlayer.GetCrotchetAt(GLOBALS.beatmapPlayer.Conductor.SongPosition);
-        SeeSawTimeline timeline = SeeSawChartCompiler.Compile(chartPlayer.Notes, GLOBALS.beatmapPlayer.GetBeatAt, GLOBALS.beatmapPlayer.GetSongPositionAtBeat, GLOBALS.beatmapPlayer.GetCrotchetAt);
+        double currentSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.Conductor.SongPosition;
+        double baseCrotchet = GLOBALS.beatmapPlayer.GetCrotchetAt(currentSeconds);
+        SeeSawTimeline timeline = SeeSawChartCompiler.Compile(chartPlayer.Notes, GLOBALS.beatmapPlayer.GetBeatAt, GLOBALS.beatmapPlayer.GetSongPositionAtBeat, GLOBALS.beatmapPlayer.GetCrotchetAt, ChartTiming.GetLeadInBeats(GLOBALS.beatmapPlayer.CurrentChart));
         SeeSawPathCatalog pathCatalog = new(layout);
 
         _director = new SeeSawDirector(
@@ -189,7 +190,11 @@ public class SeeSawScene : Scene
         ApplejackState?.Update(gameTime);
 
         if (GLOBALS.beatmapPlayer?.Conductor != null && _director != null)
-            _director.Update(GLOBALS.beatmapPlayer.Conductor.SongPosition, gameTime);
+        {
+            double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.Conductor.SongPosition;
+            double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
+            _director.Update(beat, songSeconds, gameTime);
+        }
     }
 
     private void UpdateTempoMapBeatEvents()
@@ -197,7 +202,8 @@ public class SeeSawScene : Scene
         if (GLOBALS.beatmapPlayer?.Conductor == null)
             return;
 
-        double beat = GLOBALS.beatmapPlayer.GetBeatAt(GLOBALS.beatmapPlayer.Conductor.SongPosition);
+        double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.Conductor.SongPosition;
+        double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
         if (double.IsNaN(beat) || double.IsInfinity(beat))
             return;
 

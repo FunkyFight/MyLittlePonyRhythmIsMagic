@@ -99,33 +99,27 @@ public static class EditorEffectDefinitions
 
     private static ChartEffect CreateBpmChangeEffect(double songPosition, BeatmapEditorDocument document)
     {
-        double placedSongPosition = SnapBpmChangeToNearestBeat(songPosition, document);
+        double beat = document?.GetBeatAt(songPosition) ?? songPosition / 0.6;
+        if (double.IsNaN(beat) || double.IsInfinity(beat))
+            beat = 0;
 
+        return CreateBpmChangeEffectAtBeat(Math.Round(Math.Max(0, beat), MidpointRounding.AwayFromZero), document);
+    }
+
+    private static ChartEffect CreateBpmChangeEffectAtBeat(double beat, BeatmapEditorDocument document)
+    {
+        beat = Math.Max(0, beat);
+        double placedSongPosition = document?.TempoMap.BeatToSeconds(beat) ?? beat * 0.6;
         ChartEffect effect = new()
         {
             SongPosition = placedSongPosition,
+            BeatPosition = beat,
             EffectType = ChartEffect.BpmChangeEffectType
         };
 
-        effect.SetBpm(document?.GetBpmAt(placedSongPosition) ?? 100);
+        effect.SetBpm(document?.GetBpmAtBeat(beat) ?? 100);
         effect.SetSectionOffset(0);
         return effect;
-    }
-
-    private static double SnapBpmChangeToNearestBeat(double songPosition, BeatmapEditorDocument document)
-    {
-        double placedSongPosition = songPosition;
-        if (document != null)
-        {
-            double beat = document.GetBeatAt(songPosition);
-            if (!double.IsNaN(beat) && !double.IsInfinity(beat))
-            {
-                double snappedBeat = Math.Round(beat, MidpointRounding.AwayFromZero);
-                placedSongPosition = document.GetSongPositionAtBeat(snappedBeat);
-            }
-        }
-
-        return Math.Max(0, placedSongPosition);
     }
 }
 
@@ -142,22 +136,27 @@ public sealed class BpmChangeEditorEffectOptionsPanel : IEditorEffectOptionsPane
         if (effect == null)
             return new[] { DevUiWindowRow.Title("Effect unavailable") };
 
-        double bpm = GetBpm(effect, context.Document?.GetBpmAt(effect.SongPosition) ?? 100);
+        double effectBeat = context.Document?.GetEffectBeat(effect) ?? effect.BeatPosition ?? effect.SongPosition / 0.6;
+        double effectSeconds = context.Document?.GetEffectSeconds(effect) ?? effect.SongPosition;
+        double bpm = GetBpm(effect, context.Document?.GetBpmAtBeat(effectBeat) ?? 100);
         double sectionOffset = effect.GetSectionOffsetOrDefault(0);
-        double globalBeat = context.Document?.GetBeatAt(effect.SongPosition) ?? double.NaN;
-        double offGridBeat = double.IsNaN(globalBeat) || double.IsInfinity(globalBeat)
+        double offGridBeat = double.IsNaN(effectBeat) || double.IsInfinity(effectBeat)
             ? double.NaN
-            : globalBeat - Math.Round(globalBeat, MidpointRounding.AwayFromZero);
+            : effectBeat - Math.Round(effectBeat, MidpointRounding.AwayFromZero);
 
-        return new[]
+        List<DevUiWindowRow> rows = new()
         {
-            DevUiWindowRow.Title($"Time: {effect.SongPosition:0.000}s"),
-            DevUiWindowRow.Title(double.IsNaN(globalBeat) || double.IsInfinity(globalBeat) ? "Global beat: ?" : $"Global beat: {globalBeat:0.######}"),
+            DevUiWindowRow.Title(double.IsNaN(effectBeat) || double.IsInfinity(effectBeat) ? "Beat: ?" : $"Beat: {effectBeat:0.######}"),
+            DevUiWindowRow.Title($"Seconds: {effectSeconds:0.000}s"),
             DevUiWindowRow.Title(double.IsNaN(offGridBeat) || double.IsInfinity(offGridBeat) ? "Off grid: ?" : $"Off grid: {FormatSignedBeat(offGridBeat)}b"),
             DevUiWindowRow.FloatInput("effect_bpm", "BPM", bpm, value => SetBpm(context.GetCurrentEffect(), value)),
-            DevUiWindowRow.FloatInput("effect_section_offset", "FIRST BEAT +", sectionOffset, value => SetSectionOffset(context.GetCurrentEffect(), value)),
-            DevUiWindowRow.Button("SNAP TO GLOBAL BEAT", () => SnapToNearestGlobalBeat(context.GetCurrentEffect(), context.Document))
+            DevUiWindowRow.Button("SNAP MARKER TO GRID", () => SnapToNearestGlobalBeat(context.GetCurrentEffect(), context.Document))
         };
+
+        if (Math.Abs(sectionOffset) > 0.0005)
+            rows.Add(DevUiWindowRow.Title($"Legacy section_offset ignored: {sectionOffset:0.######}"));
+
+        return rows;
     }
 
     private static string FormatSignedBeat(double value)
@@ -175,21 +174,17 @@ public sealed class BpmChangeEditorEffectOptionsPanel : IEditorEffectOptionsPane
         effect?.SetBpm(bpm);
     }
 
-    private static void SetSectionOffset(ChartEffect effect, double sectionOffset)
-    {
-        effect?.SetSectionOffset(sectionOffset);
-    }
-
     private static void SnapToNearestGlobalBeat(ChartEffect effect, BeatmapEditorDocument document)
     {
         if (effect == null || document == null)
             return;
 
-        double beat = document.GetBeatAt(effect.SongPosition);
+        double beat = document.GetEffectBeat(effect);
         if (double.IsNaN(beat) || double.IsInfinity(beat))
             return;
 
         double snappedBeat = Math.Round(beat, MidpointRounding.AwayFromZero);
+        ChartTiming.SetEffectBeat(effect, snappedBeat);
         effect.SongPosition = Math.Max(0, document.GetSongPositionAtBeat(snappedBeat));
         effect.SetSectionOffset(0);
     }

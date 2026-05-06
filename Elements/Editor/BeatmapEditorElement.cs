@@ -39,7 +39,7 @@ public sealed class BeatmapEditorElement
     private readonly Dictionary<EditorNoteKind, Dictionary<string, string>> _lastCreatedNoteData = new();
     private readonly Dictionary<string, string> _lastIntervalData = new();
     private readonly IEditorNoteOptionsPanel _intervalOptionsPanel = new IntervalEditorNoteOptionsPanel();
-    private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset" };
+    private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset", "LeadInBeats" };
     private const double ShiftSeekSongDurationRatio = 0.05;
     private const double HeldArrowSeekInitialDelaySeconds = 0.25;
     private const double HeldArrowSeekRepeatSeconds = 0.075;
@@ -54,9 +54,9 @@ public sealed class BeatmapEditorElement
     private EditorNoteKind _selectedKind = EditorNoteKind.SeeSaw;
     private EditorEffectKind _selectedEffectKind = EditorEffectKind.BpmChange;
     private EditorTimelineDragKind _timelineDragKind;
-    private double _manualSongPosition;
-    private double _visibleBeforeSeconds = 4;
-    private double _visibleAfterSeconds = 4;
+    private double _manualBeatPosition;
+    private double _visibleBeforeBeats = 8;
+    private double _visibleAfterBeats = 8;
     private string _status = "Editor ready";
     private int _selectedSongIndex;
     private int _selectedChartIndex;
@@ -81,7 +81,7 @@ public sealed class BeatmapEditorElement
     private string _newBeatmapNameBuffer = "";
     private ChartNote _draggedNote;
     private ChartEffect _draggedEffect;
-    private double _dragPointerOffsetSeconds;
+    private double _dragPointerOffsetBeats;
     private bool _draggedEffectOffsetFollowedPosition;
     private bool _dragMoved;
     private double _heldLeftSeekSeconds;
@@ -120,7 +120,7 @@ public sealed class BeatmapEditorElement
             return;
         }
 
-        AdvanceEditorPlayback();
+        AdvanceEditorPlayback(gameTime);
 
         if (_isCreatingNewBeatmap)
         {
@@ -200,10 +200,10 @@ public sealed class BeatmapEditorElement
         else
         {
             if (IsDown(Keys.Q))
-                Seek(ClampSongPosition(CurrentSongPosition() - gameTime.ElapsedGameTime.TotalSeconds * 4));
+                SeekBeat(ClampBeat(CurrentBeatPosition() - gameTime.ElapsedGameTime.TotalSeconds * 4));
 
             if (IsDown(Keys.D))
-                Seek(ClampSongPosition(CurrentSongPosition() + gameTime.ElapsedGameTime.TotalSeconds * 4));
+                SeekBeat(ClampBeat(CurrentBeatPosition() + gameTime.ElapsedGameTime.TotalSeconds * 4));
         }
 
         if (Pressed(Keys.Up))
@@ -315,13 +315,13 @@ public sealed class BeatmapEditorElement
         if (!area.Contains(_mouse.Position))
             return false;
 
-        double mouseSongPosition = XToSongPosition(_mouse.X, windowStart, windowEnd, area);
+        double mouseBeat = XToBeat(_mouse.X, windowStart, windowEnd, area);
 
         if (TryHitTimelineEffect(area, windowStart, windowEnd, out ChartEffect effect))
         {
             _timelineDragKind = EditorTimelineDragKind.Effect;
             _draggedEffect = effect;
-            _dragPointerOffsetSeconds = effect.SongPosition - mouseSongPosition;
+            _dragPointerOffsetBeats = _document.GetEffectBeat(effect) - mouseBeat;
             _draggedEffectOffsetFollowedPosition = !effect.TryGetSectionOffset(out double sectionOffset)
                 || Math.Abs(sectionOffset) <= 0.0005;
             _dragMoved = false;
@@ -333,7 +333,7 @@ public sealed class BeatmapEditorElement
         {
             _timelineDragKind = EditorTimelineDragKind.Note;
             _draggedNote = note;
-            _dragPointerOffsetSeconds = note.SongPosition - mouseSongPosition;
+            _dragPointerOffsetBeats = _document.GetNoteBeat(note) - mouseBeat;
             _dragMoved = false;
 
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
@@ -346,15 +346,16 @@ public sealed class BeatmapEditorElement
 
     private void UpdateTimelineDrag(Rectangle area, double windowStart, double windowEnd)
     {
-        double songPosition = ClampSongPosition(XToSongPosition(_mouse.X, windowStart, windowEnd, area) + _dragPointerOffsetSeconds);
+        double pointerBeat = XToBeat(_mouse.X, windowStart, windowEnd, area) + _dragPointerOffsetBeats;
 
         if (_timelineDragKind == EditorTimelineDragKind.Note && _draggedNote != null)
         {
-            if (_document.MoveNote(_draggedNote, songPosition))
+            double beat = SnapPlacementBeat(pointerBeat);
+            if (_document.MoveNoteToBeat(_draggedNote, beat))
             {
                 _dragMoved = true;
                 EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(_draggedNote);
-                _status = $"Dragging {definition?.DisplayName ?? "note"}: {_draggedNote.SongPosition:0.000}s";
+                _status = $"Dragging {definition?.DisplayName ?? "note"}: {_document.GetNoteBeat(_draggedNote):0.###}b";
             }
 
             return;
@@ -362,11 +363,12 @@ public sealed class BeatmapEditorElement
 
         if (_timelineDragKind == EditorTimelineDragKind.Effect && _draggedEffect != null)
         {
-            if (_document.MoveEffect(_draggedEffect, songPosition, _draggedEffectOffsetFollowedPosition))
+            double beat = ClampEffectPlacementBeat(pointerBeat);
+            if (_document.MoveEffectToBeat(_draggedEffect, beat, _draggedEffectOffsetFollowedPosition))
             {
                 _dragMoved = true;
                 EditorEffectDefinition definition = EditorEffectDefinitions.FromChartEffect(_draggedEffect);
-                _status = $"Dragging {definition?.DisplayName ?? "effect"}: {_draggedEffect.SongPosition:0.000}s";
+                _status = $"Dragging {definition?.DisplayName ?? "effect"}: {_document.GetEffectBeat(_draggedEffect):0.###}b";
             }
         }
     }
@@ -381,7 +383,7 @@ public sealed class BeatmapEditorElement
         _timelineDragKind = EditorTimelineDragKind.None;
         _draggedNote = null;
         _draggedEffect = null;
-        _dragPointerOffsetSeconds = 0;
+        _dragPointerOffsetBeats = 0;
         _draggedEffectOffsetFollowedPosition = false;
         _dragMoved = false;
 
@@ -393,19 +395,20 @@ public sealed class BeatmapEditorElement
         if (kind == EditorTimelineDragKind.Note && draggedNote != null)
         {
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(draggedNote);
-            _status = $"Moved {definition?.DisplayName ?? "note"} to {draggedNote.SongPosition:0.000}s";
+            _status = $"Moved {definition?.DisplayName ?? "note"} to {_document.GetNoteBeat(draggedNote):0.###}b";
         }
         else if (kind == EditorTimelineDragKind.Effect && draggedEffect != null)
         {
             EditorEffectDefinition definition = EditorEffectDefinitions.FromChartEffect(draggedEffect);
-            _status = $"Moved {definition?.DisplayName ?? "effect"} to {draggedEffect.SongPosition:0.000}s";
+            _status = $"Moved {definition?.DisplayName ?? "effect"} to {_document.GetEffectBeat(draggedEffect):0.###}b";
         }
     }
 
     private bool TryHitTimelineEffect(Rectangle area, double windowStart, double windowEnd, out ChartEffect effect)
     {
         effect = null;
-        foreach (ChartEffect candidate in _document.GetEffectsInWindow(windowStart, windowEnd).Reverse())
+        GetSongWindowForBeatWindow(windowStart, windowEnd, out double songStart, out double songEnd);
+        foreach (ChartEffect candidate in _document.GetEffectsInWindow(songStart, songEnd).Reverse())
         {
             if (EditorEffectDefinitions.FromChartEffect(candidate) == null)
                 continue;
@@ -425,7 +428,8 @@ public sealed class BeatmapEditorElement
     private bool TryHitTimelineNote(Rectangle area, double windowStart, double windowEnd, out ChartNote note)
     {
         note = null;
-        foreach (ChartNote candidate in _document.GetNotesInWindow(windowStart, windowEnd).Reverse())
+        GetSongWindowForBeatWindow(windowStart, windowEnd, out double songStart, out double songEnd);
+        foreach (ChartNote candidate in _document.GetNotesInWindow(songStart, songEnd).Reverse())
         {
             if (EditorNoteDefinitions.FromChartNote(candidate) == null)
                 continue;
@@ -457,9 +461,9 @@ public sealed class BeatmapEditorElement
         }
 
         if (_placementMode == EditorPlacementMode.Effect)
-            OpenEffectOptionsWindow(_document.FindNearestEffect(CurrentSongPosition(), GetSelectionDistance()));
+            OpenEffectOptionsWindow(_document.FindNearestEffectAtBeat(CurrentBeatPosition(), GetSelectionDistance()));
         else
-            OpenNoteOptionsWindow(_document.FindNearest(CurrentSongPosition(), GetSelectionDistance()));
+            OpenNoteOptionsWindow(_document.FindNearestAtBeat(CurrentBeatPosition(), GetSelectionDistance()));
     }
 
     private void TogglePlacementMode()
@@ -508,7 +512,10 @@ public sealed class BeatmapEditorElement
 
     private void OpenCreateNoteWindow(EditorNoteDefinition definition, double songPosition)
     {
-        _optionsNote = definition.CreateChartNote(songPosition, _document.GetCrotchetAt(songPosition), variantIndex: 0);
+        double beat = _document.GetBeatAt(songPosition);
+        _optionsNote = definition.CreateChartNote(songPosition, _document.GetSecondsPerBeatAtBeat(beat), variantIndex: 0);
+        ChartTiming.SetNoteBeat(_optionsNote, beat);
+        ChartTiming.SetNoteHoldBeats(_optionsNote, definition.HoldBeats);
         if (_lastCreatedNoteData.TryGetValue(definition.Kind, out Dictionary<string, string> lastData))
             _optionsNote.AdditionnalData = new Dictionary<string, string>(lastData);
 
@@ -522,14 +529,17 @@ public sealed class BeatmapEditorElement
         if (!EditorNoteDefinitions.TryGetOptionsPanel(definition.Kind, out _optionsPanel))
             _optionsPanel = null;
         _noteOptionsWindow.Open();
-        _status = $"Configure {definition.DisplayName} at {songPosition:0.000}s, then Create";
+        _status = $"Configure {definition.DisplayName} at {beat:0.###}b, then Create";
     }
 
     private void OpenCreateIntervalWindow(EditorNoteDefinition definition, double startSongPosition, double endSongPosition)
     {
         double start = Math.Min(startSongPosition, endSongPosition);
         double end = Math.Max(startSongPosition, endSongPosition);
-        _optionsNote = definition.CreateChartNote(start, _document.GetCrotchetAt(start), variantIndex: 0);
+        double startBeat = _document.GetBeatAt(start);
+        _optionsNote = definition.CreateChartNote(start, _document.GetSecondsPerBeatAtBeat(startBeat), variantIndex: 0);
+        ChartTiming.SetNoteBeat(_optionsNote, startBeat);
+        ChartTiming.SetNoteHoldBeats(_optionsNote, definition.HoldBeats);
         if (_lastCreatedNoteData.TryGetValue(definition.Kind, out Dictionary<string, string> lastData))
             _optionsNote.AdditionnalData = new Dictionary<string, string>(lastData);
 
@@ -552,7 +562,7 @@ public sealed class BeatmapEditorElement
         if (!EditorNoteDefinitions.TryGetOptionsPanel(definition.Kind, out _optionsPanel))
             _optionsPanel = null;
         _noteOptionsWindow.Open();
-        _status = $"Configure interval {definition.DisplayName} from {start:0.000}s to {end:0.000}s, then Create";
+        _status = $"Configure interval {definition.DisplayName} from {startBeat:0.###}b to {_document.GetBeatAt(end):0.###}b, then Create";
     }
 
     private bool OpenEffectOptionsWindow(ChartEffect effect)
@@ -596,7 +606,7 @@ public sealed class BeatmapEditorElement
         if (!EditorEffectDefinitions.TryGetOptionsPanel(definition.Kind, out _effectOptionsPanel))
             _effectOptionsPanel = null;
         _noteOptionsWindow.Open();
-        _status = $"Configure {definition.DisplayName} at {_optionsEffect.SongPosition:0.000}s, then Create";
+        _status = $"Configure {definition.DisplayName} at {_document.GetEffectBeat(_optionsEffect):0.###}b, then Create";
     }
 
     private void ApplyNoteOption(Action<ChartNote> apply)
@@ -624,7 +634,7 @@ public sealed class BeatmapEditorElement
 
         ChartNote note = _optionsNote;
         if (note == null || !_document.Chart.Notes.Contains(note))
-            note = _document.FindNearest(CurrentSongPosition(), GetSelectionDistance());
+            note = _document.FindNearestAtBeat(CurrentBeatPosition(), GetSelectionDistance());
 
         if (note == null)
             return null;
@@ -640,7 +650,7 @@ public sealed class BeatmapEditorElement
 
         ChartEffect effect = _optionsEffect;
         if (effect == null || !_document.Chart.Effects.Contains(effect))
-            effect = _document.FindNearestEffect(CurrentSongPosition(), GetSelectionDistance());
+            effect = _document.FindNearestEffectAtBeat(CurrentBeatPosition(), GetSelectionDistance());
 
         if (effect == null)
             return null;
@@ -723,12 +733,13 @@ public sealed class BeatmapEditorElement
 
     private void StopPreview()
     {
-        double position = _beatmapPlayer.Conductor?.SongPosition ?? _manualSongPosition;
+        double position = _beatmapPlayer.Conductor?.SongPosition ?? CurrentSongPosition();
+        double beat = _document.GetBeatAt(position);
         _isPreviewPlaying = false;
         _editorPlaybackPlaying = false;
         RebuildPlayback(false);
-        Seek(position);
-        _status = $"Back to editor at {position:0.000}s";
+        SeekBeat(beat);
+        _status = $"Back to editor at {beat:0.###}b / {position:0.000}s";
     }
 
     private void Load()
@@ -845,7 +856,7 @@ public sealed class BeatmapEditorElement
 
         _document = BeatmapEditorDocument.CreateNew(songPath, chartPath, bpm);
         _document.SetMetadata(beatmapName: beatmapName);
-        _manualSongPosition = 0;
+        _manualBeatPosition = 0;
         RefreshSongs();
         RefreshCharts();
         SyncSelectedSongIndex();
@@ -888,7 +899,11 @@ public sealed class BeatmapEditorElement
 
     private void RebuildPlayback(bool keepPlaying)
     {
-        double position = CurrentSongPosition();
+        RebuildPlaybackAtPosition(CurrentSongPosition(), keepPlaying);
+    }
+
+    private void RebuildPlaybackAtPosition(double position, bool keepPlaying)
+    {
         bool shouldPlay = keepPlaying && !_isPreviewPlaying;
         _editorPlaybackPlaying = false;
 
@@ -896,7 +911,7 @@ public sealed class BeatmapEditorElement
         {
             _rhythmVisuals = null;
             _beatmapPlayer.Dispose();
-            _manualSongPosition = position;
+            _manualBeatPosition = _document.GetBeatAt(position);
             _status = "No music loaded";
             return;
         }
@@ -907,7 +922,7 @@ public sealed class BeatmapEditorElement
 
         if (shouldPlay)
         {
-            _beatmapPlayer.Conductor.Play();
+            StartEditorAudioIfAtOrAfterSongStart();
             _editorPlaybackPlaying = true;
         }
     }
@@ -927,13 +942,13 @@ public sealed class BeatmapEditorElement
         {
             _editorPlaybackPlaying = false;
             _beatmapPlayer.Conductor.Pause();
-            SyncPlaybackToEditorPosition(_manualSongPosition, resetVisuals: false);
+            SyncPlaybackToEditorPosition(CurrentSongPosition(), resetVisuals: false);
             _status = "Paused";
         }
         else
         {
-            SyncPlaybackToEditorPosition(_manualSongPosition, resetVisuals: false);
-            _beatmapPlayer.Conductor.Play();
+            SyncPlaybackToEditorPosition(CurrentSongPosition(), resetVisuals: false);
+            StartEditorAudioIfAtOrAfterSongStart();
             _editorPlaybackPlaying = true;
             _status = "Playing";
         }
@@ -950,14 +965,14 @@ public sealed class BeatmapEditorElement
     private void PlaceSelectedNote()
     {
         EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
-        double position = Snap(CurrentSongPosition());
+        double position = _document.GetSongPositionAtBeat(SnapPlacementBeat(CurrentBeatPosition()));
         OpenCreateNoteWindow(definition, position);
     }
 
     private void PlaceSelectedEffect()
     {
         EditorEffectDefinition definition = EditorEffectDefinitions.Get(_selectedEffectKind);
-        double position = SnapEffectPlacementPosition(definition, CurrentSongPosition());
+        double position = _document.GetSongPositionAtBeat(SnapEffectPlacementBeat(definition, CurrentBeatPosition()));
         OpenCreateEffectWindow(definition, position);
     }
 
@@ -981,16 +996,16 @@ public sealed class BeatmapEditorElement
 
     private void SelectIntervalRangePoint()
     {
-        double position = Snap(CurrentSongPosition());
+        double position = _document.GetSongPositionAtBeat(SnapPlacementBeat(CurrentBeatPosition()));
         if (_intervalRangeStart == null)
         {
-            _intervalRangeStart = position;
-            _status = $"Interval start {position:0.000}s selected; move to end and press ENTER";
+            _intervalRangeStart = _document.GetBeatAt(position);
+            _status = $"Interval start {_intervalRangeStart.Value:0.###}b selected; move to end and press ENTER";
             return;
         }
 
         EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
-        double start = _intervalRangeStart.Value;
+        double start = _document.GetSongPositionAtBeat(_intervalRangeStart.Value);
         _isSelectingIntervalRange = false;
         _intervalRangeStart = null;
         OpenCreateIntervalWindow(definition, start, position);
@@ -1018,7 +1033,8 @@ public sealed class BeatmapEditorElement
             _lastCreatedNoteData[_optionsDefinition.Kind] = creationData;
             _optionsIsCreation = false;
             _optionsIsIntervalCreation = false;
-            RebuildPlayback(_editorPlaybackPlaying);
+        double position = CurrentSongPosition();
+        RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
 
             if (placedNotes.Count == 1 && EditorNoteDefinitions.FromChartNote(placedNotes[0]) is EditorNoteDefinition placedDefinition && EditorNoteDefinitions.TryGetOptionsPanel(placedDefinition.Kind, out _))
                 OpenNoteOptionsWindow(placedNotes[0]);
@@ -1131,8 +1147,8 @@ public sealed class BeatmapEditorElement
 
     private void DeleteNearestNote()
     {
-        double position = CurrentSongPosition();
-        if (_document.DeleteNearest(position, GetSelectionDistance(), out ChartNote deletedNote))
+        double beat = CurrentBeatPosition();
+        if (_document.DeleteNearestAtBeat(beat, GetSelectionDistance(), out ChartNote deletedNote))
         {
             RebuildPlayback(_editorPlaybackPlaying);
             _status = $"Deleted note at {deletedNote.SongPosition:0.000}s";
@@ -1145,8 +1161,8 @@ public sealed class BeatmapEditorElement
 
     private void DeleteNearestEffect()
     {
-        double position = CurrentSongPosition();
-        if (_document.DeleteNearestEffect(position, GetSelectionDistance(), out ChartEffect deletedEffect))
+        double beat = CurrentBeatPosition();
+        if (_document.DeleteNearestEffectAtBeat(beat, GetSelectionDistance(), out ChartEffect deletedEffect))
         {
             if (ReferenceEquals(_optionsEffect, deletedEffect))
             {
@@ -1165,14 +1181,19 @@ public sealed class BeatmapEditorElement
 
     private void Seek(double songPosition, bool updateStatus = true)
     {
-        SyncPlaybackToEditorPosition(songPosition, resetVisuals: true);
+        SeekBeat(_document.GetBeatAt(songPosition), updateStatus);
+    }
+
+    private void SeekBeat(double beat, bool updateStatus = true)
+    {
+        SyncPlaybackToEditorBeatPosition(beat, resetVisuals: true);
         UpdatePendingCreationPosition();
 
         if (_editorPlaybackPlaying)
-            _beatmapPlayer.Conductor?.Play();
+            StartEditorAudioIfAtOrAfterSongStart();
 
         if (updateStatus)
-            _status = $"Seek {_manualSongPosition:0.000}s";
+            _status = $"Seek {_manualBeatPosition:0.###}b / {CurrentSongPosition():0.000}s";
     }
 
     private void UpdatePendingCreationPosition()
@@ -1185,38 +1206,90 @@ public sealed class BeatmapEditorElement
             bool offsetFollowedPosition = !_optionsEffect.TryGetSectionOffset(out double sectionOffset)
                 || Math.Abs(sectionOffset) <= 0.0005;
 
-            _optionsEffect.SongPosition = SnapEffectPlacementPosition(_optionsEffectDefinition, CurrentSongPosition());
+            double beat = SnapEffectPlacementBeat(_optionsEffectDefinition, CurrentBeatPosition());
+            ChartTiming.SetEffectBeat(_optionsEffect, beat);
+            _optionsEffect.SongPosition = _document.GetSongPositionAtBeat(beat);
             if (offsetFollowedPosition)
                 _optionsEffect.SetSectionOffset(0);
         }
         else if (_optionsNote != null)
-            _optionsNote.SongPosition = Snap(CurrentSongPosition());
+        {
+            double beat = SnapPlacementBeat(CurrentBeatPosition());
+            ChartTiming.SetNoteBeat(_optionsNote, beat);
+            _optionsNote.SongPosition = _document.GetSongPositionAtBeat(beat);
+        }
     }
 
-    private void AdvanceEditorPlayback()
+    private void AdvanceEditorPlayback(GameTime gameTime)
     {
         if (!_editorPlaybackPlaying)
             return;
 
+        double virtualSongPosition = CurrentSongPosition();
+        if (virtualSongPosition < 0.0)
+        {
+            _beatmapPlayer.Conductor?.Pause();
+            double nextVirtualSongPosition = virtualSongPosition + gameTime.ElapsedGameTime.TotalSeconds;
+            if (nextVirtualSongPosition >= 0.0)
+            {
+                _beatmapPlayer.Conductor?.Seek(nextVirtualSongPosition);
+                _beatmapPlayer.Conductor?.Play();
+            }
+
+            _manualBeatPosition = ClampBeat(_document.GetBeatAt(nextVirtualSongPosition));
+            UpdateEditorPlaybackSystems(nextVirtualSongPosition, seekChartPlayer: false, resetVisuals: false);
+            return;
+        }
+
         _beatmapPlayer.Conductor?.Update();
-        _manualSongPosition = Math.Max(0, _beatmapPlayer.Conductor?.SongPosition ?? _manualSongPosition);
-        _beatmapPlayer.ApplyChartEffectsAt(_manualSongPosition);
-        _beatmapPlayer.ChartPlayer?.Update(_manualSongPosition);
-        _beatmapPlayer.VisualNoteMng?.Update(_manualSongPosition);
+        double songPosition = Math.Max(0, _beatmapPlayer.Conductor?.SongPosition ?? virtualSongPosition);
+        _manualBeatPosition = ClampBeat(_document.GetBeatAt(songPosition));
+        UpdateEditorPlaybackSystems(songPosition, seekChartPlayer: false, resetVisuals: false);
     }
 
     private void SyncPlaybackToEditorPosition(double songPosition, bool resetVisuals)
     {
-        double targetPosition = Math.Max(0, songPosition);
-        _beatmapPlayer.Conductor?.Seek(targetPosition);
-        _manualSongPosition = Math.Max(0, _beatmapPlayer.Conductor?.SongPosition ?? targetPosition);
-        _beatmapPlayer.ApplyChartEffectsAt(_manualSongPosition);
-        _beatmapPlayer.ChartPlayer?.Seek(_manualSongPosition);
+        SyncPlaybackToEditorBeatPosition(_document.GetBeatAt(songPosition), resetVisuals);
+    }
+
+    private void SyncPlaybackToEditorBeatPosition(double beat, bool resetVisuals)
+    {
+        _manualBeatPosition = ClampBeat(beat);
+        double targetPosition = _document.GetSongPositionAtBeat(_manualBeatPosition);
+        double audioPosition = Math.Max(0, targetPosition);
+        _beatmapPlayer.Conductor?.Seek(audioPosition);
+
+        if (targetPosition < 0.0)
+            _beatmapPlayer.Conductor?.Pause();
+
+        double syncedPosition = targetPosition < 0.0
+            ? targetPosition
+            : Math.Max(0, _beatmapPlayer.Conductor?.SongPosition ?? audioPosition);
+        _manualBeatPosition = ClampBeat(_document.GetBeatAt(syncedPosition));
+        UpdateEditorPlaybackSystems(syncedPosition, seekChartPlayer: true, resetVisuals: resetVisuals);
+    }
+
+    private void StartEditorAudioIfAtOrAfterSongStart()
+    {
+        if (CurrentSongPosition() >= 0.0)
+            _beatmapPlayer.Conductor?.Play();
+        else
+            _beatmapPlayer.Conductor?.Pause();
+    }
+
+    private void UpdateEditorPlaybackSystems(double songPosition, bool seekChartPlayer, bool resetVisuals)
+    {
+        _beatmapPlayer.ApplyChartEffectsAt(songPosition);
+
+        if (seekChartPlayer)
+            _beatmapPlayer.ChartPlayer?.Seek(songPosition);
+        else
+            _beatmapPlayer.ChartPlayer?.Update(songPosition);
 
         if (resetVisuals)
             _beatmapPlayer.VisualNoteMng?.Reset();
 
-        _beatmapPlayer.VisualNoteMng?.Update(_manualSongPosition);
+        _beatmapPlayer.VisualNoteMng?.Update(songPosition);
     }
 
     private void Select(EditorNoteKind kind)
@@ -1396,14 +1469,21 @@ public sealed class BeatmapEditorElement
         string field = _metadataFields[_selectedMetadataField];
         if (field == "BPM" && double.TryParse(_textBuffer, out double bpm))
         {
+            double position = CurrentSongPosition();
             _document.SetBpm(bpm);
-            _beatmapPlayer.Conductor?.SetBpm(bpm);
-            RebuildPlayback(_editorPlaybackPlaying);
+            RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
         }
         else if (field == "Offset" && double.TryParse(_textBuffer, out double offset))
         {
+            double position = CurrentSongPosition();
             _document.SetOffset(offset);
-            RebuildPlayback(_editorPlaybackPlaying);
+            RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
+        }
+        else if (field == "LeadInBeats" && double.TryParse(_textBuffer, out double leadInBeats))
+        {
+            double position = CurrentSongPosition();
+            _document.SetLeadInBeats(leadInBeats);
+            RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
         }
         else if (field == "BeatmapName")
             _document.SetMetadata(beatmapName: _textBuffer);
@@ -1420,14 +1500,19 @@ public sealed class BeatmapEditorElement
 
     private void Zoom(double delta)
     {
-        _visibleBeforeSeconds = Math.Clamp(_visibleBeforeSeconds + delta, 1, 16);
-        _visibleAfterSeconds = Math.Clamp(_visibleAfterSeconds + delta, 1, 16);
-        _status = $"Timeline window {(_visibleBeforeSeconds + _visibleAfterSeconds):0.0}s";
+        _visibleBeforeBeats = Math.Clamp(_visibleBeforeBeats + delta, 1, 32);
+        _visibleAfterBeats = Math.Clamp(_visibleAfterBeats + delta, 1, 32);
+        _status = $"Timeline window {(_visibleBeforeBeats + _visibleAfterBeats):0.0}b";
     }
 
     private double CurrentSongPosition()
     {
-        return _manualSongPosition;
+        return _document == null ? 0 : _document.GetSongPositionAtBeat(_manualBeatPosition);
+    }
+
+    private double CurrentBeatPosition()
+    {
+        return _manualBeatPosition;
     }
 
     private bool HasPlayableSong()
@@ -1437,19 +1522,19 @@ public sealed class BeatmapEditorElement
 
     private double GetSelectionDistance()
     {
-        return _document.GetCrotchetAt(CurrentSongPosition()) / GetEffectiveSnapDivisions();
+        return 1.0 / GetEffectiveSnapDivisions();
     }
 
     private double GetSteppedSeekPosition(int direction)
     {
         if (IsShiftDown())
         {
-            double position = CurrentSongPosition() + direction * GetShiftSeekStep();
-            return ClampSongPosition(position);
+            double beat = CurrentBeatPosition() + direction * GetShiftSeekStepBeats();
+            return _document.GetSongPositionAtBeat(ClampBeat(beat));
         }
 
         double divisions = GetEffectiveSnapDivisions();
-        double currentBeat = _document.GetBeatAt(CurrentSongPosition());
+        double currentBeat = CurrentBeatPosition();
         if (double.IsNaN(currentBeat) || double.IsInfinity(currentBeat))
             return ClampSongPosition(CurrentSongPosition());
 
@@ -1490,12 +1575,60 @@ public sealed class BeatmapEditorElement
         return songDuration > 0 ? songDuration * ShiftSeekSongDurationRatio : _document.GetCrotchetAt(CurrentSongPosition());
     }
 
+    private double GetShiftSeekStepBeats()
+    {
+        double songDuration = GetSongDurationSeconds();
+        if (songDuration <= 0)
+            return 1.0;
+
+        double durationBeats = _document.GetBeatAt(songDuration);
+        return Math.Max(1.0, durationBeats * ShiftSeekSongDurationRatio);
+    }
+
     private double ClampSongPosition(double songPosition)
     {
-        songPosition = Math.Max(0, songPosition);
+        songPosition = Math.Max(GetMinimumNavigableSongPosition(), songPosition);
 
         double songDuration = GetSongDurationSeconds();
         return songDuration > 0 ? Math.Min(songPosition, songDuration) : songPosition;
+    }
+
+    private double ClampBeat(double beat)
+    {
+        beat = Math.Max(GetMinimumNavigableBeat(), beat);
+        double songDuration = GetSongDurationSeconds();
+        if (songDuration <= 0)
+            return beat;
+
+        return Math.Min(beat, _document.GetBeatAt(songDuration));
+    }
+
+    private double ClampNotePlacementBeat(double beat)
+    {
+        return ClampBeat(beat);
+    }
+
+    private double ClampEffectPlacementBeat(double beat)
+    {
+        return Math.Max(0.0, ClampBeat(beat));
+    }
+
+    private double GetMinimumNavigableBeat()
+    {
+        if (_document == null)
+            return 0.0;
+
+        double songStartBeat = _document.GetBeatAt(0.0);
+        if (double.IsNaN(songStartBeat) || double.IsInfinity(songStartBeat))
+            return 0.0;
+
+        double leadInStartBeat = -ChartTiming.GetLeadInBeats(_document.Chart);
+        return Math.Min(Math.Min(0.0, songStartBeat), leadInStartBeat);
+    }
+
+    private double GetMinimumNavigableSongPosition()
+    {
+        return _document == null ? 0.0 : _document.GetSongPositionAtBeat(GetMinimumNavigableBeat());
     }
 
     private double GetSongDurationSeconds()
@@ -1505,29 +1638,47 @@ public sealed class BeatmapEditorElement
 
     private double Snap(double songPosition)
     {
-        if (!HasValidSnapDivisions())
-            return ClampSongPosition(songPosition);
+        return _document.GetSongPositionAtBeat(SnapBeat(_document.GetBeatAt(songPosition)));
+    }
 
-        double beat = _document.GetBeatAt(songPosition);
-        if (double.IsNaN(beat) || double.IsInfinity(beat))
-            return ClampSongPosition(songPosition);
+    private double SnapBeat(double beat)
+    {
+        if (!HasValidSnapDivisions() || double.IsNaN(beat) || double.IsInfinity(beat))
+            return ClampBeat(beat);
 
-        double snappedBeat = QuantizeBeat(beat, GetEffectiveSnapDivisions());
-        double snappedSongPosition = _document.GetSongPositionAtBeat(snappedBeat);
-        return ClampSongPosition(snappedSongPosition);
+        return ClampBeat(QuantizeBeat(beat, GetEffectiveSnapDivisions()));
+    }
+
+    private double SnapPlacementBeat(double beat)
+    {
+        if (!HasValidSnapDivisions() || double.IsNaN(beat) || double.IsInfinity(beat))
+            return ClampNotePlacementBeat(beat);
+
+        double divisions = GetEffectiveSnapDivisions();
+        double quantizedBeat = QuantizeBeat(beat, divisions);
+        if (beat < 0.0 && quantizedBeat >= 0.0)
+        {
+            double previousGridBeat = Math.Floor(beat / GetSnapStep(divisions)) * GetSnapStep(divisions);
+            if (previousGridBeat >= GetMinimumNavigableBeat())
+                return ClampNotePlacementBeat(previousGridBeat);
+
+            return ClampNotePlacementBeat(beat);
+        }
+
+        return ClampNotePlacementBeat(quantizedBeat);
     }
 
     private double SnapEffectPlacementPosition(EditorEffectDefinition definition, double songPosition)
     {
-        if (definition?.Kind != EditorEffectKind.BpmChange)
-            return ClampSongPosition(songPosition);
+        return _document.GetSongPositionAtBeat(SnapEffectPlacementBeat(definition, _document.GetBeatAt(songPosition)));
+    }
 
-        double beat = _document.GetBeatAt(songPosition);
-        if (double.IsNaN(beat) || double.IsInfinity(beat))
-            return ClampSongPosition(songPosition);
+    private double SnapEffectPlacementBeat(EditorEffectDefinition definition, double beat)
+    {
+        if (definition?.Kind != EditorEffectKind.BpmChange || double.IsNaN(beat) || double.IsInfinity(beat))
+            return ClampEffectPlacementBeat(beat);
 
-        double snappedBeat = Math.Round(beat, MidpointRounding.AwayFromZero);
-        return ClampSongPosition(_document.GetSongPositionAtBeat(snappedBeat));
+        return ClampEffectPlacementBeat(Math.Round(beat, MidpointRounding.AwayFromZero));
     }
 
     private bool HasValidSnapDivisions()
@@ -1542,15 +1693,21 @@ public sealed class BeatmapEditorElement
 
     private static double QuantizeBeat(double beat, double divisions)
     {
-        double step = 1.0 / Math.Max(1.0, divisions);
+        double step = GetSnapStep(divisions);
         return Math.Round(beat / step, MidpointRounding.AwayFromZero) * step;
+    }
+
+    private static double GetSnapStep(double divisions)
+    {
+        return 1.0 / Math.Max(1.0, divisions);
     }
 
     private void DrawTimeline(SpriteBatch spriteBatch)
     {
         Rectangle area = GetTimelineArea();
-        double current = CurrentSongPosition();
+        double current = CurrentBeatPosition();
         GetTimelineWindow(out double start, out double end);
+        GetSongWindowForBeatWindow(start, end, out double songStart, out double songEnd);
 
         _ui.Fill(spriteBatch, area, new Color(12, 14, 20, 220));
         _ui.Stroke(spriteBatch, area, Color.White, 2);
@@ -1559,25 +1716,25 @@ public sealed class BeatmapEditorElement
 
         if (_isSelectingIntervalRange && _intervalRangeStart is double intervalStart)
         {
-            float intervalStartX = TimeToX(intervalStart, start, end, area);
-            float intervalEndX = TimeToX(Snap(current), start, end, area);
+            float intervalStartX = BeatToX(intervalStart, start, end, area);
+            float intervalEndX = BeatToX(SnapPlacementBeat(current), start, end, area);
             _ui.Line(spriteBatch, new Vector2(intervalStartX, area.Y + 18), new Vector2(intervalEndX, area.Y + 18), Color.LightGreen, 3);
             _ui.Fill(spriteBatch, new Rectangle((int)intervalStartX - 4, area.Y + 10, 8, 16), Color.LightGreen);
             _ui.Fill(spriteBatch, new Rectangle((int)intervalEndX - 4, area.Y + 10, 8, 16), Color.LightGreen * 0.7f);
         }
 
-        foreach (ChartNote note in _document.GetNotesInWindow(start, end))
+        foreach (ChartNote note in _document.GetNotesInWindow(songStart, songEnd))
         {
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
             if (definition == null)
                 continue;
 
-            float occupyStartX = TimeToX(_document.GetContextualStart(note, definition), start, end, area);
-            float occupyEndX = TimeToX(_document.GetContextualEnd(note, definition), start, end, area);
-            float hitStartX = TimeToX(_document.GetContextualHitWindowStart(note, definition), start, end, area);
-            float hitEndX = TimeToX(_document.GetContextualHitWindowEnd(note, definition), start, end, area);
-            float sameVariantHitStartX = TimeToX(_document.GetContextualSameVariantHitWindowStart(note, definition), start, end, area);
-            float sameVariantHitEndX = TimeToX(_document.GetContextualSameVariantHitWindowEnd(note, definition), start, end, area);
+            float occupyStartX = BeatToX(_document.GetContextualStartBeat(note, definition), start, end, area);
+            float occupyEndX = BeatToX(_document.GetContextualEndBeat(note, definition), start, end, area);
+            float hitStartX = BeatToX(_document.GetContextualHitWindowStartBeat(note, definition), start, end, area);
+            float hitEndX = BeatToX(_document.GetContextualHitWindowEndBeat(note, definition), start, end, area);
+            float sameVariantHitStartX = BeatToX(_document.GetContextualSameVariantHitWindowStartBeat(note, definition), start, end, area);
+            float sameVariantHitEndX = BeatToX(_document.GetContextualSameVariantHitWindowEndBeat(note, definition), start, end, area);
             int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
             Color color = GetNoteColor(definition.Kind, variantIndex);
             Rectangle noteMarker = GetNoteMarkerBounds(note, start, end, area);
@@ -1600,34 +1757,36 @@ public sealed class BeatmapEditorElement
         DrawEffects(spriteBatch, start, end, area);
         DrawIntervalPreview(spriteBatch, start, end, area);
 
-        float playheadX = TimeToX(current, start, end, area);
+        float playheadX = BeatToX(current, start, end, area);
         _ui.Line(spriteBatch, new Vector2(playheadX, area.Y - 10), new Vector2(playheadX, area.Bottom + 10), Color.Red, 3);
     }
 
     private void DrawTempoGrid(SpriteBatch spriteBatch, double windowStart, double windowEnd, Rectangle area)
     {
         double divisions = GetEffectiveSnapDivisions();
-        foreach (EditorTempoSegment segment in _document.GetTempoSegments(windowStart, windowEnd))
+        double step = 1.0 / divisions;
+        double first = Math.Ceiling(windowStart / step) * step;
+
+        for (double beat = first; beat <= windowEnd; beat += step)
         {
-            double crotchet = segment.Crotchet;
-            if (crotchet <= 0)
-                continue;
-
-            if (divisions > 1.0)
-                DrawVisualSectionGridLines(spriteBatch, windowStart, windowEnd, area, segment, crotchet / divisions, Color.DarkSlateGray, area.Y + 110, area.Bottom, 1);
-
-            DrawVisualSectionGridLines(spriteBatch, windowStart, windowEnd, area, segment, crotchet, Color.DimGray, area.Y, area.Bottom, 2);
-            DrawTempoAnchor(spriteBatch, windowStart, windowEnd, area, segment);
+            bool wholeBeat = Math.Abs(beat - Math.Round(beat)) <= 0.000001;
+            float x = BeatToX(beat, windowStart, windowEnd, area);
+            _ui.Line(spriteBatch, new Vector2(x, wholeBeat ? area.Y : area.Y + 110), new Vector2(x, area.Bottom), wholeBeat ? Color.DimGray : Color.DarkSlateGray, wholeBeat ? 2 : 1);
         }
+
+        DrawTempoAnchor(spriteBatch, windowStart, windowEnd, area, 0.0);
+
+        GetSongWindowForBeatWindow(windowStart, windowEnd, out double songStart, out double songEnd);
+        foreach (ChartEffect effect in _document.GetEffectsInWindow(songStart, songEnd))
+            DrawTempoAnchor(spriteBatch, windowStart, windowEnd, area, _document.GetEffectBeat(effect));
     }
 
-    private void DrawTempoAnchor(SpriteBatch spriteBatch, double windowStart, double windowEnd, Rectangle area, EditorTempoSegment segment)
+    private void DrawTempoAnchor(SpriteBatch spriteBatch, double windowStart, double windowEnd, Rectangle area, double beat)
     {
-        double anchor = segment.AnchorSongPosition;
-        if (anchor < windowStart || anchor > windowEnd)
+        if (beat < windowStart || beat > windowEnd)
             return;
 
-        float x = TimeToX(anchor, windowStart, windowEnd, area);
+        float x = BeatToX(beat, windowStart, windowEnd, area);
         _ui.Line(spriteBatch, new Vector2(x, area.Y - 6), new Vector2(x, area.Bottom + 6), Color.Yellow, 4);
     }
 
@@ -1653,13 +1812,14 @@ public sealed class BeatmapEditorElement
 
     private void DrawEffects(SpriteBatch spriteBatch, double windowStart, double windowEnd, Rectangle area)
     {
-        foreach (ChartEffect effect in _document.GetEffectsInWindow(windowStart, windowEnd))
+        GetSongWindowForBeatWindow(windowStart, windowEnd, out double songStart, out double songEnd);
+        foreach (ChartEffect effect in _document.GetEffectsInWindow(songStart, songEnd))
         {
             EditorEffectDefinition definition = EditorEffectDefinitions.FromChartEffect(effect);
             if (definition == null)
                 continue;
 
-            float effectX = TimeToX(effect.SongPosition, windowStart, windowEnd, area);
+            float effectX = BeatToX(_document.GetEffectBeat(effect), windowStart, windowEnd, area);
             Color color = GetEffectColor(definition.Kind);
             Rectangle marker = GetEffectMarkerBounds(effect, windowStart, windowEnd, area);
             _ui.Line(spriteBatch, new Vector2(effectX, area.Y + 4), new Vector2(effectX, area.Bottom - 10), color * 0.35f, 2);
@@ -1668,13 +1828,13 @@ public sealed class BeatmapEditorElement
             _ui.Label(spriteBatch, GetEffectLabel(effect, definition), new Vector2(effectX + 10, area.Y + 24), color, 1);
         }
 
-        if (_optionsIsEffect && _optionsIsCreation && _optionsEffect != null && _optionsEffect.SongPosition >= windowStart && _optionsEffect.SongPosition <= windowEnd)
+        if (_optionsIsEffect && _optionsIsCreation && _optionsEffect != null && _document.GetEffectBeat(_optionsEffect) >= windowStart && _document.GetEffectBeat(_optionsEffect) <= windowEnd)
         {
             EditorEffectDefinition definition = _optionsEffectDefinition ?? EditorEffectDefinitions.FromChartEffect(_optionsEffect);
             if (definition == null)
                 return;
 
-            float effectX = TimeToX(_optionsEffect.SongPosition, windowStart, windowEnd, area);
+            float effectX = BeatToX(_document.GetEffectBeat(_optionsEffect), windowStart, windowEnd, area);
             Color color = GetEffectColor(definition.Kind);
             Rectangle marker = new((int)effectX - 8, area.Y + 18, 16, 34);
             _ui.Line(spriteBatch, new Vector2(effectX, area.Y + 4), new Vector2(effectX, area.Bottom - 10), Color.White * 0.45f, 2);
@@ -1692,12 +1852,13 @@ public sealed class BeatmapEditorElement
         foreach (EditorNotePlacement placement in placements)
         {
             ChartNote note = placement.Note;
-            if (note.SongPosition < windowStart || note.SongPosition > windowEnd)
+            double noteBeat = _document.GetNoteBeat(note);
+            if (noteBeat < windowStart || noteBeat > windowEnd)
                 continue;
 
             int variantIndex = EditorNoteDefinitions.FindVariantIndex(placement.Definition, note);
             Color color = GetNoteColor(placement.Definition.Kind, variantIndex);
-            float noteX = TimeToX(note.SongPosition, windowStart, windowEnd, area);
+            float noteX = BeatToX(noteBeat, windowStart, windowEnd, area);
 
             _ui.Line(spriteBatch, new Vector2(noteX, area.Y + 30), new Vector2(noteX, area.Bottom - 18), Color.White * 0.85f, 2);
             _ui.Stroke(spriteBatch, new Rectangle((int)noteX - 7, area.Y + 46, 14, 84), color, 2);
@@ -1709,6 +1870,7 @@ public sealed class BeatmapEditorElement
     {
         Viewport viewport = GLOBALS.graphicsDevice.Viewport;
         double current = CurrentSongPosition();
+        double currentBeat = CurrentBeatPosition();
         EditorNoteDefinition selected = EditorNoteDefinitions.Get(_selectedKind);
         EditorEffectDefinition selectedEffect = EditorEffectDefinitions.Get(_selectedEffectKind);
         string dirty = _document.IsDirty ? "DIRTY" : "SAVED";
@@ -1722,7 +1884,7 @@ public sealed class BeatmapEditorElement
             : $"MODE <E> EFFECT <UP/DOWN> {selectedEffect.DisplayName}";
 
         _ui.Fill(spriteBatch, new Rectangle(20, viewport.Height - 146, viewport.Width - 40, 126), new Color(0, 0, 0, 180));
-        _ui.Label(spriteBatch, $"{playing} T:{current:0.000}s BEAT:{_document.GetBeatAt(current):0.00} BPM:{_document.GetBpmAt(current):0.##} BASE:{_document.Chart.BPM:0.##} OFFSET:{_document.Chart.Offset:0.000} NOTES:{_document.Chart.Notes.Count} FX:{_document.Chart.Effects.Count} {dirty}", new Vector2(34, viewport.Height - 132), Color.White, 2);
+        _ui.Label(spriteBatch, $"{playing} BEAT:{currentBeat:0.00} SEC:{current:0.000}s BPM:{_document.GetBpmAtBeat(currentBeat):0.##} BASE:{_document.Chart.BPM:0.##} OFFSET:{_document.Chart.Offset:0.000} LEADIN:{_document.Chart.LeadInBeats:0.###} NOTES:{_document.Chart.Notes.Count} FX:{_document.Chart.Effects.Count} {dirty}", new Vector2(34, viewport.Height - 132), Color.White, 2);
         _ui.Label(spriteBatch, $"{placementLine}  SONG <PGUP/PGDN> {songName}", new Vector2(34, viewport.Height - 108), Color.LightGreen, 2);
         _ui.Label(spriteBatch, $"CHART <CTRL+PGUP/PGDN> {chartName}", new Vector2(34, viewport.Height - 96), Color.LightGreen, 2);
         _ui.Label(spriteBatch, editLine, new Vector2(34, viewport.Height - 84), _isEditingText ? Color.Yellow : Color.LightBlue, 2);
@@ -1751,18 +1913,36 @@ public sealed class BeatmapEditorElement
 
     private void GetTimelineWindow(out double start, out double end)
     {
-        double current = CurrentSongPosition();
-        start = current - _visibleBeforeSeconds;
-        end = current + _visibleAfterSeconds;
+        double current = CurrentBeatPosition();
+        start = current - _visibleBeforeBeats;
+        end = current + _visibleAfterBeats;
+    }
+
+    private void GetSongWindowForBeatWindow(double startBeat, double endBeat, out double startSongPosition, out double endSongPosition)
+    {
+        startSongPosition = _document.GetSongPositionAtBeat(startBeat);
+        endSongPosition = _document.GetSongPositionAtBeat(endBeat);
+        if (endSongPosition < startSongPosition)
+            (startSongPosition, endSongPosition) = (endSongPosition, startSongPosition);
     }
 
     private float TimeToX(double songPosition, double start, double end, Rectangle area)
     {
-        double t = (songPosition - start) / (end - start);
+        return BeatToX(_document.GetBeatAt(songPosition), start, end, area);
+    }
+
+    private float BeatToX(double beat, double start, double end, Rectangle area)
+    {
+        double t = (beat - start) / (end - start);
         return area.X + (float)(t * area.Width);
     }
 
     private double XToSongPosition(int x, double start, double end, Rectangle area)
+    {
+        return _document.GetSongPositionAtBeat(XToBeat(x, start, end, area));
+    }
+
+    private double XToBeat(int x, double start, double end, Rectangle area)
     {
         double clampedX = Math.Clamp(x, area.X, area.Right);
         double t = (clampedX - area.X) / area.Width;
@@ -1771,13 +1951,13 @@ public sealed class BeatmapEditorElement
 
     private Rectangle GetNoteMarkerBounds(ChartNote note, double start, double end, Rectangle area)
     {
-        float noteX = TimeToX(note.SongPosition, start, end, area);
+        float noteX = BeatToX(_document.GetNoteBeat(note), start, end, area);
         return new Rectangle((int)noteX - 5, area.Y + 58, 10, 68);
     }
 
     private Rectangle GetEffectMarkerBounds(ChartEffect effect, double start, double end, Rectangle area)
     {
-        float effectX = TimeToX(effect.SongPosition, start, end, area);
+        float effectX = BeatToX(_document.GetEffectBeat(effect), start, end, area);
         return new Rectangle((int)effectX - 7, area.Y + 20, 14, 30);
     }
 
@@ -1809,7 +1989,7 @@ public sealed class BeatmapEditorElement
     private string GetEffectLabel(ChartEffect effect, EditorEffectDefinition definition)
     {
         if (definition.Kind == EditorEffectKind.BpmChange && effect.TryGetBpm(out double bpm))
-            return $"BPM {bpm:0.##} / +{effect.GetSectionOffsetOrDefault(0):0.###}";
+            return $"BPM {bpm:0.##}";
 
         return definition.DisplayName;
     }
@@ -1964,6 +2144,7 @@ public sealed class BeatmapEditorElement
             "MusicName" => _document.Chart.MusicName ?? "",
             "BPM" => _document.Chart.BPM.ToString("0.###"),
             "Offset" => _document.Chart.Offset.ToString("0.###"),
+            "LeadInBeats" => _document.Chart.LeadInBeats.ToString("0.###"),
             _ => ""
         };
     }

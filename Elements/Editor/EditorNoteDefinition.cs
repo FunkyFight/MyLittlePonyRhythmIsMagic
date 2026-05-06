@@ -70,7 +70,10 @@ internal static class EditorNotePlacementData
         if (sourceNote == null || createNote == null)
             return Array.Empty<ChartNote>();
 
-        double start = Math.Max(0, sourceNote.SongPosition);
+        if (sourceNote.BeatPosition.HasValue)
+            return CreateBeatBasedNotesFromSource(sourceNote, crotchet, createNote);
+
+        double start = sourceNote.SongPosition;
         if (!HasIntervalConfiguration(sourceNote))
             return new[] { createNote(start) };
 
@@ -84,7 +87,37 @@ internal static class EditorNotePlacementData
 
         List<ChartNote> notes = new();
         for (double time = start; time <= end + InclusiveEndEpsilonSeconds; time += stepSeconds)
-            notes.Add(createNote(Math.Max(0, time)));
+            notes.Add(createNote(time));
+
+        return notes;
+    }
+
+    private static IReadOnlyList<ChartNote> CreateBeatBasedNotesFromSource(ChartNote sourceNote, double crotchet, Func<double, ChartNote> createNote)
+    {
+        double startBeat = sourceNote.BeatPosition.Value;
+        if (!HasIntervalConfiguration(sourceNote))
+        {
+            ChartNote note = createNote(sourceNote.SongPosition);
+            note.BeatPosition = startBeat;
+            note.HoldBeats = sourceNote.HoldBeats;
+            return new[] { note };
+        }
+
+        double durationBeats = Math.Max(0, IntervalEditorNoteProvider.GetDurationBeats(sourceNote.AdditionnalData));
+        double stepBeats = IntervalEditorNoteProvider.GetStepBeats(sourceNote.AdditionnalData);
+        if (stepBeats <= 0 || double.IsNaN(stepBeats) || double.IsInfinity(stepBeats))
+            return Array.Empty<ChartNote>();
+
+        double endBeat = startBeat + durationBeats;
+        List<ChartNote> notes = new();
+        for (double beat = startBeat; beat <= endBeat + InclusiveEndEpsilonSeconds; beat += stepBeats)
+        {
+            double approximatedSongPosition = sourceNote.SongPosition + (beat - startBeat) * Math.Max(crotchet, 0.0);
+            ChartNote note = createNote(approximatedSongPosition);
+            note.BeatPosition = beat;
+            note.HoldBeats = sourceNote.HoldBeats;
+            notes.Add(note);
+        }
 
         return notes;
     }
@@ -93,8 +126,10 @@ internal static class EditorNotePlacementData
     {
         return new ChartNote
         {
-            SongPosition = Math.Max(0, songPosition),
+            SongPosition = songPosition,
+            BeatPosition = sourceNote?.BeatPosition,
             HoldDuration = sourceNote?.HoldDuration ?? 0,
+            HoldBeats = sourceNote?.HoldBeats,
             InputActionToPress = sourceNote?.InputActionToPress,
             AdditionnalData = CreateStoredAdditionnalData(sourceNote)
         };
@@ -177,7 +212,9 @@ public sealed class EditorNoteDefinition
         return new ChartNote
         {
             SongPosition = songPosition,
+            BeatPosition = null,
             HoldDuration = HoldBeats * crotchet,
+            HoldBeats = HoldBeats,
             InputActionToPress = InputAction,
             AdditionnalData = variant.AdditionnalData.ToDictionary(pair => pair.Key, pair => pair.Value)
         };

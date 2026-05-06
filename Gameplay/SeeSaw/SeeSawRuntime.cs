@@ -199,6 +199,14 @@ public readonly struct SeeSawLogicalState
     public double ApplejackAvailableBeat { get; }
 
     public static SeeSawLogicalState Initial => new(SeeSawSide.Outer, SeeSawSide.Exit);
+
+    public static SeeSawLogicalState InitialWithLeadIn(double leadInBeats)
+    {
+        if (double.IsNaN(leadInBeats) || double.IsInfinity(leadInBeats) || leadInBeats <= 0.0)
+            return Initial;
+
+        return new SeeSawLogicalState(SeeSawSide.Outer, SeeSawSide.Exit, -leadInBeats);
+    }
 }
 
 public static class SeeSawPatternInfo
@@ -279,16 +287,12 @@ public sealed class SeeSawTimeline
             if (segment.Actor != actor)
                 continue;
 
-            bool isActive = songPosition.HasValue && segment.EndSongPosition > segment.StartSongPosition
-                ? segment.StartSongPosition <= songPosition.Value && songPosition.Value < segment.EndSongPosition
-                : segment.StartBeat <= beat && beat < segment.EndBeat;
+            bool isActive = segment.StartBeat <= beat && beat < segment.EndBeat;
 
             if (isActive)
                 active = segment;
 
-            bool isAfter = songPosition.HasValue && segment.EndSongPosition > segment.StartSongPosition
-                ? segment.StartSongPosition > songPosition.Value
-                : segment.StartBeat > beat;
+            bool isAfter = segment.StartBeat > beat;
 
             if (isAfter)
                 break;
@@ -311,9 +315,7 @@ public sealed class SeeSawTimeline
             if (segment.Actor != actor)
                 continue;
 
-            bool isAfter = songPosition.HasValue && segment.EndSongPosition > segment.StartSongPosition
-                ? segment.EndSongPosition > songPosition.Value
-                : segment.EndBeat > beat;
+            bool isAfter = segment.EndBeat > beat;
 
             if (isAfter)
                 break;
@@ -334,9 +336,7 @@ public sealed class SeeSawTimeline
         SeeSawImpactEvent last = null;
         foreach (SeeSawImpactEvent impact in ImpactEvents)
         {
-            bool isAfter = songPosition.HasValue && impact.SongPosition > 0.0
-                ? impact.SongPosition > songPosition.Value
-                : impact.Beat > beat;
+            bool isAfter = impact.Beat > beat;
 
             if (isAfter)
                 break;
@@ -356,9 +356,7 @@ public sealed class SeeSawTimeline
     {
         foreach (SeeSawImpactEvent impact in ImpactEvents)
         {
-            bool isAfter = songPosition.HasValue && impact.SongPosition > 0.0
-                ? impact.SongPosition > songPosition.Value
-                : impact.Beat > beat;
+            bool isAfter = impact.Beat > beat;
 
             if (isAfter)
                 return impact;
@@ -376,9 +374,7 @@ public sealed class SeeSawTimeline
     {
         foreach (SeeSawPatternEvent patternEvent in PatternEvents)
         {
-            bool shouldReset = fromSongPosition.HasValue && patternEvent.PlayerHitSongPosition > 0.0
-                ? patternEvent.PlayerHitSongPosition >= fromSongPosition.Value
-                : patternEvent.PlayerHitBeat >= fromBeat;
+            bool shouldReset = patternEvent.PlayerHitBeat >= fromBeat;
 
             if (shouldReset)
                 patternEvent.Judgement = SeeSawJudgement.Pending;
@@ -643,7 +639,7 @@ public static class SeeSawChartCompiler
         return Compile(notes, songPosition => songPosition / getCrotchetAt(songPosition), beat => beat * getCrotchetAt(0.0), getCrotchetAt);
     }
 
-    public static SeeSawTimeline Compile(IReadOnlyList<Note> notes, Func<double, double> getBeatAt, Func<double, double> getSongPositionAtBeat, Func<double, double> getCrotchetAt)
+    public static SeeSawTimeline Compile(IReadOnlyList<Note> notes, Func<double, double> getBeatAt, Func<double, double> getSongPositionAtBeat, Func<double, double> getCrotchetAt, double leadInBeats = 0.0)
     {
         SeeSawTimeline timeline = new();
         if (notes == null || getBeatAt == null || getSongPositionAtBeat == null || getCrotchetAt == null)
@@ -653,7 +649,7 @@ public static class SeeSawChartCompiler
         sortedNotes.Sort((a, b) => a.SongPosition.CompareTo(b.SongPosition));
 
         List<SeeSawCommandEntry> commandEntries = CreateCommandEntries(sortedNotes);
-        SeeSawLogicalState state = SeeSawLogicalState.Initial;
+        SeeSawLogicalState state = SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
         int eventId = 0;
         int segmentId = 0;
         int impactId = 0;
@@ -666,6 +662,34 @@ public static class SeeSawChartCompiler
                 continue;
 
             CompileNote(timeline, entry.SourceNote, entry.SongPosition, entry.Command, ShouldAutoExitAfterHit(commandEntries, i), hitBeat, getSongPositionAtBeat, ref state, ref eventId, ref segmentId, ref impactId);
+        }
+
+        timeline.FinalizeOrdering();
+        return timeline;
+    }
+
+    public static SeeSawTimeline Compile(IReadOnlyList<ChartNote> notes, Func<ChartNote, double> getNoteBeat, ChartTempoMap tempoMap, double leadInBeats = 0.0)
+    {
+        SeeSawTimeline timeline = new();
+        if (notes == null || getNoteBeat == null || tempoMap == null)
+            return timeline;
+
+        List<ChartNote> sortedNotes = CreateSortedChartNotes(notes, getNoteBeat);
+        List<SeeSawChartCommandEntry> commandEntries = CreateChartCommandEntries(sortedNotes);
+        SeeSawLogicalState state = SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
+        int eventId = 0;
+        int segmentId = 0;
+        int impactId = 0;
+
+        for (int i = 0; i < commandEntries.Count; i++)
+        {
+            SeeSawChartCommandEntry entry = commandEntries[i];
+            double hitBeat = getNoteBeat(entry.Note);
+            if (double.IsNaN(hitBeat) || double.IsInfinity(hitBeat))
+                continue;
+
+            double songPosition = tempoMap.BeatToSeconds(hitBeat);
+            CompileNote(timeline, null, songPosition, entry.Command, ShouldAutoExitAfterHit(commandEntries, i), hitBeat, tempoMap.BeatToSeconds, ref state, ref eventId, ref segmentId, ref impactId);
         }
 
         timeline.FinalizeOrdering();
@@ -806,7 +830,7 @@ public static class SeeSawChartCompiler
             : default;
     }
 
-    public static SeeSawCompiledEventTiming GetTimingForChartNote(IReadOnlyList<ChartNote> notes, ChartNote targetNote, Func<double, double> getBeatAt)
+    public static SeeSawCompiledEventTiming GetTimingForChartNote(IReadOnlyList<ChartNote> notes, ChartNote targetNote, Func<double, double> getBeatAt, double leadInBeats = 0.0)
     {
         if (targetNote == null || notes == null || getBeatAt == null)
             return default;
@@ -814,7 +838,7 @@ public static class SeeSawChartCompiler
         List<ChartNote> sortedNotes = CreateSortedChartNotes(notes);
         List<SeeSawChartCommandEntry> commandEntries = CreateChartCommandEntries(sortedNotes);
 
-        SeeSawLogicalState state = SeeSawLogicalState.Initial;
+        SeeSawLogicalState state = SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
         for (int i = 0; i < commandEntries.Count; i++)
         {
             SeeSawChartCommandEntry entry = commandEntries[i];
@@ -832,6 +856,34 @@ public static class SeeSawChartCompiler
         return default;
     }
 
+    public static SeeSawCompiledEventTiming GetTimingForChartNote(IReadOnlyList<ChartNote> notes, ChartNote targetNote, Func<ChartNote, double> getNoteBeat, double leadInBeats = 0.0)
+    {
+        if (targetNote == null || notes == null || getNoteBeat == null)
+            return default;
+
+        List<ChartNote> sortedNotes = CreateSortedChartNotes(notes, getNoteBeat);
+        List<SeeSawChartCommandEntry> commandEntries = CreateChartCommandEntries(sortedNotes);
+
+        SeeSawLogicalState state = SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
+        double targetBeat = getNoteBeat(targetNote);
+        BeatTick targetTick = BeatTick.FromBeat(targetBeat);
+        for (int i = 0; i < commandEntries.Count; i++)
+        {
+            SeeSawChartCommandEntry entry = commandEntries[i];
+            ChartNote note = entry.Note;
+
+            double hitBeat = getNoteBeat(note);
+            SeeSawCompiledEventTiming timing = CreateTiming(entry.Command, state, hitBeat, ShouldAutoExitAfterHit(commandEntries, i));
+            if (ReferenceEquals(note, targetNote))
+                return timing;
+
+            if (BeatTick.FromBeat(hitBeat) < targetTick && timing.IsValid)
+                state = ApplyTiming(timing);
+        }
+
+        return default;
+    }
+
     public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, SeeSawAction action, double songPosition, double crotchet)
     {
         return crotchet > 0.0
@@ -839,10 +891,16 @@ public static class SeeSawChartCompiler
             : default;
     }
 
-    public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, SeeSawAction action, double songPosition, Func<double, double> getBeatAt)
+    public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, SeeSawAction action, double songPosition, Func<double, double> getBeatAt, double leadInBeats = 0.0)
     {
-        SeeSawLogicalState state = GetStateBefore(notes, songPosition, getBeatAt);
+        SeeSawLogicalState state = GetStateBefore(notes, songPosition, getBeatAt, leadInBeats);
         return CreateTiming(new SeeSawCommand(action, null), state, getBeatAt(songPosition));
+    }
+
+    public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, SeeSawAction action, double beat, Func<ChartNote, double> getNoteBeat, double leadInBeats = 0.0)
+    {
+        SeeSawLogicalState state = GetStateBeforeBeat(notes, beat, getNoteBeat, leadInBeats);
+        return CreateTiming(new SeeSawCommand(action, null), state, beat);
     }
 
     public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, IReadOnlyDictionary<string, string> additionnalData, double songPosition, double crotchet)
@@ -852,13 +910,22 @@ public static class SeeSawChartCompiler
             : default;
     }
 
-    public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, IReadOnlyDictionary<string, string> additionnalData, double songPosition, Func<double, double> getBeatAt)
+    public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, IReadOnlyDictionary<string, string> additionnalData, double songPosition, Func<double, double> getBeatAt, double leadInBeats = 0.0)
     {
         if (!TryGetSeeSawCommand(additionnalData, out SeeSawCommand command))
             return default;
 
-        SeeSawLogicalState state = GetStateBefore(notes, songPosition, getBeatAt);
+        SeeSawLogicalState state = GetStateBefore(notes, songPosition, getBeatAt, leadInBeats);
         return CreateTiming(command, state, getBeatAt(songPosition));
+    }
+
+    public static SeeSawCompiledEventTiming GetPreviewTiming(IReadOnlyList<ChartNote> notes, IReadOnlyDictionary<string, string> additionnalData, double beat, Func<ChartNote, double> getNoteBeat, double leadInBeats = 0.0)
+    {
+        if (!TryGetSeeSawCommand(additionnalData, out SeeSawCommand command))
+            return default;
+
+        SeeSawLogicalState state = GetStateBeforeBeat(notes, beat, getNoteBeat, leadInBeats);
+        return CreateTiming(command, state, beat);
     }
 
     public static SeeSawLogicalState GetStateBefore(IReadOnlyList<ChartNote> notes, double songPosition, double crotchet)
@@ -868,14 +935,14 @@ public static class SeeSawChartCompiler
             : SeeSawLogicalState.Initial;
     }
 
-    public static SeeSawLogicalState GetStateBefore(IReadOnlyList<ChartNote> notes, double songPosition, Func<double, double> getBeatAt)
+    public static SeeSawLogicalState GetStateBefore(IReadOnlyList<ChartNote> notes, double songPosition, Func<double, double> getBeatAt, double leadInBeats = 0.0)
     {
         if (notes == null || getBeatAt == null)
-            return SeeSawLogicalState.Initial;
+            return SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
 
         List<ChartNote> sortedNotes = CreateSortedChartNotes(notes);
 
-        SeeSawLogicalState state = SeeSawLogicalState.Initial;
+        SeeSawLogicalState state = SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
         foreach (ChartNote note in sortedNotes)
         {
             if (note.SongPosition >= songPosition - SameBeatEpsilon)
@@ -885,6 +952,31 @@ public static class SeeSawChartCompiler
                 continue;
 
             SeeSawCompiledEventTiming timing = CreateTiming(command, state, getBeatAt(note.SongPosition));
+            if (timing.IsValid)
+                state = ApplyTiming(timing);
+        }
+
+        return state;
+    }
+
+    public static SeeSawLogicalState GetStateBeforeBeat(IReadOnlyList<ChartNote> notes, double beat, Func<ChartNote, double> getNoteBeat, double leadInBeats = 0.0)
+    {
+        if (notes == null || getNoteBeat == null)
+            return SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
+
+        List<ChartNote> sortedNotes = CreateSortedChartNotes(notes, getNoteBeat);
+        SeeSawLogicalState state = SeeSawLogicalState.InitialWithLeadIn(leadInBeats);
+        BeatTick targetTick = BeatTick.FromBeat(beat);
+        foreach (ChartNote note in sortedNotes)
+        {
+            double noteBeat = getNoteBeat(note);
+            if (BeatTick.FromBeat(noteBeat) >= targetTick)
+                break;
+
+            if (!TryGetSeeSawCommand(note.AdditionnalData, out SeeSawCommand command))
+                continue;
+
+            SeeSawCompiledEventTiming timing = CreateTiming(command, state, noteBeat);
             if (timing.IsValid)
                 state = ApplyTiming(timing);
         }
@@ -988,10 +1080,31 @@ public static class SeeSawChartCompiler
         return sortedNotes;
     }
 
+    private static List<ChartNote> CreateSortedChartNotes(IReadOnlyList<ChartNote> notes, Func<ChartNote, double> getNoteBeat)
+    {
+        List<ChartNoteSortEntry> entries = new();
+        for (int i = 0; i < notes.Count; i++)
+            entries.Add(new ChartNoteSortEntry(notes[i], i));
+
+        entries.Sort((a, b) => CompareChartNoteSortEntries(a, b, getNoteBeat));
+
+        List<ChartNote> sortedNotes = new(entries.Count);
+        foreach (ChartNoteSortEntry entry in entries)
+            sortedNotes.Add(entry.Note);
+
+        return sortedNotes;
+    }
+
     private static int CompareChartNoteSortEntries(ChartNoteSortEntry a, ChartNoteSortEntry b)
     {
         int byTime = a.Note.SongPosition.CompareTo(b.Note.SongPosition);
         return byTime != 0 ? byTime : a.Order.CompareTo(b.Order);
+    }
+
+    private static int CompareChartNoteSortEntries(ChartNoteSortEntry a, ChartNoteSortEntry b, Func<ChartNote, double> getNoteBeat)
+    {
+        int byBeat = BeatTick.FromBeat(getNoteBeat(a.Note)).CompareTo(BeatTick.FromBeat(getNoteBeat(b.Note)));
+        return byBeat != 0 ? byBeat : a.Order.CompareTo(b.Order);
     }
 
     private readonly struct ChartNoteSortEntry
@@ -1436,6 +1549,7 @@ public sealed class SeeSawDirector
     private readonly HashSet<int> _triggeredImpactIds = new();
     private readonly HashSet<int> _triggeredRainbowHighApexSegmentIds = new();
     private double _lastSongPosition = double.NaN;
+    private double _lastBeat = double.NaN;
     private double _currentBeat = double.NaN;
     private double _currentSongPosition;
     private Vector2 _lastRainbowTrailPosition;
@@ -1469,6 +1583,7 @@ public sealed class SeeSawDirector
     public void Reset()
     {
         _lastSongPosition = double.NaN;
+        _lastBeat = double.NaN;
         _currentBeat = double.NaN;
         _startedSegmentIds.Clear();
         _triggeredImpactIds.Clear();
@@ -1486,23 +1601,28 @@ public sealed class SeeSawDirector
 
     public void Update(double songPosition, GameTime gameTime)
     {
+        double beat = _getBeatAt != null ? _getBeatAt(songPosition) : _currentBeat;
+        Update(beat, songPosition, gameTime);
+    }
+
+    public void Update(double beat, double songPosition, GameTime gameTime)
+    {
         if (_timeline == null)
             return;
 
         _currentSongPosition = songPosition;
-        double beat = _getBeatAt != null ? _getBeatAt(songPosition) : _currentBeat;
         _currentBeat = beat;
 
-        if (HasRewound(songPosition))
+        if (HasRewound(beat, songPosition))
         {
             _startedSegmentIds.Clear();
             _triggeredImpactIds.Clear();
             _triggeredRainbowHighApexSegmentIds.Clear();
-            _timeline.ResetJudgements(beat, songPosition);
+            _timeline.ResetJudgements(beat);
         }
 
-        SeeSawJumpSegment rainbowSegment = _timeline.GetActiveSegment(SeeSawActor.RainbowDash, beat, songPosition);
-        SeeSawJumpSegment applejackSegment = _timeline.GetActiveSegment(SeeSawActor.Applejack, beat, songPosition);
+        SeeSawJumpSegment rainbowSegment = _timeline.GetActiveSegment(SeeSawActor.RainbowDash, beat);
+        SeeSawJumpSegment applejackSegment = _timeline.GetActiveSegment(SeeSawActor.Applejack, beat);
         SeeSawPose rainbowPose = ApplyActor(SeeSawActor.RainbowDash, _rainbow, rainbowSegment, beat, songPosition);
         SeeSawPose applejackPose = ApplyActor(SeeSawActor.Applejack, _applejack, applejackSegment, beat, songPosition);
 
@@ -1513,6 +1633,7 @@ public sealed class SeeSawDirector
 
         FireCrossedEvents(beat, songPosition);
         _lastSongPosition = songPosition;
+        _lastBeat = beat;
     }
 
     public void ApplyReaction(NoteReactionResult result, Note note)
@@ -1552,7 +1673,7 @@ public sealed class SeeSawDirector
             return pose;
         }
 
-        SeeSawSide side = _timeline.GetLastGroundedSide(actor, beat, songPosition);
+        SeeSawSide side = _timeline.GetLastGroundedSide(actor, beat);
         SeeSawPose groundedPose = _pathCatalog.GetGroundedPose(actor, side);
         controller.ApplyPose(groundedPose);
         controller.SetIdleForSide(side);
@@ -1561,7 +1682,7 @@ public sealed class SeeSawDirector
 
     private void FireCrossedEvents(double beat, double songPosition)
     {
-        if (double.IsNaN(_lastSongPosition) || songPosition < _lastSongPosition)
+        if (double.IsNaN(_lastBeat) || beat < _lastBeat)
             return;
 
         foreach (SeeSawJumpSegment segment in _timeline.JumpSegments)
@@ -1665,16 +1786,15 @@ public sealed class SeeSawDirector
         SeeSawImpactEvent nextImpact = GetNextBeamImpact(beat, songPosition);
         float fromRotation = lastImpact == null ? GetBeamRotationToward(SeeSawActor.RainbowDash) : GetBeamRotationToward(lastImpact.Actor);
 
-        double beamEaseSeconds = BeamEaseBeats * GetCrotchetAt(nextImpact?.SongPosition ?? songPosition);
-        if (nextImpact == null || nextImpact.SongPosition - songPosition > beamEaseSeconds)
+        if (nextImpact == null || nextImpact.Beat - beat > BeamEaseBeats)
         {
             _beam.Rotation = fromRotation;
             return;
         }
 
         float targetRotation = GetBeamRotationToward(nextImpact.Actor);
-        double easeStart = Math.Max(0.0, nextImpact.SongPosition - beamEaseSeconds);
-        float t = (float)RhythmVisualUtils.GetProgression(easeStart, nextImpact.SongPosition, songPosition);
+        double easeStart = Math.Max(0.0, nextImpact.Beat - BeamEaseBeats);
+        float t = (float)RhythmVisualUtils.GetProgression(easeStart, nextImpact.Beat, beat);
         t = t * t * (3f - 2f * t);
         _beam.Rotation = MathHelper.Lerp(fromRotation, targetRotation, t);
     }
@@ -1684,9 +1804,7 @@ public sealed class SeeSawDirector
         SeeSawImpactEvent lastImpact = null;
         foreach (SeeSawImpactEvent impact in _timeline.ImpactEvents)
         {
-            bool isAfter = impact.SongPosition > 0.0
-                ? impact.SongPosition > songPosition
-                : impact.Beat > beat;
+            bool isAfter = impact.Beat > beat;
 
             if (isAfter)
                 break;
@@ -1702,9 +1820,7 @@ public sealed class SeeSawDirector
     {
         foreach (SeeSawImpactEvent impact in _timeline.ImpactEvents)
         {
-            bool isAfter = impact.SongPosition > 0.0
-                ? impact.SongPosition > songPosition
-                : impact.Beat > beat;
+            bool isAfter = impact.Beat > beat;
 
             if (isAfter && impact.Kind != SeeSawImpactKind.Exit)
                 return impact;
@@ -1718,23 +1834,25 @@ public sealed class SeeSawDirector
         return actor == SeeSawActor.RainbowDash ? _rainbow : _applejack;
     }
 
-    private bool HasRewound(double songPosition)
+    private bool HasRewound(double beat, double songPosition)
     {
-        return !double.IsNaN(_lastSongPosition) && songPosition < _lastSongPosition - RewindThresholdBeats * GetCrotchetAt(_lastSongPosition);
+        return !double.IsNaN(_lastBeat)
+            ? beat < _lastBeat - RewindThresholdBeats
+            : !double.IsNaN(_lastSongPosition) && songPosition < _lastSongPosition - RewindThresholdBeats * GetCrotchetAt(_lastSongPosition);
     }
 
     private bool Crossed(double eventBeat, double currentBeat, double eventSongPosition, double currentSongPosition)
     {
-        return eventSongPosition > _lastSongPosition && eventSongPosition <= currentSongPosition;
+        BeatTick eventTick = BeatTick.FromBeat(eventBeat);
+        return eventTick > BeatTick.FromBeat(_lastBeat) && eventTick <= BeatTick.FromBeat(currentBeat);
     }
 
     private static double GetSegmentBeat(SeeSawJumpSegment segment, double fallbackBeat, double songPosition)
     {
-        if (segment == null || segment.EndSongPosition <= segment.StartSongPosition || segment.EndBeat <= segment.StartBeat)
+        if (segment == null || segment.EndBeat <= segment.StartBeat)
             return fallbackBeat;
 
-        double t = RhythmVisualUtils.GetProgression(segment.StartSongPosition, segment.EndSongPosition, songPosition);
-        return MathHelper.Lerp((float)segment.StartBeat, (float)segment.EndBeat, (float)t);
+        return Math.Clamp(fallbackBeat, segment.StartBeat, segment.EndBeat);
     }
 
     private SeeSawPatternEvent FindCurrentPendingEventInMissWindow()

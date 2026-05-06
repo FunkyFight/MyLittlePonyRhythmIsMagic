@@ -35,7 +35,7 @@ public abstract class IntervalEditorNoteProvider : EditorNoteProvider
         if (sourceConfigNote == null || crotchet <= 0)
             return Array.Empty<EditorNotePlacement>();
 
-        double start = Math.Max(0, sourceConfigNote.SongPosition);
+        double start = sourceConfigNote.SongPosition;
         double durationBeats = Math.Max(0, GetDurationBeats(sourceConfigNote.AdditionnalData));
         double stepBeats = Math.Max(0.000001, GetStepBeats(sourceConfigNote.AdditionnalData));
         double end = start + durationBeats * crotchet;
@@ -44,7 +44,7 @@ public abstract class IntervalEditorNoteProvider : EditorNoteProvider
         List<EditorNotePlacement> placements = new();
         for (double time = start; time <= end + InclusiveEndEpsilonSeconds; time += stepSeconds)
         {
-            ChartNote hitNote = CreateHitNote(Math.Max(0, time), crotchet, sourceConfigNote);
+            ChartNote hitNote = CreateHitNote(time, crotchet, sourceConfigNote);
             placements.Add(new EditorNotePlacement(HitDefinition, hitNote));
         }
 

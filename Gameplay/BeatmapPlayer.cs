@@ -13,6 +13,7 @@ public class BeatmapPlayer : IDisposable
     public Chart CurrentChart {get; private set;}
     public bool HasAChartLoaded { get; private set; }
     public VisualNoteManager<VisualNote> VisualNoteMng {get; set;}
+    public TempoMappedRhythmClock Clock { get; private set; }
 
     public event Action BeatmapStarted;
 
@@ -51,7 +52,7 @@ public class BeatmapPlayer : IDisposable
         if(Conductor.isPlaying())
         {
             Conductor.Update();
-            ApplyChartEffectsAt(Conductor.SongPosition);
+            Clock?.Update(Conductor.SongPosition);
             ChartPlayer?.Update(Conductor.SongPosition);
             VisualNoteMng?.Update(Conductor.SongPosition);
         }
@@ -71,8 +72,9 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = Chart.CreateMetronome(bpm, 200, startupDelaySeconds, additionnalData);
         _tempoMap = new ChartTempoMap(CurrentChart);
+        Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(CurrentChart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
+        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(CurrentChart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
         BeatmapStarted?.Invoke();
     }
@@ -90,7 +92,9 @@ public class BeatmapPlayer : IDisposable
         Chart chart = new Chart
         {
             SongName = "See Saw Debug",
-            BPM = bpm
+            BPM = bpm,
+            Offset = startupDelaySeconds,
+            ChartVersion = 2
         };
 
         for (int i = 0; i < 200; i++)
@@ -98,7 +102,9 @@ public class BeatmapPlayer : IDisposable
             chart.Notes.Add(new ChartNote
             {
                 SongPosition = startupDelaySeconds + i * crotchet * 2.0,
+                BeatPosition = i * 2.0,
                 HoldDuration = 0,
+                HoldBeats = 0,
                 InputActionToPress = "ReactMain",
                 AdditionnalData = additionnalData
             });
@@ -107,8 +113,9 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
+        Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
+        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
         BeatmapStarted?.Invoke();
     }
@@ -124,9 +131,10 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor(song_path, chart.BPM, chart.Offset);
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
+        Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);
-        ApplyChartEffectsAt(0);
+        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
+        Clock.Update(Conductor.SongPosition);
         Conductor.Play();
         BeatmapStarted?.Invoke();
 
@@ -144,20 +152,16 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor(songPath, chart.BPM, beatDelay);
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
+        Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(chart, rules, reactionEvaluator);
-        ApplyChartEffectsAt(0);
+        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
+        Clock.Update(Conductor.SongPosition);
         BeatmapStarted?.Invoke();
     }
 
     public void ApplyChartEffectsAt(double songPosition)
     {
-        if (Conductor == null || CurrentChart == null)
-            return;
-
-        double bpm = GetBpmAt(songPosition);
-        if (Math.Abs(Conductor.BPM - bpm) > 0.0005)
-            Conductor.SetBpm(bpm);
+        Clock?.Update(songPosition);
     }
 
     public double GetBpmAt(double songPosition)
@@ -165,7 +169,7 @@ public class BeatmapPlayer : IDisposable
         if (CurrentChart == null)
             return Conductor?.BPM ?? 100;
 
-        return GetTempoMap().GetBpmAt(songPosition);
+        return GetTempoMap().GetBpmAtSeconds(songPosition);
     }
 
     public double GetCrotchetAt(double songPosition)
@@ -179,14 +183,28 @@ public class BeatmapPlayer : IDisposable
     {
         return CurrentChart == null
             ? songPosition / (Conductor?.Crotchet ?? 0.6)
-            : GetTempoMap().GetBeatAt(songPosition);
+            : GetTempoMap().SecondsToBeat(songPosition);
     }
 
     public double GetSongPositionAtBeat(double beat)
     {
         return CurrentChart == null
             ? beat * (Conductor?.Crotchet ?? 0.6)
-            : GetTempoMap().GetSongPositionAtBeat(beat);
+            : GetTempoMap().BeatToSeconds(beat);
+    }
+
+    public double GetBpmAtBeat(double beat)
+    {
+        return CurrentChart == null
+            ? Conductor?.BPM ?? 100
+            : GetTempoMap().GetBpmAtBeat(beat);
+    }
+
+    public double GetSecondsPerBeatAtBeat(double beat)
+    {
+        return CurrentChart == null
+            ? Conductor?.Crotchet ?? 0.6
+            : GetTempoMap().GetSecondsPerBeatAtBeat(beat);
     }
 
     public double GetMaxCrotchet()
@@ -208,6 +226,7 @@ public class BeatmapPlayer : IDisposable
         Conductor = null;
         CurrentChart = null;
         _tempoMap = null;
+        Clock = null;
         HasAChartLoaded = false;
         ChartPlayer = null;
         VisualNoteMng = null;

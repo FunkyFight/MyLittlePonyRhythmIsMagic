@@ -8,10 +8,13 @@
   <SongPath>Songs\赤毛ポニー.mp3</SongPath>
   <BPM>195</BPM>
   <Offset>0.24</Offset>
+  <ChartVersion>2</ChartVersion>
   <Notes>
     <Note>
       <SongPosition>6.701538461538462</SongPosition>
+      <BeatPosition>21</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -20,7 +23,9 @@
     </Note>
     <Note>
       <SongPosition>7.316923076923078</SongPosition>
+      <BeatPosition>23</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -29,7 +34,9 @@
     </Note>
     <Note>
       <SongPosition>8.24</SongPosition>
+      <BeatPosition>26</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -38,7 +45,9 @@
     </Note>
     <Note>
       <SongPosition>9.163076923076924</SongPosition>
+      <BeatPosition>29</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -47,7 +56,9 @@
     </Note>
     <Note>
       <SongPosition>10.086153846153847</SongPosition>
+      <BeatPosition>32</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -56,7 +67,9 @@
     </Note>
     <Note>
       <SongPosition>11.00923076923077</SongPosition>
+      <BeatPosition>35</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -65,7 +78,9 @@
     </Note>
     <Note>
       <SongPosition>11.932307692307694</SongPosition>
+      <BeatPosition>38</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -74,7 +89,9 @@
     </Note>
     <Note>
       <SongPosition>13.163076923076924</SongPosition>
+      <BeatPosition>42</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -83,7 +100,9 @@
     </Note>
     <Note>
       <SongPosition>14.393846153846155</SongPosition>
+      <BeatPosition>46</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -92,7 +111,9 @@
     </Note>
     <Note>
       <SongPosition>15.00923076923077</SongPosition>
+      <BeatPosition>48</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -101,7 +122,9 @@
     </Note>
     <Note>
       <SongPosition>15.624615384615385</SongPosition>
+      <BeatPosition>50</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -110,7 +133,9 @@
     </Note>
     <Note>
       <SongPosition>16.24</SongPosition>
+      <BeatPosition>51.99999999999999</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -119,7 +144,9 @@
     </Note>
     <Note>
       <SongPosition>17.163076923076922</SongPosition>
+      <BeatPosition>55</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -128,7 +155,9 @@
     </Note>
     <Note>
       <SongPosition>18.086153846153845</SongPosition>
+      <BeatPosition>58</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -137,7 +166,9 @@
     </Note>
     <Note>
       <SongPosition>19.00923076923077</SongPosition>
+      <BeatPosition>61</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -146,7 +177,9 @@
     </Note>
     <Note>
       <SongPosition>19.932307692307692</SongPosition>
+      <BeatPosition>64</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -155,7 +188,9 @@
     </Note>
     <Note>
       <SongPosition>20.855384615384615</SongPosition>
+      <BeatPosition>67</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -164,7 +199,9 @@
     </Note>
     <Note>
       <SongPosition>21.77846153846154</SongPosition>
+      <BeatPosition>70</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -173,7 +210,9 @@
     </Note>
     <Note>
       <SongPosition>22.701538461538462</SongPosition>
+      <BeatPosition>73</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -182,7 +221,9 @@
     </Note>
     <Note>
       <SongPosition>23.624615384615385</SongPosition>
+      <BeatPosition>76</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -191,7 +232,9 @@
     </Note>
     <Note>
       <SongPosition>24.24</SongPosition>
+      <BeatPosition>78</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -200,7 +243,9 @@
     </Note>
     <Note>
       <SongPosition>24.855384615384615</SongPosition>
+      <BeatPosition>80</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -209,7 +254,9 @@
     </Note>
     <Note>
       <SongPosition>25.470769230769232</SongPosition>
+      <BeatPosition>82</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -218,7 +265,9 @@
     </Note>
     <Note>
       <SongPosition>26.701538461538462</SongPosition>
+      <BeatPosition>86</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -229,7 +278,9 @@
     </Note>
     <Note>
       <SongPosition>27.31692307692308</SongPosition>
+      <BeatPosition>88</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -238,7 +289,9 @@
     </Note>
     <Note>
       <SongPosition>28.24</SongPosition>
+      <BeatPosition>91</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -247,7 +300,9 @@
     </Note>
     <Note>
       <SongPosition>29.163076923076922</SongPosition>
+      <BeatPosition>94</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -256,7 +311,9 @@
     </Note>
     <Note>
       <SongPosition>30.086153846153845</SongPosition>
+      <BeatPosition>97</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -265,7 +322,9 @@
     </Note>
     <Note>
       <SongPosition>31.00923076923077</SongPosition>
+      <BeatPosition>100</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -274,7 +333,9 @@
     </Note>
     <Note>
       <SongPosition>32.24</SongPosition>
+      <BeatPosition>104</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_outer" />
@@ -283,7 +344,9 @@
     </Note>
     <Note>
       <SongPosition>33.16307692307693</SongPosition>
+      <BeatPosition>107</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -292,7 +355,9 @@
     </Note>
     <Note>
       <SongPosition>33.77846153846154</SongPosition>
+      <BeatPosition>109</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />
@@ -301,7 +366,9 @@
     </Note>
     <Note>
       <SongPosition>34.393846153846155</SongPosition>
+      <BeatPosition>110.99999999999999</BeatPosition>
       <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
       <InputActionToPress>ReactMain</InputActionToPress>
       <AdditionnalData>
         <Entry Key="action" Value="see_saw_toward_inner" />

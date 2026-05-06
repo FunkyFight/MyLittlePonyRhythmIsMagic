@@ -80,7 +80,7 @@ public sealed class SeaponyParadeEditorNotePlacementStrategy : IEditorNotePlacem
             };
         }
 
-        double start = Math.Max(0, sourceNote.SongPosition);
+        double start = sourceNote.SongPosition;
         double end = start + Math.Max(0, IntervalEditorNoteProvider.GetDurationBeats(sourceNote.AdditionnalData)) * context.Crotchet;
         double secondHitOffset = TapTapSecondHitOffsetBeats * context.Crotchet;
         double pairStep = TapTapPairStepBeats * context.Crotchet;
