@@ -25,7 +25,7 @@ public class Game1 : Core
     private KeyboardState _previousKeyboard;
     private bool _showMouseViewportCoordinates;
 
-    public Game1() : base("My Little Pony: Rhythm Is Magic", 1280, 720, false)
+    public Game1() : base("My Little Pony: Rhythm Is Magic", 1920, 1080, true)
     {
     }
 
@@ -47,6 +47,7 @@ public class Game1 : Core
 
         // Scene
         _sceneManager = new SceneManager();
+        _sceneManager.Viewport.SamplerState = SamplerState.PointClamp;
         _sceneManager.SetScene(new SeeSawScene(this));
 
 
@@ -107,6 +108,11 @@ public class Game1 : Core
     {
         GraphicsDevice.Clear(Color.Black);
 
+
+        if (GLOBALS.beatmapEditorElement != null)
+            GLOBALS.beatmapEditorElement.ConfigureSceneViewport(_sceneManager.Viewport);
+        else
+            BeatmapEditorElement.ConfigureSceneViewportFullscreen(_sceneManager.Viewport);
 
         _sceneManager.Draw(SpriteBatch);
 

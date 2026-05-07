@@ -28,6 +28,96 @@ public sealed class SetMetadataCommand : IEditorCommand
     }
 }
 
+public sealed class SetBpmCommand : IEditorCommand
+{
+    private readonly double _newValue;
+    private double _oldValue;
+    private bool _hasOldValue;
+
+    public SetBpmCommand(double newValue)
+    {
+        _newValue = newValue;
+    }
+
+    public string Name => "Set BPM";
+
+    public void Execute(BeatmapEditorDocument document)
+    {
+        if (!_hasOldValue)
+        {
+            _oldValue = document.Chart.BPM;
+            _hasOldValue = true;
+        }
+
+        document.SetBpm(_newValue);
+    }
+
+    public void Undo(BeatmapEditorDocument document)
+    {
+        document.SetBpm(_oldValue);
+    }
+}
+
+public sealed class SetOffsetCommand : IEditorCommand
+{
+    private readonly double _newValue;
+    private double _oldValue;
+    private bool _hasOldValue;
+
+    public SetOffsetCommand(double newValue)
+    {
+        _newValue = newValue;
+    }
+
+    public string Name => "Set Offset";
+
+    public void Execute(BeatmapEditorDocument document)
+    {
+        if (!_hasOldValue)
+        {
+            _oldValue = document.Chart.Offset;
+            _hasOldValue = true;
+        }
+
+        document.SetOffset(_newValue);
+    }
+
+    public void Undo(BeatmapEditorDocument document)
+    {
+        document.SetOffset(_oldValue);
+    }
+}
+
+public sealed class SetLeadInBeatsCommand : IEditorCommand
+{
+    private readonly double _newValue;
+    private double _oldValue;
+    private bool _hasOldValue;
+
+    public SetLeadInBeatsCommand(double newValue)
+    {
+        _newValue = newValue;
+    }
+
+    public string Name => "Set Lead-In";
+
+    public void Execute(BeatmapEditorDocument document)
+    {
+        if (!_hasOldValue)
+        {
+            _oldValue = document.Chart.LeadInBeats;
+            _hasOldValue = true;
+        }
+
+        document.SetLeadInBeats(_newValue);
+    }
+
+    public void Undo(BeatmapEditorDocument document)
+    {
+        document.SetLeadInBeats(_oldValue);
+    }
+}
+
 public sealed class SetFlashingEffectsWarningCommand : IEditorCommand
 {
     private readonly bool _newValue;

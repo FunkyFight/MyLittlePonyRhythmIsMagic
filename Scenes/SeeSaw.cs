@@ -32,8 +32,8 @@ public class SeeSawScene : Scene
     private AnimationStateMachine ApplejackState;
     private AnimationStateMachine SeeSawState;
     private bool[] requestBop = [true, true];
-    private readonly int ponyScale = 3;
-    private readonly int seeSawScale = 3;
+    private readonly float ponyScale = 4.5f;
+    private readonly float seeSawScale = 4.5f;
 
     private Vector2 applejackOuterPos;
     private Vector2 applejackInnerPos;

@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GameCore.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MLP_RiM.Elements.DevUI;
+using MLP_RiM.Elements.Editor.Commands;
 using Rhythm.Note;
 using Rhythm.Note.Evaluator;
 
@@ -21,7 +23,11 @@ internal enum EditorTimelineDragKind
 {
     None,
     Note,
-    Effect
+    Effect,
+    ClipCreate,
+    ClipMove,
+    ClipResizeStart,
+    ClipResizeEnd
 }
 
 public sealed class BeatmapEditorElement
@@ -38,8 +44,13 @@ public sealed class BeatmapEditorElement
     private readonly List<string> _availableCharts = new();
     private readonly Dictionary<EditorNoteKind, Dictionary<string, string>> _lastCreatedNoteData = new();
     private readonly Dictionary<string, string> _lastIntervalData = new();
+    private readonly EditorCommandStack _commandStack = new();
     private readonly IEditorNoteOptionsPanel _intervalOptionsPanel = new IntervalEditorNoteOptionsPanel();
     private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset", "LeadInBeats" };
+    private const float ScenePreviewScale = 0.5f;
+    private const int TimelineTrackCount = 10;
+    private const int TimelineTrackLabelWidth = 180;
+    private const int TimelineHeaderHeight = 28;
     private const double ShiftSeekSongDurationRatio = 0.05;
     private const double HeldArrowSeekInitialDelaySeconds = 0.25;
     private const double HeldArrowSeekRepeatSeconds = 0.075;
@@ -81,7 +92,16 @@ public sealed class BeatmapEditorElement
     private string _newBeatmapNameBuffer = "";
     private ChartNote _draggedNote;
     private ChartEffect _draggedEffect;
+    private ChartEditorClip _draggedClip;
+    private EditorClipDefinition _draggedClipDefinition;
     private double _dragPointerOffsetBeats;
+    private double _dragStartBeat;
+    private double _dragEndBeat;
+    private double _dragStartLengthBeats;
+    private double _dragPreviewStartBeat;
+    private double _dragPreviewLengthBeats;
+    private int _dragStartTrackIndex;
+    private int _dragPreviewTrackIndex;
     private bool _draggedEffectOffsetFollowedPosition;
     private bool _dragMoved;
     private double _heldLeftSeekSeconds;
@@ -106,6 +126,41 @@ public sealed class BeatmapEditorElement
 
     public bool IsPreviewPlaying => _isPreviewPlaying;
     public bool IsEditorPlaybackPlaying => _editorPlaybackPlaying;
+
+    public void ConfigureSceneViewport(RenderViewport viewport)
+    {
+        if (viewport == null)
+            return;
+
+        if (_isPreviewPlaying)
+        {
+            ConfigureSceneViewportFullscreen(viewport);
+            return;
+        }
+
+        Rectangle bounds = GetEditorLayout().ScenePreviewPanel;
+        viewport.UseBackBufferSize();
+        viewport.Position = new Vector2(bounds.X, bounds.Y);
+        viewport.Origin = Vector2.Zero;
+        viewport.Rotation = 0f;
+        viewport.Scale = new Vector2(ScenePreviewScale, ScenePreviewScale);
+        viewport.Color = Color.White;
+        viewport.ClearBackBufferBeforePresent = true;
+    }
+
+    public static void ConfigureSceneViewportFullscreen(RenderViewport viewport)
+    {
+        if (viewport == null)
+            return;
+
+        viewport.UseBackBufferSize();
+        viewport.Position = Vector2.Zero;
+        viewport.Origin = Vector2.Zero;
+        viewport.Rotation = 0f;
+        viewport.Scale = Vector2.One;
+        viewport.Color = Color.White;
+        viewport.ClearBackBufferBeforePresent = true;
+    }
 
     public void Update(GameTime gameTime)
     {
@@ -149,6 +204,7 @@ public sealed class BeatmapEditorElement
         if (_isPreviewPlaying)
             return;
 
+        DrawEditorShell(spriteBatch);
         DrawTimeline(spriteBatch);
         _rhythmVisuals?.Draw(spriteBatch);
         DrawHud(spriteBatch);
@@ -232,6 +288,18 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.S) && IsControlDown())
             Save();
 
+        if (Pressed(Keys.Z) && IsControlDown())
+        {
+            UndoCommand();
+            return;
+        }
+
+        if (Pressed(Keys.Y) && IsControlDown())
+        {
+            RedoCommand();
+            return;
+        }
+
         if (Pressed(Keys.L) && IsControlDown())
             ReloadCurrentDocument();
 
@@ -307,7 +375,57 @@ public sealed class BeatmapEditorElement
         if (!LeftPressed() || _optionsIsCreation || MouseOverOpenWindow())
             return false;
 
+        if (TryStartPaletteClipDrag())
+            return true;
+
+        if (TrySelectRhythmGameFromList())
+            return true;
+
         return TryStartTimelineDrag(area, windowStart, windowEnd);
+    }
+
+    private bool TryStartPaletteClipDrag()
+    {
+        if (!TryHitPaletteClip(out EditorClipDefinition clipDefinition))
+            return false;
+
+        _timelineDragKind = EditorTimelineDragKind.ClipCreate;
+        _draggedClip = null;
+        _draggedClipDefinition = clipDefinition;
+        _dragStartBeat = 0;
+        _dragEndBeat = 0;
+        _dragStartLengthBeats = Math.Max(0.0, clipDefinition.DefaultLengthBeats);
+        _dragPreviewLengthBeats = _dragStartLengthBeats;
+        _dragPreviewStartBeat = CurrentBeatPosition();
+        _dragStartTrackIndex = 0;
+        _dragPreviewTrackIndex = 0;
+        _dragMoved = false;
+        _status = $"Drag {clipDefinition.DisplayName} to a track";
+        return true;
+    }
+
+    private bool TrySelectRhythmGameFromList()
+    {
+        BeatmapEditorLayout layout = GetEditorLayout();
+        int gameY = layout.RhythmGameListPanel.Y + 30;
+        Rectangle seeSawBounds = new(layout.RhythmGameListPanel.X, gameY - 4, layout.RhythmGameListPanel.Width, 22);
+        Rectangle seaponyBounds = new(layout.RhythmGameListPanel.X, gameY + 18, layout.RhythmGameListPanel.Width, 22);
+
+        if (seeSawBounds.Contains(_mouse.Position))
+        {
+            Select(EditorNoteKind.SeeSaw);
+            _status = "Rhythm game See Saw";
+            return true;
+        }
+
+        if (seaponyBounds.Contains(_mouse.Position))
+        {
+            Select(EditorNoteKind.SeaponyParade);
+            _status = "Rhythm game Seapony Parade";
+            return true;
+        }
+
+        return false;
     }
 
     private bool TryStartTimelineDrag(Rectangle area, double windowStart, double windowEnd)
@@ -317,11 +435,31 @@ public sealed class BeatmapEditorElement
 
         double mouseBeat = XToBeat(_mouse.X, windowStart, windowEnd, area);
 
+        if (TryHitTimelineClip(area, windowStart, windowEnd, out ChartEditorClip clip, out EditorTimelineDragKind clipDragKind))
+        {
+            _timelineDragKind = clipDragKind;
+            _draggedClip = clip;
+            _draggedClipDefinition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+            _dragStartBeat = clip.StartBeat;
+            _dragEndBeat = clip.StartBeat;
+            _dragStartLengthBeats = clip.LengthBeats;
+            _dragPreviewStartBeat = clip.StartBeat;
+            _dragPreviewLengthBeats = clip.LengthBeats;
+            _dragStartTrackIndex = clip.TrackIndex;
+            _dragPreviewTrackIndex = clip.TrackIndex;
+            _dragPointerOffsetBeats = clip.StartBeat - mouseBeat;
+            _dragMoved = false;
+            _status = $"Dragging {_draggedClipDefinition?.DisplayName ?? "clip"}";
+            return true;
+        }
+
         if (TryHitTimelineEffect(area, windowStart, windowEnd, out ChartEffect effect))
         {
             _timelineDragKind = EditorTimelineDragKind.Effect;
             _draggedEffect = effect;
-            _dragPointerOffsetBeats = _document.GetEffectBeat(effect) - mouseBeat;
+            _dragStartBeat = _document.GetEffectBeat(effect);
+            _dragEndBeat = _dragStartBeat;
+            _dragPointerOffsetBeats = _dragStartBeat - mouseBeat;
             _draggedEffectOffsetFollowedPosition = !effect.TryGetSectionOffset(out double sectionOffset)
                 || Math.Abs(sectionOffset) <= 0.0005;
             _dragMoved = false;
@@ -333,7 +471,9 @@ public sealed class BeatmapEditorElement
         {
             _timelineDragKind = EditorTimelineDragKind.Note;
             _draggedNote = note;
-            _dragPointerOffsetBeats = _document.GetNoteBeat(note) - mouseBeat;
+            _dragStartBeat = _document.GetNoteBeat(note);
+            _dragEndBeat = _dragStartBeat;
+            _dragPointerOffsetBeats = _dragStartBeat - mouseBeat;
             _dragMoved = false;
 
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
@@ -348,12 +488,28 @@ public sealed class BeatmapEditorElement
     {
         double pointerBeat = XToBeat(_mouse.X, windowStart, windowEnd, area) + _dragPointerOffsetBeats;
 
+        if (_timelineDragKind == EditorTimelineDragKind.ClipCreate && _draggedClipDefinition != null)
+        {
+            UpdateClipCreatePreview(area, windowStart, windowEnd);
+            return;
+        }
+
+        if ((_timelineDragKind == EditorTimelineDragKind.ClipMove
+                || _timelineDragKind == EditorTimelineDragKind.ClipResizeStart
+                || _timelineDragKind == EditorTimelineDragKind.ClipResizeEnd)
+            && _draggedClip != null)
+        {
+            UpdateClipDragPreview(area, pointerBeat);
+            return;
+        }
+
         if (_timelineDragKind == EditorTimelineDragKind.Note && _draggedNote != null)
         {
             double beat = SnapPlacementBeat(pointerBeat);
             if (_document.MoveNoteToBeat(_draggedNote, beat))
             {
                 _dragMoved = true;
+                _dragEndBeat = _document.GetNoteBeat(_draggedNote);
                 EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(_draggedNote);
                 _status = $"Dragging {definition?.DisplayName ?? "note"}: {_document.GetNoteBeat(_draggedNote):0.###}b";
             }
@@ -367,10 +523,57 @@ public sealed class BeatmapEditorElement
             if (_document.MoveEffectToBeat(_draggedEffect, beat, _draggedEffectOffsetFollowedPosition))
             {
                 _dragMoved = true;
+                _dragEndBeat = _document.GetEffectBeat(_draggedEffect);
                 EditorEffectDefinition definition = EditorEffectDefinitions.FromChartEffect(_draggedEffect);
                 _status = $"Dragging {definition?.DisplayName ?? "effect"}: {_document.GetEffectBeat(_draggedEffect):0.###}b";
             }
         }
+    }
+
+    private void UpdateClipCreatePreview(Rectangle area, double windowStart, double windowEnd)
+    {
+        if (!area.Contains(_mouse.Position))
+        {
+            _dragMoved = false;
+            _status = $"Drag {_draggedClipDefinition.DisplayName} to a track";
+            return;
+        }
+
+        _dragPreviewStartBeat = SnapPlacementBeat(XToBeat(_mouse.X, windowStart, windowEnd, area));
+        _dragPreviewTrackIndex = GetTrackIndexAtY(_mouse.Y, area);
+        _dragMoved = true;
+        _status = $"Create {_draggedClipDefinition.DisplayName}: {_dragPreviewStartBeat:0.###}b on Track {_dragPreviewTrackIndex + 1}";
+    }
+
+    private void UpdateClipDragPreview(Rectangle area, double pointerBeat)
+    {
+        double minLength = 0.0;
+        double originalEnd = _dragStartBeat + Math.Max(0.0, _dragStartLengthBeats);
+
+        if (_timelineDragKind == EditorTimelineDragKind.ClipMove)
+        {
+            _dragPreviewStartBeat = SnapPlacementBeat(pointerBeat);
+            _dragPreviewLengthBeats = _dragStartLengthBeats;
+            _dragPreviewTrackIndex = GetTrackIndexAtY(_mouse.Y, area);
+        }
+        else if (_timelineDragKind == EditorTimelineDragKind.ClipResizeStart)
+        {
+            double newStart = Math.Min(SnapPlacementBeat(pointerBeat), originalEnd - minLength);
+            _dragPreviewStartBeat = newStart;
+            _dragPreviewLengthBeats = Math.Max(minLength, originalEnd - newStart);
+            _dragPreviewTrackIndex = _dragStartTrackIndex;
+        }
+        else if (_timelineDragKind == EditorTimelineDragKind.ClipResizeEnd)
+        {
+            double newEnd = Math.Max(SnapPlacementBeat(pointerBeat), _dragStartBeat + minLength);
+            _dragPreviewStartBeat = _dragStartBeat;
+            _dragPreviewLengthBeats = Math.Max(minLength, newEnd - _dragStartBeat);
+            _dragPreviewTrackIndex = _dragStartTrackIndex;
+        }
+
+        _dragEndBeat = _dragPreviewStartBeat;
+        _dragMoved = true;
+        _status = $"{_draggedClipDefinition?.DisplayName ?? "Clip"}: {_dragPreviewStartBeat:0.###}b len {_dragPreviewLengthBeats:0.###} on Track {_dragPreviewTrackIndex + 1}";
     }
 
     private void FinishTimelineDrag()
@@ -378,21 +581,68 @@ public sealed class BeatmapEditorElement
         EditorTimelineDragKind kind = _timelineDragKind;
         ChartNote draggedNote = _draggedNote;
         ChartEffect draggedEffect = _draggedEffect;
+        ChartEditorClip draggedClip = _draggedClip;
+        EditorClipDefinition draggedClipDefinition = _draggedClipDefinition;
         bool dragged = _dragMoved;
+        double startBeat = _dragStartBeat;
+        double endBeat = _dragEndBeat;
+        double previewStartBeat = _dragPreviewStartBeat;
+        double previewLengthBeats = _dragPreviewLengthBeats;
+        int startTrackIndex = _dragStartTrackIndex;
+        int previewTrackIndex = _dragPreviewTrackIndex;
+        bool effectOffsetFollowedPosition = _draggedEffectOffsetFollowedPosition;
 
         _timelineDragKind = EditorTimelineDragKind.None;
         _draggedNote = null;
         _draggedEffect = null;
+        _draggedClip = null;
+        _draggedClipDefinition = null;
         _dragPointerOffsetBeats = 0;
+        _dragStartBeat = 0;
+        _dragEndBeat = 0;
+        _dragStartLengthBeats = 0;
+        _dragPreviewStartBeat = 0;
+        _dragPreviewLengthBeats = 0;
+        _dragStartTrackIndex = 0;
+        _dragPreviewTrackIndex = 0;
         _draggedEffectOffsetFollowedPosition = false;
         _dragMoved = false;
+
+        if (kind == EditorTimelineDragKind.ClipCreate)
+        {
+            if (dragged && draggedClipDefinition != null && CreateDroppedClip(draggedClipDefinition, previewStartBeat, previewLengthBeats, previewTrackIndex))
+                _status = $"Created {draggedClipDefinition.DisplayName} at {previewStartBeat:0.###}b on Track {previewTrackIndex + 1}";
+            else if (draggedClipDefinition != null)
+                _status = $"Cancelled {draggedClipDefinition.DisplayName}";
+
+            return;
+        }
 
         if (!dragged)
             return;
 
-        RebuildPlayback(_editorPlaybackPlaying);
+        if (kind == EditorTimelineDragKind.ClipMove && draggedClip != null)
+            ExecuteCommand(new MoveClipCommand(draggedClip.Id, previewStartBeat, previewTrackIndex));
+        else if (kind == EditorTimelineDragKind.ClipResizeEnd && draggedClip != null)
+            ExecuteCommand(new ResizeClipCommand(draggedClip.Id, previewLengthBeats));
+        else if (kind == EditorTimelineDragKind.ClipResizeStart && draggedClip != null)
+            ExecuteCommand(new CompositeEditorCommand("Resize Clip", new IEditorCommand[]
+            {
+                new MoveClipCommand(draggedClip.Id, previewStartBeat, startTrackIndex),
+                new ResizeClipCommand(draggedClip.Id, previewLengthBeats)
+            }));
+        else if (kind == EditorTimelineDragKind.Note && draggedNote != null)
+            ExecuteCommand(new MoveNoteCommand(draggedNote, startBeat, endBeat));
+        else if (kind == EditorTimelineDragKind.Effect && draggedEffect != null)
+            ExecuteCommand(new MoveEffectCommand(draggedEffect, startBeat, endBeat, effectOffsetFollowedPosition));
+        else
+            RebuildPlayback(_editorPlaybackPlaying);
 
-        if (kind == EditorTimelineDragKind.Note && draggedNote != null)
+        if ((kind == EditorTimelineDragKind.ClipMove || kind == EditorTimelineDragKind.ClipResizeStart || kind == EditorTimelineDragKind.ClipResizeEnd) && draggedClip != null)
+        {
+            _status = $"Updated {draggedClipDefinition?.DisplayName ?? "clip"} at {previewStartBeat:0.###}b len {previewLengthBeats:0.###}";
+        }
+        else if (kind == EditorTimelineDragKind.Note && draggedNote != null)
         {
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(draggedNote);
             _status = $"Moved {definition?.DisplayName ?? "note"} to {_document.GetNoteBeat(draggedNote):0.###}b";
@@ -677,13 +927,16 @@ public sealed class BeatmapEditorElement
         }
 
         bool wasCreation = _optionsIsCreation;
+        ChartNote oldSnapshot = wasCreation ? null : EditorCommandCloning.CloneNote(_optionsNote);
         if (_noteOptionsWindow.Update(GetNoteOptionsWindowBounds(), GetNoteOptionRows()))
         {
             if (wasCreation)
                 return;
 
-            _document.MarkDirty();
-            RebuildPlayback(_editorPlaybackPlaying);
+            ChartNote newSnapshot = EditorCommandCloning.CloneNote(_optionsNote);
+            if (!NotesEqual(oldSnapshot, newSnapshot))
+                ExecuteCommand(new ChangeNoteCommand(_optionsNote, oldSnapshot, newSnapshot));
+
             _status = $"Updated options at {_optionsNote.SongPosition:0.000}s";
         }
     }
@@ -697,13 +950,16 @@ public sealed class BeatmapEditorElement
         }
 
         bool wasCreation = _optionsIsCreation;
+        ChartEffect oldSnapshot = wasCreation ? null : EditorCommandCloning.CloneEffect(_optionsEffect);
         if (_noteOptionsWindow.Update(GetNoteOptionsWindowBounds(), GetNoteOptionRows()))
         {
             if (wasCreation)
                 return;
 
-            _document.MarkDirty();
-            RebuildPlayback(_editorPlaybackPlaying);
+            ChartEffect newSnapshot = EditorCommandCloning.CloneEffect(_optionsEffect);
+            if (!EffectsEqual(oldSnapshot, newSnapshot))
+                ExecuteCommand(new ChangeEffectCommand(_optionsEffect, oldSnapshot, newSnapshot));
+
             _status = $"Updated effect at {_optionsEffect.SongPosition:0.000}s";
         }
     }
@@ -769,6 +1025,7 @@ public sealed class BeatmapEditorElement
         RefreshSongs();
         RefreshCharts();
         _document = BeatmapEditorDocument.LoadOrCreate(songPath, chartPath, 100);
+        _commandStack.Clear();
         SyncSelectedSongIndex();
         SyncSelectedChartIndex();
         RebuildPlayback(false);
@@ -781,6 +1038,72 @@ public sealed class BeatmapEditorElement
         RefreshCharts();
         SyncSelectedChartIndex();
         _status = $"Saved {_document.Chart.Notes.Count} notes";
+    }
+
+    private bool ExecuteCommand(IEditorCommand command, bool rebuildPlayback = true)
+    {
+        try
+        {
+            double position = CurrentSongPosition();
+            _commandStack.Execute(command, _document);
+            if (rebuildPlayback)
+                RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _status = ex.Message;
+            return false;
+        }
+    }
+
+    private void UndoCommand()
+    {
+        if (!_commandStack.CanUndo)
+        {
+            _status = "Nothing to undo";
+            return;
+        }
+
+        string name = _commandStack.NextUndoName;
+        double position = CurrentSongPosition();
+        try
+        {
+            if (_commandStack.TryUndo(_document))
+            {
+                RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
+                _status = $"Undid {name}";
+            }
+        }
+        catch (Exception ex)
+        {
+            _status = ex.Message;
+        }
+    }
+
+    private void RedoCommand()
+    {
+        if (!_commandStack.CanRedo)
+        {
+            _status = "Nothing to redo";
+            return;
+        }
+
+        string name = _commandStack.NextRedoName;
+        double position = CurrentSongPosition();
+        try
+        {
+            if (_commandStack.TryRedo(_document))
+            {
+                RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
+                _status = $"Redid {name}";
+            }
+        }
+        catch (Exception ex)
+        {
+            _status = ex.Message;
+        }
     }
 
     private void NormalizeSeeSawNotesToGrid()
@@ -855,6 +1178,7 @@ public sealed class BeatmapEditorElement
         double bpm = _document?.Chart?.BPM > 0 ? _document.Chart.BPM : 100;
 
         _document = BeatmapEditorDocument.CreateNew(songPath, chartPath, bpm);
+        _commandStack.Clear();
         _document.SetMetadata(beatmapName: beatmapName);
         _manualBeatPosition = 0;
         RefreshSongs();
@@ -1023,13 +1347,13 @@ public sealed class BeatmapEditorElement
             StoreLastIntervalData(_optionsNote);
 
         IReadOnlyList<EditorNotePlacement> placements = _optionsDefinition.CreatePlacements(_optionsNote, CreatePlacementContext());
-        if (_document.TryPlaceNotes(placements, out IReadOnlyList<ChartNote> placedNotes, out string reason))
+        PlaceNotesCommand command = new(placements);
+        if (ExecuteCommand(command))
         {
+            IReadOnlyList<ChartNote> placedNotes = command.PlacedNotes;
             _lastCreatedNoteData[_optionsDefinition.Kind] = creationData;
             _optionsIsCreation = false;
             _optionsIsIntervalCreation = false;
-        double position = CurrentSongPosition();
-        RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
 
             if (placedNotes.Count == 1 && EditorNoteDefinitions.FromChartNote(placedNotes[0]) is EditorNoteDefinition placedDefinition && EditorNoteDefinitions.TryGetOptionsPanel(placedDefinition.Kind, out _))
                 OpenNoteOptionsWindow(placedNotes[0]);
@@ -1046,10 +1370,6 @@ public sealed class BeatmapEditorElement
             else
                 _status = $"Created {creationName}: {placedNotes.Count} notes from {firstNote.SongPosition:0.000}s to {lastNote.SongPosition:0.000}s";
         }
-        else
-        {
-            _status = reason;
-        }
     }
 
     private void CreatePendingEffect()
@@ -1057,10 +1377,11 @@ public sealed class BeatmapEditorElement
         if (!_optionsIsCreation || _optionsEffect == null || _optionsEffectDefinition == null)
             return;
 
-        if (_document.TryPlaceEffect(_optionsEffect, out ChartEffect placedEffect, out string reason))
+        PlaceEffectCommand command = new(_optionsEffect);
+        if (ExecuteCommand(command))
         {
+            ChartEffect placedEffect = command.PlacedEffect;
             _optionsIsCreation = false;
-            RebuildPlayback(_editorPlaybackPlaying);
 
             if (EditorEffectDefinitions.FromChartEffect(placedEffect) is EditorEffectDefinition placedDefinition && EditorEffectDefinitions.TryGetOptionsPanel(placedDefinition.Kind, out _))
                 OpenEffectOptionsWindow(placedEffect);
@@ -1068,10 +1389,6 @@ public sealed class BeatmapEditorElement
                 _noteOptionsWindow.Close();
 
             _status = $"Created {_optionsEffectDefinition.DisplayName} at {placedEffect.SongPosition:0.000}s";
-        }
-        else
-        {
-            _status = reason;
         }
     }
 
@@ -1121,6 +1438,48 @@ public sealed class BeatmapEditorElement
         return EditorNotePlacementData.CreateStoredAdditionnalData(note);
     }
 
+    private static bool NotesEqual(ChartNote a, ChartNote b)
+    {
+        return a == null && b == null
+            || a != null && b != null
+            && NearlyEqual(a.SongPosition, b.SongPosition)
+            && NullableNearlyEqual(a.BeatPosition, b.BeatPosition)
+            && NearlyEqual(a.HoldDuration, b.HoldDuration)
+            && NullableNearlyEqual(a.HoldBeats, b.HoldBeats)
+            && a.InputActionToPress == b.InputActionToPress
+            && DictionariesEqual(a.AdditionnalData, b.AdditionnalData);
+    }
+
+    private static bool EffectsEqual(ChartEffect a, ChartEffect b)
+    {
+        return a == null && b == null
+            || a != null && b != null
+            && NearlyEqual(a.SongPosition, b.SongPosition)
+            && NullableNearlyEqual(a.BeatPosition, b.BeatPosition)
+            && a.EffectType == b.EffectType
+            && DictionariesEqual(a.Data, b.Data);
+    }
+
+    private static bool NearlyEqual(double a, double b)
+    {
+        return Math.Abs(a - b) <= 0.000000001;
+    }
+
+    private static bool NullableNearlyEqual(double? a, double? b)
+    {
+        if (!a.HasValue || !b.HasValue)
+            return a.HasValue == b.HasValue;
+
+        return NearlyEqual(a.Value, b.Value);
+    }
+
+    private static bool DictionariesEqual(Dictionary<string, string> a, Dictionary<string, string> b)
+    {
+        a ??= new Dictionary<string, string>();
+        b ??= new Dictionary<string, string>();
+        return a.Count == b.Count && a.All(pair => b.TryGetValue(pair.Key, out string value) && value == pair.Value);
+    }
+
     private void StoreLastIntervalData(ChartNote note)
     {
         _lastIntervalData[IntervalEditorNoteProvider.DurationBeatsKey] = IntervalEditorNoteProvider.GetDurationBeats(note.AdditionnalData).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
@@ -1143,21 +1502,26 @@ public sealed class BeatmapEditorElement
     private void DeleteNearestNote()
     {
         double beat = CurrentBeatPosition();
-        if (_document.DeleteNearestAtBeat(beat, GetSelectionDistance(), out ChartNote deletedNote))
-        {
-            RebuildPlayback(_editorPlaybackPlaying);
-            _status = $"Deleted note at {deletedNote.SongPosition:0.000}s";
-        }
-        else
+        ChartNote deletedNote = _document.FindNearestAtBeat(beat, GetSelectionDistance());
+        if (deletedNote == null)
         {
             _status = "No note close enough to delete";
+        }
+        else if (ExecuteCommand(new DeleteNoteCommand(deletedNote)))
+        {
+            _status = $"Deleted note at {deletedNote.SongPosition:0.000}s";
         }
     }
 
     private void DeleteNearestEffect()
     {
         double beat = CurrentBeatPosition();
-        if (_document.DeleteNearestEffectAtBeat(beat, GetSelectionDistance(), out ChartEffect deletedEffect))
+        ChartEffect deletedEffect = _document.FindNearestEffectAtBeat(beat, GetSelectionDistance());
+        if (deletedEffect == null)
+        {
+            _status = "No effect close enough to delete";
+        }
+        else if (ExecuteCommand(new DeleteEffectCommand(deletedEffect)))
         {
             if (ReferenceEquals(_optionsEffect, deletedEffect))
             {
@@ -1165,12 +1529,7 @@ public sealed class BeatmapEditorElement
                 ClearPendingOptions();
             }
 
-            RebuildPlayback(_editorPlaybackPlaying);
             _status = $"Deleted effect at {deletedEffect.SongPosition:0.000}s";
-        }
-        else
-        {
-            _status = "No effect close enough to delete";
         }
     }
 
@@ -1394,9 +1753,8 @@ public sealed class BeatmapEditorElement
 
         _selectedSongIndex = PositiveModulo(_selectedSongIndex + delta, _availableSongs.Count);
         string songPath = _availableSongs[_selectedSongIndex];
-        _document.SetSongPath(songPath);
-        RebuildPlayback(false);
-        _status = $"Song {Path.GetFileName(songPath)}";
+        if (ExecuteCommand(new SetSongPathCommand(songPath)))
+            _status = $"Song {Path.GetFileName(songPath)}";
     }
 
     private void SelectNextMetadataField()
@@ -1462,35 +1820,25 @@ public sealed class BeatmapEditorElement
     private void CommitMetadataEdit()
     {
         string field = _metadataFields[_selectedMetadataField];
+        bool updated = false;
         if (field == "BPM" && double.TryParse(_textBuffer, out double bpm))
-        {
-            double position = CurrentSongPosition();
-            _document.SetBpm(bpm);
-            RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
-        }
+            updated = ExecuteCommand(new SetBpmCommand(bpm));
         else if (field == "Offset" && double.TryParse(_textBuffer, out double offset))
-        {
-            double position = CurrentSongPosition();
-            _document.SetOffset(offset);
-            RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
-        }
+            updated = ExecuteCommand(new SetOffsetCommand(offset));
         else if (field == "LeadInBeats" && double.TryParse(_textBuffer, out double leadInBeats))
-        {
-            double position = CurrentSongPosition();
-            _document.SetLeadInBeats(leadInBeats);
-            RebuildPlaybackAtPosition(position, _editorPlaybackPlaying);
-        }
+            updated = ExecuteCommand(new SetLeadInBeatsCommand(leadInBeats));
         else if (field == "BeatmapName")
-            _document.SetMetadata(beatmapName: _textBuffer);
+            updated = ExecuteCommand(new SetMetadataCommand(EditorMetadataField.BeatmapName, _textBuffer), rebuildPlayback: false);
         else if (field == "Beatmapper")
-            _document.SetMetadata(beatmapper: _textBuffer);
+            updated = ExecuteCommand(new SetMetadataCommand(EditorMetadataField.Beatmapper, _textBuffer), rebuildPlayback: false);
         else if (field == "ArtistName")
-            _document.SetMetadata(artistName: _textBuffer);
+            updated = ExecuteCommand(new SetMetadataCommand(EditorMetadataField.ArtistName, _textBuffer), rebuildPlayback: false);
         else if (field == "MusicName")
-            _document.SetMetadata(musicName: _textBuffer);
+            updated = ExecuteCommand(new SetMetadataCommand(EditorMetadataField.MusicName, _textBuffer), rebuildPlayback: false);
 
         _isEditingText = false;
-        _status = $"Updated {field}";
+        if (updated)
+            _status = $"Updated {field}";
     }
 
     private void Zoom(double delta)
@@ -1697,17 +2045,97 @@ public sealed class BeatmapEditorElement
         return 1.0 / Math.Max(1.0, divisions);
     }
 
+    private void DrawEditorShell(SpriteBatch spriteBatch)
+    {
+        BeatmapEditorLayout layout = GetEditorLayout();
+        string dirty = _document.IsDirty ? "DIRTY" : "SAVED";
+        string playing = _editorPlaybackPlaying ? "PLAY" : "PAUSE";
+
+        _ui.Fill(spriteBatch, layout.TopBar, new Color(4, 6, 10, 245));
+        _ui.Stroke(spriteBatch, layout.TopBar, Color.DarkSlateGray, 1);
+        _ui.Label(spriteBatch, "FILE", new Vector2(6, 9), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, "ACTIONS", new Vector2(58, 9), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, "DATA", new Vector2(138, 9), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, "TOOLS", new Vector2(194, 9), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, $"{playing} {dirty} BEAT:{CurrentBeatPosition():0.00} BPM:{_document.GetBpmAtBeat(CurrentBeatPosition()):0.##} {_status}", new Vector2(270, 9), Color.White, 2);
+
+        DrawPanel(spriteBatch, layout.RhythmGameListPanel, "RHYTHM GAMES");
+        DrawPanel(spriteBatch, layout.PalettePanel, _noteOptionsWindow.IsOpen ? "OPTIONS" : "CLIP PALETTE");
+
+        int gameY = layout.RhythmGameListPanel.Y + 30;
+        _ui.Label(spriteBatch, "SEE SAW", new Vector2(layout.RhythmGameListPanel.X + 6, gameY), _selectedKind == EditorNoteKind.SeeSaw ? Color.LightGreen : Color.White, 2);
+        _ui.Label(spriteBatch, "SEAPONY PARADE", new Vector2(layout.RhythmGameListPanel.X + 6, gameY + 22), _selectedKind == EditorNoteKind.SeaponyParade ? Color.LightGreen : Color.White, 2);
+
+        IReadOnlyList<EditorClipDefinition> paletteClips = GetPaletteClipDefinitions();
+        for (int i = 0; i < paletteClips.Count; i++)
+        {
+            EditorClipDefinition clipDefinition = paletteClips[i];
+            Color color = GetClipColor(clipDefinition);
+            Rectangle rowBounds = GetPaletteClipBounds(i);
+            Rectangle clipPreview = new(rowBounds.X, rowBounds.Y + 4, 46, 24);
+            _ui.Fill(spriteBatch, clipPreview, color * 0.78f);
+            _ui.Fill(spriteBatch, new Rectangle(clipPreview.X, clipPreview.Y, 6, clipPreview.Height), color);
+            _ui.Stroke(spriteBatch, clipPreview, Color.White, 1);
+            _ui.Label(spriteBatch, clipDefinition.DisplayName, new Vector2(rowBounds.X + 56, rowBounds.Y + 11), Color.White, 2);
+        }
+    }
+
+    private void DrawPanel(SpriteBatch spriteBatch, Rectangle bounds, string title)
+    {
+        _ui.Fill(spriteBatch, bounds, new Color(8, 10, 14, 180));
+        _ui.Stroke(spriteBatch, bounds, Color.DarkSlateGray, 1);
+        _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, bounds.Width, 26), new Color(18, 36, 24, 200));
+        _ui.Label(spriteBatch, title, new Vector2(bounds.X + 6, bounds.Y + 8), Color.LightGreen, 2);
+    }
+
+    private IReadOnlyList<EditorClipDefinition> GetPaletteClipDefinitions()
+    {
+        string gameId = _selectedKind == EditorNoteKind.SeeSaw
+            ? EditorClipDefinitions.SeeSawGameId
+            : EditorClipDefinitions.SeaponyParadeGameId;
+
+        return EditorClipDefinitions.Games
+            .FirstOrDefault(game => game.Id == gameId)?.Clips
+            ?? Array.Empty<EditorClipDefinition>();
+    }
+
+    private Rectangle GetPaletteClipBounds(int index)
+    {
+        Rectangle panel = GetEditorLayout().PalettePanel;
+        return new Rectangle(panel.X + 8, panel.Y + 30 + index * 34, Math.Max(1, panel.Width - 16), 32);
+    }
+
+    private bool TryHitPaletteClip(out EditorClipDefinition clipDefinition)
+    {
+        IReadOnlyList<EditorClipDefinition> clips = GetPaletteClipDefinitions();
+        for (int i = 0; i < clips.Count; i++)
+        {
+            if (!GetPaletteClipBounds(i).Contains(_mouse.Position))
+                continue;
+
+            clipDefinition = clips[i];
+            return true;
+        }
+
+        clipDefinition = null;
+        return false;
+    }
+
     private void DrawTimeline(SpriteBatch spriteBatch)
     {
+        Rectangle panel = GetTimelinePanelArea();
         Rectangle area = GetTimelineArea();
         double current = CurrentBeatPosition();
         GetTimelineWindow(out double start, out double end);
         GetSongWindowForBeatWindow(start, end, out double songStart, out double songEnd);
 
-        _ui.Fill(spriteBatch, area, new Color(12, 14, 20, 220));
-        _ui.Stroke(spriteBatch, area, Color.White, 2);
+        _ui.Fill(spriteBatch, panel, new Color(12, 14, 20, 235));
+        _ui.Stroke(spriteBatch, panel, Color.White, 1);
+        DrawTimelineTracks(spriteBatch, panel, area);
 
         DrawTempoGrid(spriteBatch, start, end, area);
+        DrawEditorClips(spriteBatch, start, end, area);
+        DrawDraggingClipPreview(spriteBatch, start, end, area);
 
         if (_isSelectingIntervalRange && _intervalRangeStart is double intervalStart)
         {
@@ -1718,42 +2146,182 @@ public sealed class BeatmapEditorElement
             _ui.Fill(spriteBatch, new Rectangle((int)intervalEndX - 4, area.Y + 10, 8, 16), Color.LightGreen * 0.7f);
         }
 
-        foreach (ChartNote note in _document.GetNotesInWindow(songStart, songEnd))
-        {
-            EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
-            if (definition == null)
-                continue;
-
-            float occupyStartX = BeatToX(_document.GetContextualStartBeat(note, definition), start, end, area);
-            float occupyEndX = BeatToX(_document.GetContextualEndBeat(note, definition), start, end, area);
-            float hitStartX = BeatToX(_document.GetContextualHitWindowStartBeat(note, definition), start, end, area);
-            float hitEndX = BeatToX(_document.GetContextualHitWindowEndBeat(note, definition), start, end, area);
-            float sameVariantHitStartX = BeatToX(_document.GetContextualSameVariantHitWindowStartBeat(note, definition), start, end, area);
-            float sameVariantHitEndX = BeatToX(_document.GetContextualSameVariantHitWindowEndBeat(note, definition), start, end, area);
-            int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
-            Color color = GetNoteColor(definition.Kind, variantIndex);
-            Rectangle noteMarker = GetNoteMarkerBounds(note, start, end, area);
-
-            int occupyX = (int)Math.Clamp(occupyStartX, area.X, area.Right);
-            int occupyRight = (int)Math.Clamp(occupyEndX, area.X, area.Right);
-            int hitX = (int)Math.Clamp(hitStartX, area.X, area.Right);
-            int hitRight = (int)Math.Clamp(hitEndX, area.X, area.Right);
-            int sameVariantHitX = (int)Math.Clamp(sameVariantHitStartX, area.X, area.Right);
-            int sameVariantHitRight = (int)Math.Clamp(sameVariantHitEndX, area.X, area.Right);
-            bool hasDistinctSameVariantHitWindow = Math.Abs(sameVariantHitStartX - hitStartX) > 0.5f || Math.Abs(sameVariantHitEndX - hitEndX) > 0.5f;
-            _ui.Fill(spriteBatch, new Rectangle(occupyX, area.Y + 96, Math.Max(2, occupyRight - occupyX), 18), color * 0.35f);
-            if (hasDistinctSameVariantHitWindow)
-                _ui.Fill(spriteBatch, new Rectangle(sameVariantHitX, area.Y + 118, Math.Max(2, sameVariantHitRight - sameVariantHitX), 10), Color.Gold * 0.6f);
-
-            _ui.Fill(spriteBatch, new Rectangle(hitX, hasDistinctSameVariantHitWindow ? area.Y + 130 : area.Y + 118, Math.Max(2, hitRight - hitX), 10), Color.Red * 0.5f);
-            _ui.Fill(spriteBatch, noteMarker, color);
-        }
-
         DrawEffects(spriteBatch, start, end, area);
         DrawIntervalPreview(spriteBatch, start, end, area);
 
         float playheadX = BeatToX(current, start, end, area);
         _ui.Line(spriteBatch, new Vector2(playheadX, area.Y - 10), new Vector2(playheadX, area.Bottom + 10), Color.Red, 3);
+    }
+
+    private void DrawTimelineTracks(SpriteBatch spriteBatch, Rectangle panel, Rectangle lanesArea)
+    {
+        Rectangle corner = new(panel.X, panel.Y, TimelineTrackLabelWidth, TimelineHeaderHeight);
+        Rectangle header = new(lanesArea.X, panel.Y, lanesArea.Width, TimelineHeaderHeight);
+        _ui.Fill(spriteBatch, corner, new Color(18, 36, 24, 245));
+        _ui.Fill(spriteBatch, header, new Color(14, 18, 26, 245));
+        _ui.Stroke(spriteBatch, corner, Color.DarkSlateGray, 1);
+        _ui.Stroke(spriteBatch, header, Color.DarkSlateGray, 1);
+        _ui.Label(spriteBatch, "TRACKS", new Vector2(corner.X + 4, corner.Y + 8), Color.LightGreen, 2);
+
+        int laneHeight = GetTrackLaneHeight(lanesArea);
+        IReadOnlyList<ChartEditorTrack> tracks = _document.EditorTracks;
+        for (int i = 0; i < TimelineTrackCount; i++)
+        {
+            int y = lanesArea.Y + i * laneHeight;
+            int height = i == TimelineTrackCount - 1 ? lanesArea.Bottom - y : laneHeight;
+            Rectangle labelBounds = new(panel.X, y, TimelineTrackLabelWidth, height);
+            Rectangle laneBounds = new(lanesArea.X, y, lanesArea.Width, height);
+            Color laneColor = i % 2 == 0 ? new Color(16, 19, 28, 230) : new Color(11, 14, 22, 230);
+            _ui.Fill(spriteBatch, labelBounds, new Color(8, 10, 14, 245));
+            _ui.Fill(spriteBatch, laneBounds, laneColor);
+            _ui.Stroke(spriteBatch, labelBounds, Color.DarkSlateGray, 1);
+            _ui.Line(spriteBatch, new Vector2(lanesArea.X, laneBounds.Bottom - 1), new Vector2(lanesArea.Right, laneBounds.Bottom - 1), Color.DarkSlateGray, 1);
+
+            string trackName = i < tracks.Count && !string.IsNullOrWhiteSpace(tracks[i].Name)
+                ? tracks[i].Name
+                : $"Track {i + 1}";
+            _ui.Label(spriteBatch, trackName, new Vector2(labelBounds.X + 8, labelBounds.Y + Math.Max(4, height / 2 - 6)), Color.White, 2);
+        }
+    }
+
+    private void DrawEditorClips(SpriteBatch spriteBatch, double windowStart, double windowEnd, Rectangle area)
+    {
+        if (_document?.EditorClips == null || _document.EditorClips.Count == 0)
+            return;
+
+        foreach (ChartEditorClip clip in _document.EditorClips)
+        {
+            if (clip == null)
+                continue;
+
+            Rectangle bounds = GetClipBounds(clip, windowStart, windowEnd, area);
+            if (bounds.Right < area.X || bounds.X > area.Right)
+                continue;
+
+            EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+            Color color = GetClipColor(definition);
+            _ui.Fill(spriteBatch, bounds, color * 0.78f);
+            _ui.Stroke(spriteBatch, bounds, Color.White, 1);
+            _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, Math.Min(5, bounds.Width), bounds.Height), color);
+            DrawClipResizeHandles(spriteBatch, bounds, Color.White * 0.8f);
+
+            if (bounds.Width > 58)
+                _ui.Label(spriteBatch, definition?.DisplayName ?? clip.ClipTypeId ?? "Clip", new Vector2(bounds.X + 8, bounds.Y + Math.Max(4, bounds.Height / 2 - 6)), Color.White, 2);
+        }
+    }
+
+    private void DrawDraggingClipPreview(SpriteBatch spriteBatch, double windowStart, double windowEnd, Rectangle area)
+    {
+        if (_timelineDragKind != EditorTimelineDragKind.ClipCreate
+            && _timelineDragKind != EditorTimelineDragKind.ClipMove
+            && _timelineDragKind != EditorTimelineDragKind.ClipResizeStart
+            && _timelineDragKind != EditorTimelineDragKind.ClipResizeEnd)
+            return;
+
+        EditorClipDefinition definition = _draggedClipDefinition;
+        if (definition == null)
+            return;
+
+        Rectangle bounds = GetClipBounds(_dragPreviewStartBeat, _dragPreviewLengthBeats, _dragPreviewTrackIndex, windowStart, windowEnd, area);
+        if (bounds.Right < area.X || bounds.X > area.Right)
+            return;
+
+        Color color = GetClipColor(definition);
+        _ui.Fill(spriteBatch, bounds, color * 0.45f);
+        _ui.Stroke(spriteBatch, bounds, Color.Yellow, 2);
+        _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, Math.Min(5, bounds.Width), bounds.Height), color);
+        DrawClipResizeHandles(spriteBatch, bounds, Color.Yellow);
+        if (bounds.Width > 58)
+            _ui.Label(spriteBatch, definition.DisplayName, new Vector2(bounds.X + 8, bounds.Y + Math.Max(4, bounds.Height / 2 - 6)), Color.White, 2);
+    }
+
+    private void DrawClipResizeHandles(SpriteBatch spriteBatch, Rectangle bounds, Color color)
+    {
+        int handleWidth = Math.Min(6, Math.Max(2, bounds.Width / 4));
+        _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, handleWidth, bounds.Height), color * 0.5f);
+        _ui.Fill(spriteBatch, new Rectangle(bounds.Right - handleWidth, bounds.Y, handleWidth, bounds.Height), color * 0.5f);
+    }
+
+    private Rectangle GetClipBounds(ChartEditorClip clip, double windowStart, double windowEnd, Rectangle area)
+    {
+        if (clip == null)
+            return Rectangle.Empty;
+
+        return GetClipBounds(clip.StartBeat, clip.LengthBeats, clip.TrackIndex, windowStart, windowEnd, area);
+    }
+
+    private Rectangle GetClipBounds(double startBeat, double lengthBeats, int trackIndex, double windowStart, double windowEnd, Rectangle area)
+    {
+        double clipEnd = startBeat + Math.Max(lengthBeats, 1.0);
+        int laneHeight = GetTrackLaneHeight(area);
+        int clampedTrack = Math.Clamp(trackIndex, 0, TimelineTrackCount - 1);
+        float startX = BeatToX(startBeat, windowStart, windowEnd, area);
+        float endX = BeatToX(clipEnd, windowStart, windowEnd, area);
+        int x = (int)Math.Clamp(Math.Min(startX, endX), area.X, area.Right);
+        int right = (int)Math.Clamp(Math.Max(startX, endX), area.X, area.Right);
+        int laneY = area.Y + clampedTrack * laneHeight;
+        int laneBottom = clampedTrack == TimelineTrackCount - 1 ? area.Bottom : laneY + laneHeight;
+        return new Rectangle(x, laneY + 3, Math.Max(10, right - x), Math.Max(8, laneBottom - laneY - 6));
+    }
+
+    private bool TryHitTimelineClip(Rectangle area, double windowStart, double windowEnd, out ChartEditorClip clip, out EditorTimelineDragKind dragKind)
+    {
+        foreach (ChartEditorClip candidate in _document.EditorClips.Reverse())
+        {
+            if (candidate == null)
+                continue;
+
+            Rectangle bounds = GetClipBounds(candidate, windowStart, windowEnd, area);
+            if (!bounds.Contains(_mouse.Position))
+                continue;
+
+            int handleWidth = Math.Min(10, Math.Max(6, bounds.Width / 5));
+            if (_mouse.X <= bounds.X + handleWidth)
+                dragKind = EditorTimelineDragKind.ClipResizeStart;
+            else if (_mouse.X >= bounds.Right - handleWidth)
+                dragKind = EditorTimelineDragKind.ClipResizeEnd;
+            else
+                dragKind = EditorTimelineDragKind.ClipMove;
+
+            clip = candidate;
+            return true;
+        }
+
+        clip = null;
+        dragKind = EditorTimelineDragKind.None;
+        return false;
+    }
+
+    private int GetTrackIndexAtY(int y, Rectangle area)
+    {
+        int laneHeight = GetTrackLaneHeight(area);
+        return Math.Clamp((y - area.Y) / Math.Max(1, laneHeight), 0, TimelineTrackCount - 1);
+    }
+
+    private bool CreateDroppedClip(EditorClipDefinition definition, double startBeat, double lengthBeats, int trackIndex)
+    {
+        if (definition == null)
+            return false;
+
+        ChartEditorClip clip = new()
+        {
+            Id = Guid.NewGuid().ToString("N"),
+            TrackIndex = Math.Clamp(trackIndex, 0, TimelineTrackCount - 1),
+            StartBeat = startBeat,
+            LengthBeats = Math.Max(0.0, lengthBeats),
+            RhythmGameId = definition.RhythmGameId,
+            ClipTypeId = definition.ClipTypeId,
+            ClipCategory = definition.Category.ToString(),
+            InputAction = definition.InputAction,
+            Data = new Dictionary<string, string>(definition.DefaultData ?? new Dictionary<string, string>())
+        };
+
+        return ExecuteCommand(new CreateClipCommand(clip));
+    }
+
+    private static int GetTrackLaneHeight(Rectangle area)
+    {
+        return Math.Max(1, area.Height / TimelineTrackCount);
     }
 
     private void DrawTempoGrid(SpriteBatch spriteBatch, double windowStart, double windowEnd, Rectangle area)
@@ -1766,7 +2334,7 @@ public sealed class BeatmapEditorElement
         {
             bool wholeBeat = Math.Abs(beat - Math.Round(beat)) <= 0.000001;
             float x = BeatToX(beat, windowStart, windowEnd, area);
-            _ui.Line(spriteBatch, new Vector2(x, wholeBeat ? area.Y : area.Y + 110), new Vector2(x, area.Bottom), wholeBeat ? Color.DimGray : Color.DarkSlateGray, wholeBeat ? 2 : 1);
+            _ui.Line(spriteBatch, new Vector2(x, area.Y), new Vector2(x, area.Bottom), wholeBeat ? Color.DimGray : Color.DarkSlateGray, wholeBeat ? 2 : 1);
         }
 
         DrawTempoAnchor(spriteBatch, windowStart, windowEnd, area, 0.0);
@@ -1853,38 +2421,20 @@ public sealed class BeatmapEditorElement
 
             int variantIndex = EditorNoteDefinitions.FindVariantIndex(placement.Definition, note);
             Color color = GetNoteColor(placement.Definition.Kind, variantIndex);
+            double noteEndBeat = Math.Max(noteBeat + 1.0, noteBeat + Math.Max(0.0, ChartTiming.GetNoteHoldBeats(note, placement.Definition, _document.TempoMap)));
             float noteX = BeatToX(noteBeat, windowStart, windowEnd, area);
-
-            _ui.Line(spriteBatch, new Vector2(noteX, area.Y + 30), new Vector2(noteX, area.Bottom - 18), Color.White * 0.85f, 2);
-            _ui.Stroke(spriteBatch, new Rectangle((int)noteX - 7, area.Y + 46, 14, 84), color, 2);
-            _ui.Fill(spriteBatch, new Rectangle((int)noteX - 4, area.Y + 75, 8, 22), color * 0.7f);
+            float noteEndX = BeatToX(noteEndBeat, windowStart, windowEnd, area);
+            int laneHeight = GetTrackLaneHeight(area);
+            int x = (int)Math.Clamp(Math.Min(noteX, noteEndX), area.X, area.Right);
+            int right = (int)Math.Clamp(Math.Max(noteX, noteEndX), area.X, area.Right);
+            Rectangle previewBounds = new(x, area.Y + 3, Math.Max(10, right - x), Math.Max(8, laneHeight - 6));
+            _ui.Fill(spriteBatch, previewBounds, color * 0.45f);
+            _ui.Stroke(spriteBatch, previewBounds, Color.White, 2);
         }
     }
 
     private void DrawHud(SpriteBatch spriteBatch)
     {
-        Viewport viewport = GLOBALS.graphicsDevice.Viewport;
-        double current = CurrentSongPosition();
-        double currentBeat = CurrentBeatPosition();
-        EditorNoteDefinition selected = EditorNoteDefinitions.Get(_selectedKind);
-        EditorEffectDefinition selectedEffect = EditorEffectDefinitions.Get(_selectedEffectKind);
-        string dirty = _document.IsDirty ? "DIRTY" : "SAVED";
-        string playing = _editorPlaybackPlaying ? "PLAY" : "PAUSE";
-        string field = _metadataFields[_selectedMetadataField];
-        string editLine = _isEditingText ? $"EDIT {field}: {_textBuffer}|" : $"META <TAB/F2> {field}: {GetMetadataValue(field)}";
-        string songName = _availableSongs.Count > 0 ? Path.GetFileName(_availableSongs[_selectedSongIndex]) : "No music loaded";
-        string chartName = _availableCharts.Count > 0 ? GetChartDisplayName(_availableCharts[_selectedChartIndex]) : GetChartDisplayName(_document.ChartPath);
-        string placementLine = _placementMode == EditorPlacementMode.Note
-            ? $"MODE <E> NOTE <UP/DOWN> {selected.DisplayName}"
-            : $"MODE <E> EFFECT <UP/DOWN> {selectedEffect.DisplayName}";
-
-        _ui.Fill(spriteBatch, new Rectangle(20, viewport.Height - 146, viewport.Width - 40, 126), new Color(0, 0, 0, 180));
-        _ui.Label(spriteBatch, $"{playing} BEAT:{currentBeat:0.00} SEC:{current:0.000}s BPM:{_document.GetBpmAtBeat(currentBeat):0.##} BASE:{_document.Chart.BPM:0.##} OFFSET:{_document.Chart.Offset:0.000} LEADIN:{_document.Chart.LeadInBeats:0.###} NOTES:{_document.Chart.Notes.Count} FX:{_document.Chart.Effects.Count} {dirty}", new Vector2(34, viewport.Height - 132), Color.White, 2);
-        _ui.Label(spriteBatch, $"{placementLine}  SONG <PGUP/PGDN> {songName}", new Vector2(34, viewport.Height - 108), Color.LightGreen, 2);
-        _ui.Label(spriteBatch, $"CHART <CTRL+PGUP/PGDN> {chartName}", new Vector2(34, viewport.Height - 96), Color.LightGreen, 2);
-        _ui.Label(spriteBatch, editLine, new Vector2(34, viewport.Height - 84), _isEditingText ? Color.Yellow : Color.LightBlue, 2);
-        _ui.Label(spriteBatch, $"STATUS: {_status}", new Vector2(34, viewport.Height - 60), Color.LightGray, 2);
-        _ui.Label(spriteBatch, "SPACE PLAY/PAUSE E NOTE/EFFECT LEFT/RIGHT SEEK Q/D SCROLL ENTER PLACE I INTERVAL DEL DELETE F3 OPTIONS F6 FIX NOTES SHIFT+F6 FIX BPM CTRL+N NEW CTRL+S SAVE CTRL+L LOAD P PREVIEW ESC STOP +/- ZOOM", new Vector2(34, viewport.Height - 36), Color.LightGray, 2);
         _noteOptionsWindow.Draw(spriteBatch, GetNoteOptionsWindowBounds(), GetNoteOptionsTitle(), GetNoteOptionRows());
         _newBeatmapWindow.Draw(spriteBatch, GetNewBeatmapWindowBounds(), "NEW BEATMAP", GetNewBeatmapRows());
     }
@@ -1902,8 +2452,22 @@ public sealed class BeatmapEditorElement
 
     private Rectangle GetTimelineArea()
     {
-        Viewport viewport = GLOBALS.graphicsDevice.Viewport;
-        return new Rectangle(60, 40, viewport.Width - 120, 160);
+        Rectangle panel = GetTimelinePanelArea();
+        return new Rectangle(
+            panel.X + TimelineTrackLabelWidth,
+            panel.Y + TimelineHeaderHeight,
+            Math.Max(1, panel.Width - TimelineTrackLabelWidth),
+            Math.Max(1, panel.Height - TimelineHeaderHeight));
+    }
+
+    private Rectangle GetTimelinePanelArea()
+    {
+        return GetEditorLayout().Timeline;
+    }
+
+    private BeatmapEditorLayout GetEditorLayout()
+    {
+        return new BeatmapEditorLayout(GLOBALS.graphicsDevice.Viewport);
     }
 
     private void GetTimelineWindow(out double start, out double end)
@@ -1946,8 +2510,15 @@ public sealed class BeatmapEditorElement
 
     private Rectangle GetNoteMarkerBounds(ChartNote note, double start, double end, Rectangle area)
     {
-        float noteX = BeatToX(_document.GetNoteBeat(note), start, end, area);
-        return new Rectangle((int)noteX - 5, area.Y + 58, 10, 68);
+        EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
+        double noteBeat = _document.GetNoteBeat(note);
+        double noteEndBeat = Math.Max(noteBeat + 1.0, _document.GetContextualEndBeat(note, definition));
+        float noteX = BeatToX(noteBeat, start, end, area);
+        float noteEndX = BeatToX(noteEndBeat, start, end, area);
+        int laneHeight = GetTrackLaneHeight(area);
+        int x = (int)Math.Clamp(Math.Min(noteX, noteEndX), area.X, area.Right);
+        int right = (int)Math.Clamp(Math.Max(noteX, noteEndX), area.X, area.Right);
+        return new Rectangle(x, area.Y + 3, Math.Max(10, right - x), Math.Max(8, laneHeight - 6));
     }
 
     private Rectangle GetEffectMarkerBounds(ChartEffect effect, double start, double end, Rectangle area)
@@ -1981,6 +2552,34 @@ public sealed class BeatmapEditorElement
         };
     }
 
+    private Color GetClipColor(EditorClipDefinition definition)
+    {
+        if (definition == null)
+            return Color.Gray;
+
+        if (definition.RhythmGameId == EditorClipDefinitions.SeeSawGameId)
+        {
+            return definition.ClipTypeId switch
+            {
+                EditorClipDefinitions.SeeSawLongLong => Color.Orange,
+                EditorClipDefinitions.SeeSawLongShort => Color.Gold,
+                EditorClipDefinitions.SeeSawShortLong => Color.MediumPurple,
+                EditorClipDefinitions.SeeSawShortShort => Color.LightSalmon,
+                _ => Color.OrangeRed
+            };
+        }
+
+        if (definition.ClipTypeId == EditorClipDefinitions.NoHit)
+            return Color.DimGray;
+
+        return definition.ClipTypeId switch
+        {
+            EditorClipDefinitions.SeaponyRoll => Color.DeepSkyBlue,
+            EditorClipDefinitions.SeaponyTapTap => Color.LightBlue,
+            _ => Color.CornflowerBlue
+        };
+    }
+
     private string GetEffectLabel(ChartEffect effect, EditorEffectDefinition definition)
     {
         if (definition.Kind == EditorEffectKind.BpmChange && effect.TryGetBpm(out double bpm))
@@ -1996,8 +2595,7 @@ public sealed class BeatmapEditorElement
 
     private Rectangle GetNoteOptionsWindowBounds()
     {
-        Viewport viewport = GLOBALS.graphicsDevice.Viewport;
-        return new Rectangle(viewport.Width - 390, 210, 350, 230);
+        return GetEditorLayout().OptionsWindow;
     }
 
     private Rectangle GetNewBeatmapWindowBounds()
@@ -2079,6 +2677,8 @@ public sealed class BeatmapEditorElement
             DevUiWindowRowKind.Checkbox => DevUiWindowRow.Checkbox(row.Text, row.IsChecked, () => ApplyNoteOption(_ => row.Toggle?.Invoke())),
             DevUiWindowRowKind.Dropdown => DevUiWindowRow.Dropdown(row.Key, row.Text, row.Options, row.SelectedIndex, index => ApplyNoteOption(_ => row.Select?.Invoke(index))),
             DevUiWindowRowKind.FloatInput => DevUiWindowRow.FloatInput(row.Key, row.Text, row.FloatValue, value => ApplyNoteOption(_ => row.SetFloat?.Invoke(value))),
+            DevUiWindowRowKind.Slider => DevUiWindowRow.Slider(row.Key, row.Text, row.FloatValue, row.MinValue, row.MaxValue, value => ApplyNoteOption(_ => row.SetFloat?.Invoke(value))),
+            DevUiWindowRowKind.Stepper => DevUiWindowRow.Stepper(row.Key, row.Text, row.FloatValue, row.StepValue, value => ApplyNoteOption(_ => row.SetFloat?.Invoke(value))),
             _ => row
         };
     }
@@ -2090,6 +2690,8 @@ public sealed class BeatmapEditorElement
             DevUiWindowRowKind.Checkbox => DevUiWindowRow.Checkbox(row.Text, row.IsChecked, () => ApplyEffectOption(_ => row.Toggle?.Invoke())),
             DevUiWindowRowKind.Dropdown => DevUiWindowRow.Dropdown(row.Key, row.Text, row.Options, row.SelectedIndex, index => ApplyEffectOption(_ => row.Select?.Invoke(index))),
             DevUiWindowRowKind.FloatInput => DevUiWindowRow.FloatInput(row.Key, row.Text, row.FloatValue, value => ApplyEffectOption(_ => row.SetFloat?.Invoke(value))),
+            DevUiWindowRowKind.Slider => DevUiWindowRow.Slider(row.Key, row.Text, row.FloatValue, row.MinValue, row.MaxValue, value => ApplyEffectOption(_ => row.SetFloat?.Invoke(value))),
+            DevUiWindowRowKind.Stepper => DevUiWindowRow.Stepper(row.Key, row.Text, row.FloatValue, row.StepValue, value => ApplyEffectOption(_ => row.SetFloat?.Invoke(value))),
             _ => row
         };
     }

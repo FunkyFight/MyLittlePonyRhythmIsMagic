@@ -280,7 +280,53 @@ public sealed class BeatmapEditorDocument
         if (deletedNote == null)
             return false;
 
-        Chart.Notes.Remove(deletedNote);
+        return RemoveNote(deletedNote);
+    }
+
+    public bool RemoveNote(ChartNote note)
+    {
+        if (note == null || !Chart.Notes.Remove(note))
+            return false;
+
+        SynchronizeAllDerivedTiming();
+        SortNotes();
+        UseRuntimeNotesAsEditorClipSource();
+        IsDirty = true;
+        return true;
+    }
+
+    public bool RemoveNotes(IEnumerable<ChartNote> notes)
+    {
+        if (notes == null)
+            return false;
+
+        bool removedAny = false;
+        foreach (ChartNote note in notes.ToArray())
+            removedAny |= note != null && Chart.Notes.Remove(note);
+
+        if (!removedAny)
+            return false;
+
+        SynchronizeAllDerivedTiming();
+        SortNotes();
+        UseRuntimeNotesAsEditorClipSource();
+        IsDirty = true;
+        return true;
+    }
+
+    public bool ApplyNoteSnapshot(ChartNote target, ChartNote snapshot)
+    {
+        if (target == null || snapshot == null || !Chart.Notes.Contains(target))
+            return false;
+
+        target.SongPosition = snapshot.SongPosition;
+        target.BeatPosition = snapshot.BeatPosition;
+        target.HoldDuration = snapshot.HoldDuration;
+        target.HoldBeats = snapshot.HoldBeats;
+        target.InputActionToPress = snapshot.InputActionToPress;
+        target.AdditionnalData = new Dictionary<string, string>(snapshot.AdditionnalData ?? new Dictionary<string, string>());
+        SynchronizeAllDerivedTiming();
+        SortNotes();
         UseRuntimeNotesAsEditorClipSource();
         IsDirty = true;
         return true;
@@ -367,6 +413,21 @@ public sealed class BeatmapEditorDocument
         if (effect == null || !Chart.Effects.Remove(effect))
             return false;
 
+        SynchronizeAllDerivedTiming();
+        SortEffects();
+        IsDirty = true;
+        return true;
+    }
+
+    public bool ApplyEffectSnapshot(ChartEffect target, ChartEffect snapshot)
+    {
+        if (target == null || snapshot == null || !Chart.Effects.Contains(target))
+            return false;
+
+        target.SongPosition = snapshot.SongPosition;
+        target.BeatPosition = snapshot.BeatPosition;
+        target.EffectType = snapshot.EffectType;
+        target.Data = new Dictionary<string, string>(snapshot.Data ?? new Dictionary<string, string>());
         SynchronizeAllDerivedTiming();
         SortEffects();
         IsDirty = true;

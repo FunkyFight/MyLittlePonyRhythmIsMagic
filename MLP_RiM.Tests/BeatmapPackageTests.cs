@@ -191,6 +191,55 @@ public sealed class BeatmapPackageTests
         Assert.Equal(new[] { 0.0, 2.0, 4.0 }, document.Chart.Notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
     }
 
+    [Fact]
+    public void CommandStackUndoRedoWorksForLegacyNotePlacementAndDeletion()
+    {
+        using TempWorkspace workspace = new();
+        BeatmapEditorDocument document = BeatmapEditorDocument.CreateNew("", Path.Combine(workspace.Root, "Beatmaps", "LegacyCommands", "chart.xml"), 120);
+        EditorCommandStack stack = new();
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(EditorNoteKind.SeaponyParade);
+        ChartNote note = definition.CreateChartNote(0, document.Crotchet, variantIndex: 0);
+        ChartTiming.SetNoteBeat(note, 0);
+
+        stack.Execute(new PlaceNotesCommand(new[] { new EditorNotePlacement(definition, note) }), document);
+        Assert.Single(document.Chart.Notes);
+
+        ChartNote placedNote = document.Chart.Notes[0];
+        stack.Execute(new DeleteNoteCommand(placedNote), document);
+        Assert.Empty(document.Chart.Notes);
+
+        Assert.True(stack.TryUndo(document));
+        Assert.Single(document.Chart.Notes);
+
+        Assert.True(stack.TryRedo(document));
+        Assert.Empty(document.Chart.Notes);
+
+        Assert.True(stack.TryUndo(document));
+        Assert.Single(document.Chart.Notes);
+
+        Assert.True(stack.TryUndo(document));
+        Assert.Empty(document.Chart.Notes);
+    }
+
+    [Fact]
+    public void TimingMetadataCommandsUndoAndRedoDerivedTiming()
+    {
+        using TempWorkspace workspace = new();
+        BeatmapEditorDocument document = BeatmapEditorDocument.CreateNew("", Path.Combine(workspace.Root, "Beatmaps", "MetadataCommands", "chart.xml"), 120);
+        EditorCommandStack stack = new();
+
+        stack.Execute(new SetBpmCommand(180), document);
+        Assert.Equal(180, document.Chart.BPM);
+        Assert.Equal(180, document.GetBpmAtBeat(0));
+
+        Assert.True(stack.TryUndo(document));
+        Assert.Equal(120, document.Chart.BPM);
+        Assert.Equal(120, document.GetBpmAtBeat(0));
+
+        Assert.True(stack.TryRedo(document));
+        Assert.Equal(180, document.Chart.BPM);
+    }
+
     private static ChartEditorClip CreateClip(string id, string clipTypeId, EditorClipCategory category, double startBeat, double lengthBeats)
     {
         EditorClipDefinition definition = EditorClipDefinitions.Find(EditorClipDefinitions.SeaponyParadeGameId, clipTypeId);

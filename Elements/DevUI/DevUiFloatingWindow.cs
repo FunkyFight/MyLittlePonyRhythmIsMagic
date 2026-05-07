@@ -120,6 +120,18 @@ public sealed class DevUiFloatingWindow
                 return true;
             }
 
+            if (row.Kind == DevUiWindowRowKind.Slider)
+            {
+                UpdateSlider(row, GetDropdownBounds(rowBounds));
+                return true;
+            }
+
+            if (row.Kind == DevUiWindowRowKind.Stepper)
+            {
+                UpdateStepper(row, GetDropdownBounds(rowBounds));
+                return true;
+            }
+
             y += rowBounds.Height;
         }
 
@@ -261,6 +273,18 @@ public sealed class DevUiFloatingWindow
                 _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X, bounds.Y + 5), Color.White, 2);
                 break;
 
+            case DevUiWindowRowKind.Value:
+                _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X, bounds.Y + 7), Color.White, 2);
+                _ui.Label(spriteBatch, row.ValueText, new Vector2(GetDropdownBounds(bounds).X + 8, bounds.Y + 7), Color.LightGreen, 2);
+                break;
+
+            case DevUiWindowRowKind.Separator:
+                int separatorY = bounds.Y + bounds.Height / 2;
+                _ui.Line(spriteBatch, new Vector2(bounds.X, separatorY), new Vector2(bounds.Right, separatorY), Color.DarkSlateGray, 1);
+                if (!string.IsNullOrWhiteSpace(row.Text))
+                    _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X + 8, bounds.Y + 7), Color.DarkSeaGreen, 1);
+                break;
+
             case DevUiWindowRowKind.Checkbox:
                 Rectangle checkBounds = new(bounds.X, bounds.Y + 6, 14, 14);
                 _ui.Stroke(spriteBatch, checkBounds, Color.LightGreen, 2);
@@ -284,6 +308,16 @@ public sealed class DevUiFloatingWindow
                 _ui.Fill(spriteBatch, bounds, new Color(18, 36, 24, 245));
                 _ui.Stroke(spriteBatch, bounds, Color.LightGreen, 2);
                 _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X + 10, bounds.Y + 8), Color.LightGreen, 2);
+                break;
+
+            case DevUiWindowRowKind.Slider:
+                _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X, bounds.Y + 7), Color.White, 2);
+                DrawSlider(spriteBatch, GetDropdownBounds(bounds), row);
+                break;
+
+            case DevUiWindowRowKind.Stepper:
+                _ui.Label(spriteBatch, row.Text, new Vector2(bounds.X, bounds.Y + 7), Color.White, 2);
+                DrawStepper(spriteBatch, GetDropdownBounds(bounds), row);
                 break;
         }
     }
@@ -383,7 +417,30 @@ public sealed class DevUiFloatingWindow
     {
         return row.Kind == DevUiWindowRowKind.Button
             || row.Kind == DevUiWindowRowKind.Checkbox
-            || row.Kind == DevUiWindowRowKind.FloatInput;
+            || row.Kind == DevUiWindowRowKind.FloatInput
+            || row.Kind == DevUiWindowRowKind.Slider
+            || row.Kind == DevUiWindowRowKind.Stepper;
+    }
+
+    private void UpdateSlider(DevUiWindowRow row, Rectangle bounds)
+    {
+        if (!bounds.Contains(_mouse.Position))
+            return;
+
+        double t = Math.Clamp((double)(_mouse.X - bounds.X) / Math.Max(1, bounds.Width), 0.0, 1.0);
+        row.SetFloat?.Invoke(row.MinValue + (row.MaxValue - row.MinValue) * t);
+    }
+
+    private void UpdateStepper(DevUiWindowRow row, Rectangle bounds)
+    {
+        int buttonWidth = 24;
+        Rectangle minusBounds = new(bounds.X, bounds.Y, buttonWidth, bounds.Height);
+        Rectangle plusBounds = new(bounds.Right - buttonWidth, bounds.Y, buttonWidth, bounds.Height);
+
+        if (minusBounds.Contains(_mouse.Position))
+            row.SetFloat?.Invoke(row.FloatValue - row.StepValue);
+        else if (plusBounds.Contains(_mouse.Position))
+            row.SetFloat?.Invoke(row.FloatValue + row.StepValue);
     }
 
     private void BeginFloatEdit(DevUiWindowRow row)
@@ -486,6 +543,33 @@ public sealed class DevUiFloatingWindow
         _ui.Label(spriteBatch, text, new Vector2(bounds.X + 8, bounds.Y + 6), textColor, 2);
     }
 
+    private void DrawSlider(SpriteBatch spriteBatch, Rectangle bounds, DevUiWindowRow row)
+    {
+        double range = row.MaxValue - row.MinValue;
+        double t = Math.Abs(range) <= double.Epsilon ? 0.0 : Math.Clamp((row.FloatValue - row.MinValue) / range, 0.0, 1.0);
+        int fillWidth = (int)Math.Round(bounds.Width * t);
+        _ui.Fill(spriteBatch, bounds, Color.Black * 0.85f);
+        _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, fillWidth, bounds.Height), Color.LightGreen * 0.5f);
+        _ui.Stroke(spriteBatch, bounds, Color.LightGreen, 1);
+        _ui.Label(spriteBatch, row.FloatValue.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(bounds.X + 8, bounds.Y + 6), Color.LightGreen, 2);
+    }
+
+    private void DrawStepper(SpriteBatch spriteBatch, Rectangle bounds, DevUiWindowRow row)
+    {
+        int buttonWidth = 24;
+        Rectangle minusBounds = new(bounds.X, bounds.Y, buttonWidth, bounds.Height);
+        Rectangle valueBounds = new(bounds.X + buttonWidth, bounds.Y, bounds.Width - buttonWidth * 2, bounds.Height);
+        Rectangle plusBounds = new(bounds.Right - buttonWidth, bounds.Y, buttonWidth, bounds.Height);
+
+        _ui.Fill(spriteBatch, bounds, Color.Black * 0.85f);
+        _ui.Stroke(spriteBatch, bounds, Color.LightGreen, 1);
+        _ui.Fill(spriteBatch, minusBounds, new Color(18, 36, 24, 245));
+        _ui.Fill(spriteBatch, plusBounds, new Color(18, 36, 24, 245));
+        _ui.Label(spriteBatch, "-", new Vector2(minusBounds.X + 9, minusBounds.Y + 6), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, row.FloatValue.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(valueBounds.X + 8, valueBounds.Y + 6), Color.LightGreen, 2);
+        _ui.Label(spriteBatch, "+", new Vector2(plusBounds.X + 8, plusBounds.Y + 6), Color.LightGreen, 2);
+    }
+
     private bool Pressed(Keys key)
     {
         return _keyboard.IsKeyDown(key) && !_previousKeyboard.IsKeyDown(key);
@@ -529,6 +613,7 @@ public readonly struct DevUiWindowRow
 {
     public DevUiWindowRowKind Kind { get; }
     public string Text { get; }
+    public string ValueText { get; }
     public bool IsChecked { get; }
     public Action Toggle { get; }
     public IReadOnlyList<string> Options { get; }
@@ -536,12 +621,16 @@ public readonly struct DevUiWindowRow
     public Action<int> Select { get; }
     public string Key { get; }
     public double FloatValue { get; }
+    public double MinValue { get; }
+    public double MaxValue { get; }
+    public double StepValue { get; }
     public Action<double> SetFloat { get; }
 
-    private DevUiWindowRow(DevUiWindowRowKind kind, string text, bool isChecked = false, Action toggle = null, IReadOnlyList<string> options = null, int selectedIndex = 0, Action<int> select = null, string key = null, double floatValue = 0, Action<double> setFloat = null)
+    private DevUiWindowRow(DevUiWindowRowKind kind, string text, bool isChecked = false, Action toggle = null, IReadOnlyList<string> options = null, int selectedIndex = 0, Action<int> select = null, string key = null, double floatValue = 0, Action<double> setFloat = null, string valueText = null, double minValue = 0, double maxValue = 1, double stepValue = 1)
     {
         Kind = kind;
         Text = text;
+        ValueText = valueText ?? string.Empty;
         IsChecked = isChecked;
         Toggle = toggle;
         Options = options;
@@ -549,6 +638,9 @@ public readonly struct DevUiWindowRow
         Select = select;
         Key = key ?? text;
         FloatValue = floatValue;
+        MinValue = minValue;
+        MaxValue = maxValue;
+        StepValue = stepValue;
         SetFloat = setFloat;
     }
 
@@ -560,6 +652,16 @@ public readonly struct DevUiWindowRow
     public static DevUiWindowRow Title(string text)
     {
         return new DevUiWindowRow(DevUiWindowRowKind.Title, text);
+    }
+
+    public static DevUiWindowRow Value(string text, string value)
+    {
+        return new DevUiWindowRow(DevUiWindowRowKind.Value, text, valueText: value);
+    }
+
+    public static DevUiWindowRow Separator(string text = null)
+    {
+        return new DevUiWindowRow(DevUiWindowRowKind.Separator, text ?? string.Empty);
     }
 
     public static DevUiWindowRow Checkbox(string text, bool isChecked, Action toggle)
@@ -587,6 +689,16 @@ public readonly struct DevUiWindowRow
         return new DevUiWindowRow(DevUiWindowRowKind.FloatInput, text, key: key, floatValue: value, setFloat: setFloat);
     }
 
+    public static DevUiWindowRow Slider(string key, string text, double value, double min, double max, Action<double> setFloat)
+    {
+        return new DevUiWindowRow(DevUiWindowRowKind.Slider, text, key: key, floatValue: value, setFloat: setFloat, minValue: min, maxValue: max);
+    }
+
+    public static DevUiWindowRow Stepper(string key, string text, double value, double step, Action<double> setFloat)
+    {
+        return new DevUiWindowRow(DevUiWindowRowKind.Stepper, text, key: key, floatValue: value, setFloat: setFloat, stepValue: step);
+    }
+
 }
 
 public enum DevUiWindowRowKind
@@ -596,5 +708,9 @@ public enum DevUiWindowRowKind
     Checkbox,
     Dropdown,
     FloatInput,
-    Button
+    Button,
+    Value,
+    Separator,
+    Slider,
+    Stepper
 }

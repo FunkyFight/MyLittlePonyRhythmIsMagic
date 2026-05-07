@@ -5,6 +5,22 @@ namespace MLP_RiM.Elements.Editor.Commands;
 
 internal static class EditorCommandCloning
 {
+    public static ChartNote CloneNote(ChartNote note)
+    {
+        if (note == null)
+            return null;
+
+        return new ChartNote
+        {
+            SongPosition = note.SongPosition,
+            BeatPosition = note.BeatPosition,
+            HoldDuration = note.HoldDuration,
+            HoldBeats = note.HoldBeats,
+            InputActionToPress = note.InputActionToPress,
+            AdditionnalData = new Dictionary<string, string>(note.AdditionnalData ?? new Dictionary<string, string>())
+        };
+    }
+
     public static ChartEditorClip CloneClip(ChartEditorClip clip)
     {
         if (clip == null)
