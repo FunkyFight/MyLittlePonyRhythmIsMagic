@@ -14,29 +14,39 @@ public sealed class BeatmapEditorDocument
     public Chart Chart { get; private set; }
     public string SongPath { get; set; }
     public string ChartPath { get; private set; }
+    public string PackagePath { get; private set; }
+    public string AssetsPath => BeatmapPackagePaths.GetAssetsPath(PackagePath);
+    public bool IsLegacyChart { get; private set; }
     public bool IsDirty { get; private set; }
     public ChartTempoMap TempoMap => _tempoMap ??= new ChartTempoMap(Chart);
+    public IReadOnlyList<ChartEditorTrack> EditorTracks => Chart?.EditorTracks != null ? Chart.EditorTracks : Array.Empty<ChartEditorTrack>();
+    public IReadOnlyList<ChartEditorClip> EditorClips => Chart?.EditorClips != null ? Chart.EditorClips : Array.Empty<ChartEditorClip>();
 
     public double Crotchet => Chart.BPM > 0 ? 60.0 / Chart.BPM : 0.6;
 
     private ChartTempoMap _tempoMap;
     private bool _needsV1Backup;
+    private string _v1BackupSourcePath;
+    private bool _editorClipsAreRuntimeSource;
 
     private BeatmapEditorDocument(Chart chart, string songPath, string chartPath)
     {
         Chart = chart;
         SongPath = songPath;
-        ChartPath = chartPath;
+        ChartPath = BeatmapPackagePaths.ResolveChartPath(chartPath);
+        PackagePath = BeatmapPackagePaths.GetPackagePath(ChartPath);
+        IsLegacyChart = BeatmapPackagePaths.IsLegacyXmlChartPath(ChartPath);
         NormalizeChart();
     }
 
     public static BeatmapEditorDocument CreateNew(string songPath, string chartPath, double bpm = 100)
     {
+        chartPath = BeatmapPackagePaths.ResolveChartPath(chartPath);
         string songName = string.IsNullOrWhiteSpace(songPath) ? "Untitled" : Path.GetFileNameWithoutExtension(songPath);
-        return new BeatmapEditorDocument(new Chart
+        Chart chart = new()
         {
             SongName = songName,
-            BeatmapName = Path.GetFileNameWithoutExtension(chartPath),
+            BeatmapName = GetDefaultBeatmapName(chartPath),
             Beatmapper = "Unknown",
             ArtistName = "Unknown",
             MusicName = songName,
@@ -46,12 +56,30 @@ public sealed class BeatmapEditorDocument
             LeadInBeats = 0,
             ChartVersion = 2,
             Notes = new List<ChartNote>(),
-            Effects = new List<ChartEffect>()
-        }, songPath, chartPath);
+            Effects = new List<ChartEffect>(),
+            Tags = new List<string>(),
+            EditorTracks = CreateDefaultTracks(),
+            EditorTracksSpecified = true,
+            EditorClips = new List<ChartEditorClip>(),
+            EditorClipsSpecified = true
+        };
+
+        BeatmapEditorDocument document = new(chart, songPath, chartPath)
+        {
+            _editorClipsAreRuntimeSource = true
+        };
+        document.EnsurePackageDirectoriesIfNeeded();
+        return document;
+    }
+
+    public static BeatmapEditorDocument CreateNewPackage(string songPath, string beatmapName, double bpm = 100)
+    {
+        return CreateNew(songPath, BeatmapPackagePaths.GetAvailablePackageChartPath(beatmapName), bpm);
     }
 
     public static BeatmapEditorDocument LoadOrCreate(string songPath, string chartPath, double bpm = 100)
     {
+        chartPath = BeatmapPackagePaths.ResolveChartPath(chartPath);
         if (!File.Exists(chartPath) || new FileInfo(chartPath).Length == 0)
             return CreateNew(songPath, chartPath, bpm);
 
@@ -89,11 +117,20 @@ public sealed class BeatmapEditorDocument
     public void Save(string chartPath = null)
     {
         if (!string.IsNullOrWhiteSpace(chartPath))
-            ChartPath = chartPath;
+            SetChartPath(chartPath, markDirty: false);
+
+        EnsurePackagePathForSave();
+
+        if (_editorClipsAreRuntimeSource)
+            CompileClipsToRuntimeNotes();
+        else
+            SyncEditorClipsFromRuntimeNotes();
 
         string directory = Path.GetDirectoryName(ChartPath);
         if (!string.IsNullOrWhiteSpace(directory))
             Directory.CreateDirectory(directory);
+
+        EnsurePackageDirectoriesIfNeeded();
 
         SynchronizeAllDerivedTiming();
         SortNotes();
@@ -116,12 +153,13 @@ public sealed class BeatmapEditorDocument
 
     private void BackupV1ChartIfNeeded()
     {
-        if (string.IsNullOrWhiteSpace(ChartPath) || !File.Exists(ChartPath))
+        string sourcePath = !string.IsNullOrWhiteSpace(_v1BackupSourcePath) ? _v1BackupSourcePath : ChartPath;
+        if (string.IsNullOrWhiteSpace(sourcePath) || !File.Exists(sourcePath))
             return;
 
-        string backupPath = ChartPath + ".v1backup";
+        string backupPath = sourcePath + ".v1backup";
         if (!File.Exists(backupPath))
-            File.Copy(ChartPath, backupPath, overwrite: false);
+            File.Copy(sourcePath, backupPath, overwrite: false);
     }
 
     public bool TryPlaceNote(EditorNoteDefinition definition, double songPosition, int variantIndex, out ChartNote placedNote, out string reason)
@@ -222,6 +260,7 @@ public sealed class BeatmapEditorDocument
         Chart.Notes.AddRange(notes);
         SynchronizeAllDerivedTiming();
         SortNotes();
+        UseRuntimeNotesAsEditorClipSource();
         IsDirty = true;
         placedNotes = notes;
         reason = null;
@@ -242,6 +281,7 @@ public sealed class BeatmapEditorDocument
             return false;
 
         Chart.Notes.Remove(deletedNote);
+        UseRuntimeNotesAsEditorClipSource();
         IsDirty = true;
         return true;
     }
@@ -259,6 +299,7 @@ public sealed class BeatmapEditorDocument
         ChartTiming.SetNoteBeat(note, ClampNoteBeatToSongStart(beat));
         SynchronizeNoteDuration(note, EditorNoteDefinitions.FromChartNote(note));
         SortNotes();
+        UseRuntimeNotesAsEditorClipSource();
         IsDirty = true;
         return true;
     }
@@ -321,6 +362,33 @@ public sealed class BeatmapEditorDocument
         return true;
     }
 
+    public bool RemoveEffect(ChartEffect effect)
+    {
+        if (effect == null || !Chart.Effects.Remove(effect))
+            return false;
+
+        SynchronizeAllDerivedTiming();
+        SortEffects();
+        IsDirty = true;
+        return true;
+    }
+
+    public bool UpdateTempoChange(ChartEffect effect, double beat, double bpm, bool sectionOffsetFollowsPosition = true)
+    {
+        if (effect == null || !effect.IsBpmChange || !Chart.Effects.Contains(effect) || bpm <= 0)
+            return false;
+
+        ChartTiming.SetEffectBeat(effect, beat);
+        effect.SetBpm(bpm);
+        if (sectionOffsetFollowsPosition)
+            effect.SetSectionOffset(0);
+
+        SynchronizeAllDerivedTiming();
+        SortEffects();
+        IsDirty = true;
+        return true;
+    }
+
     public int NormalizeSeeSawNotesToGrid(double snapDivisions)
     {
         double divisions = GetEffectiveSnapDivisions(snapDivisions);
@@ -348,6 +416,7 @@ public sealed class BeatmapEditorDocument
         {
             SynchronizeAllDerivedTiming();
             SortNotes();
+            UseRuntimeNotesAsEditorClipSource();
             IsDirty = true;
         }
 
@@ -386,6 +455,7 @@ public sealed class BeatmapEditorDocument
     public void MarkDirty()
     {
         SynchronizeAllDerivedTiming();
+        UseRuntimeNotesAsEditorClipSource();
         IsDirty = true;
     }
 
@@ -557,13 +627,23 @@ public sealed class BeatmapEditorDocument
 
     public void SetSongPath(string songPath)
     {
+        SetSongPath(songPath, allowEmpty: false);
+    }
+
+    public void SetSongPath(string songPath, bool allowEmpty)
+    {
         if (string.IsNullOrWhiteSpace(songPath))
-            return;
+        {
+            if (!allowEmpty)
+                return;
+
+            songPath = string.Empty;
+        }
 
         SongPath = songPath;
         Chart.SongPath = songPath;
 
-        if (string.IsNullOrWhiteSpace(Chart.MusicName) || Chart.MusicName == "Unknown")
+        if (!string.IsNullOrWhiteSpace(songPath) && (string.IsNullOrWhiteSpace(Chart.MusicName) || Chart.MusicName == "Unknown"))
             Chart.MusicName = Path.GetFileNameWithoutExtension(songPath);
 
         IsDirty = true;
@@ -571,15 +651,23 @@ public sealed class BeatmapEditorDocument
 
     public void SetChartPath(string chartPath)
     {
+        SetChartPath(chartPath, markDirty: true);
+    }
+
+    public void SetChartPath(string chartPath, bool markDirty)
+    {
         if (string.IsNullOrWhiteSpace(chartPath))
             return;
 
-        ChartPath = chartPath;
+        ChartPath = BeatmapPackagePaths.ResolveChartPath(chartPath);
+        PackagePath = BeatmapPackagePaths.GetPackagePath(ChartPath);
+        IsLegacyChart = BeatmapPackagePaths.IsLegacyXmlChartPath(ChartPath);
 
         if (string.IsNullOrWhiteSpace(Chart.BeatmapName) || Chart.BeatmapName == "Unknown")
-            Chart.BeatmapName = Path.GetFileNameWithoutExtension(chartPath);
+            Chart.BeatmapName = GetDefaultBeatmapName(ChartPath);
 
-        IsDirty = true;
+        if (markDirty)
+            IsDirty = true;
     }
 
     public void SetMetadata(string beatmapName = null, string beatmapper = null, string artistName = null, string musicName = null)
@@ -598,6 +686,248 @@ public sealed class BeatmapEditorDocument
 
         Chart.SongName = Chart.MusicName;
         IsDirty = true;
+    }
+
+    public string GetMetadataField(EditorMetadataField field)
+    {
+        return field switch
+        {
+            EditorMetadataField.BeatmapName => Chart.BeatmapName,
+            EditorMetadataField.Beatmapper => Chart.Beatmapper,
+            EditorMetadataField.Description => Chart.Description,
+            EditorMetadataField.Tags => string.Join(", ", Chart.Tags ?? new List<string>()),
+            EditorMetadataField.SongName => Chart.SongName,
+            EditorMetadataField.ArtistName => Chart.ArtistName,
+            EditorMetadataField.MusicName => Chart.MusicName,
+            EditorMetadataField.LevelIconPath => Chart.LevelIconPath,
+            EditorMetadataField.RatingHeader => Chart.RatingHeader,
+            EditorMetadataField.RatingTryAgainMessage => Chart.RatingTryAgainMessage,
+            EditorMetadataField.RatingTryAgainImagePath => Chart.RatingTryAgainImagePath,
+            EditorMetadataField.RatingOkMessage => Chart.RatingOkMessage,
+            EditorMetadataField.RatingOkImagePath => Chart.RatingOkImagePath,
+            EditorMetadataField.RatingSuperbMessage => Chart.RatingSuperbMessage,
+            EditorMetadataField.RatingSuperbImagePath => Chart.RatingSuperbImagePath,
+            _ => string.Empty
+        } ?? string.Empty;
+    }
+
+    public void SetMetadataField(EditorMetadataField field, string value)
+    {
+        value ??= string.Empty;
+        switch (field)
+        {
+            case EditorMetadataField.BeatmapName:
+                Chart.BeatmapName = value;
+                break;
+            case EditorMetadataField.Beatmapper:
+                Chart.Beatmapper = value;
+                break;
+            case EditorMetadataField.Description:
+                Chart.Description = value;
+                break;
+            case EditorMetadataField.Tags:
+                Chart.Tags = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+                break;
+            case EditorMetadataField.SongName:
+                Chart.SongName = value;
+                break;
+            case EditorMetadataField.ArtistName:
+                Chart.ArtistName = value;
+                break;
+            case EditorMetadataField.MusicName:
+                Chart.MusicName = value;
+                Chart.SongName = value;
+                break;
+            case EditorMetadataField.LevelIconPath:
+                Chart.LevelIconPath = BeatmapPackagePaths.NormalizeRelativePath(value);
+                break;
+            case EditorMetadataField.RatingHeader:
+                Chart.RatingHeader = value;
+                break;
+            case EditorMetadataField.RatingTryAgainMessage:
+                Chart.RatingTryAgainMessage = value;
+                break;
+            case EditorMetadataField.RatingTryAgainImagePath:
+                Chart.RatingTryAgainImagePath = BeatmapPackagePaths.NormalizeRelativePath(value);
+                break;
+            case EditorMetadataField.RatingOkMessage:
+                Chart.RatingOkMessage = value;
+                break;
+            case EditorMetadataField.RatingOkImagePath:
+                Chart.RatingOkImagePath = BeatmapPackagePaths.NormalizeRelativePath(value);
+                break;
+            case EditorMetadataField.RatingSuperbMessage:
+                Chart.RatingSuperbMessage = value;
+                break;
+            case EditorMetadataField.RatingSuperbImagePath:
+                Chart.RatingSuperbImagePath = BeatmapPackagePaths.NormalizeRelativePath(value);
+                break;
+        }
+
+        IsDirty = true;
+    }
+
+    public bool GetFlashingEffectsWarning()
+    {
+        return Chart.FlashingEffectsWarning == true;
+    }
+
+    public void SetFlashingEffectsWarning(bool value)
+    {
+        Chart.FlashingEffectsWarning = value;
+        IsDirty = true;
+    }
+
+    public string ImportAsset(string sourcePath, string targetSubfolder = null)
+    {
+        EnsurePackagePathForSave();
+        EnsurePackageDirectoriesIfNeeded();
+        return new EditorAssetManager(PackagePath).ImportImage(sourcePath, targetSubfolder);
+    }
+
+    public bool AddEditorClip(ChartEditorClip clip, out string reason)
+    {
+        reason = null;
+        if (clip == null)
+        {
+            reason = "Invalid clip";
+            return false;
+        }
+
+        NormalizeClip(clip);
+        Chart.EditorClips.Add(clip);
+        Chart.EditorClipsSpecified = true;
+        _editorClipsAreRuntimeSource = true;
+        if (!TryCompileClipsToRuntimeNotes(out reason))
+        {
+            Chart.EditorClips.Remove(clip);
+            _editorClipsAreRuntimeSource = Chart.EditorClips.Count > 0;
+            return false;
+        }
+
+        IsDirty = true;
+        return true;
+    }
+
+    public ChartEditorClip RemoveEditorClip(string clipId)
+    {
+        ChartEditorClip clip = FindEditorClip(clipId);
+        if (clip == null)
+            return null;
+
+        Chart.EditorClips.Remove(clip);
+        Chart.EditorClipsSpecified = true;
+        _editorClipsAreRuntimeSource = true;
+        CompileClipsToRuntimeNotes();
+        IsDirty = true;
+        return clip;
+    }
+
+    public bool MoveEditorClip(string clipId, double startBeat, int trackIndex, out string reason)
+    {
+        ChartEditorClip clip = FindEditorClip(clipId);
+        if (clip == null)
+        {
+            reason = "Clip not found";
+            return false;
+        }
+
+        double oldBeat = clip.StartBeat;
+        int oldTrack = clip.TrackIndex;
+        clip.StartBeat = startBeat;
+        clip.TrackIndex = Math.Max(0, trackIndex);
+        _editorClipsAreRuntimeSource = true;
+        if (!TryCompileClipsToRuntimeNotes(out reason))
+        {
+            clip.StartBeat = oldBeat;
+            clip.TrackIndex = oldTrack;
+            CompileClipsToRuntimeNotes();
+            return false;
+        }
+
+        IsDirty = true;
+        return true;
+    }
+
+    public bool ResizeEditorClip(string clipId, double lengthBeats, out string reason)
+    {
+        ChartEditorClip clip = FindEditorClip(clipId);
+        if (clip == null)
+        {
+            reason = "Clip not found";
+            return false;
+        }
+
+        double oldLength = clip.LengthBeats;
+        clip.LengthBeats = Math.Max(0.0, lengthBeats);
+        _editorClipsAreRuntimeSource = true;
+        if (!TryCompileClipsToRuntimeNotes(out reason))
+        {
+            clip.LengthBeats = oldLength;
+            CompileClipsToRuntimeNotes();
+            return false;
+        }
+
+        IsDirty = true;
+        return true;
+    }
+
+    public bool ChangeEditorClipData(string clipId, IDictionary<string, string> data, out string reason)
+    {
+        ChartEditorClip clip = FindEditorClip(clipId);
+        if (clip == null)
+        {
+            reason = "Clip not found";
+            return false;
+        }
+
+        Dictionary<string, string> oldData = clip.Data;
+        clip.Data = data == null ? new Dictionary<string, string>() : new Dictionary<string, string>(data);
+        _editorClipsAreRuntimeSource = true;
+        if (!TryCompileClipsToRuntimeNotes(out reason))
+        {
+            clip.Data = oldData;
+            CompileClipsToRuntimeNotes();
+            return false;
+        }
+
+        IsDirty = true;
+        return true;
+    }
+
+    public ChartEditorClip FindEditorClip(string clipId)
+    {
+        return Chart.EditorClips?.FirstOrDefault(clip => string.Equals(clip?.Id, clipId, StringComparison.Ordinal));
+    }
+
+    public void CompileClipsToRuntimeNotes()
+    {
+        if (!TryCompileClipsToRuntimeNotes(out string reason))
+            throw new InvalidOperationException(reason ?? "Unable to compile editor clips");
+    }
+
+    public bool TryCompileClipsToRuntimeNotes(out string reason)
+    {
+        reason = null;
+        Chart.EditorClips ??= new List<ChartEditorClip>();
+        List<ChartNote> oldNotes = Chart.Notes;
+        List<ChartNote> generatedNotes = EditorClipCompiler.Compile(Chart, TempoMap);
+
+        if (generatedNotes.Any(note => EditorNoteDefinitions.FromChartNote(note)?.Kind == EditorNoteKind.SeeSaw))
+        {
+            SeeSawTimeline previewTimeline = SeeSawChartCompiler.Compile(generatedNotes, note => ChartTiming.GetNoteBeat(note, TempoMap), TempoMap, GetLeadInBeats());
+            if (previewTimeline.Errors.Count > 0)
+            {
+                reason = previewTimeline.Errors[0];
+                Chart.Notes = oldNotes;
+                return false;
+            }
+        }
+
+        Chart.Notes = generatedNotes;
+        SynchronizeAllDerivedTiming();
+        SortNotes();
+        return true;
     }
 
     public double GetContextualHitWindowEnd(ChartNote note, EditorNoteDefinition definition)
@@ -1021,6 +1351,92 @@ public sealed class BeatmapEditorDocument
             ChartTiming.SetEffectBeat(effect, TempoMap.SecondsToBeat(effect.SongPosition));
     }
 
+    private void EnsurePackagePathForSave()
+    {
+        if (!IsLegacyChart)
+        {
+            PackagePath = BeatmapPackagePaths.GetPackagePath(ChartPath);
+            return;
+        }
+
+        if (_needsV1Backup && string.IsNullOrWhiteSpace(_v1BackupSourcePath))
+            _v1BackupSourcePath = ChartPath;
+
+        SetChartPath(BeatmapPackagePaths.GetAvailableMigratedChartPath(ChartPath), markDirty: false);
+        IsLegacyChart = false;
+    }
+
+    private void EnsurePackageDirectoriesIfNeeded()
+    {
+        if (IsLegacyChart || string.IsNullOrWhiteSpace(PackagePath))
+            return;
+
+        Directory.CreateDirectory(PackagePath);
+        Directory.CreateDirectory(AssetsPath);
+    }
+
+    private void UseRuntimeNotesAsEditorClipSource()
+    {
+        SyncEditorClipsFromRuntimeNotes();
+        _editorClipsAreRuntimeSource = false;
+    }
+
+    private void SyncEditorClipsFromRuntimeNotes()
+    {
+        Chart.EditorTracks ??= CreateDefaultTracks();
+        if (Chart.EditorTracks.Count == 0)
+            Chart.EditorTracks = CreateDefaultTracks();
+
+        Chart.EditorTracksSpecified = true;
+        Chart.EditorClips = Chart.Notes
+            .Where(note => note != null)
+            .Select((note, index) => EditorClipCompiler.CreateClipFromLegacyNote(note, GetNoteBeat, index))
+            .ToList();
+        Chart.EditorClipsSpecified = true;
+    }
+
+    private static void NormalizeClip(ChartEditorClip clip)
+    {
+        clip.Id = string.IsNullOrWhiteSpace(clip.Id) ? Guid.NewGuid().ToString("N") : clip.Id;
+        clip.TrackIndex = Math.Max(0, clip.TrackIndex);
+        if (double.IsNaN(clip.StartBeat) || double.IsInfinity(clip.StartBeat))
+            clip.StartBeat = 0;
+
+        if (double.IsNaN(clip.LengthBeats) || double.IsInfinity(clip.LengthBeats) || clip.LengthBeats < 0)
+            clip.LengthBeats = 0;
+
+        EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+        clip.RhythmGameId = string.IsNullOrWhiteSpace(clip.RhythmGameId) ? definition?.RhythmGameId ?? EditorClipDefinitions.UnknownGameId : clip.RhythmGameId;
+        clip.ClipTypeId = string.IsNullOrWhiteSpace(clip.ClipTypeId) ? definition?.ClipTypeId ?? EditorClipDefinitions.NoHit : clip.ClipTypeId;
+        clip.ClipCategory = string.IsNullOrWhiteSpace(clip.ClipCategory) ? (definition?.Category ?? EditorClipCategory.SingleHit).ToString() : clip.ClipCategory;
+        clip.InputAction = string.IsNullOrWhiteSpace(clip.InputAction) ? definition?.InputAction ?? "ReactMain" : clip.InputAction;
+        clip.Data ??= new Dictionary<string, string>();
+    }
+
+    private static List<ChartEditorTrack> CreateDefaultTracks()
+    {
+        List<ChartEditorTrack> tracks = new();
+        for (int i = 0; i < 10; i++)
+        {
+            tracks.Add(new ChartEditorTrack
+            {
+                Id = $"track-{i + 1}",
+                Name = $"Track {i + 1}",
+                Index = i
+            });
+        }
+
+        return tracks;
+    }
+
+    private static string GetDefaultBeatmapName(string chartPath)
+    {
+        if (BeatmapPackagePaths.IsPackageChartPath(chartPath))
+            return Path.GetFileName(Path.GetDirectoryName(chartPath));
+
+        return Path.GetFileNameWithoutExtension(chartPath);
+    }
+
     private void NormalizeChart()
     {
         if (Chart == null)
@@ -1030,7 +1446,7 @@ public sealed class BeatmapEditorDocument
             Chart.SongName = Path.GetFileNameWithoutExtension(SongPath);
 
         if (string.IsNullOrWhiteSpace(Chart.BeatmapName))
-            Chart.BeatmapName = Path.GetFileNameWithoutExtension(ChartPath);
+            Chart.BeatmapName = GetDefaultBeatmapName(ChartPath);
 
         if (string.IsNullOrWhiteSpace(Chart.Beatmapper))
             Chart.Beatmapper = "Unknown";
@@ -1054,6 +1470,9 @@ public sealed class BeatmapEditorDocument
 
         Chart.Notes ??= new List<ChartNote>();
         Chart.Effects ??= new List<ChartEffect>();
+        Chart.Tags ??= new List<string>();
+        Chart.EditorTracks ??= new List<ChartEditorTrack>();
+        Chart.EditorClips ??= new List<ChartEditorClip>();
         Chart.Notes = Chart.Notes.Where(note => note != null).ToList();
 
         bool migratedFromV1 = Chart.ChartVersion < 2
@@ -1078,11 +1497,46 @@ public sealed class BeatmapEditorDocument
             NormalizeEffect(effect);
         }
 
+        bool hasPersistedEditorClips = Chart.EditorClipsSpecified || Chart.EditorClips.Count > 0;
+        if (Chart.EditorTracks.Count == 0)
+            Chart.EditorTracks = CreateDefaultTracks();
+
+        for (int i = 0; i < Chart.EditorTracks.Count; i++)
+        {
+            ChartEditorTrack track = Chart.EditorTracks[i];
+            track.Id = string.IsNullOrWhiteSpace(track.Id) ? $"track-{i + 1}" : track.Id;
+            track.Name = string.IsNullOrWhiteSpace(track.Name) ? $"Track {i + 1}" : track.Name;
+            track.Index = i;
+        }
+
+        Chart.EditorTracksSpecified = true;
+
+        if (hasPersistedEditorClips)
+        {
+            Chart.EditorClips = Chart.EditorClips.Where(clip => clip != null).ToList();
+            foreach (ChartEditorClip clip in Chart.EditorClips)
+                NormalizeClip(clip);
+
+            Chart.EditorClipsSpecified = true;
+            _editorClipsAreRuntimeSource = true;
+        }
+        else
+        {
+            SyncEditorClipsFromRuntimeNotes();
+            _editorClipsAreRuntimeSource = false;
+        }
+
         Chart.ChartVersion = 2;
         _needsV1Backup = migratedFromV1 && !string.IsNullOrWhiteSpace(ChartPath) && File.Exists(ChartPath);
 
-        SynchronizeAllDerivedTiming();
-        SortNotes();
+        if (_editorClipsAreRuntimeSource)
+            TryCompileClipsToRuntimeNotes(out _);
+        else
+        {
+            SynchronizeAllDerivedTiming();
+            SortNotes();
+        }
+
         SortEffects();
     }
 

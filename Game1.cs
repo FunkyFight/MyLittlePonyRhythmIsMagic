@@ -108,7 +108,6 @@ public class Game1 : Core
         GraphicsDevice.Clear(Color.Black);
 
 
-        _sceneManager.Viewport.Scale = new Vector2(0.5f, 0.5f);
         _sceneManager.Draw(SpriteBatch);
 
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);

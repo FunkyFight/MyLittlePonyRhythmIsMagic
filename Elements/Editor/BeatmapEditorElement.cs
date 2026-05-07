@@ -89,7 +89,7 @@ public sealed class BeatmapEditorElement
     private bool _leftSeekRepeated;
     private bool _rightSeekRepeated;
 
-    public BeatmapEditorElement(BeatmapPlayer beatmapPlayer, string songPath = "", string chartPath = "Beatmaps/editor_beatmap.xml", double firstBeatDelay = 0.078, double snapDivisions = 4)
+    public BeatmapEditorElement(BeatmapPlayer beatmapPlayer, string songPath = "", string chartPath = "Beatmaps/editor_beatmap/chart.xml", double firstBeatDelay = 0.078, double snapDivisions = 4)
     {
         _beatmapPlayer = beatmapPlayer;
         _defaultSongPath = songPath;
@@ -862,7 +862,7 @@ public sealed class BeatmapEditorElement
         SyncSelectedSongIndex();
         SyncSelectedChartIndex();
         RebuildPlayback(false);
-        CloseNewBeatmapModal($"New beatmap {Path.GetFileName(chartPath)} ready");
+        CloseNewBeatmapModal($"New beatmap {GetChartDisplayName(chartPath)} ready");
     }
 
     private void CloseNewBeatmapModal(string status)
@@ -874,20 +874,7 @@ public sealed class BeatmapEditorElement
 
     private string GetAvailableNewBeatmapPath(string beatmapName)
     {
-        string fileName = SanitizeFileName(beatmapName);
-        if (string.IsNullOrWhiteSpace(fileName))
-            fileName = "New Beatmap";
-
-        string basePath = Path.Combine("Beatmaps", fileName + ".xml");
-        if (!File.Exists(basePath))
-            return basePath;
-
-        for (int i = 2; ; i++)
-        {
-            string candidate = Path.Combine("Beatmaps", $"{fileName}_{i}.xml");
-            if (!File.Exists(candidate))
-                return candidate;
-        }
+        return BeatmapPackagePaths.GetAvailablePackageChartPath(beatmapName);
     }
 
     private static string SanitizeFileName(string value)
@@ -895,6 +882,14 @@ public sealed class BeatmapEditorElement
         char[] invalidChars = Path.GetInvalidFileNameChars();
         string sanitized = new(value.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
         return sanitized.Trim().Trim('.');
+    }
+
+    private static string GetChartDisplayName(string chartPath)
+    {
+        if (BeatmapPackagePaths.IsPackageChartPath(chartPath))
+            return Path.GetFileName(Path.GetDirectoryName(chartPath));
+
+        return Path.GetFileName(chartPath);
     }
 
     private void RebuildPlayback(bool keepPlaying)
@@ -1383,7 +1378,7 @@ public sealed class BeatmapEditorElement
         _selectedChartIndex = PositiveModulo(_selectedChartIndex + delta, _availableCharts.Count);
         string chartPath = _availableCharts[_selectedChartIndex];
         _document.SetChartPath(chartPath);
-        _status = $"Chart {Path.GetFileName(chartPath)}";
+        _status = $"Chart {GetChartDisplayName(chartPath)}";
     }
 
     private void SelectSongRelative(int delta)
@@ -1878,7 +1873,7 @@ public sealed class BeatmapEditorElement
         string field = _metadataFields[_selectedMetadataField];
         string editLine = _isEditingText ? $"EDIT {field}: {_textBuffer}|" : $"META <TAB/F2> {field}: {GetMetadataValue(field)}";
         string songName = _availableSongs.Count > 0 ? Path.GetFileName(_availableSongs[_selectedSongIndex]) : "No music loaded";
-        string chartName = _availableCharts.Count > 0 ? Path.GetFileName(_availableCharts[_selectedChartIndex]) : Path.GetFileName(_document.ChartPath);
+        string chartName = _availableCharts.Count > 0 ? GetChartDisplayName(_availableCharts[_selectedChartIndex]) : GetChartDisplayName(_document.ChartPath);
         string placementLine = _placementMode == EditorPlacementMode.Note
             ? $"MODE <E> NOTE <UP/DOWN> {selected.DisplayName}"
             : $"MODE <E> EFFECT <UP/DOWN> {selectedEffect.DisplayName}";
