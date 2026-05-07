@@ -1293,6 +1293,7 @@ public sealed class SeeSawPathCatalog
 
 public sealed class SeeSawActorController
 {
+    private const float ApplejackTiltDegrees = -15f;
     private const string JumpState = "jump";
     private const string FallState = "fall";
     private const string LandState = "land";
@@ -1334,6 +1335,19 @@ public sealed class SeeSawActorController
 
     public void Land(SeeSawImpactEvent impact)
     {
+        if (_actor == SeeSawActor.Applejack && _gameObject != null)
+        {
+            _gameObject.Rotation = impact.Side == SeeSawSide.Exit ? 0f : MathHelper.ToRadians(ApplejackTiltDegrees);
+            if (_gameObject.sprite != null && impact.Side == SeeSawSide.Exit)
+                _gameObject.sprite.DrawOffset = Vector2.Zero;
+
+            if (impact.Side == SeeSawSide.Exit)
+            {
+                RhythmVisualUtils.ForceAnimationState(_stateMachine, ApplejackStartIdleState);
+                return;
+            }
+        }
+
         RhythmVisualUtils.ForceAnimationState(_stateMachine, LandState, JumpState);
     }
 
@@ -1381,6 +1395,50 @@ public sealed class SeeSawActorController
     {
         string stateName = _stateMachine?.CurrentState?.Name;
         return (stateName == LandState || stateName == FailState) && _stateMachine.StateProgress < 1f;
+    }
+}
+
+public sealed class SeeSawBeamController
+{
+    private const string IdleLeftState = "idle_left";
+    private const string IdleRightState = "idle_right";
+    private const string LandLeftState = "land_left";
+    private const string LandRightState = "land_right";
+
+    private readonly GameObject _gameObject;
+    private readonly AnimationStateMachine _stateMachine;
+
+    public SeeSawBeamController(GameObject gameObject, AnimationStateMachine stateMachine)
+    {
+        _gameObject = gameObject;
+        _stateMachine = stateMachine;
+    }
+
+    public void Reset()
+    {
+        if (_gameObject != null)
+            _gameObject.Rotation = 0f;
+
+        _stateMachine?.ForceState(IdleRightState);
+    }
+
+    public void LandToward(SeeSawActor actor)
+    {
+        RhythmVisualUtils.ForceAnimationState(_stateMachine, actor == SeeSawActor.RainbowDash ? LandRightState : LandLeftState);
+    }
+
+    public void SetIdleToward(SeeSawActor actor)
+    {
+        if (IsLandStatePlaying())
+            return;
+
+        RhythmVisualUtils.ForceAnimationState(_stateMachine, actor == SeeSawActor.RainbowDash ? IdleRightState : IdleLeftState);
+    }
+
+    private bool IsLandStatePlaying()
+    {
+        string stateName = _stateMachine?.CurrentState?.Name;
+        return (stateName == LandLeftState || stateName == LandRightState) && _stateMachine.StateProgress < 1f;
     }
 }
 
@@ -1530,14 +1588,12 @@ public sealed class SeeSawDirector
 {
     private const double RewindThresholdBeats = 0.001;
     private const double MissWindowSeconds = 0.25;
-    private const double BeamEaseBeats = 0.125;
     private const float JumpApexProgression = 0.5f;
-    private const float BeamTiltDegrees = 10f;
 
     private readonly SeeSawTimeline _timeline;
     private readonly SeeSawActorController _rainbow;
     private readonly SeeSawActorController _applejack;
-    private readonly GameObject _beam;
+    private readonly SeeSawBeamController _beam;
     private readonly TrailGameObject _rainbowTrail;
     private readonly SeeSawPathCatalog _pathCatalog;
     private readonly SeeSawCameraController _cameraController;
@@ -1555,17 +1611,17 @@ public sealed class SeeSawDirector
     private Vector2 _lastRainbowTrailPosition;
     private bool _hasLastRainbowTrailPosition;
 
-    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, GameObject beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, double crotchet)
+    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, double crotchet)
         : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, _ => crotchet, crotchet)
     {
     }
 
-    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, GameObject beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
+    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
         : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, getCrotchetAt, fallbackCrotchet)
     {
     }
 
-    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, GameObject beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, Func<double, double> getBeatAt, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
+    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, Func<double, double> getBeatAt, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
     {
         _timeline = timeline;
         _rainbow = rainbow;
@@ -1592,7 +1648,7 @@ public sealed class SeeSawDirector
         _cameraController?.Reset();
         _hasLastRainbowTrailPosition = false;
         ResetRainbowTrail();
-        _beam.Rotation = GetBeamRotationToward(SeeSawActor.RainbowDash);
+        _beam?.Reset();
         _rainbow.ApplyPose(_pathCatalog.GetGroundedPose(SeeSawActor.RainbowDash, SeeSawSide.Outer));
         _applejack.ApplyPose(_pathCatalog.GetGroundedPose(SeeSawActor.Applejack, SeeSawSide.Exit));
         _rainbow.ResetToIdle(SeeSawSide.Outer);
@@ -1621,6 +1677,8 @@ public sealed class SeeSawDirector
             _timeline.ResetJudgements(beat);
         }
 
+        FireCrossedEvents(beat, songPosition);
+
         SeeSawJumpSegment rainbowSegment = _timeline.GetActiveSegment(SeeSawActor.RainbowDash, beat);
         SeeSawJumpSegment applejackSegment = _timeline.GetActiveSegment(SeeSawActor.Applejack, beat);
         SeeSawPose rainbowPose = ApplyActor(SeeSawActor.RainbowDash, _rainbow, rainbowSegment, beat, songPosition);
@@ -1628,10 +1686,9 @@ public sealed class SeeSawDirector
 
         ApplyRainbowTrail(rainbowSegment, rainbowPose);
         ApplyRainbowHighApexSfx(rainbowSegment, rainbowPose);
-        ApplyBeam(beat, songPosition);
+        ApplyBeamIdle(beat, songPosition);
         _cameraController?.Apply(rainbowSegment, rainbowPose, applejackSegment, applejackPose);
 
-        FireCrossedEvents(beat, songPosition);
         _lastSongPosition = songPosition;
         _lastBeat = beat;
     }
@@ -1719,6 +1776,9 @@ public sealed class SeeSawDirector
             GetController(impact.Actor).Land(impact);
         }
 
+        if (impact.Kind != SeeSawImpactKind.Exit)
+            _beam?.LandToward(impact.Actor);
+
         _soundScheduler?.OnImpact(impact, patternEvent);
     }
 
@@ -1777,26 +1837,13 @@ public sealed class SeeSawDirector
         return rainbowPosition;
     }
 
-    private void ApplyBeam(double beat, double songPosition)
+    private void ApplyBeamIdle(double beat, double songPosition)
     {
         if (_beam == null)
             return;
 
         SeeSawImpactEvent lastImpact = GetLastBeamImpact(beat, songPosition);
-        SeeSawImpactEvent nextImpact = GetNextBeamImpact(beat, songPosition);
-        float fromRotation = lastImpact == null ? GetBeamRotationToward(SeeSawActor.RainbowDash) : GetBeamRotationToward(lastImpact.Actor);
-
-        if (nextImpact == null || nextImpact.Beat - beat > BeamEaseBeats)
-        {
-            _beam.Rotation = fromRotation;
-            return;
-        }
-
-        float targetRotation = GetBeamRotationToward(nextImpact.Actor);
-        double easeStart = Math.Max(0.0, nextImpact.Beat - BeamEaseBeats);
-        float t = (float)RhythmVisualUtils.GetProgression(easeStart, nextImpact.Beat, beat);
-        t = t * t * (3f - 2f * t);
-        _beam.Rotation = MathHelper.Lerp(fromRotation, targetRotation, t);
+        _beam.SetIdleToward(lastImpact?.Actor ?? SeeSawActor.RainbowDash);
     }
 
     private SeeSawImpactEvent GetLastBeamImpact(double beat, double songPosition)
@@ -1814,19 +1861,6 @@ public sealed class SeeSawDirector
         }
 
         return lastImpact;
-    }
-
-    private SeeSawImpactEvent GetNextBeamImpact(double beat, double songPosition)
-    {
-        foreach (SeeSawImpactEvent impact in _timeline.ImpactEvents)
-        {
-            bool isAfter = impact.Beat > beat;
-
-            if (isAfter && impact.Kind != SeeSawImpactKind.Exit)
-                return impact;
-        }
-
-        return null;
     }
 
     private SeeSawActorController GetController(SeeSawActor actor)
@@ -1892,10 +1926,4 @@ public sealed class SeeSawDirector
         };
     }
 
-    private static float GetBeamRotationToward(SeeSawActor actor)
-    {
-        return actor == SeeSawActor.RainbowDash
-            ? MathHelper.ToRadians(BeamTiltDegrees)
-            : MathHelper.ToRadians(-BeamTiltDegrees);
-    }
 }

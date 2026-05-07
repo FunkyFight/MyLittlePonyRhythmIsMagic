@@ -107,9 +107,12 @@ public class Game1 : Core
     {
         GraphicsDevice.Clear(Color.Black);
 
-        SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
+        _sceneManager.Viewport.Scale = new Vector2(0.5f, 0.5f);
         _sceneManager.Draw(SpriteBatch);
+
+        SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        
         GLOBALS.beatmapEditorElement?.Draw(SpriteBatch);
         if (_showMouseViewportCoordinates)
             GLOBALS.mouseViewportCoordinatesElement?.Draw(SpriteBatch);

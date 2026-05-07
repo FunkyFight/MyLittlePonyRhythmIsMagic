@@ -19,6 +19,7 @@ using TexturePackerMonoGameDefinitions;
 public class SeeSawScene : Scene
 {
     private const float BeamTiltDegrees = 10f;
+    private const float ApplejackTiltDegrees = -15f;
 
     private readonly Game1 game;
 
@@ -29,6 +30,7 @@ public class SeeSawScene : Scene
 
     private AnimationStateMachine RainbowState;
     private AnimationStateMachine ApplejackState;
+    private AnimationStateMachine SeeSawState;
     private bool[] requestBop = [true, true];
     private readonly int ponyScale = 3;
     private readonly int seeSawScale = 3;
@@ -67,16 +69,16 @@ public class SeeSawScene : Scene
         Applejack.Scale = new Vector2(ponyScale, ponyScale);
         Rainbow.Scale = new Vector2(ponyScale, ponyScale);
 
-        SeeSaw2.Position = new Vector2(vp.Width * 0.4898f, vp.Height * 0.823f)
+        SeeSaw2.Position = new Vector2(vp.Width * 0.5008f, vp.Height * 0.8064f);
         SeeSaw1.Position = new Vector2(vp.Width / 2, vp.Height / 2 + (vp.Height / 5) * 1.5f);
-        Rainbow.Position = new Vector2(vp.Width * 0.6351f, vp.Height * 0.4902f);
+        Rainbow.Position = new Vector2(vp.Width * 0.6305f, vp.Height * 0.55f);
         Applejack.Position = new Vector2(vp.Width * 0.0289f, vp.Height * 0.6139f);
 
         applejackExitPos = Applejack.Position;
-        applejackOuterPos = new Vector2(vp.Width * 0.1984f, vp.Height * 0.5444f);
-        applejackInnerPos = new Vector2(vp.Width * 0.3406f, vp.Height * 0.5042f);
+        applejackOuterPos = new Vector2(vp.Width * 0.1906f, vp.Height * 0.6708f);
+        applejackInnerPos = new Vector2(vp.Width * 0.3008f, vp.Height * 0.6292f);
         rainbowOuterPos = Rainbow.Position;
-        rainbowInnerPos = new Vector2(vp.Width * 0.4953f, vp.Height * 0.4375f);
+        rainbowInnerPos = new Vector2(vp.Width * 0.5203f, vp.Height * 0.5069f);
 
         rainbowTrail = new TrailGameObject(GLOBALS.main_atlas.CreateSprite(MainAtlas.Rainbow_trail));
         rainbowTrail.sprite.CenterOrigin();
@@ -129,7 +131,7 @@ public class SeeSawScene : Scene
             timeline,
             new SeeSawActorController(SeeSawActor.RainbowDash, Rainbow, RainbowState),
             new SeeSawActorController(SeeSawActor.Applejack, Applejack, ApplejackState),
-            SeeSaw2,
+            new SeeSawBeamController(SeeSaw2, SeeSawState),
             rainbowTrail,
             pathCatalog,
             new SeeSawCameraController(sceneCamera),
@@ -159,9 +161,9 @@ public class SeeSawScene : Scene
     {
         Rainbow.Position = rainbowOuterPos;
         Applejack.Position = applejackExitPos;
-        SeeSaw2.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
+        SeeSaw2.Rotation = 0f;
         Rainbow.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
-        Applejack.Rotation = 0;
+        Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
         sceneCamera.Position = Vector2.Zero;
     }
 
@@ -188,6 +190,7 @@ public class SeeSawScene : Scene
         UpdateTempoMapBeatEvents();
         RainbowState?.Update(gameTime);
         ApplejackState?.Update(gameTime);
+        SeeSawState?.Update(gameTime);
 
         if (GLOBALS.beatmapPlayer?.Conductor != null && _director != null)
         {
@@ -261,7 +264,7 @@ public class SeeSawScene : Scene
                     {
                         Rainbow.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
                         Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-land");
-                        Rainbow.sprite.DrawOffset = new Vector2(0, 20);
+                        Rainbow.sprite.DrawOffset = new Vector2(0, 35);
                         ((AnimatedSprite)Rainbow.sprite).Restart();
                     },
                     isLooping: false
@@ -310,7 +313,9 @@ public class SeeSawScene : Scene
                     5,
                     onEnter: () =>
                     {
+                        Applejack.Rotation = 0f;
                         Applejack.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("applejack afk");
+                        Applejack.sprite.DrawOffset = Vector2.Zero;
                     },
                     onUpdate: gt =>
                     {
@@ -328,6 +333,7 @@ public class SeeSawScene : Scene
                     duration: 1,
                     onEnter: () =>
                     {
+                        Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
                         Applejack.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Applejack_jump1);
                     },
                     isLooping: false
@@ -339,6 +345,7 @@ public class SeeSawScene : Scene
                     duration: 1,
                     onEnter: () =>
                     {
+                        Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
                         Applejack.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Applejack_jump2);
                     },
                     isLooping: false
@@ -350,8 +357,8 @@ public class SeeSawScene : Scene
                     duration: 1,
                     onEnter: () =>
                     {
+                        Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
                         Applejack.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("applejack-land");
-                        Applejack.sprite.Rotation = MathHelper.ToRadians(-10);
                         ((AnimatedSprite)Applejack.sprite).IsLooping = false;
                         ((AnimatedSprite)Applejack.sprite).Restart();
                     },
@@ -364,8 +371,8 @@ public class SeeSawScene : Scene
                     duration: 1,
                     onEnter: () =>
                     {
+                        Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
                         Applejack.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Applejack_true_idle);
-                        Applejack.sprite.Rotation = MathHelper.ToRadians(-10);
                     },
                     isLooping: false
                 )
@@ -379,7 +386,74 @@ public class SeeSawScene : Scene
             })
             .Build();
 
+        SeeSawState = new AnimationStateMachine()
+            .AddState(
+                new AnimationState(
+                    name: "idle_right",
+                    duration: 1,
+                    onEnter: () =>
+                    {
+                        SeeSaw2.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Planks_left4);
+                        SeeSaw2.sprite.Effects = SpriteEffects.None;
+                        SeeSaw2.sprite.CenterOrigin();
+                    },
+                    isLooping: false
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "idle_left",
+                    duration: 1,
+                    onEnter: () =>
+                    {
+                        SeeSaw2.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Planks_left4);
+                        SeeSaw2.sprite.Effects = SpriteEffects.FlipHorizontally;
+                        SeeSaw2.sprite.CenterOrigin();
+                    },
+                    isLooping: false
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "land_right",
+                    duration: 1,
+                    onEnter: () =>
+                    {
+                        SeeSaw2.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("planks_left");
+                        SeeSaw2.sprite.Effects = SpriteEffects.None;
+                        SeeSaw2.sprite.CenterOrigin();
+                        ((AnimatedSprite)SeeSaw2.sprite).IsLooping = false;
+                        ((AnimatedSprite)SeeSaw2.sprite).Restart();
+                    },
+                    isLooping: false
+                )
+            )
+            .AddState(
+                new AnimationState(
+                    name: "land_left",
+                    duration: 1,
+                    onEnter: () =>
+                    {
+                        SeeSaw2.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("planks_left");
+                        SeeSaw2.sprite.Effects = SpriteEffects.FlipHorizontally;
+                        SeeSaw2.sprite.CenterOrigin();
+                        ((AnimatedSprite)SeeSaw2.sprite).IsLooping = false;
+                        ((AnimatedSprite)SeeSaw2.sprite).Restart();
+                    },
+                    isLooping: false
+                )
+            )
+            .SetGlobalUpdate(globalUpdate: gt =>
+            {
+                if (SeeSaw2.sprite is AnimatedSprite animatedSprite)
+                    animatedSprite.Update(gt);
+
+                return true;
+            })
+            .Build();
+
         RainbowState.ForceState("idle");
         ApplejackState.ForceState("start_idle");
+        SeeSawState.ForceState("idle_right");
     }
 }
