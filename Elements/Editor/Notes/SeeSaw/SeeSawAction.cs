@@ -12,10 +12,13 @@ public enum SeeSawOppositeMode
 
 public readonly struct SeeSawAction
 {
-    public const string DataKey = "action";
+    public const string GameId = "see_saw";
+    public const string NoteId = "jump";
+    public const int SchemaVersion = 1;
+    public const string DataKey = NotePayloadKeys.Action;
     public const string PatternDataKey = "pattern";
-    private const string BigLeapRainbowDashDataKey = "big_leap_rainbow_dash";
-    private const string BigLeapApplejackDataKey = "big_leap_applejack";
+    public const string BigLeapRainbowDashDataKey = "big_leap_rainbow_dash";
+    public const string BigLeapApplejackDataKey = "big_leap_applejack";
     private const string OppositeJumperDataKey = "opposite_jumper";
     private const string ApplejackOppositeJumperValue = "applejack";
     private const string RainbowDashOppositeJumperValue = "rainbow_dash";
@@ -113,7 +116,9 @@ public readonly struct SeeSawAction
 
     public IReadOnlyDictionary<string, string> ToAdditionnalData()
     {
-        return new Dictionary<string, string> { [DataKey] = Value };
+        Dictionary<string, string> data = new() { [DataKey] = Value };
+        EnsureMetadata(data);
+        return data;
     }
 
     public static bool GetBigLeapRainbowDash(IReadOnlyDictionary<string, string> additionnalData)
@@ -172,6 +177,7 @@ public readonly struct SeeSawAction
 
     public static void SetDirection(IDictionary<string, string> additionnalData, SeeSawDirection direction)
     {
+        EnsureMetadata(additionnalData);
         additionnalData[DataKey] = GetActionValue(GetBaseDirection(direction));
 
         if (GetBaseDirection(direction) != SeeSawDirection.Opposite)
@@ -180,6 +186,7 @@ public readonly struct SeeSawAction
 
     public static void SetPattern(IDictionary<string, string> additionnalData, SeeSawPatternKind pattern)
     {
+        EnsureMetadata(additionnalData);
         bool rainbowTargetsOuter = pattern == SeeSawPatternKind.LongLong
             || pattern == SeeSawPatternKind.ShortLong;
 
@@ -199,6 +206,7 @@ public readonly struct SeeSawAction
 
     public static void SetOppositeMode(IDictionary<string, string> additionnalData, SeeSawOppositeMode mode)
     {
+        EnsureMetadata(additionnalData);
         switch (mode)
         {
             case SeeSawOppositeMode.Applejack:
@@ -269,10 +277,21 @@ public readonly struct SeeSawAction
 
     private static void SetBool(IDictionary<string, string> additionnalData, string key, bool value)
     {
+        EnsureMetadata(additionnalData);
         if (value)
             additionnalData[key] = "true";
         else
             additionnalData.Remove(key);
+    }
+
+    private static void EnsureMetadata(IDictionary<string, string> additionnalData)
+    {
+        if (additionnalData == null)
+            return;
+
+        additionnalData[NotePayloadKeys.Game] = GameId;
+        additionnalData[NotePayloadKeys.Type] = NoteId;
+        additionnalData[NotePayloadKeys.Version] = SchemaVersion.ToString();
     }
 
     private static string GetActionValue(SeeSawDirection direction)

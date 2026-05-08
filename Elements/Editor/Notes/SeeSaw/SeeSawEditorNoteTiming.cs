@@ -1,65 +1,45 @@
-using System;
+using System.Collections.Generic;
+using Rhythm.Note;
 
 namespace MLP_RiM.Elements.Editor;
 
 public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
 {
-    public double GetStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    public const string LeadInBeatsContextKey = "see_saw.lead_in_beats";
+
+    private static readonly FixedEditorNoteTiming FallbackTiming = new();
+
+    public NoteTimingResult GetTiming(NoteTimingRequest request)
     {
-        return context.SongPosition - GetBeforeBeats(definition, context) * context.Crotchet;
+        if (request == null)
+            return NoteTimingResult.AtBeat(0.0);
+
+        SeeSawCompiledEventTiming timing = GetCompiledTiming(request);
+        if (!timing.IsSeeSaw && !timing.IsExit)
+            return FallbackTiming.GetTiming(request);
+
+        return new NoteTimingResult(
+            StartBeat: timing.PrepStartBeat,
+            EndBeat: timing.EndBeat,
+            HitStartBeat: timing.PrepStartBeat,
+            HitEndBeat: timing.EndBeat,
+            SameVariantHitStartBeat: timing.PrepStartBeat,
+            SameVariantHitEndBeat: timing.EndBeat);
     }
 
-    public double GetEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static SeeSawCompiledEventTiming GetCompiledTiming(NoteTimingRequest request)
     {
-        return context.SongPosition + Math.Max(definition.HoldBeats, definition.OccupyAfterBeats) * context.Crotchet;
+        IReadOnlyList<ChartNote> contextualNotes = request.GetContextualNotes();
+        double leadInBeats = GetLeadInBeats(request);
+
+        if (request.Note != null)
+            return SeeSawChartCompiler.GetTimingForChartNote(contextualNotes, request.Note, note => ChartTiming.GetNoteBeat(note, request.TempoMap), leadInBeats);
+
+        return SeeSawChartCompiler.GetPreviewTiming(contextualNotes, request.Definition.GetVariant(request.VariantIndex).AdditionnalData, request.Beat, note => ChartTiming.GetNoteBeat(note, request.TempoMap), leadInBeats);
     }
 
-    public double GetHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static double GetLeadInBeats(NoteTimingRequest request)
     {
-        return context.SongPosition - GetBeforeBeats(definition, context) * context.Crotchet;
-    }
-
-    public double GetHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
-        if (GetBaseDirection(action.Direction) == SeeSawDirection.Exit)
-            return context.SongPosition;
-
-        return context.SongPosition + GetPhaseBeats(context.AfterUsesOuterTiming) * context.Crotchet;
-    }
-
-    public double GetSameVariantHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        return GetHitWindowStart(definition, context);
-    }
-
-    public double GetSameVariantHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        return GetHitWindowEnd(definition, context);
-    }
-
-    private static double GetBeforeBeats(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        SeeSawAction action = SeeSawAction.FromVariant(definition.GetVariant(context.VariantIndex));
-        if (GetBaseDirection(action.Direction) == SeeSawDirection.Exit)
-            return global::SeeSawTiming.ExitJumpBeats;
-
-        return GetPhaseBeats(context.BeforeUsesOuterTiming) + GetPhaseBeats(context.AfterUsesOuterTiming);
-    }
-
-    private static SeeSawDirection GetBaseDirection(SeeSawDirection direction)
-    {
-        return direction switch
-        {
-            SeeSawDirection.OuterBigLeap => SeeSawDirection.Outer,
-            SeeSawDirection.InnerBigLeap => SeeSawDirection.Inner,
-            SeeSawDirection.OppositeBigLeap => SeeSawDirection.Opposite,
-            _ => direction
-        };
-    }
-
-    private static double GetPhaseBeats(bool usesOuterTiming)
-    {
-        return usesOuterTiming ? global::SeeSawTiming.LongJumpBeats : global::SeeSawTiming.ShortJumpBeats;
+        return request.TryGetGameContext(LeadInBeatsContextKey, out double leadInBeats) ? leadInBeats : 0.0;
     }
 }

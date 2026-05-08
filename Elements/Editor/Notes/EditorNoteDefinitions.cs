@@ -18,21 +18,26 @@ public static class EditorNoteDefinitions
         .Select(provider => provider.Definition)
         .ToArray();
 
-    private static readonly IReadOnlyDictionary<EditorNoteKind, IEditorNoteOptionsPanel> OptionsPanels = Providers
+    private static readonly IReadOnlyDictionary<NoteTypeId, IEditorNoteOptionsPanel> OptionsPanels = Providers
         .Where(provider => provider.OptionsPanel != null)
-        .ToDictionary(provider => provider.Definition.Kind, provider => provider.OptionsPanel);
+        .ToDictionary(provider => provider.Definition.TypeId, provider => provider.OptionsPanel);
 
     private static readonly IReadOnlyDictionary<string, IEditorNoteProvider> ProvidersByRhythmGameId = GameProviders
         .GroupBy(provider => provider.RhythmGameId)
         .ToDictionary(group => group.Key, group => group.First());
 
-    private static readonly IReadOnlyDictionary<EditorNoteKind, IEditorNoteProvider> ProvidersByKind = Providers
-        .GroupBy(provider => provider.Definition.Kind)
+    private static readonly IReadOnlyDictionary<NoteTypeId, IEditorNoteProvider> ProvidersByTypeId = Providers
+        .GroupBy(provider => provider.Definition.TypeId)
         .ToDictionary(group => group.Key, group => group.First());
+
+    public static EditorNoteDefinition Get(NoteTypeId typeId)
+    {
+        return All.First(definition => definition.TypeId == typeId);
+    }
 
     public static EditorNoteDefinition Get(EditorNoteKind kind)
     {
-        return All.First(definition => definition.Kind == kind);
+        return Get(EditorNoteKindCompatibility.ToTypeId(kind));
     }
 
     public static EditorNoteDefinition FromChartNote(ChartNote note)
@@ -43,14 +48,24 @@ public static class EditorNoteDefinitions
         return All.FirstOrDefault(definition => definition.Matches(note));
     }
 
+    public static bool TryGetOptionsPanel(NoteTypeId typeId, out IEditorNoteOptionsPanel panel)
+    {
+        return OptionsPanels.TryGetValue(typeId, out panel);
+    }
+
     public static bool TryGetOptionsPanel(EditorNoteKind kind, out IEditorNoteOptionsPanel panel)
     {
-        return OptionsPanels.TryGetValue(kind, out panel);
+        return TryGetOptionsPanel(EditorNoteKindCompatibility.ToTypeId(kind), out panel);
+    }
+
+    public static bool TryGetProvider(NoteTypeId typeId, out IEditorNoteProvider provider)
+    {
+        return ProvidersByTypeId.TryGetValue(typeId, out provider);
     }
 
     public static bool TryGetProvider(EditorNoteKind kind, out IEditorNoteProvider provider)
     {
-        return ProvidersByKind.TryGetValue(kind, out provider);
+        return TryGetProvider(EditorNoteKindCompatibility.ToTypeId(kind), out provider);
     }
 
     public static bool TryGetProvider(string rhythmGameId, out IEditorNoteProvider provider)
@@ -73,25 +88,8 @@ public static class EditorNoteDefinitions
 
     public static int FindVariantIndex(EditorNoteDefinition definition, ChartNote note)
     {
-        if (note.AdditionnalData == null)
-            return 0;
-
-        for (int i = 0; i < definition.Variants.Count; i++)
-        {
-            EditorNoteVariant variant = definition.Variants[i];
-            if (definition.Kind == EditorNoteKind.SeeSaw
-                && variant.AdditionnalData.TryGetValue("action", out string variantAction)
-                && note.AdditionnalData.TryGetValue("action", out string noteAction)
-                && SeeSawAction.TryParse(noteAction, out SeeSawAction parsedAction)
-                && SeeSawAction.TryParse(variantAction, out SeeSawAction parsedVariantAction)
-                && SeeSawAction.GetBaseDirection(parsedAction.Direction) == SeeSawAction.GetBaseDirection(parsedVariantAction.Direction))
-            {
-                return i;
-            }
-
-            if (variant.AdditionnalData.All(pair => note.AdditionnalData.TryGetValue(pair.Key, out string value) && value == pair.Value))
-                return i;
-        }
+        if (definition != null && ProvidersByTypeId.TryGetValue(definition.TypeId, out IEditorNoteProvider provider))
+            return provider.FindVariantIndex(note);
 
         return 0;
     }

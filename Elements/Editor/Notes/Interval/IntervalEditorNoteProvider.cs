@@ -14,14 +14,19 @@ public abstract class IntervalEditorNoteProvider : EditorNoteProvider
     public const double DefaultStepBeats = 1.0;
     private const double InclusiveEndEpsilonSeconds = 0.000001;
 
-    protected IntervalEditorNoteProvider(EditorNoteKind kind, string displayName, string inputAction)
+    protected IntervalEditorNoteProvider(NoteTypeId typeId, string displayName, string inputAction)
     {
-        Definition = new EditorNoteDefinitionBuilder(kind, displayName)
+        Definition = new EditorNoteDefinitionBuilder(typeId, displayName)
             .InputAction(inputAction)
             .Matches(_ => false)
             .Placement(new IntervalEditorNotePlacementStrategy(this))
             .Variant("Default")
             .Build();
+    }
+
+    protected IntervalEditorNoteProvider(EditorNoteKind kind, string displayName, string inputAction)
+        : this(EditorNoteKindCompatibility.ToTypeId(kind), displayName, inputAction)
+    {
     }
 
     public override EditorNoteDefinition Definition { get; }
@@ -30,14 +35,17 @@ public abstract class IntervalEditorNoteProvider : EditorNoteProvider
 
     protected virtual EditorNoteDefinition HitDefinition => RhythmInputEditorNote.DefinitionInstance;
 
-    internal IReadOnlyList<EditorNotePlacement> CreateIntervalPlacements(ChartNote sourceConfigNote, double crotchet)
+    internal IReadOnlyList<EditorNotePlacement> CreateIntervalPlacements(ChartNote sourceConfigNote, double crotchet, PlacementOptions placementOptions)
     {
         if (sourceConfigNote == null || crotchet <= 0)
             return Array.Empty<EditorNotePlacement>();
 
         double start = sourceConfigNote.SongPosition;
-        double durationBeats = Math.Max(0, GetDurationBeats(sourceConfigNote.AdditionnalData));
-        double stepBeats = Math.Max(0.000001, GetStepBeats(sourceConfigNote.AdditionnalData));
+        placementOptions = placementOptions?.HasRepeat == true
+            ? placementOptions
+            : PlacementOptions.FromLegacyNote(sourceConfigNote);
+        double durationBeats = Math.Max(0, placementOptions.RepeatDurationBeats ?? DefaultDurationBeats);
+        double stepBeats = Math.Max(0.000001, placementOptions.RepeatStepBeats ?? DefaultStepBeats);
         double end = start + durationBeats * crotchet;
         double stepSeconds = stepBeats * crotchet;
 
@@ -118,9 +126,9 @@ public abstract class IntervalEditorNoteProvider : EditorNoteProvider
             _provider = provider;
         }
 
-        public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, EditorNotePlacementContext context)
+        public IReadOnlyList<EditorNotePlacement> CreatePlacements(EditorNoteDefinition definition, ChartNote sourceNote, EditorNotePlacementContext context, PlacementOptions placementOptions)
         {
-            return _provider.CreateIntervalPlacements(sourceNote, context?.Crotchet ?? 0);
+            return _provider.CreateIntervalPlacements(sourceNote, context?.Crotchet ?? 0, placementOptions);
         }
     }
 }

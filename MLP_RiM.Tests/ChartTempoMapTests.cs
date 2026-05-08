@@ -136,7 +136,7 @@ public sealed class ChartTempoMapTests
         document.SetOffset(1.0);
         document.SetLeadInBeats(4.0);
 
-        EditorNoteDefinition definition = EditorNoteDefinitions.Get(EditorNoteKind.SeaponyParade);
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(SeaPonyParadeNoteEditor.TypeId);
 
         Assert.True(document.TryPlaceNoteAtBeat(definition, -3.0, 0, out ChartNote placedNote, out string reason), reason);
         NearlyEqual(-3.0, placedNote.BeatPosition.GetValueOrDefault());

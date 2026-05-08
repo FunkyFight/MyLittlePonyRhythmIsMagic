@@ -6,7 +6,7 @@ namespace MLP_RiM.Elements.Editor;
 
 public sealed class EditorNoteDefinitionBuilder
 {
-    private readonly EditorNoteKind _kind;
+    private readonly NoteTypeId _typeId;
     private readonly string _displayName;
     private string _inputAction = "ReactMain";
     private double _holdBeats;
@@ -26,12 +26,17 @@ public sealed class EditorNoteDefinitionBuilder
     /// On donne ici son identité et son nom. Les autres méthodes servent ensuite à expliquer
     /// comment cette note se comporte quand on la crée, quand on la charge et quand on l'affiche.
     /// </summary>
-    /// <param name="kind">Type interne de la note. L'éditeur s'en sert pour savoir de quelle note il s'agit.</param>
+    /// <param name="typeId">Identifiant extensible de la note. L'éditeur s'en sert pour savoir de quelle note il s'agit.</param>
     /// <param name="displayName">Nom montré au joueur dans l'éditeur.</param>
-    public EditorNoteDefinitionBuilder(EditorNoteKind kind, string displayName)
+    public EditorNoteDefinitionBuilder(NoteTypeId typeId, string displayName)
     {
-        _kind = kind;
+        _typeId = typeId;
         _displayName = displayName;
+    }
+
+    public EditorNoteDefinitionBuilder(EditorNoteKind kind, string displayName)
+        : this(EditorNoteKindCompatibility.ToTypeId(kind), displayName)
+    {
     }
 
     /// <summary>
@@ -126,8 +131,8 @@ public sealed class EditorNoteDefinitionBuilder
     /// Ajoute une version possible de cette note, avec les données à mettre dans la chart.
     /// C'est utile quand plusieurs notes se ressemblent dans l'éditeur, mais doivent être sauvegardées différemment.
     /// Exemple : Seapony Parade utilise le même type de note pour <c>Swim</c>, <c>Star</c> et <c>Tap Tap</c>.
-    /// La variante <c>Swim</c> peut sauvegarder <c>action = seapony_parade_swim</c>.
-    /// La variante <c>Star</c> peut sauvegarder <c>action = seapony_parade_star</c>.
+    /// La variante <c>Swim</c> peut sauvegarder les donnees produites par un codec de payload.
+    /// La variante <c>Star</c> peut faire pareil avec un autre payload type.
     /// Quand l'utilisateur pose une note avec une variante, ces données sont copiées dans la nouvelle note.
     /// Attention : une variante ne s'affiche pas toute seule dans le panneau d'options.
     /// Si on veut changer cette version après avoir posé la note, le panneau d'options doit le prévoir lui-même.
@@ -138,6 +143,12 @@ public sealed class EditorNoteDefinitionBuilder
     public EditorNoteDefinitionBuilder Variant(string displayName, IReadOnlyDictionary<string, string> additionnalData)
     {
         _variants.Add(new EditorNoteVariant(displayName, additionnalData));
+        return this;
+    }
+
+    public EditorNoteDefinitionBuilder Variant(string id, string displayName, INotePayload defaultPayload, Func<INotePayload, bool> matches = null, NoteTimingPreset timingPreset = null, EditorVisualStyle editorStyle = null)
+    {
+        _variants.Add(new EditorNoteVariant(id, displayName, defaultPayload, matches, timingPreset, editorStyle));
         return this;
     }
 
@@ -196,6 +207,6 @@ public sealed class EditorNoteDefinitionBuilder
             ? _variants.ToArray()
             : new[] { new EditorNoteVariant("Default", new Dictionary<string, string>()) };
 
-        return new EditorNoteDefinition(_kind, _displayName, _inputAction, _holdBeats, _occupyBeforeBeats, _occupyAfterBeats, _hitWindowBeforeBeats, _hitWindowAfterBeats, _sameVariantHitWindowBeforeBeats, _sameVariantHitWindowAfterBeats, variants, _timing, _matchesChartNote, _placementStrategy);
+        return new EditorNoteDefinition(_typeId, _displayName, _inputAction, _holdBeats, _occupyBeforeBeats, _occupyAfterBeats, _hitWindowBeforeBeats, _hitWindowAfterBeats, _sameVariantHitWindowBeforeBeats, _sameVariantHitWindowAfterBeats, variants, _timing, _matchesChartNote, _placementStrategy);
     }
 }

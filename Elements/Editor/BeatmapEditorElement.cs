@@ -66,8 +66,8 @@ public sealed class BeatmapEditorElement
     private readonly double _snapDivisions;
     private readonly List<string> _availableSongs = new();
     private readonly List<string> _availableCharts = new();
-    private readonly Dictionary<EditorNoteKind, Dictionary<string, string>> _lastCreatedNoteData = new();
-    private readonly Dictionary<string, string> _lastIntervalData = new();
+    private readonly Dictionary<NoteTypeId, Dictionary<string, string>> _lastCreatedNoteData = new();
+    private PlacementOptions _lastIntervalPlacementOptions = new(IntervalEditorNoteProvider.DefaultDurationBeats, IntervalEditorNoteProvider.DefaultStepBeats);
     private readonly EditorCommandStack _commandStack = new();
     private readonly IEditorNoteOptionsPanel _intervalOptionsPanel = new IntervalEditorNoteOptionsPanel();
     private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset", "LeadInBeats" };
@@ -86,7 +86,7 @@ public sealed class BeatmapEditorElement
     private MouseState _previousMouse;
     private MouseState _mouse;
     private EditorPlacementMode _placementMode = EditorPlacementMode.Note;
-    private EditorNoteKind _selectedKind = EditorNoteKind.SeeSaw;
+    private NoteTypeId _selectedNoteTypeId;
     private EditorEffectKind _selectedEffectKind = EditorEffectKind.BpmChange;
     private EditorTimelineDragKind _timelineDragKind;
     private double _manualBeatPosition;
@@ -103,15 +103,18 @@ public sealed class BeatmapEditorElement
     private ChartNote _optionsNote;
     private EditorNoteDefinition _optionsDefinition;
     private IEditorNoteOptionsPanel _optionsPanel;
+    private ChartEditorClip _optionsClip;
+    private EditorClipDefinition _optionsClipDefinition;
     private ChartEffect _optionsEffect;
     private EditorEffectDefinition _optionsEffectDefinition;
     private IEditorEffectOptionsPanel _effectOptionsPanel;
+    private bool _optionsIsClip;
     private bool _optionsIsEffect;
     private bool _optionsIsCreation;
     private bool _optionsIsIntervalCreation;
     private bool _isSelectingIntervalRange;
     private double? _intervalRangeStart;
-    private double _pendingIntervalDurationBeats;
+    private PlacementOptions _pendingPlacementOptions = PlacementOptions.None;
     private bool _isCreatingNewBeatmap;
     private string _newBeatmapNameBuffer = "";
     private ChartNote _draggedNote;
@@ -150,8 +153,16 @@ public sealed class BeatmapEditorElement
         _metadataWindow = new DevUiFloatingWindow(_ui);
         _pixel = new Texture2D(GLOBALS.graphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
+        _selectedNoteTypeId = GetDefaultNoteTypeId();
 
         Load();
+    }
+
+    private static NoteTypeId GetDefaultNoteTypeId()
+    {
+        return EditorNoteDefinitions.GameProviders.FirstOrDefault()?.Definition.TypeId
+            ?? EditorNoteDefinitions.All.FirstOrDefault()?.TypeId
+            ?? default;
     }
 
     public bool IsPreviewPlaying => _isPreviewPlaying;
@@ -386,13 +397,8 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.F5))
             RefreshSongs();
 
-        if (Pressed(Keys.F6))
-        {
-            if (IsShiftDown())
-                NormalizeBpmChangesToGlobalBeats();
-            else
-                NormalizeSeeSawNotesToGrid();
-        }
+        if (Pressed(Keys.F6) && IsShiftDown())
+            NormalizeBpmChangesToGlobalBeats();
 
         if (Pressed(Keys.OemPlus) || Pressed(Keys.Add))
             Zoom(-0.5);
@@ -505,7 +511,7 @@ public sealed class BeatmapEditorElement
             if (!GetRhythmGameRowBounds(i).Contains(_mouse.Position))
                 continue;
 
-            Select(providers[i].Definition.Kind);
+            Select(providers[i].Definition.TypeId);
             _status = $"Rhythm game {providers[i].RhythmGameDisplayName ?? providers[i].Definition.DisplayName}";
             return true;
         }
@@ -864,8 +870,72 @@ public sealed class BeatmapEditorElement
 
         if (_placementMode == EditorPlacementMode.Effect)
             OpenEffectOptionsWindow(_document.FindNearestEffectAtBeat(CurrentBeatPosition(), GetSelectionDistance()));
-        else
+        else if (!TryOpenSelectedClipOptionsWindow())
             OpenNoteOptionsWindow(_document.FindNearestAtBeat(CurrentBeatPosition(), GetSelectionDistance()));
+    }
+
+    private bool TryOpenSelectedClipOptionsWindow()
+    {
+        ChartEditorClip selectedClip = !string.IsNullOrWhiteSpace(_selectedTimelineClipId)
+            ? _document.FindEditorClip(_selectedTimelineClipId)
+            : null;
+
+        return OpenClipOptionsWindow(selectedClip ?? FindNearestEditorClipAtBeat(CurrentBeatPosition(), GetSelectionDistance()), showStatusWhenMissing: false);
+    }
+
+    private bool OpenClipOptionsWindow(ChartEditorClip clip, bool showStatusWhenMissing = true)
+    {
+        if (clip == null)
+        {
+            if (showStatusWhenMissing)
+                _status = "No configurable clip close enough";
+            return false;
+        }
+
+        EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+        if (definition == null)
+        {
+            if (showStatusWhenMissing)
+                _status = "No configurable clip close enough";
+            return false;
+        }
+
+        _optionsClip = clip;
+        _optionsClipDefinition = definition;
+        _optionsNote = null;
+        _optionsDefinition = null;
+        _optionsPanel = null;
+        _optionsEffect = null;
+        _optionsEffectDefinition = null;
+        _effectOptionsPanel = null;
+        _optionsIsClip = true;
+        _optionsIsEffect = false;
+        _optionsIsCreation = false;
+        _optionsIsIntervalCreation = false;
+        _noteOptionsWindow.Open();
+        _status = $"Options for {definition.DisplayName} at {clip.StartBeat:0.###}b";
+        return true;
+    }
+
+    private ChartEditorClip FindNearestEditorClipAtBeat(double beat, double maxDistanceBeats)
+    {
+        return _document.EditorClips
+            .Where(clip => clip != null)
+            .Select(clip => new { Clip = clip, Distance = GetClipDistanceFromBeat(clip, beat) })
+            .Where(item => item.Distance <= maxDistanceBeats)
+            .OrderBy(item => item.Distance)
+            .Select(item => item.Clip)
+            .FirstOrDefault();
+    }
+
+    private static double GetClipDistanceFromBeat(ChartEditorClip clip, double beat)
+    {
+        double start = clip.StartBeat;
+        double end = start + Math.Max(0.0, clip.LengthBeats);
+        if (beat >= start && beat <= end)
+            return 0.0;
+
+        return Math.Min(Math.Abs(beat - start), Math.Abs(beat - end));
     }
 
     private void TogglePlacementMode()
@@ -880,7 +950,7 @@ public sealed class BeatmapEditorElement
         _noteOptionsWindow.Close();
         ClearPendingOptions();
         _status = _placementMode == EditorPlacementMode.Note
-            ? $"Mode notes: {EditorNoteDefinitions.Get(_selectedKind).DisplayName}"
+            ? $"Mode notes: {EditorNoteDefinitions.Get(_selectedNoteTypeId).DisplayName}"
             : $"Mode effects: {EditorEffectDefinitions.Get(_selectedEffectKind).DisplayName}";
     }
 
@@ -894,16 +964,19 @@ public sealed class BeatmapEditorElement
 
         _optionsNote = note;
         EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(_optionsNote);
-        if (definition == null || !EditorNoteDefinitions.TryGetOptionsPanel(definition.Kind, out _optionsPanel))
+        if (definition == null || !EditorNoteDefinitions.TryGetOptionsPanel(definition.TypeId, out _optionsPanel))
         {
             _status = "No configurable note close enough";
             return false;
         }
 
         _optionsDefinition = definition;
+        _optionsClip = null;
+        _optionsClipDefinition = null;
         _optionsEffect = null;
         _optionsEffectDefinition = null;
         _effectOptionsPanel = null;
+        _optionsIsClip = false;
         _optionsIsEffect = false;
         _optionsIsCreation = false;
         _optionsIsIntervalCreation = false;
@@ -918,17 +991,20 @@ public sealed class BeatmapEditorElement
         _optionsNote = definition.CreateChartNote(songPosition, _document.GetSecondsPerBeatAtBeat(beat), variantIndex: 0);
         ChartTiming.SetNoteBeat(_optionsNote, beat);
         ChartTiming.SetNoteHoldBeats(_optionsNote, definition.HoldBeats);
-        if (_lastCreatedNoteData.TryGetValue(definition.Kind, out Dictionary<string, string> lastData))
+        if (_lastCreatedNoteData.TryGetValue(definition.TypeId, out Dictionary<string, string> lastData))
             _optionsNote.AdditionnalData = new Dictionary<string, string>(lastData);
 
         _optionsDefinition = definition;
+        _optionsClip = null;
+        _optionsClipDefinition = null;
         _optionsEffect = null;
         _optionsEffectDefinition = null;
         _effectOptionsPanel = null;
+        _optionsIsClip = false;
         _optionsIsEffect = false;
         _optionsIsCreation = true;
         _optionsIsIntervalCreation = false;
-        if (!EditorNoteDefinitions.TryGetOptionsPanel(definition.Kind, out _optionsPanel))
+        if (!EditorNoteDefinitions.TryGetOptionsPanel(definition.TypeId, out _optionsPanel))
             _optionsPanel = null;
         _noteOptionsWindow.Open();
         _status = $"Configure {definition.DisplayName} at {beat:0.###}b, then Create";
@@ -942,26 +1018,24 @@ public sealed class BeatmapEditorElement
         _optionsNote = definition.CreateChartNote(start, _document.GetSecondsPerBeatAtBeat(startBeat), variantIndex: 0);
         ChartTiming.SetNoteBeat(_optionsNote, startBeat);
         ChartTiming.SetNoteHoldBeats(_optionsNote, definition.HoldBeats);
-        if (_lastCreatedNoteData.TryGetValue(definition.Kind, out Dictionary<string, string> lastData))
+        if (_lastCreatedNoteData.TryGetValue(definition.TypeId, out Dictionary<string, string> lastData))
             _optionsNote.AdditionnalData = new Dictionary<string, string>(lastData);
 
-        _pendingIntervalDurationBeats = GetBeatsBetween(start, end);
-        foreach (KeyValuePair<string, string> pair in _lastIntervalData)
-        {
-            if (pair.Key != IntervalEditorNoteProvider.DurationBeatsKey)
-                _optionsNote.AdditionnalData[pair.Key] = pair.Value;
-        }
-
-        IntervalEditorNoteProvider.SetDurationBeats(_optionsNote, _pendingIntervalDurationBeats);
+        _pendingPlacementOptions = new PlacementOptions(
+            RepeatDurationBeats: GetBeatsBetween(start, end),
+            RepeatStepBeats: _lastIntervalPlacementOptions.RepeatStepBeats ?? IntervalEditorNoteProvider.DefaultStepBeats);
 
         _optionsDefinition = definition;
+        _optionsClip = null;
+        _optionsClipDefinition = null;
         _optionsEffect = null;
         _optionsEffectDefinition = null;
         _effectOptionsPanel = null;
+        _optionsIsClip = false;
         _optionsIsEffect = false;
         _optionsIsCreation = true;
         _optionsIsIntervalCreation = true;
-        if (!EditorNoteDefinitions.TryGetOptionsPanel(definition.Kind, out _optionsPanel))
+        if (!EditorNoteDefinitions.TryGetOptionsPanel(definition.TypeId, out _optionsPanel))
             _optionsPanel = null;
         _noteOptionsWindow.Open();
         _status = $"Configure interval {definition.DisplayName} from {startBeat:0.###}b to {_document.GetBeatAt(end):0.###}b, then Create";
@@ -986,7 +1060,10 @@ public sealed class BeatmapEditorElement
         _optionsNote = null;
         _optionsDefinition = null;
         _optionsPanel = null;
+        _optionsClip = null;
+        _optionsClipDefinition = null;
         _optionsEffectDefinition = definition;
+        _optionsIsClip = false;
         _optionsIsEffect = true;
         _optionsIsCreation = false;
         _optionsIsIntervalCreation = false;
@@ -1000,8 +1077,11 @@ public sealed class BeatmapEditorElement
         _optionsNote = null;
         _optionsDefinition = null;
         _optionsPanel = null;
+        _optionsClip = null;
+        _optionsClipDefinition = null;
         _optionsEffect = definition.CreateChartEffect(songPosition, _document);
         _optionsEffectDefinition = definition;
+        _optionsIsClip = false;
         _optionsIsEffect = true;
         _optionsIsCreation = true;
         _optionsIsIntervalCreation = false;
@@ -1018,6 +1098,29 @@ public sealed class BeatmapEditorElement
             return;
 
         apply(note);
+    }
+
+    private void ApplyNotePatch(NotePatch patch)
+    {
+        if (patch == null)
+            return;
+
+        ChartNote note = ResolveOptionsNote();
+        if (note == null)
+            return;
+
+        if (_optionsIsCreation)
+        {
+            patch.ApplyTo(note);
+            return;
+        }
+
+        _document.ApplyNotePatch(note, patch);
+    }
+
+    private void ApplyPlacementOptions(PlacementOptions placementOptions)
+    {
+        _pendingPlacementOptions = placementOptions ?? PlacementOptions.None;
     }
 
     private void ApplyEffectOption(Action<ChartEffect> apply)
@@ -1072,6 +1175,12 @@ public sealed class BeatmapEditorElement
             return;
         }
 
+        if (_optionsIsClip)
+        {
+            UpdateClipOptionsWindow();
+            return;
+        }
+
         if (_optionsNote == null || _optionsDefinition == null || (!_optionsIsCreation && !_document.Chart.Notes.Contains(_optionsNote)))
         {
             _noteOptionsWindow.Close();
@@ -1091,6 +1200,18 @@ public sealed class BeatmapEditorElement
 
             _status = $"Updated options at {_optionsNote.SongPosition:0.000}s";
         }
+    }
+
+    private void UpdateClipOptionsWindow()
+    {
+        if (_optionsClip == null || _optionsClipDefinition == null || _document.FindEditorClip(_optionsClip.Id) == null)
+        {
+            _noteOptionsWindow.Close();
+            return;
+        }
+
+        if (_noteOptionsWindow.Update(GetNoteOptionsWindowBounds(), GetNoteOptionRows()))
+            _status = $"Updated clip {_optionsClipDefinition.DisplayName} at {_optionsClip.StartBeat:0.###}b";
     }
 
     private void UpdateEffectOptionsWindow()
@@ -1259,19 +1380,6 @@ public sealed class BeatmapEditorElement
         }
     }
 
-    private void NormalizeSeeSawNotesToGrid()
-    {
-        int normalizedCount = _document.NormalizeSeeSawNotesToGrid(GetEffectiveSnapDivisions());
-        if (normalizedCount <= 0)
-        {
-            _status = "No See-Saw notes needed grid normalization";
-            return;
-        }
-
-        RebuildPlayback(_editorPlaybackPlaying);
-        _status = $"Normalized {normalizedCount} See-Saw notes to global beat grid";
-    }
-
     private void NormalizeBpmChangesToGlobalBeats()
     {
         int normalizedCount = _document.NormalizeBpmChangesToNearestGlobalBeat();
@@ -1437,7 +1545,7 @@ public sealed class BeatmapEditorElement
 
     private void PlaceSelectedNote()
     {
-        EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedNoteTypeId);
         double position = _document.GetSongPositionAtBeat(SnapPlacementBeat(CurrentBeatPosition()));
         OpenCreateNoteWindow(definition, position);
     }
@@ -1464,7 +1572,7 @@ public sealed class BeatmapEditorElement
         _optionsIsIntervalCreation = false;
         _isSelectingIntervalRange = true;
         _intervalRangeStart = null;
-        _status = $"Interval {EditorNoteDefinitions.Get(_selectedKind).DisplayName}: ENTER start, ENTER end";
+        _status = $"Interval {EditorNoteDefinitions.Get(_selectedNoteTypeId).DisplayName}: ENTER start, ENTER end";
     }
 
     private void SelectIntervalRangePoint()
@@ -1477,7 +1585,7 @@ public sealed class BeatmapEditorElement
             return;
         }
 
-        EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedKind);
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(_selectedNoteTypeId);
         double start = _document.GetSongPositionAtBeat(_intervalRangeStart.Value);
         _isSelectingIntervalRange = false;
         _intervalRangeStart = null;
@@ -1498,18 +1606,21 @@ public sealed class BeatmapEditorElement
         Dictionary<string, string> creationData = GetNoteCreationData(_optionsNote);
         bool wasIntervalCreation = _optionsIsIntervalCreation;
         if (_optionsIsIntervalCreation)
-            StoreLastIntervalData(_optionsNote);
+            StoreLastIntervalData();
 
-        IReadOnlyList<EditorNotePlacement> placements = _optionsDefinition.CreatePlacements(_optionsNote, CreatePlacementContext());
+        PlacementOptions placementOptions = _optionsIsIntervalCreation
+            ? _pendingPlacementOptions
+            : PlacementOptions.None;
+        IReadOnlyList<EditorNotePlacement> placements = _optionsDefinition.CreatePlacements(_optionsNote, CreatePlacementContext(), placementOptions);
         PlaceNotesCommand command = new(placements);
         if (ExecuteCommand(command))
         {
             IReadOnlyList<ChartNote> placedNotes = command.PlacedNotes;
-            _lastCreatedNoteData[_optionsDefinition.Kind] = creationData;
+            _lastCreatedNoteData[_optionsDefinition.TypeId] = creationData;
             _optionsIsCreation = false;
             _optionsIsIntervalCreation = false;
 
-            if (placedNotes.Count == 1 && EditorNoteDefinitions.FromChartNote(placedNotes[0]) is EditorNoteDefinition placedDefinition && EditorNoteDefinitions.TryGetOptionsPanel(placedDefinition.Kind, out _))
+            if (placedNotes.Count == 1 && EditorNoteDefinitions.FromChartNote(placedNotes[0]) is EditorNoteDefinition placedDefinition && EditorNoteDefinitions.TryGetOptionsPanel(placedDefinition.TypeId, out _))
                 OpenNoteOptionsWindow(placedNotes[0]);
             else
                 _noteOptionsWindow.Close();
@@ -1579,12 +1690,16 @@ public sealed class BeatmapEditorElement
         _optionsNote = null;
         _optionsDefinition = null;
         _optionsPanel = null;
+        _optionsClip = null;
+        _optionsClipDefinition = null;
         _optionsEffect = null;
         _optionsEffectDefinition = null;
         _effectOptionsPanel = null;
+        _optionsIsClip = false;
         _optionsIsEffect = false;
         _optionsIsCreation = false;
         _optionsIsIntervalCreation = false;
+        _pendingPlacementOptions = PlacementOptions.None;
     }
 
     private static Dictionary<string, string> GetNoteCreationData(ChartNote note)
@@ -1634,10 +1749,9 @@ public sealed class BeatmapEditorElement
         return a.Count == b.Count && a.All(pair => b.TryGetValue(pair.Key, out string value) && value == pair.Value);
     }
 
-    private void StoreLastIntervalData(ChartNote note)
+    private void StoreLastIntervalData()
     {
-        _lastIntervalData[IntervalEditorNoteProvider.DurationBeatsKey] = IntervalEditorNoteProvider.GetDurationBeats(note.AdditionnalData).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
-        _lastIntervalData[IntervalEditorNoteProvider.StepBeatsKey] = IntervalEditorNoteProvider.GetStepBeats(note.AdditionnalData).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
+        _lastIntervalPlacementOptions = _pendingPlacementOptions ?? PlacementOptions.None;
     }
 
     private double GetBeatsBetween(double startSongPosition, double endSongPosition)
@@ -1883,10 +1997,10 @@ public sealed class BeatmapEditorElement
         _beatmapPlayer.VisualNoteMng?.Update(songPosition);
     }
 
-    private void Select(EditorNoteKind kind)
+    private void Select(NoteTypeId typeId)
     {
-        _selectedKind = kind;
-        _status = $"Selected {EditorNoteDefinitions.Get(kind).DisplayName}";
+        _selectedNoteTypeId = typeId;
+        _status = $"Selected {EditorNoteDefinitions.Get(typeId).DisplayName}";
     }
 
     private void Select(EditorEffectKind kind)
@@ -1907,9 +2021,9 @@ public sealed class BeatmapEditorElement
         }
 
         IReadOnlyList<EditorNoteDefinition> definitions = EditorNoteDefinitions.All;
-        int currentIndex = definitions.ToList().FindIndex(definition => definition.Kind == _selectedKind);
+        int currentIndex = definitions.ToList().FindIndex(definition => definition.TypeId == _selectedNoteTypeId);
         int nextIndex = PositiveModulo(currentIndex + delta, definitions.Count);
-        Select(definitions[nextIndex].Kind);
+        Select(definitions[nextIndex].TypeId);
     }
 
     private void RefreshSongs()
@@ -2366,11 +2480,11 @@ public sealed class BeatmapEditorElement
         {
             IEditorNoteProvider provider = gameProviders[i];
             Rectangle rowBounds = GetRhythmGameRowBounds(i);
-            if (provider.Definition.Kind == _selectedKind)
+            if (provider.Definition.TypeId == _selectedNoteTypeId)
                 _ui.Fill(spriteBatch, rowBounds, new Color(24, 58, 36, 180));
 
             string displayName = provider.RhythmGameDisplayName ?? provider.Definition.DisplayName;
-            _ui.Label(spriteBatch, displayName.ToUpperInvariant(), new Vector2(rowBounds.X + 6, rowBounds.Y + 4), provider.Definition.Kind == _selectedKind ? Color.LightGreen : Color.White, 2);
+            _ui.Label(spriteBatch, displayName.ToUpperInvariant(), new Vector2(rowBounds.X + 6, rowBounds.Y + 4), provider.Definition.TypeId == _selectedNoteTypeId ? Color.LightGreen : Color.White, 2);
         }
 
         IReadOnlyList<EditorClipDefinition> paletteClips = GetPaletteClipDefinitions();
@@ -2501,7 +2615,6 @@ public sealed class BeatmapEditorElement
                 new EditorTopBarMenuItem("Toggle Note/Effect", TogglePlacementMode),
                 new EditorTopBarMenuItem("Interval Range", ToggleIntervalRangeSelection),
                 new EditorTopBarMenuItem("Options Window", ToggleNoteOptionsWindow),
-                new EditorTopBarMenuItem("Normalize See-Saw", NormalizeSeeSawNotesToGrid),
                 new EditorTopBarMenuItem("Normalize BPM", NormalizeBpmChangesToGlobalBeats)
             },
             _ => Array.Empty<EditorTopBarMenuItem>()
@@ -2525,7 +2638,7 @@ public sealed class BeatmapEditorElement
 
     private IReadOnlyList<EditorClipDefinition> GetPaletteClipDefinitions()
     {
-        return EditorNoteDefinitions.TryGetProvider(_selectedKind, out IEditorNoteProvider provider)
+        return EditorNoteDefinitions.TryGetProvider(_selectedNoteTypeId, out IEditorNoteProvider provider)
             ? provider.Clips
             : Array.Empty<EditorClipDefinition>();
     }
@@ -2756,7 +2869,8 @@ public sealed class BeatmapEditorElement
             return;
         }
 
-        Rectangle bounds = GetClipBounds(_dragPreviewStartBeat, _dragPreviewLengthBeats, _dragPreviewTrackIndex, definition, definition.DefaultData, windowStart, windowEnd, area);
+        ChartEditorClip previewClip = CreateDragPreviewClip(definition);
+        Rectangle bounds = GetClipBounds(previewClip, windowStart, windowEnd, area, CreateDragPreviewRuntimeContext(previewClip));
         if (bounds.Right < area.X || bounds.X > area.Right)
             return;
 
@@ -2767,6 +2881,51 @@ public sealed class BeatmapEditorElement
         DrawClipResizeHandles(spriteBatch, bounds, Color.Yellow);
         if (bounds.Width > 58)
             _ui.Label(spriteBatch, definition.DisplayName, new Vector2(bounds.X + 8, bounds.Y + Math.Max(4, bounds.Height / 2 - 6)), Color.White, 2);
+    }
+
+    private ChartEditorClip CreateDragPreviewClip(EditorClipDefinition definition)
+    {
+        return new ChartEditorClip
+        {
+            Id = _draggedClip?.Id ?? "preview",
+            TrackIndex = _dragPreviewTrackIndex,
+            StartBeat = _dragPreviewStartBeat,
+            LengthBeats = Math.Max(0.0, _dragPreviewLengthBeats),
+            RhythmGameId = definition.RhythmGameId,
+            ClipTypeId = definition.ClipTypeId,
+            ClipCategory = definition.Category.ToString(),
+            InputAction = string.IsNullOrWhiteSpace(_draggedClip?.InputAction) ? definition.InputAction : _draggedClip.InputAction,
+            Data = CreateMergedClipData(definition, _draggedClip?.Data ?? definition.DefaultData)
+        };
+    }
+
+    private IReadOnlyList<ChartNote> CreateDragPreviewRuntimeContext(ChartEditorClip previewClip)
+    {
+        if (previewClip == null || _document?.EditorClips == null)
+            return null;
+
+        List<ChartEditorClip> clips = new();
+        bool replacedDraggedClip = false;
+        foreach (ChartEditorClip clip in _document.EditorClips)
+        {
+            if (clip == null)
+                continue;
+
+            if (_draggedClip != null && string.Equals(clip.Id, _draggedClip.Id, StringComparison.Ordinal))
+            {
+                clips.Add(previewClip);
+                replacedDraggedClip = true;
+            }
+            else
+            {
+                clips.Add(clip);
+            }
+        }
+
+        if (!replacedDraggedClip)
+            clips.Add(previewClip);
+
+        return EditorClipCompiler.Compile(new Chart { EditorClips = clips }, _document.TempoMap);
     }
 
     private void DrawClipResizeHandles(SpriteBatch spriteBatch, Rectangle bounds, Color color)
@@ -2800,14 +2959,18 @@ public sealed class BeatmapEditorElement
             return Rectangle.Empty;
 
         EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
-        return GetClipBounds(clip.StartBeat, clip.LengthBeats, clip.TrackIndex, definition, clip.Data, windowStart, windowEnd, area);
+        return GetClipBounds(clip, windowStart, windowEnd, area, _document?.Chart?.Notes);
     }
 
-    private Rectangle GetClipBounds(double startBeat, double lengthBeats, int trackIndex, EditorClipDefinition definition, IReadOnlyDictionary<string, string> data, double windowStart, double windowEnd, Rectangle area)
+    private Rectangle GetClipBounds(ChartEditorClip clip, double windowStart, double windowEnd, Rectangle area, IReadOnlyList<ChartNote> contextualNotes)
     {
-        GetClipActivationBeatRange(startBeat, lengthBeats, definition, data, out double activationStartBeat, out double activationEndBeat);
+        if (clip == null)
+            return Rectangle.Empty;
+
+        EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+        GetClipActivationBeatRange(clip, definition, contextualNotes, out double activationStartBeat, out double activationEndBeat);
         int laneHeight = GetTrackLaneHeight(area);
-        int clampedTrack = Math.Clamp(trackIndex, 0, TimelineTrackCount - 1);
+        int clampedTrack = Math.Clamp(clip.TrackIndex, 0, TimelineTrackCount - 1);
         float startX = BeatToX(activationStartBeat, windowStart, windowEnd, area);
         float endX = BeatToX(activationEndBeat, windowStart, windowEnd, area);
         int x = (int)Math.Clamp(Math.Min(startX, endX), area.X, area.Right);
@@ -2817,25 +2980,25 @@ public sealed class BeatmapEditorElement
         return new Rectangle(x, laneY + 3, GetTimelineBlockWidth(right - x), Math.Max(8, laneBottom - laneY - 6));
     }
 
-    private void GetClipActivationBeatRange(double startBeat, double lengthBeats, EditorClipDefinition definition, IReadOnlyDictionary<string, string> data, out double activationStartBeat, out double activationEndBeat)
+    private void GetClipActivationBeatRange(ChartEditorClip clip, EditorClipDefinition definition, IReadOnlyList<ChartNote> contextualNotes, out double activationStartBeat, out double activationEndBeat)
     {
-        activationStartBeat = startBeat;
-        activationEndBeat = startBeat + Math.Max(0.0, lengthBeats);
+        activationStartBeat = clip?.StartBeat ?? 0.0;
+        activationEndBeat = activationStartBeat + Math.Max(0.0, clip?.LengthBeats ?? 0.0);
 
-        if (definition == null)
+        if (clip == null || definition == null)
             return;
 
         ChartEditorClip previewClip = new()
         {
-            Id = "preview",
-            TrackIndex = 0,
-            StartBeat = startBeat,
-            LengthBeats = Math.Max(0.0, lengthBeats),
+            Id = clip.Id,
+            TrackIndex = clip.TrackIndex,
+            StartBeat = clip.StartBeat,
+            LengthBeats = Math.Max(0.0, clip.LengthBeats),
             RhythmGameId = definition.RhythmGameId,
             ClipTypeId = definition.ClipTypeId,
             ClipCategory = definition.Category.ToString(),
             InputAction = definition.InputAction,
-            Data = CreateMergedClipData(definition, data)
+            Data = CreateMergedClipData(definition, clip.Data)
         };
 
         IReadOnlyList<ChartNote> generatedNotes = EditorClipCompiler.CompileClip(previewClip, _document.TempoMap);
@@ -2850,17 +3013,45 @@ public sealed class BeatmapEditorElement
             if (noteDefinition == null)
                 continue;
 
-            double noteBeat = ChartTiming.GetNoteBeat(note, _document.TempoMap);
-            GetNoteActivationBeatRange(note, noteDefinition, noteBeat, generatedNotes, out double noteStartBeat, out double noteEndBeat);
+            ChartNote timingNote = FindContextualRuntimeNote(note, noteDefinition, contextualNotes) ?? note;
+            IReadOnlyList<ChartNote> timingContext = ReferenceEquals(timingNote, note)
+                ? generatedNotes
+                : contextualNotes;
+            double noteBeat = ChartTiming.GetNoteBeat(timingNote, _document.TempoMap);
+            GetNoteActivationBeatRange(timingNote, noteDefinition, noteBeat, timingContext, out double noteStartBeat, out double noteEndBeat);
             activationStartBeat = Math.Min(activationStartBeat, noteStartBeat);
             activationEndBeat = Math.Max(activationEndBeat, noteEndBeat);
         }
 
         if (double.IsInfinity(activationStartBeat) || double.IsInfinity(activationEndBeat))
         {
-            activationStartBeat = startBeat;
-            activationEndBeat = startBeat + Math.Max(0.0, lengthBeats);
+            activationStartBeat = clip.StartBeat;
+            activationEndBeat = clip.StartBeat + Math.Max(0.0, clip.LengthBeats);
         }
+    }
+
+    private ChartNote FindContextualRuntimeNote(ChartNote generatedNote, EditorNoteDefinition definition, IReadOnlyList<ChartNote> contextualNotes)
+    {
+        contextualNotes ??= _document?.Chart?.Notes;
+        if (generatedNote == null || definition == null || contextualNotes == null)
+            return null;
+
+        double generatedBeat = ChartTiming.GetNoteBeat(generatedNote, _document.TempoMap);
+        foreach (ChartNote candidate in contextualNotes)
+        {
+            EditorNoteDefinition candidateDefinition = EditorNoteDefinitions.FromChartNote(candidate);
+            if (candidateDefinition == null || candidateDefinition.TypeId != definition.TypeId)
+                continue;
+
+            double candidateBeat = ChartTiming.GetNoteBeat(candidate, _document.TempoMap);
+            if (Math.Abs(candidateBeat - generatedBeat) > 0.0005)
+                continue;
+
+            if (NotePayloadKeys.PayloadDataEquals(candidate.AdditionnalData, generatedNote.AdditionnalData))
+                return candidate;
+        }
+
+        return null;
     }
 
     private void GetNoteActivationBeatRange(ChartNote note, EditorNoteDefinition definition, double noteBeat, IReadOnlyList<ChartNote> contextualNotes, out double startBeat, out double endBeat)
@@ -2873,70 +3064,9 @@ public sealed class BeatmapEditorElement
             return;
         }
 
-        if (definition.Kind == EditorNoteKind.SeeSaw)
-        {
-            SeeSawCompiledEventTiming timing = SeeSawChartCompiler.GetPreviewTiming(_document.Chart.Notes, note.AdditionnalData, noteBeat, _document.GetNoteBeat, ChartTiming.GetLeadInBeats(_document.Chart));
-            if (timing.IsSeeSaw || timing.IsExit)
-            {
-                startBeat = timing.PrepStartBeat;
-                endBeat = timing.EndBeat;
-                return;
-            }
-        }
-
-        if (TryGetTimedNoteActivationBeatRange(note, definition, noteBeat, contextualNotes, out startBeat, out endBeat))
-            return;
-
-        double holdBeats = ChartTiming.GetNoteHoldBeats(note, definition, _document.TempoMap);
-        startBeat = noteBeat - definition.OccupyBeforeBeats;
-        endBeat = noteBeat + Math.Max(holdBeats, definition.OccupyAfterBeats);
-    }
-
-    private bool TryGetTimedNoteActivationBeatRange(ChartNote note, EditorNoteDefinition definition, double noteBeat, IReadOnlyList<ChartNote> contextualNotes, out double startBeat, out double endBeat)
-    {
-        startBeat = noteBeat;
-        endBeat = noteBeat;
-        if (note == null || definition == null)
-            return false;
-
-        double secondsPerBeat = _document.GetSecondsPerBeatAtBeat(noteBeat);
-        if (secondsPerBeat <= 0 || double.IsNaN(secondsPerBeat) || double.IsInfinity(secondsPerBeat))
-            return false;
-
-        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
-        Func<int, ChartNote> getRelativeNote = CreateRelativeNoteGetter(contextualNotes ?? _document.Chart.Notes, note);
-        double startSeconds = definition.GetStart(note.SongPosition, secondsPerBeat, variantIndex, getRelativeNote, beforeUsesOuterTiming: false);
-        double endSeconds = definition.GetEnd(note.SongPosition, secondsPerBeat, variantIndex, getRelativeNote);
-        if (double.IsNaN(startSeconds) || double.IsInfinity(startSeconds) || double.IsNaN(endSeconds) || double.IsInfinity(endSeconds))
-            return false;
-
-        startBeat = _document.GetBeatAt(startSeconds);
-        endBeat = _document.GetBeatAt(endSeconds);
-        return !double.IsNaN(startBeat) && !double.IsInfinity(startBeat) && !double.IsNaN(endBeat) && !double.IsInfinity(endBeat);
-    }
-
-    private static Func<int, ChartNote> CreateRelativeNoteGetter(IReadOnlyList<ChartNote> notes, ChartNote note)
-    {
-        int index = IndexOfReference(notes, note);
-        return offset =>
-        {
-            int relativeIndex = index + offset;
-            return index >= 0 && relativeIndex >= 0 && relativeIndex < notes.Count ? notes[relativeIndex] : null;
-        };
-    }
-
-    private static int IndexOfReference(IReadOnlyList<ChartNote> notes, ChartNote note)
-    {
-        if (notes == null || note == null)
-            return -1;
-
-        for (int i = 0; i < notes.Count; i++)
-        {
-            if (ReferenceEquals(notes[i], note))
-                return i;
-        }
-
-        return -1;
+        NoteTimingResult timing = _document.GetNoteTiming(note, definition, contextualNotes);
+        startBeat = timing.StartBeat;
+        endBeat = timing.EndBeat;
     }
 
     private static Dictionary<string, string> CreateMergedClipData(EditorClipDefinition definition, IReadOnlyDictionary<string, string> data)
@@ -3113,7 +3243,7 @@ public sealed class BeatmapEditorElement
         if (!_optionsIsCreation || !_optionsIsIntervalCreation || _optionsNote == null || _optionsDefinition == null)
             return;
 
-        IReadOnlyList<EditorNotePlacement> placements = _optionsDefinition.CreatePlacements(_optionsNote, CreatePlacementContext());
+        IReadOnlyList<EditorNotePlacement> placements = _optionsDefinition.CreatePlacements(_optionsNote, CreatePlacementContext(), _pendingPlacementOptions);
         IReadOnlyList<ChartNote> placementNotes = placements.Select(item => item.Note).ToList();
         foreach (EditorNotePlacement placement in placements)
         {
@@ -3127,7 +3257,7 @@ public sealed class BeatmapEditorElement
                 continue;
 
             int variantIndex = EditorNoteDefinitions.FindVariantIndex(placement.Definition, note);
-            Color color = GetNoteColor(placement.Definition.Kind, variantIndex);
+            Color color = GetNoteColor(placement.Definition, variantIndex);
             float noteX = BeatToX(noteStartBeat, windowStart, windowEnd, area);
             float noteEndX = BeatToX(noteEndBeat, windowStart, windowEnd, area);
             int laneHeight = GetTrackLaneHeight(area);
@@ -3151,6 +3281,9 @@ public sealed class BeatmapEditorElement
     {
         if (_optionsIsEffect)
             return _effectOptionsPanel?.Title ?? "EFFECT OPTIONS";
+
+        if (_optionsIsClip)
+            return $"CLIP {_optionsClipDefinition?.DisplayName?.ToUpperInvariant() ?? "OPTIONS"}";
 
         if (_optionsIsIntervalCreation)
             return $"INTERVAL {_optionsDefinition?.DisplayName?.ToUpperInvariant() ?? "NOTE"}";
@@ -3250,20 +3383,11 @@ public sealed class BeatmapEditorElement
         return new Rectangle((int)effectX - 7, area.Y + 20, 14, 30);
     }
 
-    private Color GetNoteColor(EditorNoteKind kind, int variantIndex)
+    private Color GetNoteColor(EditorNoteDefinition definition, int variantIndex)
     {
-        if (kind == EditorNoteKind.SeeSaw)
-        {
-            return variantIndex switch
-            {
-                0 or 3 => Color.Orange,
-                1 or 4 => Color.MediumPurple,
-                2 or 5 => Color.Gold,
-                _ => Color.Orange
-            };
-        }
-
-        return Color.DeepSkyBlue;
+        return definition != null && EditorNoteDefinitions.TryGetProvider(definition.TypeId, out IEditorNoteProvider provider)
+            ? provider.GetEditorColor(variantIndex)
+            : Color.DeepSkyBlue;
     }
 
     private Color GetEffectColor(EditorEffectKind kind)
@@ -3555,10 +3679,21 @@ public sealed class BeatmapEditorElement
         if (_optionsIsEffect)
             return GetEffectOptionRows();
 
+        if (_optionsIsClip)
+            return GetClipOptionRows();
+
         if (_optionsNote == null)
             return Array.Empty<DevUiWindowRow>();
 
-        EditorNoteOptionsContext context = new(_optionsNote, _document, GetNoteOptionsWindowBounds(), ResolveOptionsNote);
+        EditorNoteOptionsContext context = new(
+            _optionsNote,
+            _document,
+            GetNoteOptionsWindowBounds(),
+            ResolveOptionsNote,
+            _optionsDefinition,
+            ApplyNotePatch,
+            _pendingPlacementOptions,
+            ApplyPlacementOptions);
         List<DevUiWindowRow> rows = new();
         if (_optionsPanel != null)
             rows.AddRange(_optionsPanel.BuildRows(context));
@@ -3575,6 +3710,109 @@ public sealed class BeatmapEditorElement
             wrappedRows.Add(WrapNoteOptionRow(rows[i]));
 
         return wrappedRows;
+    }
+
+    private IReadOnlyList<DevUiWindowRow> GetClipOptionRows()
+    {
+        ChartEditorClip clip = ResolveOptionsClip();
+        if (clip == null || _optionsClipDefinition == null)
+            return Array.Empty<DevUiWindowRow>();
+
+        List<DevUiWindowRow> rows = new()
+        {
+            DevUiWindowRow.Value("TYPE", _optionsClipDefinition.DisplayName),
+            DevUiWindowRow.Value("CATEGORY", _optionsClipDefinition.Category.ToString()),
+            DevUiWindowRow.Value("START", $"{clip.StartBeat:0.###}b"),
+            DevUiWindowRow.Value("LENGTH", $"{clip.LengthBeats:0.###}b")
+        };
+
+        if (_optionsClipDefinition.Fields.Count == 0)
+        {
+            rows.Add(DevUiWindowRow.Title("No editable clip fields"));
+            return rows;
+        }
+
+        rows.Add(DevUiWindowRow.Category("FIELDS"));
+        foreach (EditorClipFieldDefinition field in _optionsClipDefinition.Fields)
+        {
+            string value = GetClipFieldValue(clip, _optionsClipDefinition, field);
+            rows.Add(CreateClipFieldRow(field, value));
+        }
+
+        return rows;
+    }
+
+    private ChartEditorClip ResolveOptionsClip()
+    {
+        if (_optionsClip == null)
+            return null;
+
+        ChartEditorClip clip = _document.FindEditorClip(_optionsClip.Id);
+        if (clip == null)
+            return null;
+
+        _optionsClip = clip;
+        _optionsClipDefinition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId) ?? _optionsClipDefinition;
+        return clip;
+    }
+
+    private DevUiWindowRow CreateClipFieldRow(EditorClipFieldDefinition field, string value)
+    {
+        return field.Kind switch
+        {
+            EditorClipFieldKind.Bool => DevUiWindowRow.Checkbox(field.DisplayName, ParseClipFieldBool(value), () => ToggleClipField(field)),
+            EditorClipFieldKind.Enum when field.Options.Count > 0 => DevUiWindowRow.Dropdown(field.Key, field.DisplayName, field.Options.Select(option => option.DisplayName).ToArray(), GetClipFieldOptionIndex(field, value), index => SetClipField(field, field.Options[Math.Clamp(index, 0, field.Options.Count - 1)].Value)),
+            EditorClipFieldKind.Float => DevUiWindowRow.FloatInput(field.Key, field.DisplayName, ParseClipFieldDouble(value), number => SetClipField(field, number.ToString("0.###", CultureInfo.InvariantCulture))),
+            _ => DevUiWindowRow.Title(field.DisplayName)
+        };
+    }
+
+    private void ToggleClipField(EditorClipFieldDefinition field)
+    {
+        bool current = ParseClipFieldBool(GetClipFieldValue(ResolveOptionsClip(), _optionsClipDefinition, field));
+        SetClipField(field, current ? "false" : "true");
+    }
+
+    private void SetClipField(EditorClipFieldDefinition field, string value)
+    {
+        ChartEditorClip clip = ResolveOptionsClip();
+        if (clip == null || field == null)
+            return;
+
+        Dictionary<string, string> data = CreateMergedClipData(_optionsClipDefinition, clip.Data);
+        data[field.Key] = value ?? string.Empty;
+        if (ExecuteCommand(new ChangeClipDataCommand(clip.Id, data)))
+            _status = $"Updated {_optionsClipDefinition.DisplayName} {field.DisplayName}";
+    }
+
+    private static string GetClipFieldValue(ChartEditorClip clip, EditorClipDefinition definition, EditorClipFieldDefinition field)
+    {
+        Dictionary<string, string> data = CreateMergedClipData(definition, clip?.Data);
+        return data.TryGetValue(field.Key, out string value) ? value : field.DefaultValue;
+    }
+
+    private static bool ParseClipFieldBool(string value)
+    {
+        return bool.TryParse(value, out bool parsed) && parsed
+            || string.Equals(value, "1", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static double ParseClipFieldDouble(string value)
+    {
+        return double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double parsed)
+            ? parsed
+            : 0.0;
+    }
+
+    private static int GetClipFieldOptionIndex(EditorClipFieldDefinition field, string value)
+    {
+        for (int i = 0; i < field.Options.Count; i++)
+        {
+            if (field.Options[i].Value == value)
+                return i;
+        }
+
+        return 0;
     }
 
     private IReadOnlyList<DevUiWindowRow> GetEffectOptionRows()

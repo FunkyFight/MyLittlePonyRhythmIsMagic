@@ -52,7 +52,7 @@ public sealed class BeatmapPackageTests
                     ClipTypeId = EditorClipDefinitions.SeaponySwim,
                     ClipCategory = EditorClipCategory.Continuous.ToString(),
                     InputAction = "ReactMain",
-                    Data = new Dictionary<string, string> { ["action"] = "seapony_parade_swim" }
+                    Data = SeaponyNoteCodec.Write(SeaponyAction.Swim)
                 }
             },
             EditorClipsSpecified = true
@@ -67,7 +67,7 @@ public sealed class BeatmapPackageTests
         Assert.Single(roundTripped.EditorTracks);
         Assert.Single(roundTripped.EditorClips);
         Assert.Equal("clip-1", roundTripped.EditorClips[0].Id);
-        Assert.Equal("seapony_parade_swim", roundTripped.EditorClips[0].Data["action"]);
+        Assert.True(SeaponyNoteCodec.IsAction(roundTripped.EditorClips[0].Data, SeaponyAction.Swim));
     }
 
     [Fact]
@@ -110,7 +110,7 @@ public sealed class BeatmapPackageTests
                     SongPosition = 0.5,
                     HoldDuration = 0,
                     InputActionToPress = "ReactMain",
-                    AdditionnalData = new Dictionary<string, string> { ["action"] = "seapony_parade_swim" }
+                    AdditionnalData = SeaponyNoteCodec.Write(SeaponyAction.Swim)
                 }
             }
         });
@@ -261,7 +261,7 @@ public sealed class BeatmapPackageTests
         using TempWorkspace workspace = new();
         BeatmapEditorDocument document = BeatmapEditorDocument.CreateNew("", Path.Combine(workspace.Root, "Beatmaps", "LegacyCommands", "chart.xml"), 120);
         EditorCommandStack stack = new();
-        EditorNoteDefinition definition = EditorNoteDefinitions.Get(EditorNoteKind.SeaponyParade);
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(SeaPonyParadeNoteEditor.TypeId);
         ChartNote note = definition.CreateChartNote(0, document.Crotchet, variantIndex: 0);
         ChartTiming.SetNoteBeat(note, 0);
 

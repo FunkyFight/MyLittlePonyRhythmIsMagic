@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameCore.Scenes;
+using Microsoft.Xna.Framework;
 using Rhythm.Note;
 
 namespace MLP_RiM.Elements.Editor;
@@ -25,6 +26,34 @@ public interface IEditorNoteProvider
     IReadOnlyList<ChartNote> CompileClip(ChartEditorClip clip, ChartTempoMap tempoMap);
 
     string GetClipTypeIdFromLegacyNote(ChartNote note);
+
+    int FindVariantIndex(ChartNote note);
+
+    IReadOnlyDictionary<string, object> CreateTimingContext(Chart chart, ChartTempoMap tempoMap);
+
+    bool TryValidateNotes(EditorNoteValidationContext context, out string reason);
+
+    bool AllowsBoundaryTouch(EditorNoteDefinition otherDefinition);
+
+    Color GetEditorColor(int variantIndex);
+}
+
+public sealed class EditorNoteValidationContext
+{
+    public EditorNoteValidationContext(Chart chart, IReadOnlyList<ChartNote> notes, IReadOnlyList<ChartNote> changedNotes, ChartTempoMap tempoMap, Func<ChartNote, double> getNoteBeat)
+    {
+        Chart = chart;
+        Notes = notes ?? Array.Empty<ChartNote>();
+        ChangedNotes = changedNotes ?? Array.Empty<ChartNote>();
+        TempoMap = tempoMap;
+        GetNoteBeat = getNoteBeat;
+    }
+
+    public Chart Chart { get; }
+    public IReadOnlyList<ChartNote> Notes { get; }
+    public IReadOnlyList<ChartNote> ChangedNotes { get; }
+    public ChartTempoMap TempoMap { get; }
+    public Func<ChartNote, double> GetNoteBeat { get; }
 }
 
 public abstract class EditorNoteProvider : IEditorNoteProvider
@@ -68,11 +97,37 @@ public abstract class EditorNoteProvider : IEditorNoteProvider
             ?? EditorClipDefinitions.NoHit;
     }
 
+    public virtual int FindVariantIndex(ChartNote note)
+    {
+        return FindVariantIndexByExactData(Definition, note);
+    }
+
+    public virtual IReadOnlyDictionary<string, object> CreateTimingContext(Chart chart, ChartTempoMap tempoMap)
+    {
+        return new Dictionary<string, object>();
+    }
+
+    public virtual bool TryValidateNotes(EditorNoteValidationContext context, out string reason)
+    {
+        reason = null;
+        return true;
+    }
+
+    public virtual bool AllowsBoundaryTouch(EditorNoteDefinition otherDefinition)
+    {
+        return false;
+    }
+
+    public virtual Color GetEditorColor(int variantIndex)
+    {
+        return Color.DeepSkyBlue;
+    }
+
     protected virtual IReadOnlyList<EditorClipDefinition> CreateClips() => Array.Empty<EditorClipDefinition>();
 
-    protected EditorClipDefinition Clip(string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction = "ReactMain", IReadOnlyDictionary<string, string> defaultData = null)
+    protected EditorClipDefinition Clip(string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction = "ReactMain", IReadOnlyDictionary<string, string> defaultData = null, IReadOnlyList<EditorClipFieldDefinition> fields = null)
     {
-        return new EditorClipDefinition(RhythmGameId, clipTypeId, displayName, category, defaultLengthBeats, inputAction, defaultData);
+        return new EditorClipDefinition(RhythmGameId, clipTypeId, displayName, category, defaultLengthBeats, inputAction, defaultData, fields);
     }
 
     protected IReadOnlyList<ChartNote> CompileContinuous(ChartEditorClip clip, ChartTempoMap tempoMap, IReadOnlyDictionary<string, string> data, double stepBeats)
@@ -133,6 +188,21 @@ public abstract class EditorNoteProvider : IEditorNoteProvider
     {
         return Clips.FirstOrDefault(definition => definition.ClipTypeId == clip?.ClipTypeId)
             ?? EditorClipDefinitions.Find(clip?.RhythmGameId, clip?.ClipTypeId);
+    }
+
+    protected static int FindVariantIndexByExactData(EditorNoteDefinition definition, ChartNote note)
+    {
+        if (definition == null || note?.AdditionnalData == null)
+            return 0;
+
+        for (int i = 0; i < definition.Variants.Count; i++)
+        {
+            EditorNoteVariant variant = definition.Variants[i];
+            if (variant.AdditionnalData.All(pair => note.AdditionnalData.TryGetValue(pair.Key, out string value) && value == pair.Value))
+                return i;
+        }
+
+        return 0;
     }
 
     private IReadOnlyList<EditorClipDefinition> CreateDeclaredClips()

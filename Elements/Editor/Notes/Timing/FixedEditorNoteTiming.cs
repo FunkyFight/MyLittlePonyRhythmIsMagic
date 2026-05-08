@@ -4,33 +4,21 @@ namespace MLP_RiM.Elements.Editor;
 
 public sealed class FixedEditorNoteTiming : IEditorNoteTiming
 {
-    public double GetStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    public NoteTimingResult GetTiming(NoteTimingRequest request)
     {
-        return context.SongPosition - definition.OccupyBeforeBeats * context.Crotchet;
-    }
+        EditorNoteDefinition definition = request?.Definition;
+        if (definition == null)
+            return NoteTimingResult.AtBeat(request?.Beat ?? 0.0);
 
-    public double GetEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        return context.SongPosition + Math.Max(definition.HoldBeats, definition.OccupyAfterBeats) * context.Crotchet;
-    }
+        double beat = request.Beat;
+        double holdBeats = ChartTiming.GetNoteHoldBeats(request.Note, definition, request.TempoMap);
 
-    public double GetHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        return context.SongPosition - definition.HitWindowBeforeBeats * context.Crotchet;
-    }
-
-    public double GetHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        return context.SongPosition + Math.Max(definition.HoldBeats, definition.HitWindowAfterBeats) * context.Crotchet;
-    }
-
-    public double GetSameVariantHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        return context.SongPosition - definition.SameVariantHitWindowBeforeBeats * context.Crotchet;
-    }
-
-    public double GetSameVariantHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
-    {
-        return context.SongPosition + Math.Max(definition.HoldBeats, definition.SameVariantHitWindowAfterBeats) * context.Crotchet;
+        return new NoteTimingResult(
+            StartBeat: beat - definition.OccupyBeforeBeats,
+            EndBeat: beat + Math.Max(holdBeats, definition.OccupyAfterBeats),
+            HitStartBeat: beat - definition.HitWindowBeforeBeats,
+            HitEndBeat: beat + Math.Max(holdBeats, definition.HitWindowAfterBeats),
+            SameVariantHitStartBeat: beat - definition.SameVariantHitWindowBeforeBeats,
+            SameVariantHitEndBeat: beat + Math.Max(holdBeats, definition.SameVariantHitWindowAfterBeats));
     }
 }

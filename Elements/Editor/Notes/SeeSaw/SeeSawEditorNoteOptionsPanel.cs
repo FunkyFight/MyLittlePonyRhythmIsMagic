@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using MLP_RiM.Elements.DevUI;
-using Rhythm.Note;
 
 namespace MLP_RiM.Elements.Editor;
 
@@ -12,19 +10,13 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
 
     public IReadOnlyList<DevUiWindowRow> BuildRows(EditorNoteOptionsContext context)
     {
-        IReadOnlyList<SeeSawPatternKind?> patternOptions = GetPatternOptions();
         SeeSawCompiledEventTiming timing = GetCurrentTiming(context);
         SeeSawLogicalState state = GetCurrentState(context);
         List<DevUiWindowRow> rows = new()
         {
-            DevUiWindowRow.Category("PATTERN"),
-            DevUiWindowRow.Title($"CURRENT: {GetCurrentPatternName(context, timing)}"),
-            DevUiWindowRow.Dropdown(
-                "see_saw_pattern",
-                "PATTERN",
-                patternOptions.Select(GetPatternName).ToArray(),
-                GetPatternIndex(context, patternOptions, timing),
-                index => SetPattern(context, patternOptions[index])),
+            DevUiWindowRow.Category("AUTHOR CLIP"),
+            DevUiWindowRow.Title($"Pattern: {GetCurrentPatternName(context, timing)}"),
+            DevUiWindowRow.Title("Change pattern by editing the See Saw clip type"),
             DevUiWindowRow.Category("STATE / TIMING"),
             DevUiWindowRow.Title($"Rainbow starts: {state.RainbowSide}"),
             DevUiWindowRow.Title($"Applejack starts: {state.ApplejackSide} / available {FormatBeat(state.ApplejackAvailableBeat)}"),
@@ -45,24 +37,12 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
             rows.AddRange(new[]
             {
                 DevUiWindowRow.Category("VISUAL STYLE"),
-                DevUiWindowRow.Checkbox("APPLEJACK", SeeSawAction.GetBigLeapApplejack(context.Note.AdditionnalData), () => ToggleBigLeapApplejack(context.GetCurrentNote())),
-                DevUiWindowRow.Checkbox("RAINBOW DASH", SeeSawAction.GetBigLeapRainbowDash(context.Note.AdditionnalData), () => ToggleBigLeapRainbowDash(context.GetCurrentNote()))
+                DevUiWindowRow.Checkbox("APPLEJACK", SeeSawAction.GetBigLeapApplejack(context.Note.AdditionnalData), () => ToggleBigLeapApplejack(context)),
+                DevUiWindowRow.Checkbox("RAINBOW DASH", SeeSawAction.GetBigLeapRainbowDash(context.Note.AdditionnalData), () => ToggleBigLeapRainbowDash(context))
             });
         }
 
         return rows;
-    }
-
-    private static IReadOnlyList<SeeSawPatternKind?> GetPatternOptions()
-    {
-        return new SeeSawPatternKind?[]
-        {
-            SeeSawPatternKind.LongLong,
-            SeeSawPatternKind.ShortShort,
-            SeeSawPatternKind.ShortLong,
-            SeeSawPatternKind.LongShort,
-            null
-        };
     }
 
     private static string GetPatternName(SeeSawPatternKind? pattern)
@@ -88,30 +68,6 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
             return "Exit";
 
         return GetPatternName(timing.Pattern);
-    }
-
-    private static int GetPatternIndex(EditorNoteOptionsContext context, IReadOnlyList<SeeSawPatternKind?> options, SeeSawCompiledEventTiming timing)
-    {
-        SeeSawAction action = SeeSawAction.FromAdditionnalData(context.Note.AdditionnalData);
-        SeeSawPatternKind? currentPattern;
-        if (SeeSawAction.TryGetPattern(context.Note.AdditionnalData, out SeeSawPatternKind storedPattern))
-        {
-            currentPattern = storedPattern;
-        }
-        else
-        {
-            currentPattern = SeeSawAction.GetBaseDirection(action.Direction) == SeeSawDirection.Exit || timing.IsExit
-                ? null
-                : timing.Pattern;
-        }
-
-        for (int i = 0; i < options.Count; i++)
-        {
-            if (options[i] == currentPattern)
-                return i;
-        }
-
-        return 0;
     }
 
     private static SeeSawCompiledEventTiming GetCurrentTiming(EditorNoteOptionsContext context)
@@ -178,41 +134,22 @@ public sealed class SeeSawEditorNoteOptionsPanel : IEditorNoteOptionsPanel
         return "Next note AJ";
     }
 
-    private static void SetPattern(EditorNoteOptionsContext context, SeeSawPatternKind? pattern)
+    private static void ToggleBigLeapApplejack(EditorNoteOptionsContext context)
     {
-        ChartNote note = context.GetCurrentNote();
-        Dictionary<string, string> data = GetData(note);
-
-        if (pattern == null)
-        {
-            SeeSawAction.SetDirection(data, SeeSawDirection.Exit);
-            SeeSawAction.ClearPattern(data);
-            SeeSawAction.SetBigLeapApplejack(data, false);
-            SeeSawAction.SetBigLeapRainbowDash(data, false);
-            note.AdditionnalData = data;
-            return;
-        }
-
-        SeeSawAction.SetPattern(data, pattern.Value);
-        note.AdditionnalData = data;
-    }
-
-    private static void ToggleBigLeapApplejack(ChartNote note)
-    {
-        Dictionary<string, string> data = GetData(note);
+        Dictionary<string, string> data = GetData(context);
         SeeSawAction.ToggleBigLeapApplejack(data);
-        note.AdditionnalData = data;
+        context.ApplyPatch(NotePatch.ReplaceAdditionnalData(data));
     }
 
-    private static void ToggleBigLeapRainbowDash(ChartNote note)
+    private static void ToggleBigLeapRainbowDash(EditorNoteOptionsContext context)
     {
-        Dictionary<string, string> data = GetData(note);
+        Dictionary<string, string> data = GetData(context);
         SeeSawAction.ToggleBigLeapRainbowDash(data);
-        note.AdditionnalData = data;
+        context.ApplyPatch(NotePatch.ReplaceAdditionnalData(data));
     }
 
-    private static Dictionary<string, string> GetData(ChartNote note)
+    private static Dictionary<string, string> GetData(EditorNoteOptionsContext context)
     {
-        return note.AdditionnalData ?? new Dictionary<string, string>();
+        return new Dictionary<string, string>(context.GetCurrentNote()?.AdditionnalData ?? new Dictionary<string, string>());
     }
 }

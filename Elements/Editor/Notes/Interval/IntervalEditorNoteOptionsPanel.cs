@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using MLP_RiM.Elements.DevUI;
-using Rhythm.Note;
 
 namespace MLP_RiM.Elements.Editor;
 
@@ -10,10 +9,9 @@ public sealed class IntervalEditorNoteOptionsPanel : IEditorNoteOptionsPanel
 
     public IReadOnlyList<DevUiWindowRow> BuildRows(EditorNoteOptionsContext context)
     {
-        ChartNote note = context.GetCurrentNote();
-        double durationBeats = IntervalEditorNoteProvider.GetDurationBeats(note.AdditionnalData);
-        double stepBeats = IntervalEditorNoteProvider.GetStepBeats(note.AdditionnalData);
-        int hitCount = IntervalEditorNoteProvider.GetHitCount(note);
+        double durationBeats = System.Math.Max(0, context.PlacementOptions.RepeatDurationBeats ?? IntervalEditorNoteProvider.DefaultDurationBeats);
+        double stepBeats = System.Math.Max(0.000001, context.PlacementOptions.RepeatStepBeats ?? IntervalEditorNoteProvider.DefaultStepBeats);
+        int hitCount = (int)System.Math.Floor(durationBeats / stepBeats + 0.000001) + 1;
 
         return new[]
         {
@@ -23,12 +21,16 @@ public sealed class IntervalEditorNoteOptionsPanel : IEditorNoteOptionsPanel
                 "interval_duration_beats",
                 "DURATION BEATS",
                 durationBeats,
-                value => IntervalEditorNoteProvider.SetDurationBeats(context.GetCurrentNote(), value)),
+                value => context.ApplyPlacementOptions(new PlacementOptions(
+                    RepeatDurationBeats: System.Math.Max(0, value),
+                    RepeatStepBeats: stepBeats))),
             DevUiWindowRow.FloatInput(
                 "interval_step_beats",
                 "INTERVAL BEATS",
                 stepBeats,
-                value => IntervalEditorNoteProvider.SetStepBeats(context.GetCurrentNote(), value))
+                value => context.ApplyPlacementOptions(new PlacementOptions(
+                    RepeatDurationBeats: durationBeats,
+                    RepeatStepBeats: System.Math.Max(0.000001, value))))
         };
     }
 }

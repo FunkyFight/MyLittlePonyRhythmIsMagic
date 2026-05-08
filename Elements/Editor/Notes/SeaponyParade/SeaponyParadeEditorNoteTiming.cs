@@ -3,158 +3,162 @@ using Rhythm.Note;
 
 public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
 {
-    private const string SwimAction = "seapony_parade_swim";
-    private const string RollAction = "seapony_parade_roll";
-    private const string TapTapAction = "seapony_parade_tap_tap";
-
-    public double GetEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    public NoteTimingResult GetTiming(NoteTimingRequest request)
     {
-        switch(GetSelectedAction(definition, context))
+        return new NoteTimingResult(
+            StartBeat: GetStartBeat(request),
+            EndBeat: GetEndBeat(request),
+            HitStartBeat: GetHitWindowStartBeat(request),
+            HitEndBeat: GetHitWindowEndBeat(request),
+            SameVariantHitStartBeat: GetSameVariantHitWindowStartBeat(request),
+            SameVariantHitEndBeat: GetSameVariantHitWindowEndBeat(request));
+    }
+
+    private static double GetEndBeat(NoteTimingRequest request)
+    {
+        switch(GetSelectedAction(request))
         {
-            case SwimAction:
-                return context.SongPosition + context.Crotchet;
+            case SeaponyAction.Swim:
+                return request.Beat + 1;
 
-            case RollAction:
-                return IsRollAfter(context)
-                    ? context.GetNoteAfter(1).SongPosition
-                    : context.SongPosition + GetRollStopCueBeats(context) * context.Crotchet;
+            case SeaponyAction.Roll:
+                return IsRollAfter(request)
+                    ? request.GetBeat(request.GetNextNote(1))
+                    : request.Beat + GetRollStopCueBeats(request);
 
-            case TapTapAction:
-                return context.SongPosition + 2 * context.Crotchet;
+            case SeaponyAction.TapTap:
+                return request.Beat + 2;
         }
 
-        return context.SongPosition;
+        return request.Beat;
     }
 
-    public double GetHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static double GetHitWindowEndBeat(NoteTimingRequest request)
     {
-        switch(GetSelectedAction(definition, context))
+        switch(GetSelectedAction(request))
         {
-            case SwimAction:
-                return context.SongPosition + 2 * context.Crotchet;
+            case SeaponyAction.Swim:
+                return request.Beat + 2;
 
-            case RollAction:
-                return IsRollAfter(context)
-                    ? context.GetNoteAfter(1).SongPosition
-                    : GetEnd(definition, context) + context.Crotchet;
+            case SeaponyAction.Roll:
+                return IsRollAfter(request)
+                    ? request.GetBeat(request.GetNextNote(1))
+                    : GetEndBeat(request) + 1;
 
-            case TapTapAction:
-                return context.SongPosition + 2 * context.Crotchet;
+            case SeaponyAction.TapTap:
+                return request.Beat + 2;
         }
 
-        return context.SongPosition;
+        return request.Beat;
     }
 
-    public double GetHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static double GetHitWindowStartBeat(NoteTimingRequest request)
     {
-        switch(GetSelectedAction(definition, context))
+        switch(GetSelectedAction(request))
         {
-            case SwimAction:
-            case RollAction:
-            case TapTapAction:
-                return context.SongPosition;
+            case SeaponyAction.Swim:
+            case SeaponyAction.Roll:
+            case SeaponyAction.TapTap:
+                return request.Beat;
         }
 
-        return context.SongPosition;
+        return request.Beat;
     }
 
-    public double GetStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static double GetStartBeat(NoteTimingRequest request)
     {
-        switch(GetSelectedAction(definition, context))
+        switch(GetSelectedAction(request))
         {
-            case SwimAction:
-                return context.SongPosition - context.Crotchet;
+            case SeaponyAction.Swim:
+                return request.Beat - 1;
 
-            case RollAction:
-                return IsRollBefore(context)
-                    ? context.SongPosition
-                    : context.SongPosition - 2 * context.Crotchet;
+            case SeaponyAction.Roll:
+                return IsRollBefore(request)
+                    ? request.Beat
+                    : request.Beat - 2;
 
-            case TapTapAction:
-                return IsTapTapBefore(context)
-                    ? context.SongPosition
-                    : context.SongPosition - 2 * context.Crotchet;
+            case SeaponyAction.TapTap:
+                return IsTapTapBefore(request)
+                    ? request.Beat
+                    : request.Beat - 2;
         }
 
-        return context.SongPosition;
+        return request.Beat;
     }
 
-    public double GetSameVariantHitWindowStart(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static double GetSameVariantHitWindowStartBeat(NoteTimingRequest request)
     {
-        string action = GetSelectedAction(definition, context);
-        if(action == RollAction || action == TapTapAction)
-            return context.SongPosition;
+        SeaponyAction action = GetSelectedAction(request);
+        if(action == SeaponyAction.Roll || action == SeaponyAction.TapTap)
+            return request.Beat;
 
-        return GetHitWindowStart(definition, context);
+        return GetHitWindowStartBeat(request);
     }
 
-    public double GetSameVariantHitWindowEnd(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static double GetSameVariantHitWindowEndBeat(NoteTimingRequest request)
     {
-        string action = GetSelectedAction(definition, context);
-        if(action == RollAction)
-            return context.SongPosition + context.Crotchet;
+        SeaponyAction action = GetSelectedAction(request);
+        if(action == SeaponyAction.Roll)
+            return request.Beat + 1;
 
-        if(action == TapTapAction)
-            return IsNextTapTapInSamePair(context)
-                ? context.SongPosition + 0.5 * context.Crotchet
-                : context.SongPosition + context.Crotchet;
+        if(action == SeaponyAction.TapTap)
+            return IsNextTapTapInSamePair(request)
+                ? request.Beat + 0.5
+                : request.Beat + 1;
 
-        return GetHitWindowEnd(definition, context);
+        return GetHitWindowEndBeat(request);
     }
 
-    private static string GetSelectedAction(EditorNoteDefinition definition, EditorNoteTimingContext context)
+    private static SeaponyAction GetSelectedAction(NoteTimingRequest request)
     {
-        return definition.GetVariant(context.VariantIndex).AdditionnalData.TryGetValue("action", out string action)
-            ? action
-            : SwimAction;
+        if (request.Note != null)
+            return SeaponyNoteCodec.ReadAction(request.Note.AdditionnalData);
+
+        return SeaponyNoteCodec.ReadAction(request.Definition.GetVariant(request.VariantIndex).AdditionnalData);
     }
 
-    private static bool IsRollBefore(EditorNoteTimingContext context)
+    private static bool IsRollBefore(NoteTimingRequest request)
     {
-        return IsRoll(context.GetNoteBefore(1));
+        return IsRoll(request.GetPreviousNote(1));
     }
 
-    private static bool IsRollAfter(EditorNoteTimingContext context)
+    private static bool IsRollAfter(NoteTimingRequest request)
     {
-        return IsRoll(context.GetNoteAfter(1));
+        return IsRoll(request.GetNextNote(1));
     }
 
     private static bool IsRoll(ChartNote note)
     {
-        return note?.AdditionnalData != null
-            && note.AdditionnalData.TryGetValue("action", out string action)
-            && action == RollAction;
+        return SeaponyNoteCodec.IsAction(note?.AdditionnalData, SeaponyAction.Roll);
     }
 
-    private static bool IsTapTapBefore(EditorNoteTimingContext context)
+    private static bool IsTapTapBefore(NoteTimingRequest request)
     {
-        return IsTapTap(context.GetNoteBefore(1));
+        return IsTapTap(request.GetPreviousNote(1));
     }
 
-    private static bool IsTapTapAfter(EditorNoteTimingContext context)
+    private static bool IsTapTapAfter(NoteTimingRequest request)
     {
-        return IsTapTap(context.GetNoteAfter(1));
+        return IsTapTap(request.GetNextNote(1));
     }
 
-    private static bool IsNextTapTapInSamePair(EditorNoteTimingContext context)
+    private static bool IsNextTapTapInSamePair(NoteTimingRequest request)
     {
-        ChartNote nextNote = context.GetNoteAfter(1);
+        ChartNote nextNote = request.GetNextNote(1);
         return nextNote != null
             && IsTapTap(nextNote)
-            && nextNote.SongPosition <= context.SongPosition + 0.5 * context.Crotchet + 0.000001;
+            && request.GetBeat(nextNote) <= request.Beat + 0.5 + 0.000001;
     }
 
     private static bool IsTapTap(ChartNote note)
     {
-        return note?.AdditionnalData != null
-            && note.AdditionnalData.TryGetValue("action", out string action)
-            && action == TapTapAction;
+        return SeaponyNoteCodec.IsAction(note?.AdditionnalData, SeaponyAction.TapTap);
     }
 
-    private static int GetRollStopCueBeats(EditorNoteTimingContext context)
+    private static int GetRollStopCueBeats(NoteTimingRequest request)
     {
         int rollCount = 1;
-        for (int offset = 1; IsRoll(context.GetNoteBefore(offset)); offset++)
+        for (int offset = 1; IsRoll(request.GetPreviousNote(offset)); offset++)
             rollCount++;
 
         int paddingBeats = (4 - rollCount % 4) % 4;

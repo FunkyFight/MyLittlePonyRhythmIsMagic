@@ -1,0 +1,998 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>akage</SongName>
+  <BeatmapName>akage pinkie pie</BeatmapName>
+  <Beatmapper>funkyfight</Beatmapper>
+  <ArtistName>tridashie</ArtistName>
+  <MusicName>akage</MusicName>
+  <SongPath>Songs\赤毛ポニー.mp3</SongPath>
+  <BPM>195</BPM>
+  <Offset>0.24</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>6.701538461538462</SongPosition>
+      <BeatPosition>21</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>7.316923076923078</SongPosition>
+      <BeatPosition>23</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>8.24</SongPosition>
+      <BeatPosition>26</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>9.163076923076924</SongPosition>
+      <BeatPosition>29</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.086153846153847</SongPosition>
+      <BeatPosition>32</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>11.00923076923077</SongPosition>
+      <BeatPosition>35</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>11.932307692307694</SongPosition>
+      <BeatPosition>38</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>13.163076923076924</SongPosition>
+      <BeatPosition>42</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>14.393846153846155</SongPosition>
+      <BeatPosition>46</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>15.00923076923077</SongPosition>
+      <BeatPosition>48</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>15.624615384615385</SongPosition>
+      <BeatPosition>50</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>16.24</SongPosition>
+      <BeatPosition>51.99999999999999</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.163076923076922</SongPosition>
+      <BeatPosition>55</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>18.086153846153845</SongPosition>
+      <BeatPosition>58</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.00923076923077</SongPosition>
+      <BeatPosition>61</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.932307692307692</SongPosition>
+      <BeatPosition>64</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>20.855384615384615</SongPosition>
+      <BeatPosition>67</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>21.77846153846154</SongPosition>
+      <BeatPosition>70</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>22.701538461538462</SongPosition>
+      <BeatPosition>73</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>23.624615384615385</SongPosition>
+      <BeatPosition>76</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>24.24</SongPosition>
+      <BeatPosition>78</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>24.855384615384615</SongPosition>
+      <BeatPosition>80</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.470769230769232</SongPosition>
+      <BeatPosition>82</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>26.701538461538462</SongPosition>
+      <BeatPosition>86</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.31692307692308</SongPosition>
+      <BeatPosition>88</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>28.24</SongPosition>
+      <BeatPosition>91</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.163076923076922</SongPosition>
+      <BeatPosition>94</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.086153846153845</SongPosition>
+      <BeatPosition>97</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.00923076923077</SongPosition>
+      <BeatPosition>100</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>32.24</SongPosition>
+      <BeatPosition>104</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33.16307692307693</SongPosition>
+      <BeatPosition>107</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33.77846153846154</SongPosition>
+      <BeatPosition>109</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>34.393846153846155</SongPosition>
+      <BeatPosition>110.99999999999999</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects />
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>legacy-0</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>21</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-1</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>23</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-2</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>26</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-3</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>29</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-4</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>32</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-5</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>35</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-6</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>38</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-7</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>42</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>46</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>48</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-10</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>50</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-11</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>51.99999999999999</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-12</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>55</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-13</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>58</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-14</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>61</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-15</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>64</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-16</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>67</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-17</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>70</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-18</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>73</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-19</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>76</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-20</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>78</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-21</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>80</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-22</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>82</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-23</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>86</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+        <Entry Key="big_leap_applejack" Value="true" />
+        <Entry Key="big_leap_rainbow_dash" Value="true" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-24</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>88</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-25</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>91</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="LongShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-26</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>94</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-27</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>97</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-28</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>100</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.long_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="LongLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-29</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>104</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-30</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>107</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-31</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>109</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>legacy-32</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>110.99999999999999</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_short</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="action" Value="see_saw_toward_inner" />
+        <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+  </EditorClips>
+</Chart>

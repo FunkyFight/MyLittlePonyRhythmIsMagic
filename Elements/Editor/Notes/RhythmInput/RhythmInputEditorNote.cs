@@ -4,7 +4,9 @@ namespace MLP_RiM.Elements.Editor;
 
 public sealed class RhythmInputEditorNote : EditorNoteProvider
 {
-    public static EditorNoteDefinition DefinitionInstance { get; } = new EditorNoteDefinitionBuilder(EditorNoteKind.RhythmInput, "Rhythm Input")
+    public static readonly NoteTypeId TypeId = new("core", "rhythm_input");
+
+    public static EditorNoteDefinition DefinitionInstance { get; } = new EditorNoteDefinitionBuilder(TypeId, "Rhythm Input")
         .InputAction("ReactMain")
         .Matches(MatchesRhythmInput)
         .Variant("Default")
@@ -20,6 +22,13 @@ public sealed class RhythmInputEditorNote : EditorNoteProvider
         if (!string.IsNullOrWhiteSpace(note.InputActionToPress) && note.InputActionToPress != "ReactMain")
             return false;
 
-        return note.AdditionnalData == null || !note.AdditionnalData.ContainsKey("action");
+        if (note.AdditionnalData == null)
+            return true;
+
+        if (note.AdditionnalData.ContainsKey(NotePayloadKeys.Game)
+            || note.AdditionnalData.ContainsKey(NotePayloadKeys.Type))
+            return false;
+
+        return !note.AdditionnalData.ContainsKey(NotePayloadKeys.Action);
     }
 }

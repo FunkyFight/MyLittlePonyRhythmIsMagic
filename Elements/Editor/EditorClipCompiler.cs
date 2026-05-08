@@ -37,7 +37,7 @@ public static class EditorClipCompiler
         EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
         IEditorNoteProvider provider = null;
         if (definition != null)
-            EditorNoteDefinitions.TryGetProvider(definition.Kind, out provider);
+            EditorNoteDefinitions.TryGetProvider(definition.TypeId, out provider);
 
         string rhythmGameId = provider?.RhythmGameId ?? EditorClipDefinitions.UnknownGameId;
         string clipTypeId = provider?.GetClipTypeIdFromLegacyNote(note) ?? EditorClipDefinitions.NoHit;
@@ -47,13 +47,21 @@ public static class EditorClipCompiler
             Id = $"legacy-{index}",
             TrackIndex = 0,
             StartBeat = getNoteBeat?.Invoke(note) ?? note?.BeatPosition ?? 0,
-            LengthBeats = Math.Max(0.0, note?.HoldBeats ?? clipDefinition?.DefaultLengthBeats ?? 0.0),
+            LengthBeats = GetLegacyClipLengthBeats(note, clipDefinition),
             RhythmGameId = rhythmGameId,
             ClipTypeId = clipTypeId,
             ClipCategory = (clipDefinition?.Category ?? EditorClipCategory.SingleHit).ToString(),
             InputAction = note?.InputActionToPress ?? clipDefinition?.InputAction ?? "ReactMain",
             Data = data
         };
+    }
+
+    private static double GetLegacyClipLengthBeats(ChartNote note, EditorClipDefinition clipDefinition)
+    {
+        if (note?.HoldBeats is double holdBeats && holdBeats > 0.0)
+            return holdBeats;
+
+        return Math.Max(0.0, clipDefinition?.DefaultLengthBeats ?? 0.0);
     }
 
     private static IReadOnlyList<ChartNote> CompileFallbackClip(ChartEditorClip clip, ChartTempoMap tempoMap)

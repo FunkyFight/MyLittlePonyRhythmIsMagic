@@ -230,18 +230,11 @@ public sealed class BeatmapEditorDocument
         }
 
         IReadOnlyList<ChartNote> contextualNotes = CreateContextualNotes(normalizedPlacements);
-        if (normalizedPlacements.Any(placement => placement.Definition.Kind == EditorNoteKind.SeeSaw))
-        {
-            ChartNote firstSeeSawNote = normalizedPlacements.First(placement => placement.Definition.Kind == EditorNoteKind.SeeSaw).Note;
-            SeeSawTimeline previewTimeline = SeeSawChartCompiler.Compile(contextualNotes, GetNoteBeat, TempoMap, GetLeadInBeats());
-            if (previewTimeline.Errors.Count > 0)
-            {
-                reason = previewTimeline.Errors[0];
-                return false;
-            }
-        }
+        IReadOnlyList<ChartNote> changedNotes = normalizedPlacements.Select(placement => placement.Note).ToArray();
+        if (!TryValidateNotes(GetProvidersForPlacements(normalizedPlacements), contextualNotes, changedNotes, out reason))
+            return false;
 
-        List<ChartNote> notes = normalizedPlacements.Select(placement => placement.Note).ToList();
+        List<ChartNote> notes = changedNotes.ToList();
         Chart.Notes.AddRange(notes);
         SynchronizeAllDerivedTiming();
         SortNotes();
@@ -310,6 +303,19 @@ public sealed class BeatmapEditorDocument
         target.HoldBeats = snapshot.HoldBeats;
         target.InputActionToPress = snapshot.InputActionToPress;
         target.AdditionnalData = new Dictionary<string, string>(snapshot.AdditionnalData ?? new Dictionary<string, string>());
+        SynchronizeAllDerivedTiming();
+        SortNotes();
+        UseRuntimeNotesAsEditorClipSource();
+        IsDirty = true;
+        return true;
+    }
+
+    public bool ApplyNotePatch(ChartNote target, NotePatch patch)
+    {
+        if (target == null || patch == null || !Chart.Notes.Contains(target))
+            return false;
+
+        patch.ApplyTo(target);
         SynchronizeAllDerivedTiming();
         SortNotes();
         UseRuntimeNotesAsEditorClipSource();
@@ -433,40 +439,6 @@ public sealed class BeatmapEditorDocument
         SortEffects();
         IsDirty = true;
         return true;
-    }
-
-    public int NormalizeSeeSawNotesToGrid(double snapDivisions)
-    {
-        double divisions = GetEffectiveSnapDivisions(snapDivisions);
-        int normalizedCount = 0;
-
-        foreach (ChartNote note in Chart.Notes)
-        {
-            EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
-            if (definition?.Kind != EditorNoteKind.SeeSaw)
-                continue;
-
-            double beat = GetNoteBeat(note);
-            if (double.IsNaN(beat) || double.IsInfinity(beat))
-                continue;
-
-            double snappedBeat = QuantizeBeat(beat, divisions);
-            if (Math.Abs(beat - snappedBeat) <= 0.000000001)
-                continue;
-
-            ChartTiming.SetNoteBeat(note, snappedBeat);
-            normalizedCount++;
-        }
-
-        if (normalizedCount > 0)
-        {
-            SynchronizeAllDerivedTiming();
-            SortNotes();
-            UseRuntimeNotesAsEditorClipSource();
-            IsDirty = true;
-        }
-
-        return normalizedCount;
     }
 
     public int NormalizeBpmChangesToNearestGlobalBeat()
@@ -959,21 +931,65 @@ public sealed class BeatmapEditorDocument
         List<ChartNote> oldNotes = Chart.Notes;
         List<ChartNote> generatedNotes = EditorClipCompiler.Compile(Chart, TempoMap);
 
-        if (generatedNotes.Any(note => EditorNoteDefinitions.FromChartNote(note)?.Kind == EditorNoteKind.SeeSaw))
+        if (!TryValidateNotes(GetProvidersForNotes(generatedNotes), generatedNotes, generatedNotes, out reason))
         {
-            SeeSawTimeline previewTimeline = SeeSawChartCompiler.Compile(generatedNotes, note => ChartTiming.GetNoteBeat(note, TempoMap), TempoMap, GetLeadInBeats());
-            if (previewTimeline.Errors.Count > 0)
-            {
-                reason = previewTimeline.Errors[0];
-                Chart.Notes = oldNotes;
-                return false;
-            }
+            Chart.Notes = oldNotes;
+            return false;
         }
 
         Chart.Notes = generatedNotes;
         SynchronizeAllDerivedTiming();
         SortNotes();
         return true;
+    }
+
+    private bool TryValidateNotes(IReadOnlyList<IEditorNoteProvider> providers, IReadOnlyList<ChartNote> notes, IReadOnlyList<ChartNote> changedNotes, out string reason)
+    {
+        reason = null;
+        if (providers == null || providers.Count == 0)
+            return true;
+
+        EditorNoteValidationContext context = new(Chart, notes, changedNotes, TempoMap, GetNoteBeat);
+        foreach (IEditorNoteProvider provider in providers)
+        {
+            if (provider != null && !provider.TryValidateNotes(context, out reason))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static IReadOnlyList<IEditorNoteProvider> GetProvidersForPlacements(IReadOnlyList<EditorNotePlacement> placements)
+    {
+        List<IEditorNoteProvider> providers = new();
+        foreach (EditorNotePlacement placement in placements ?? Array.Empty<EditorNotePlacement>())
+        {
+            if (placement?.Definition != null
+                && EditorNoteDefinitions.TryGetProvider(placement.Definition.TypeId, out IEditorNoteProvider provider)
+                && !providers.Contains(provider))
+            {
+                providers.Add(provider);
+            }
+        }
+
+        return providers;
+    }
+
+    private static IReadOnlyList<IEditorNoteProvider> GetProvidersForNotes(IReadOnlyList<ChartNote> notes)
+    {
+        List<IEditorNoteProvider> providers = new();
+        foreach (ChartNote note in notes ?? Array.Empty<ChartNote>())
+        {
+            EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
+            if (definition != null
+                && EditorNoteDefinitions.TryGetProvider(definition.TypeId, out IEditorNoteProvider provider)
+                && !providers.Contains(provider))
+            {
+                providers.Add(provider);
+            }
+        }
+
+        return providers;
     }
 
     public double GetContextualHitWindowEnd(ChartNote note, EditorNoteDefinition definition)
@@ -983,16 +999,7 @@ public sealed class BeatmapEditorDocument
 
     public double GetContextualHitWindowEndBeat(ChartNote note, EditorNoteDefinition definition)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        double noteBeat = GetNoteBeat(note);
-        double holdBeats = ChartTiming.GetNoteHoldBeats(note, definition, TempoMap);
-
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return noteBeat + Math.Max(holdBeats, definition.HitWindowAfterBeats);
-
-        return GetSeeSawTiming(note).EndBeat;
+        return GetNoteTiming(note, definition).HitEndBeat;
     }
 
     public double GetContextualSameVariantHitWindowEnd(ChartNote note, EditorNoteDefinition definition)
@@ -1002,16 +1009,7 @@ public sealed class BeatmapEditorDocument
 
     public double GetContextualSameVariantHitWindowEndBeat(ChartNote note, EditorNoteDefinition definition)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        double noteBeat = GetNoteBeat(note);
-        double holdBeats = ChartTiming.GetNoteHoldBeats(note, definition, TempoMap);
-
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return noteBeat + Math.Max(holdBeats, definition.SameVariantHitWindowAfterBeats);
-
-        return GetSeeSawTiming(note).EndBeat;
+        return GetNoteTiming(note, definition).SameVariantHitEndBeat;
     }
 
     public double GetContextualStart(ChartNote note, EditorNoteDefinition definition)
@@ -1021,13 +1019,7 @@ public sealed class BeatmapEditorDocument
 
     public double GetContextualStartBeat(ChartNote note, EditorNoteDefinition definition)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return GetNoteBeat(note) - definition.OccupyBeforeBeats;
-
-        return GetSeeSawTiming(note).PrepStartBeat;
+        return GetNoteTiming(note, definition).StartBeat;
     }
 
     public double GetBlockingStart(ChartNote note, EditorNoteDefinition definition)
@@ -1042,13 +1034,7 @@ public sealed class BeatmapEditorDocument
 
     public double GetContextualHitWindowStartBeat(ChartNote note, EditorNoteDefinition definition)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return GetNoteBeat(note) - definition.HitWindowBeforeBeats;
-
-        return GetSeeSawTiming(note).PrepStartBeat;
+        return GetNoteTiming(note, definition).HitStartBeat;
     }
 
     public double GetContextualSameVariantHitWindowStart(ChartNote note, EditorNoteDefinition definition)
@@ -1058,13 +1044,7 @@ public sealed class BeatmapEditorDocument
 
     public double GetContextualSameVariantHitWindowStartBeat(ChartNote note, EditorNoteDefinition definition)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return GetNoteBeat(note) - definition.SameVariantHitWindowBeforeBeats;
-
-        return GetSeeSawTiming(note).PrepStartBeat;
+        return GetNoteTiming(note, definition).SameVariantHitStartBeat;
     }
 
     public double GetContextualEnd(ChartNote note, EditorNoteDefinition definition)
@@ -1074,14 +1054,7 @@ public sealed class BeatmapEditorDocument
 
     public double GetContextualEndBeat(ChartNote note, EditorNoteDefinition definition)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        if (definition.Kind == EditorNoteKind.SeeSaw)
-            return GetSeeSawTiming(note).EndBeat;
-
-        double holdBeats = ChartTiming.GetNoteHoldBeats(note, definition, TempoMap);
-        return GetNoteBeat(note) + Math.Max(holdBeats, definition.OccupyAfterBeats);
+        return GetNoteTiming(note, definition).EndBeat;
     }
 
     public double GetContextualStart(EditorNoteDefinition definition, double songPosition, int variantIndex)
@@ -1094,11 +1067,58 @@ public sealed class BeatmapEditorDocument
         if (definition == null)
             return beat;
 
-        if (definition.Kind != EditorNoteKind.SeeSaw)
-            return beat - definition.OccupyBeforeBeats;
+        double songPosition = TempoMap.BeatToSeconds(beat);
+        ChartNote note = definition.CreateChartNote(songPosition, TempoMap.GetSecondsPerBeatAtBeat(beat), variantIndex);
+        ChartTiming.SetNoteBeat(note, beat);
+        ChartTiming.SetNoteHoldBeats(note, definition.HoldBeats);
+        IReadOnlyList<ChartNote> contextualNotes = CreateContextualNotes(new[] { new EditorNotePlacement(definition, note) });
+        return GetNoteTiming(note, definition, contextualNotes).StartBeat;
+    }
 
-        EditorNoteVariant variant = definition.GetVariant(variantIndex);
-        return SeeSawChartCompiler.GetPreviewTiming(Chart.Notes, variant.AdditionnalData, beat, GetNoteBeat, GetLeadInBeats()).PrepStartBeat;
+    public NoteTimingResult GetNoteTiming(ChartNote note, EditorNoteDefinition definition, IReadOnlyList<ChartNote> contextualNotes = null)
+    {
+        if (definition == null)
+            return NoteTimingResult.AtBeat(GetNoteBeat(note));
+
+        return definition.GetTiming(CreateNoteTimingRequest(note, definition, contextualNotes));
+    }
+
+    private NoteTimingRequest CreateNoteTimingRequest(ChartNote note, EditorNoteDefinition definition, IReadOnlyList<ChartNote> contextualNotes)
+    {
+        double beat = GetNoteBeat(note);
+        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        SplitContextualNotes(note, beat, contextualNotes ?? Chart.Notes, out IReadOnlyList<ChartNote> previousNotes, out IReadOnlyList<ChartNote> nextNotes);
+        return new NoteTimingRequest(note, definition, variantIndex, beat, TempoMap, previousNotes, nextNotes, CreateTimingContext(definition));
+    }
+
+    private IReadOnlyDictionary<string, object> CreateTimingContext(EditorNoteDefinition definition)
+    {
+        return definition != null && EditorNoteDefinitions.TryGetProvider(definition.TypeId, out IEditorNoteProvider provider)
+            ? provider.CreateTimingContext(Chart, TempoMap)
+            : new Dictionary<string, object>();
+    }
+
+    private void SplitContextualNotes(ChartNote note, double beat, IReadOnlyList<ChartNote> contextualNotes, out IReadOnlyList<ChartNote> previousNotes, out IReadOnlyList<ChartNote> nextNotes)
+    {
+        IReadOnlyList<ChartNote> sortedNotes = SortContextualNotes(contextualNotes);
+        int index = IndexOfReference(sortedNotes, note);
+        if (index >= 0)
+        {
+            previousNotes = sortedNotes.Take(index).ToArray();
+            nextNotes = sortedNotes.Skip(index + 1).ToArray();
+            return;
+        }
+
+        previousNotes = sortedNotes.Where(item => GetNoteBeat(item) < beat).ToArray();
+        nextNotes = sortedNotes.Where(item => GetNoteBeat(item) >= beat).ToArray();
+    }
+
+    private IReadOnlyList<ChartNote> SortContextualNotes(IReadOnlyList<ChartNote> notes)
+    {
+        return (notes ?? Array.Empty<ChartNote>())
+            .Where(note => note != null)
+            .OrderBy(GetNoteBeat)
+            .ToArray();
     }
 
     private ChartNote FindBlockingNote(EditorNotePlacement placed, IReadOnlyList<ChartNote> contextualNotes)
@@ -1141,7 +1161,7 @@ public sealed class BeatmapEditorDocument
         if (aDefinition == null || bDefinition == null || aNote == null || bNote == null)
             return false;
 
-        if (!ReferenceEquals(aDefinition, bDefinition) && aDefinition.Kind != bDefinition.Kind)
+        if (!ReferenceEquals(aDefinition, bDefinition) && aDefinition.TypeId != bDefinition.TypeId)
             return false;
 
         return EditorNoteDefinitions.FindVariantIndex(aDefinition, aNote) == EditorNoteDefinitions.FindVariantIndex(bDefinition, bNote);
@@ -1152,7 +1172,9 @@ public sealed class BeatmapEditorDocument
         if (placedDefinition == null || existingDefinition == null)
             return false;
 
-        if (placedDefinition.Kind != EditorNoteKind.SeeSaw || existingDefinition.Kind != EditorNoteKind.SeeSaw)
+        bool allowsBoundaryTouch = EditorNoteDefinitions.TryGetProvider(placedDefinition.TypeId, out IEditorNoteProvider placedProvider)
+            && placedProvider.AllowsBoundaryTouch(existingDefinition);
+        if (!allowsBoundaryTouch)
             return false;
 
         return Math.Abs(placedStart - existingEnd) <= BeatEpsilon
@@ -1176,15 +1198,8 @@ public sealed class BeatmapEditorDocument
 
     private double GetBlockingStartBeat(EditorNoteDefinition definition, ChartNote note, bool sameVariantWindow, IReadOnlyList<ChartNote> contextualNotes)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        if (definition.Kind == EditorNoteKind.SeeSaw)
-            return GetSeeSawTiming(note, contextualNotes).PrepStartBeat;
-
-        return sameVariantWindow
-            ? GetNoteBeat(note) - definition.SameVariantHitWindowBeforeBeats
-            : GetNoteBeat(note) - definition.HitWindowBeforeBeats;
+        NoteTimingResult timing = GetNoteTiming(note, definition, contextualNotes);
+        return sameVariantWindow ? timing.SameVariantHitStartBeat : timing.HitStartBeat;
     }
 
     private double GetBlockingEnd(EditorNoteDefinition definition, ChartNote note)
@@ -1199,31 +1214,8 @@ public sealed class BeatmapEditorDocument
 
     private double GetBlockingEndBeat(EditorNoteDefinition definition, ChartNote note, bool sameVariantWindow, IReadOnlyList<ChartNote> contextualNotes)
     {
-        if (definition == null)
-            return GetNoteBeat(note);
-
-        if (definition.Kind == EditorNoteKind.SeeSaw)
-            return GetSeeSawTiming(note, contextualNotes).EndBeat;
-
-        double holdBeats = ChartTiming.GetNoteHoldBeats(note, definition, TempoMap);
-        return sameVariantWindow
-            ? GetNoteBeat(note) + Math.Max(holdBeats, definition.SameVariantHitWindowAfterBeats)
-            : GetNoteBeat(note) + Math.Max(holdBeats, definition.HitWindowAfterBeats);
-    }
-
-    private Func<int, ChartNote> CreateRelativeNoteGetter(ChartNote note)
-    {
-        return CreateRelativeNoteGetter(note, Chart.Notes);
-    }
-
-    private static Func<int, ChartNote> CreateRelativeNoteGetter(ChartNote note, IReadOnlyList<ChartNote> notes)
-    {
-        int index = IndexOfReference(notes, note);
-        return offset =>
-        {
-            int relativeIndex = index + offset;
-            return index >= 0 && relativeIndex >= 0 && relativeIndex < notes.Count ? notes[relativeIndex] : null;
-        };
+        NoteTimingResult timing = GetNoteTiming(note, definition, contextualNotes);
+        return sameVariantWindow ? timing.SameVariantHitEndBeat : timing.HitEndBeat;
     }
 
     private IReadOnlyList<ChartNote> CreateContextualNotes(IReadOnlyList<EditorNotePlacement> placements)
@@ -1277,34 +1269,6 @@ public sealed class BeatmapEditorDocument
         public ChartNote Note { get; }
         public bool IsGenerated { get; }
         public int Order { get; }
-    }
-
-    private SeeSawCompiledEventTiming GetSeeSawTiming(ChartNote note)
-    {
-        return GetSeeSawTiming(note, Chart.Notes);
-    }
-
-    private SeeSawCompiledEventTiming GetSeeSawTiming(ChartNote note, IReadOnlyList<ChartNote> contextualNotes)
-    {
-        SeeSawCompiledEventTiming timing = SeeSawChartCompiler.GetTimingForChartNote(contextualNotes ?? Chart.Notes, note, GetNoteBeat, GetLeadInBeats());
-        if (timing.IsSeeSaw)
-            return timing;
-
-        double beat = GetNoteBeat(note);
-        return new SeeSawCompiledEventTiming(
-            idealPrepStartBeat: beat,
-            prepStartBeat: beat,
-            cueBeat: beat,
-            playerHitBeat: beat,
-            endBeat: beat,
-            isSeeSaw: false,
-            isExit: false,
-            isValid: true,
-            invalidReason: null,
-            pattern: SeeSawPatternKind.LongLong,
-            launchSide: SeeSawSide.Outer,
-            targetSide: SeeSawSide.Outer,
-            applejackTargetSide: SeeSawSide.Outer);
     }
 
     private ChartTempoMap CreateTempoMap()

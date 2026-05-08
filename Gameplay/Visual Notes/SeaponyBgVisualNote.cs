@@ -3,16 +3,12 @@ using GameCore;
 using GameCore.Animation;
 using GameCore.GameObjects;
 using Microsoft.Xna.Framework.Graphics;
+using MLP_RiM.Elements.Editor;
 using Rhythm.Note;
 using Rhythm.Note.Visual;
 
 public class SeaponyBgVisualNote : VisualNote
 {
-    private const string ActionDataKey = "action";
-    private const string SwimAction = "seapony_parade_swim";
-    private const string RollAction = "seapony_parade_roll";
-    private const string TapTapAction = "seapony_parade_tap_tap";
-
     private InfiniteScrollBackground _background;
     private int _backgroundScrollDestinationBeat;
     private readonly Func<bool> _canApplyState;
@@ -34,14 +30,8 @@ public class SeaponyBgVisualNote : VisualNote
         if(!inTimeWindow || !inAtOrAfterHit) return;
         if(!RhythmVisualUtils.CanApplyState(_canApplyState)) return;
 
-        switch(Note.AdditionnalData[ActionDataKey])
-        {
-            case SwimAction:
-            case RollAction:
-            case TapTapAction:
-                handleScroll(currentSongPosition);
-                break;
-        }
+        if(SeaponyNoteCodec.TryReadAction(Note?.AdditionnalData, out _))
+            handleScroll(currentSongPosition);
     }
 
     private void handleScroll(double currentSongPosition)

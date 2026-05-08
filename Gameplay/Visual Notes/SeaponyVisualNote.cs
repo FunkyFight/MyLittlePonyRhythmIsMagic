@@ -6,15 +6,12 @@ using GameCore.GameObjects;
 using GameCore.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MLP_RiM.Elements.Editor;
 using Rhythm.Note;
 using Rhythm.Note.Visual;
 
 public class SeaponyVisualNote : VisualNote
 {
-    private const string ActionDataKey = "action";
-    private const string SwimAction = "seapony_parade_swim";
-    private const string RollAction = "seapony_parade_roll";
-    private const string TapTapAction = "seapony_parade_tap_tap";
     private const string IdleState = "idle";
     private const string SwimAnticipationState = "swim_anticipation";
     private const string SwimState = "swim";
@@ -84,7 +81,7 @@ public class SeaponyVisualNote : VisualNote
             _lastTapTapHitsPassed = int.MinValue;
         }
 
-        if(!tryGetAction(out string action))
+        if(!tryGetAction(out SeaponyAction action))
         {
             _lastSongPosition = currentSongPosition;
             return;
@@ -92,12 +89,12 @@ public class SeaponyVisualNote : VisualNote
 
         bool inTimeWindow = RhythmVisualUtils.IsInTimeWindow(currentSongPosition, Note.SongPosition, ApproachDuration, DespawnDelay);
 
-        if(action == TapTapAction)
+        if(action == SeaponyAction.TapTap)
             handleTapTapSfx(currentSongPosition);
 
         if(!RhythmVisualUtils.CanApplyState(_canApplyState))
         {
-            if(action == TapTapAction && _wasControlling && !hasNextTapTapTakenOver(currentSongPosition))
+            if(action == SeaponyAction.TapTap && _wasControlling && !hasNextTapTapTakenOver(currentSongPosition))
                 resetTapTapScale();
 
             _wasControlling = false;
@@ -107,15 +104,15 @@ public class SeaponyVisualNote : VisualNote
 
         switch(action)
         {
-            case SwimAction:
+            case SeaponyAction.Swim:
                 handleSwim(inTimeWindow, currentSongPosition);
                 break;
 
-            case RollAction:
+            case SeaponyAction.Roll:
                 handleRoll(inTimeWindow, currentSongPosition);
                 break;
 
-            case TapTapAction:
+            case SeaponyAction.TapTap:
                 handleTapTap(inTimeWindow, currentSongPosition);
                 break;
 
@@ -395,9 +392,7 @@ public class SeaponyVisualNote : VisualNote
 
     private static bool IsTapTapNote(Note note)
     {
-        return note?.AdditionnalData != null
-            && note.AdditionnalData.TryGetValue(ActionDataKey, out string action)
-            && action == TapTapAction;
+        return SeaponyNoteCodec.IsAction(note?.AdditionnalData, SeaponyAction.TapTap);
     }
 
     private string getTapTapState(int hitsPassed)
@@ -446,12 +441,9 @@ public class SeaponyVisualNote : VisualNote
         return _hasPerfectReactionProvider?.Invoke(Note) == true;
     }
 
-    private bool tryGetAction(out string action)
+    private bool tryGetAction(out SeaponyAction action)
     {
-        action = string.Empty;
-        return Note.AdditionnalData != null
-            && Note.AdditionnalData.TryGetValue(ActionDataKey, out action)
-            && (action == SwimAction || action == RollAction || action == TapTapAction);
+        return SeaponyNoteCodec.TryReadAction(Note?.AdditionnalData, out action);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
