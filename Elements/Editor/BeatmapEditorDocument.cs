@@ -16,6 +16,7 @@ public sealed class BeatmapEditorDocument
     public string ChartPath { get; private set; }
     public string PackagePath { get; private set; }
     public string AssetsPath => BeatmapPackagePaths.GetAssetsPath(PackagePath);
+    public string PackageSongPath => BeatmapPackagePaths.GetSongPathForPackage(PackagePath);
     public bool IsLegacyChart { get; private set; }
     public bool IsDirty { get; private set; }
     public ChartTempoMap TempoMap => _tempoMap ??= new ChartTempoMap(Chart);
@@ -121,10 +122,15 @@ public sealed class BeatmapEditorDocument
 
         EnsurePackagePathForSave();
 
-        if (_editorClipsAreRuntimeSource)
+        if (_editorClipsAreRuntimeSource || HasEditorAuthoredClips())
+        {
+            _editorClipsAreRuntimeSource = true;
             CompileClipsToRuntimeNotes();
+        }
         else
+        {
             SyncEditorClipsFromRuntimeNotes();
+        }
 
         string directory = Path.GetDirectoryName(ChartPath);
         if (!string.IsNullOrWhiteSpace(directory))
@@ -224,27 +230,6 @@ public sealed class BeatmapEditorDocument
         }
 
         IReadOnlyList<ChartNote> contextualNotes = CreateContextualNotes(normalizedPlacements);
-        for (int i = 0; i < normalizedPlacements.Count; i++)
-        {
-            EditorNotePlacement placement = normalizedPlacements[i];
-
-            if (FindBlockingNote(placement, contextualNotes) is ChartNote blocker)
-            {
-                EditorNoteDefinition blockerDefinition = EditorNoteDefinitions.FromChartNote(blocker);
-                reason = $"Blocked by {blockerDefinition?.DisplayName ?? "note"} at {GetNoteBeat(blocker):0.###}b";
-                return false;
-            }
-
-            for (int j = 0; j < i; j++)
-            {
-                if (PlacementsBlockEachOther(placement, normalizedPlacements[j], contextualNotes))
-                {
-                    reason = $"Generated notes overlap at {GetNoteBeat(placement.Note):0.###}b";
-                    return false;
-                }
-            }
-        }
-
         if (normalizedPlacements.Any(placement => placement.Definition.Kind == EditorNoteKind.SeeSaw))
         {
             ChartNote firstSeeSawNote = normalizedPlacements.First(placement => placement.Definition.Kind == EditorNoteKind.SeeSaw).Note;
@@ -577,7 +562,7 @@ public sealed class BeatmapEditorDocument
         foreach (ChartNote note in Chart.Notes)
         {
             EditorNoteDefinition definition = EditorNoteDefinitions.FromChartNote(note);
-            if (GetContextualHitWindowEndBeat(note, definition) >= startBeat && GetContextualStartBeat(note, definition) <= endBeat)
+            if (GetContextualEndBeat(note, definition) >= startBeat && GetContextualStartBeat(note, definition) <= endBeat)
                 yield return note;
         }
     }
@@ -1438,8 +1423,27 @@ public sealed class BeatmapEditorDocument
 
     private void UseRuntimeNotesAsEditorClipSource()
     {
+        if (HasEditorAuthoredClips())
+        {
+            _editorClipsAreRuntimeSource = true;
+            TryCompileClipsToRuntimeNotes(out _);
+            return;
+        }
+
         SyncEditorClipsFromRuntimeNotes();
         _editorClipsAreRuntimeSource = false;
+    }
+
+    private bool HasEditorAuthoredClips()
+    {
+        return Chart?.EditorClips != null && Chart.EditorClips.Any(IsEditorAuthoredClip);
+    }
+
+    private static bool IsEditorAuthoredClip(ChartEditorClip clip)
+    {
+        return clip != null
+            && !string.IsNullOrWhiteSpace(clip.Id)
+            && !clip.Id.StartsWith("legacy-", StringComparison.Ordinal);
     }
 
     private void SyncEditorClipsFromRuntimeNotes()
@@ -1463,10 +1467,10 @@ public sealed class BeatmapEditorDocument
         if (double.IsNaN(clip.StartBeat) || double.IsInfinity(clip.StartBeat))
             clip.StartBeat = 0;
 
-        if (double.IsNaN(clip.LengthBeats) || double.IsInfinity(clip.LengthBeats) || clip.LengthBeats < 0)
-            clip.LengthBeats = 0;
-
         EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+        if (double.IsNaN(clip.LengthBeats) || double.IsInfinity(clip.LengthBeats) || clip.LengthBeats <= 0)
+            clip.LengthBeats = Math.Max(0.0, definition?.DefaultLengthBeats ?? 0.0);
+
         clip.RhythmGameId = string.IsNullOrWhiteSpace(clip.RhythmGameId) ? definition?.RhythmGameId ?? EditorClipDefinitions.UnknownGameId : clip.RhythmGameId;
         clip.ClipTypeId = string.IsNullOrWhiteSpace(clip.ClipTypeId) ? definition?.ClipTypeId ?? EditorClipDefinitions.NoHit : clip.ClipTypeId;
         clip.ClipCategory = string.IsNullOrWhiteSpace(clip.ClipCategory) ? (definition?.Category ?? EditorClipCategory.SingleHit).ToString() : clip.ClipCategory;
@@ -1518,7 +1522,9 @@ public sealed class BeatmapEditorDocument
         if (string.IsNullOrWhiteSpace(Chart.MusicName))
             Chart.MusicName = Chart.SongName;
 
-        if (string.IsNullOrWhiteSpace(Chart.SongPath))
+        if (File.Exists(PackageSongPath))
+            Chart.SongPath = PackageSongPath;
+        else if (string.IsNullOrWhiteSpace(Chart.SongPath))
             Chart.SongPath = SongPath;
 
         SongPath = Chart.SongPath;

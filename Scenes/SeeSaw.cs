@@ -47,6 +47,10 @@ public class SeeSawScene : Scene
     private ChartPlayer _reactionChartPlayer;
     private int _lastTempoMapBeat = int.MinValue;
 
+    public SeeSawScene() : this(null)
+    {
+    }
+
     public SeeSawScene(Game1 game) : base("See Saw")
     {
         this.game = game;
@@ -291,7 +295,7 @@ public class SeeSawScene : Scene
                     onEnter: () =>
                     {
                         Rainbow.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Rainbowdash_fail);
-                        Rainbow.sprite.DrawOffset = new Vector2(100, 170);
+                        Rainbow.sprite.DrawOffset = new Vector2(150, 240);
                         Rainbow.sprite.CenterOrigin();
                     },
                     isLooping: false

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MLP_RiM.Elements.Editor;
 using Rhythm.Conductor;
 using Rhythm.Note;
 using Rhythm.Note.Evaluator;
@@ -8,6 +9,8 @@ using Rhythm.Note.Visual;
 
 public class BeatmapPlayer : IDisposable
 {
+    private const double TimelineEventEpsilonSeconds = 0.000001;
+
     public Conductor Conductor {get; private set;}
     public ChartPlayer ChartPlayer {get; private set;}
     public Chart CurrentChart {get; private set;}
@@ -16,11 +19,21 @@ public class BeatmapPlayer : IDisposable
     public TempoMappedRhythmClock Clock { get; private set; }
 
     public event Action BeatmapStarted;
+    public event Action<string> RhythmGameSwitchRequested;
 
     private double _startupDelay;
     private double _startupTimer;
     private bool _startupComplete;
     private ChartTempoMap _tempoMap;
+    private readonly List<RhythmGameSwitchMarker> _switchGameMarkers = new();
+    private int _nextSwitchGameMarkerIndex;
+    private string _currentSwitchGameId;
+
+    private sealed class RhythmGameSwitchMarker
+    {
+        public double SongPosition { get; init; }
+        public string RhythmGameId { get; init; }
+    }
 
     public BeatmapPlayer(Conductor conductor, ChartPlayer chartPlayer)
     {
@@ -53,6 +66,7 @@ public class BeatmapPlayer : IDisposable
         {
             Conductor.Update();
             Clock?.Update(Conductor.SongPosition);
+            ApplyEditorTimelineEventsAt(Conductor.SongPosition, seek: false);
             ChartPlayer?.Update(Conductor.SongPosition);
             VisualNoteMng?.Update(Conductor.SongPosition);
         }
@@ -72,6 +86,7 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = Chart.CreateMetronome(bpm, 200, startupDelaySeconds, additionnalData);
         _tempoMap = new ChartTempoMap(CurrentChart);
+        RebuildSwitchGameMarkers();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(CurrentChart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
@@ -113,6 +128,7 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor("Songs/metronome.wav", bpm, 0.078);
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
+        RebuildSwitchGameMarkers();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
@@ -131,6 +147,7 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor(song_path, chart.BPM, chart.Offset);
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
+        RebuildSwitchGameMarkers();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
@@ -152,6 +169,7 @@ public class BeatmapPlayer : IDisposable
         Conductor = new Conductor(songPath, chart.BPM, beatDelay);
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
+        RebuildSwitchGameMarkers();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
@@ -162,6 +180,78 @@ public class BeatmapPlayer : IDisposable
     public void ApplyChartEffectsAt(double songPosition)
     {
         Clock?.Update(songPosition);
+    }
+
+    public void ApplyEditorTimelineEventsAt(double songPosition, bool seek)
+    {
+        if (_switchGameMarkers.Count == 0)
+            return;
+
+        if (seek)
+        {
+            ApplySwitchGameMarkerForSeek(songPosition);
+            return;
+        }
+
+        while (_nextSwitchGameMarkerIndex < _switchGameMarkers.Count
+            && _switchGameMarkers[_nextSwitchGameMarkerIndex].SongPosition <= songPosition + TimelineEventEpsilonSeconds)
+        {
+            RequestRhythmGameSwitch(_switchGameMarkers[_nextSwitchGameMarkerIndex].RhythmGameId);
+            _nextSwitchGameMarkerIndex++;
+        }
+    }
+
+    private void ApplySwitchGameMarkerForSeek(double songPosition)
+    {
+        int markerIndex = -1;
+        for (int i = 0; i < _switchGameMarkers.Count; i++)
+        {
+            if (_switchGameMarkers[i].SongPosition > songPosition + TimelineEventEpsilonSeconds)
+                break;
+
+            markerIndex = i;
+        }
+
+        _nextSwitchGameMarkerIndex = markerIndex + 1;
+        if (markerIndex >= 0)
+            RequestRhythmGameSwitch(_switchGameMarkers[markerIndex].RhythmGameId);
+    }
+
+    private void RequestRhythmGameSwitch(string rhythmGameId)
+    {
+        if (string.IsNullOrWhiteSpace(rhythmGameId) || rhythmGameId == _currentSwitchGameId)
+            return;
+
+        _currentSwitchGameId = rhythmGameId;
+        RhythmGameSwitchRequested?.Invoke(rhythmGameId);
+    }
+
+    private void RebuildSwitchGameMarkers()
+    {
+        _switchGameMarkers.Clear();
+        _nextSwitchGameMarkerIndex = 0;
+        _currentSwitchGameId = null;
+
+        if (CurrentChart?.EditorClips == null || _tempoMap == null)
+            return;
+
+        foreach (ChartEditorClip clip in CurrentChart.EditorClips)
+        {
+            if (!EditorClipDefinitions.IsSwitchGame(clip))
+                continue;
+
+            string targetGameId = EditorClipDefinitions.GetSwitchGameTargetGameId(clip);
+            if (string.IsNullOrWhiteSpace(targetGameId))
+                continue;
+
+            _switchGameMarkers.Add(new RhythmGameSwitchMarker
+            {
+                SongPosition = _tempoMap.BeatToSeconds(clip.StartBeat),
+                RhythmGameId = targetGameId
+            });
+        }
+
+        _switchGameMarkers.Sort((a, b) => a.SongPosition.CompareTo(b.SongPosition));
     }
 
     public double GetBpmAt(double songPosition)
@@ -230,6 +320,9 @@ public class BeatmapPlayer : IDisposable
         HasAChartLoaded = false;
         ChartPlayer = null;
         VisualNoteMng = null;
+        _switchGameMarkers.Clear();
+        _nextSwitchGameMarkerIndex = 0;
+        _currentSwitchGameId = null;
     }
 
     private ChartTempoMap GetTempoMap()

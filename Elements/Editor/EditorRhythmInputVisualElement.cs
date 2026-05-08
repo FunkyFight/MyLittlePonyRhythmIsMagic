@@ -42,12 +42,5 @@ public sealed class EditorRhythmInputVisualElement
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        _beatmapPlayer.VisualNoteMng?.Draw(spriteBatch);
-
-        float reactionX = GLOBALS.graphicsDevice.Viewport.Width / 2f;
-        float reactionY = GLOBALS.graphicsDevice.Viewport.Height / 2f + GLOBALS.graphicsDevice.Viewport.Height / 4f;
-
-        _ui.Fill(spriteBatch, new Rectangle((int)reactionX - 3, (int)reactionY - 60, 6, 120), Color.Red);
-        _ui.Stroke(spriteBatch, new Rectangle((int)reactionX - 24, (int)reactionY - 24, 48, 48), Color.White, 2);
     }
 }

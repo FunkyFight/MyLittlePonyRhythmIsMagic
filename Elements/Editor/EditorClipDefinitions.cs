@@ -1,43 +1,35 @@
 using System.Collections.Generic;
 using System.Linq;
+using Rhythm.Note;
 
 namespace MLP_RiM.Elements.Editor;
 
 public static class EditorClipDefinitions
 {
-    public const string SeeSawGameId = "see_saw";
-    public const string SeaponyParadeGameId = "seapony_parade";
+    public const string SeeSawGameId = SeeSawEditorNote.GameId;
+    public const string SeaponyParadeGameId = SeaPonyParadeNoteEditor.GameId;
     public const string UnknownGameId = "unknown";
 
-    public const string SeeSawLongLong = "see_saw.long_long";
-    public const string SeeSawLongShort = "see_saw.long_short";
-    public const string SeeSawShortLong = "see_saw.short_long";
-    public const string SeeSawShortShort = "see_saw.short_short";
-    public const string SeeSawExit = "see_saw.exit";
+    public const string SeeSawLongLong = SeeSawEditorNote.LongLongClipId;
+    public const string SeeSawSwitchGame = SeeSawEditorNote.SwitchGameClipId;
+    public const string SeeSawLongShort = SeeSawEditorNote.LongShortClipId;
+    public const string SeeSawShortLong = SeeSawEditorNote.ShortLongClipId;
+    public const string SeeSawShortShort = SeeSawEditorNote.ShortShortClipId;
+    public const string SeeSawExit = SeeSawEditorNote.ExitClipId;
 
-    public const string SeaponySwim = "seapony_parade.swim";
-    public const string SeaponyRoll = "seapony_parade.roll";
-    public const string SeaponyTapTap = "seapony_parade.tap_tap";
+    public const string SeaponySwitchGame = SeaPonyParadeNoteEditor.SwitchGameClipId;
+    public const string SeaponySwim = SeaPonyParadeNoteEditor.SwimClipId;
+    public const string SeaponyRoll = SeaPonyParadeNoteEditor.RollClipId;
+    public const string SeaponyTapTap = SeaPonyParadeNoteEditor.TapTapClipId;
     public const string NoHit = "no_hit";
 
-    public static readonly IReadOnlyList<EditorRhythmGameDefinition> Games = new[]
-    {
-        new EditorRhythmGameDefinition(SeeSawGameId, "See Saw", new[]
-        {
-            CreateSeeSaw(SeeSawLongLong, "Long Long", SeeSawPatternKind.LongLong),
-            CreateSeeSaw(SeeSawShortShort, "Short Short", SeeSawPatternKind.ShortShort),
-            CreateSeeSaw(SeeSawLongShort, "Long Short", SeeSawPatternKind.LongShort),
-            CreateSeeSaw(SeeSawShortLong, "Short Long", SeeSawPatternKind.ShortLong),
-            new EditorClipDefinition(SeeSawGameId, SeeSawExit, "Exit", EditorClipCategory.SingleHit, 0, "ReactMain", SeeSawAction.Exit.ToAdditionnalData())
-        }),
-        new EditorRhythmGameDefinition(SeaponyParadeGameId, "Seapony Parade", new[]
-        {
-            new EditorClipDefinition(SeaponyParadeGameId, SeaponySwim, "Swim", EditorClipCategory.Continuous, 2, "ReactMain", new Dictionary<string, string> { ["action"] = "seapony_parade_swim" }),
-            new EditorClipDefinition(SeaponyParadeGameId, SeaponyRoll, "Roll", EditorClipCategory.Continuous, 3, "ReactMain", new Dictionary<string, string> { ["action"] = "seapony_parade_roll" }),
-            new EditorClipDefinition(SeaponyParadeGameId, SeaponyTapTap, "Tap Tap", EditorClipCategory.SingleHit, 0, "ReactMain", new Dictionary<string, string> { ["action"] = "seapony_parade_tap_tap" }),
-            new EditorClipDefinition(SeaponyParadeGameId, NoHit, "No Hit", EditorClipCategory.NoHit, 1, "ReactMain")
-        })
-    };
+    public const string SwitchGameEventKey = "editor_event";
+    public const string SwitchGameEventValue = "switch_game";
+    public const string SwitchGameTargetGameKey = "target_game";
+
+    public static readonly IReadOnlyList<EditorRhythmGameDefinition> Games = EditorNoteDefinitions.GameProviders
+        .Select(provider => new EditorRhythmGameDefinition(provider.RhythmGameId, provider.RhythmGameDisplayName, provider.Clips))
+        .ToArray();
 
     public static readonly IReadOnlyList<EditorClipDefinition> All = Games.SelectMany(game => game.Clips).ToArray();
 
@@ -47,10 +39,36 @@ public static class EditorClipDefinitions
             ?? All.FirstOrDefault(definition => definition.ClipTypeId == clipTypeId);
     }
 
-    private static EditorClipDefinition CreateSeeSaw(string clipTypeId, string displayName, SeeSawPatternKind pattern)
+    public static bool IsSwitchGame(EditorClipDefinition definition)
     {
-        Dictionary<string, string> data = new();
-        SeeSawAction.SetPattern(data, pattern);
-        return new EditorClipDefinition(SeeSawGameId, clipTypeId, displayName, EditorClipCategory.SingleHit, 0, "ReactMain", data);
+        return definition != null
+            && definition.Category == EditorClipCategory.Instant
+            && definition.DefaultData.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == SwitchGameEventValue;
     }
+
+    public static bool IsSwitchGame(ChartEditorClip clip)
+    {
+        if (clip == null)
+            return false;
+
+        EditorClipDefinition definition = Find(clip.RhythmGameId, clip.ClipTypeId);
+        return IsSwitchGame(definition)
+            || clip.Data.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == SwitchGameEventValue;
+    }
+
+    public static string GetSwitchGameTargetGameId(ChartEditorClip clip)
+    {
+        if (clip == null)
+            return null;
+
+        Dictionary<string, string> data = clip.Data;
+        if (data.TryGetValue(SwitchGameTargetGameKey, out string targetGame) && !string.IsNullOrWhiteSpace(targetGame))
+            return targetGame;
+
+        EditorClipDefinition definition = Find(clip.RhythmGameId, clip.ClipTypeId);
+        return definition?.RhythmGameId ?? clip.RhythmGameId;
+    }
+
 }

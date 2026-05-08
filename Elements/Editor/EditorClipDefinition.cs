@@ -7,6 +7,7 @@ public enum EditorClipCategory
 {
     SingleHit,
     Continuous,
+    Instant,
     NoHit,
     TempoChange
 }

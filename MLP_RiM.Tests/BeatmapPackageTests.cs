@@ -164,7 +164,47 @@ public sealed class BeatmapPackageTests
 
         List<ChartNote> notes = EditorClipCompiler.Compile(chart, new ChartTempoMap(chart));
 
-        Assert.Equal(new[] { 0.0, 2.0, 4.0, 8.0, 8.5 }, notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
+        Assert.Equal(new[] { 0.0, 2.0, 4.0, 10.0, 10.5 }, notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
+    }
+
+    [Fact]
+    public void RollClipReservesTwoCueBeatsBeforeRuntimeActions()
+    {
+        Chart chart = new()
+        {
+            BPM = 120,
+            Offset = 0,
+            ChartVersion = 2,
+            EditorClips = new List<ChartEditorClip>
+            {
+                CreateClip("roll", EditorClipDefinitions.SeaponyRoll, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 3)
+            },
+            EditorClipsSpecified = true
+        };
+
+        List<ChartNote> notes = EditorClipCompiler.Compile(chart, new ChartTempoMap(chart));
+
+        Assert.Equal(new[] { 2.0, 3.0, 4.0, 5.0 }, notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
+    }
+
+    [Fact]
+    public void TapTapClipReservesTwoCueBeatsBeforeRuntimeActions()
+    {
+        Chart chart = new()
+        {
+            BPM = 120,
+            Offset = 0,
+            ChartVersion = 2,
+            EditorClips = new List<ChartEditorClip>
+            {
+                CreateClip("tap", EditorClipDefinitions.SeaponyTapTap, EditorClipCategory.SingleHit, startBeat: 0, lengthBeats: 0)
+            },
+            EditorClipsSpecified = true
+        };
+
+        List<ChartNote> notes = EditorClipCompiler.Compile(chart, new ChartTempoMap(chart));
+
+        Assert.Equal(new[] { 2.0, 2.5 }, notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
     }
 
     [Fact]
@@ -189,6 +229,30 @@ public sealed class BeatmapPackageTests
 
         Assert.True(stack.TryRedo(document));
         Assert.Equal(new[] { 0.0, 2.0, 4.0 }, document.Chart.Notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
+    }
+
+    [Fact]
+    public void RuntimeNoteMutationDoesNotSplitAuthoredEditorClips()
+    {
+        using TempWorkspace workspace = new();
+        string chartPath = Path.Combine(workspace.Root, "Beatmaps", "Clips", "chart.xml");
+        BeatmapEditorDocument document = BeatmapEditorDocument.CreateNew("", chartPath, 120);
+        ChartEditorClip clip = CreateClip("clip-1", EditorClipDefinitions.SeaponySwim, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 4);
+
+        Assert.True(document.AddEditorClip(clip, out string reason), reason);
+        Assert.Equal(new[] { 0.0, 2.0, 4.0 }, document.Chart.Notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
+
+        ChartNote generatedNote = document.Chart.Notes[0];
+        Assert.True(document.MoveNoteToBeat(generatedNote, 1.0));
+
+        ChartEditorClip savedClip = Assert.Single(document.Chart.EditorClips);
+        Assert.Equal("clip-1", savedClip.Id);
+        Assert.Equal(new[] { 0.0, 2.0, 4.0 }, document.Chart.Notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
+
+        document.Save();
+        BeatmapEditorDocument reloaded = BeatmapEditorDocument.LoadOrCreate("", chartPath, 120);
+        ChartEditorClip reloadedClip = Assert.Single(reloaded.Chart.EditorClips);
+        Assert.Equal("clip-1", reloadedClip.Id);
     }
 
     [Fact]

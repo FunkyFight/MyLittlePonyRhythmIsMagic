@@ -8,6 +8,7 @@ public static class BeatmapPackagePaths
 {
     public const string BeatmapsRoot = "Beatmaps";
     public const string ChartFileName = "chart.xml";
+    public const string SongFileName = "song.mp3";
     public const string AssetsDirectoryName = "assets";
 
     public static string ResolveChartPath(string path)
@@ -56,6 +57,11 @@ public static class BeatmapPackagePaths
     public static string GetChartPathForPackage(string packagePath)
     {
         return Path.Combine(packagePath, ChartFileName);
+    }
+
+    public static string GetSongPathForPackage(string packagePath)
+    {
+        return Path.Combine(packagePath, SongFileName);
     }
 
     public static string GetAvailablePackageChartPath(string beatmapName)

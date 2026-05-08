@@ -168,12 +168,6 @@ public class SeaponyVisualNote : VisualNote
 
         resetTapTapScale();
 
-        if(_rollIndexInSequence == 0)
-        {
-            playSfxOnForwardCross(Note.SongPosition - 2 * _crotchet, currentSongPosition, "SFX/BubbleHeavy.wav");
-            playSfxOnForwardCross(Note.SongPosition - _crotchet, currentSongPosition, "SFX/BubbleHeavy.wav");
-        }
-
         if(Progress <= double.Epsilon || currentSongPosition < Note.SongPosition)
         {
             return;
@@ -314,12 +308,6 @@ public class SeaponyVisualNote : VisualNote
 
     private void handleTapTapSfx(double currentSongPosition)
     {
-        if(_tapTapIndexInSequence == 0)
-        {
-            playSfxOnForwardCross(Note.SongPosition - 2 * _crotchet, currentSongPosition, "SFX/seapony_parade_roll.wav");
-            playSfxOnForwardCross(Note.SongPosition - _crotchet, currentSongPosition, "SFX/seapony_parade_roll.wav");
-        }
-
         playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/seapony_parade_roll.wav");
         if(_tapTapHitsRemainingInSequence == 1)
             playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/AndStop.wav");

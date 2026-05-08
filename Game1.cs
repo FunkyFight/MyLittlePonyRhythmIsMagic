@@ -19,6 +19,7 @@ namespace MLP_RiM;
 public class Game1 : Core
 {
     private SceneManager _sceneManager;
+    private string _currentRhythmGameSceneId;
 
     private InputActionManager _inputActionManager;
     private KeyboardState _keyboard;
@@ -41,14 +42,16 @@ public class Game1 : Core
 
         // Beatmap
         GLOBALS.beatmapPlayer = new BeatmapPlayer();
-        
-        // Beatmap editor
-        GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
 
         // Scene
         _sceneManager = new SceneManager();
         _sceneManager.Viewport.SamplerState = SamplerState.PointClamp;
-        _sceneManager.SetScene(new SeeSawScene(this));
+        GLOBALS.beatmapPlayer.RhythmGameSwitchRequested += SwitchRhythmGameScene;
+
+        // Beatmap editor
+        GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
+        if (_currentRhythmGameSceneId == null && EditorNoteDefinitions.GameProviders.Count > 0)
+            SwitchRhythmGameScene(EditorNoteDefinitions.GameProviders[0].RhythmGameId);
 
 
         
@@ -149,6 +152,18 @@ public class Game1 : Core
     private bool Pressed(Keys key)
     {
         return _keyboard.IsKeyDown(key) && !_previousKeyboard.IsKeyDown(key);
+    }
+
+    private void SwitchRhythmGameScene(string rhythmGameId)
+    {
+        if (_sceneManager == null || string.IsNullOrWhiteSpace(rhythmGameId) || rhythmGameId == _currentRhythmGameSceneId)
+            return;
+
+        if (!EditorNoteDefinitions.TryCreateScene(rhythmGameId, out Scene scene))
+            return;
+
+        _currentRhythmGameSceneId = rhythmGameId;
+        _sceneManager.SetScene(scene);
     }
 
     private void CopyMouseViewportCoordinates()

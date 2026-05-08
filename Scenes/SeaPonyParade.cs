@@ -15,12 +15,17 @@ using TexturePackerMonoGameDefinitions;
 public class SeaPonyParade : Scene
 {
     // Config
-    private const int SCALE = 3;
+    private const float SCALE = 4.5f;
+    private const float CoralBackgroundScale = 4.5f;
+    private const float SandBackgroundScale = 6f;
     private const int SeaPonyCount = 4;
+    private static readonly int[] SeaPonyPositionOrder = { 3, 2, 1, 0 };
     private const string ActionDataKey = "action";
     private const string SwimAction = "seapony_parade_swim";
     private const string RollAction = "seapony_parade_roll";
     private const string TapTapAction = "seapony_parade_tap_tap";
+    private const double FirstCueLeadBeats = 2.0;
+    private const double SecondCueLeadBeats = 1.0;
 
     // Objects
     private Viewport _viewport;
@@ -158,8 +163,8 @@ public class SeaPonyParade : Scene
                 );
                 conf.WithPlacementInterval(25, 600);
                 conf.WithScrollMultiplier(0.1f);
-                conf.WithOffset(new Vector2(0, 2.75f * (_viewport.Height / 5)));
-                conf.WithScale(3);
+                conf.WithOffset(new Vector2(0, 2.6f * (_viewport.Height / 5)));
+                conf.WithScale(CoralBackgroundScale);
             })
             .AddLine(conf =>
             {
@@ -167,7 +172,7 @@ public class SeaPonyParade : Scene
                 conf.WithPlacementInterval(0, 0);
                 conf.WithScrollMultiplier(0.3f);
                 conf.WithOffset(new Vector2(0, 3.15f * (_viewport.Height / 5)));
-                conf.WithScale(4);
+                conf.WithScale(SandBackgroundScale);
             })
             .AddLine(conf =>
             {
@@ -185,16 +190,16 @@ public class SeaPonyParade : Scene
                 );
                 conf.WithPlacementInterval(25, 600);
                 conf.WithScrollMultiplier(0.4f);
-                conf.WithOffset(new Vector2(0, 3.45f * (_viewport.Height / 5)));
-                conf.WithScale(3);
+                conf.WithOffset(new Vector2(0, 3.09f * (_viewport.Height / 5)));
+                conf.WithScale(CoralBackgroundScale);
             })
             .AddLine(conf =>
             {
                 conf.AddPrototype(new GameObject(GLOBALS.main_atlas.CreateSprite(MainAtlas.Sand2)));
                 conf.WithPlacementInterval(0, 0);
                 conf.WithScrollMultiplier(0.6f);
-                conf.WithOffset(new Vector2(485, 3.65f * (_viewport.Height / 5)));
-                conf.WithScale(4);
+                conf.WithOffset(new Vector2(485, 3.25f * (_viewport.Height / 5)));
+                conf.WithScale(SandBackgroundScale);
             })
             .AddLine(conf =>
             {
@@ -212,16 +217,16 @@ public class SeaPonyParade : Scene
                 );
                 conf.WithPlacementInterval(25, 600);
                 conf.WithScrollMultiplier(0.7f);
-                conf.WithOffset(new Vector2(200, 3.9f * (_viewport.Height / 5)));
-                conf.WithScale(3);
+                conf.WithOffset(new Vector2(200, 3.45f * (_viewport.Height / 5)));
+                conf.WithScale(CoralBackgroundScale);
             })
             .AddLine(conf =>
             {
                 conf.AddPrototype(new GameObject(GLOBALS.main_atlas.CreateSprite(MainAtlas.Sand1)));
                 conf.WithPlacementInterval(0, 0);
                 conf.WithScrollMultiplier(1);
-                conf.WithOffset(new Vector2(0, 4.15f * (_viewport.Height / 5)));
-                conf.WithScale(4);
+                conf.WithOffset(new Vector2(0, 3.4f * (_viewport.Height / 5)));
+                conf.WithScale(SandBackgroundScale);
             })
             .WithPixelsPerProgress(new Vector2(_viewport.Width / 4, 0))
             .Build();
@@ -229,17 +234,20 @@ public class SeaPonyParade : Scene
 
     private void createSeaPonies()
     {
+        float spacing = _viewport.Width / SeaPonyCount;
+        float startX = spacing / 2f - _viewport.Width * 0.03f;
+
         for(int i = 0; i < SeaPonyCount; i++)
         {
             // Create object
             GameObject seaPony = new GameObject(GLOBALS.main_atlas.CreateAnimatedSprite("template-pony-idle"));
-            seaPony.Position = new Vector2(4 * _viewport.Width / 5 - ((GLOBALS.graphicsDevice.Viewport.Width / 5) * i), _viewport.Height / 2);
+            int positionIndex = Array.IndexOf(SeaPonyPositionOrder, i);
+            seaPony.Position = new Vector2(startX + spacing * positionIndex, _viewport.Height / 2);
             _seaPonyBasePositions[i] = seaPony.Position;
             seaPony.Scale = Vector2.One * SCALE;
             seaPony.sprite.CenterOrigin();
             int seaPonyId = i;
 
-            GameObjects.Add(seaPony);
             _seaPonies[i] = seaPony;
 
             // Create animation state
@@ -318,6 +326,9 @@ public class SeaPonyParade : Scene
                 animationState.ForceState("idle");
                 _seaPoniesAnimationStates[i] = animationState;
         }
+
+        for(int i = 0; i < SeaPonyCount; i++)
+            GameObjects.Add(_seaPonies[i]);
     }
 
     private static string getSeaPonyAtlasRegion(int seaPonyId, string state)
@@ -869,6 +880,7 @@ public class SeaPonyParade : Scene
 
         updateDrivingSeaPonyNotes(songPos);
         _drivingBackgroundNote = findDrivingBackgroundNote(songPos);
+        playStartCues(songPos, gameTime.ElapsedGameTime.TotalSeconds);
         applyBaseStateForIdleSeaPonies(songPos);
 
         for(int i = 0; i < SeaPonyCount; i++)
@@ -881,12 +893,64 @@ public class SeaPonyParade : Scene
         _lastSeaPonySongPosition = songPos;
     }
 
+    private void playStartCues(double songPosition, double elapsedSeconds)
+    {
+        if(GLOBALS.SfxVolume <= 0 || GLOBALS.beatmapPlayer.ChartPlayer == null)
+            return;
+
+        double previousSongPosition = double.IsNaN(_lastSeaPonySongPosition)
+            ? songPosition - Math.Max(0.0, elapsedSeconds)
+            : _lastSeaPonySongPosition;
+
+        if(previousSongPosition > songPosition)
+            return;
+
+        foreach(Note note in GLOBALS.beatmapPlayer.ChartPlayer.Notes)
+        {
+            double crotchet = getCrotchetAt(note);
+            if(isFirstActionInSequence(note, RollAction))
+            {
+                playSfxOnForwardCross(previousSongPosition, note.SongPosition - FirstCueLeadBeats * crotchet, songPosition, "SFX/BubbleHeavy.wav");
+                playSfxOnForwardCross(previousSongPosition, note.SongPosition - SecondCueLeadBeats * crotchet, songPosition, "SFX/BubbleHeavy.wav");
+            }
+            else if(isFirstActionInSequence(note, TapTapAction))
+            {
+                playSfxOnForwardCross(previousSongPosition, note.SongPosition - FirstCueLeadBeats * crotchet, songPosition, "SFX/seapony_parade_roll.wav");
+                playSfxOnForwardCross(previousSongPosition, note.SongPosition - SecondCueLeadBeats * crotchet, songPosition, "SFX/seapony_parade_roll.wav");
+            }
+        }
+    }
+
+    private bool isFirstActionInSequence(Note note, string expectedAction)
+    {
+        if(!IsSeaponyAction(note, expectedAction) || GLOBALS.beatmapPlayer.ChartPlayer == null)
+            return false;
+
+        Note previousSeaponyNote = null;
+        foreach(Note candidate in GLOBALS.beatmapPlayer.ChartPlayer.Notes)
+        {
+            if(ReferenceEquals(candidate, note))
+                break;
+
+            if(TryGetSeaponyAction(candidate, out _))
+                previousSeaponyNote = candidate;
+        }
+
+        return !IsSeaponyAction(previousSeaponyNote, expectedAction);
+    }
+
+    private void playSfxOnForwardCross(double previousSongPosition, double cuePosition, double currentSongPosition, string filePath)
+    {
+        if(previousSongPosition < cuePosition && currentSongPosition >= cuePosition)
+            SFX.Play(this, filePath, 4);
+    }
+
     public override void Draw(SpriteBatch spriteBatch)
     {
 
         GLOBALS.graphicsDevice?.Clear(Color.DarkBlue);
 
-        _devUIRenderer.Label(spriteBatch, "You", _seaPonies[1].Position + new Vector2(-35, -225), Color.White, 7);
+        _devUIRenderer.Label(spriteBatch, "You", _seaPonies[1].Position + new Vector2(-25, -225), Color.White, 7);
         _infiniteScrollBg?.Draw(spriteBatch);
 
         base.Draw(spriteBatch);
