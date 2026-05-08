@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using GameCore.Scenes;
 using Microsoft.Xna.Framework;
-using MLP_RiM.Elements.Editor;
 using Rhythm.Note;
 
-public class SeaPonyParadeNoteEditor : EditorNoteProvider
+namespace MLP_RiM.Elements.Editor;
+
+public sealed class SeaponyParadeEditorNoteProvider : EditorNoteProvider
 {
     public const string GameId = SeaponyNoteCodec.GameId;
-    public const string SwitchGameClipId = "seapony_parade.switch_game";
     public const string SwimClipId = "seapony_parade.swim";
     public const string RollClipId = "seapony_parade.roll";
     public const string TapTapClipId = "seapony_parade.tap_tap";
@@ -28,28 +28,20 @@ public class SeaPonyParadeNoteEditor : EditorNoteProvider
         .InputAction("ReactMain")
         .Occupies(1d, 1d)
         .Matches(note => SeaponyNoteCodec.Matches(note?.AdditionnalData))
-        .Variant("runtime", "Runtime", new SeaponyNotePayload(SeaponyAction.Swim), _ => true, editorStyle: new EditorVisualStyle(Color.DeepSkyBlue))
+        .Variant("swim", "Swim", new SeaponyNotePayload(SeaponyAction.Swim), MatchesAction(SeaponyAction.Swim), editorStyle: new EditorVisualStyle(Color.DeepSkyBlue))
+        .Variant("roll", "Roll", new SeaponyNotePayload(SeaponyAction.Roll), MatchesAction(SeaponyAction.Roll), editorStyle: new EditorVisualStyle(Color.MediumPurple))
+        .Variant("tap_tap", "Tap Tap", new SeaponyNotePayload(SeaponyAction.TapTap), MatchesAction(SeaponyAction.TapTap), editorStyle: new EditorVisualStyle(Color.Gold))
         .Timing(new SeaponyParadeEditorNoteTiming())
         .Placement(new SeaponyParadeEditorNotePlacementStrategy())
         .Build();
 
-    public override int FindVariantIndex(ChartNote note)
+    public override int GetNoteVariantIndex(ChartNote note)
     {
         return SeaponyNoteCodec.ReadAction(note?.AdditionnalData) switch
         {
             SeaponyAction.Roll => 1,
             SeaponyAction.TapTap => 2,
             _ => 0
-        };
-    }
-
-    public override Color GetEditorColor(int variantIndex)
-    {
-        return variantIndex switch
-        {
-            1 => Color.MediumPurple,
-            2 => Color.Gold,
-            _ => Color.DeepSkyBlue
         };
     }
 
@@ -72,10 +64,10 @@ public class SeaPonyParadeNoteEditor : EditorNoteProvider
     {
         return new[]
         {
-            Clip(SwimClipId, "Swim", EditorClipCategory.Continuous, 2, "ReactMain", SeaponyNoteCodec.Write(SeaponyAction.Swim)),
-            Clip(RollClipId, "Roll", EditorClipCategory.Continuous, 3, "ReactMain", SeaponyNoteCodec.Write(SeaponyAction.Roll)),
-            Clip(TapTapClipId, "Tap Tap", EditorClipCategory.SingleHit, 0, "ReactMain", SeaponyNoteCodec.Write(SeaponyAction.TapTap)),
-            Clip(EditorClipDefinitions.NoHit, "No Hit", EditorClipCategory.NoHit, 1)
+            Clip(SwimClipId, "Swim", EditorClipCategory.Continuous, 2, "ReactMain", SeaponyNoteCodec.Write(SeaponyAction.Swim), editorStyle: new EditorVisualStyle(Color.CornflowerBlue)),
+            Clip(RollClipId, "Roll", EditorClipCategory.Continuous, 3, "ReactMain", SeaponyNoteCodec.Write(SeaponyAction.Roll), editorStyle: new EditorVisualStyle(Color.DeepSkyBlue)),
+            Clip(TapTapClipId, "Tap Tap", EditorClipCategory.SingleHit, 0, "ReactMain", SeaponyNoteCodec.Write(SeaponyAction.TapTap), editorStyle: new EditorVisualStyle(Color.LightBlue)),
+            Clip(EditorClipDefinitions.NoHit, "No Hit", EditorClipCategory.NoHit, 1, editorStyle: new EditorVisualStyle(Color.DimGray))
         };
     }
 
@@ -98,6 +90,11 @@ public class SeaPonyParadeNoteEditor : EditorNoteProvider
             .Select(draft => draft.ToChartNote(tempoMap))
             .ToArray();
     }
+
+    private static Func<INotePayload, bool> MatchesAction(SeaponyAction action)
+    {
+        return payload => payload is SeaponyNotePayload seaponyPayload && seaponyPayload.Action == action;
+    }
 }
 
 public sealed class SeaponyParadeEditorNotePlacementStrategy : IEditorNotePlacementStrategy
@@ -111,7 +108,7 @@ public sealed class SeaponyParadeEditorNotePlacementStrategy : IEditorNotePlacem
 
         SeaponyNotePayload payload = SeaponyNoteCodec.Read(sourceNote.AdditionnalData);
         double startBeat = GetSourceBeat(sourceNote, context.Crotchet);
-        NoteAuthoringIntent intent = new(SeaPonyParadeNoteEditor.GameId, payload.Action.ToString(), startBeat, placementOptions?.RepeatDurationBeats ?? 0.0, payload, placementOptions ?? PlacementOptions.None);
+        NoteAuthoringIntent intent = new(SeaponyParadeEditorNoteProvider.GameId, payload.Action.ToString(), startBeat, placementOptions?.RepeatDurationBeats ?? 0.0, payload, placementOptions ?? PlacementOptions.None);
         return PatternCompiler.Compile(intent, new NoteCompileContext(null, context.ExistingNotes))
             .Select(draft => new EditorNotePlacement(definition, CreateNoteFromDraft(sourceNote, draft, startBeat, context.Crotchet)))
             .ToArray();
@@ -123,6 +120,7 @@ public sealed class SeaponyParadeEditorNotePlacementStrategy : IEditorNotePlacem
         ChartNote note = EditorNotePlacementData.CloneForPlacement(sourceNote, songPosition);
         note.BeatPosition = draft.Beat;
         note.HoldBeats = draft.HoldBeats;
+        note.HoldDuration = draft.HoldBeats > 0.0 && crotchet > 0.0 ? draft.HoldBeats * crotchet : 0.0;
         note.InputActionToPress = draft.InputAction;
         note.AdditionnalData = draft.Payload?.ToLegacyData() ?? new Dictionary<string, string>();
         return note;

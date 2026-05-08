@@ -1086,9 +1086,9 @@ public sealed class BeatmapEditorDocument
     private NoteTimingRequest CreateNoteTimingRequest(ChartNote note, EditorNoteDefinition definition, IReadOnlyList<ChartNote> contextualNotes)
     {
         double beat = GetNoteBeat(note);
-        int variantIndex = EditorNoteDefinitions.FindVariantIndex(definition, note);
+        int noteVariantIndex = EditorNoteDefinitions.GetNoteVariantIndex(definition, note);
         SplitContextualNotes(note, beat, contextualNotes ?? Chart.Notes, out IReadOnlyList<ChartNote> previousNotes, out IReadOnlyList<ChartNote> nextNotes);
-        return new NoteTimingRequest(note, definition, variantIndex, beat, TempoMap, previousNotes, nextNotes, CreateTimingContext(definition));
+        return new NoteTimingRequest(note, definition, noteVariantIndex, beat, TempoMap, previousNotes, nextNotes, CreateTimingContext(definition));
     }
 
     private IReadOnlyDictionary<string, object> CreateTimingContext(EditorNoteDefinition definition)
@@ -1164,7 +1164,7 @@ public sealed class BeatmapEditorDocument
         if (!ReferenceEquals(aDefinition, bDefinition) && aDefinition.TypeId != bDefinition.TypeId)
             return false;
 
-        return EditorNoteDefinitions.FindVariantIndex(aDefinition, aNote) == EditorNoteDefinitions.FindVariantIndex(bDefinition, bNote);
+        return EditorNoteDefinitions.GetNoteVariantIndex(aDefinition, aNote) == EditorNoteDefinitions.GetNoteVariantIndex(bDefinition, bNote);
     }
 
     private bool TouchesAllowedBoundary(EditorNoteDefinition placedDefinition, EditorNoteDefinition existingDefinition, double placedStart, double placedEnd, double existingStart, double existingEnd)

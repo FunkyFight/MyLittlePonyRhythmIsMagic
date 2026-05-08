@@ -136,11 +136,29 @@ public sealed class ChartTempoMapTests
         document.SetOffset(1.0);
         document.SetLeadInBeats(4.0);
 
-        EditorNoteDefinition definition = EditorNoteDefinitions.Get(SeaPonyParadeNoteEditor.TypeId);
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(SeaponyParadeEditorNoteProvider.TypeId);
 
         Assert.True(document.TryPlaceNoteAtBeat(definition, -3.0, 0, out ChartNote placedNote, out string reason), reason);
         NearlyEqual(-3.0, placedNote.BeatPosition.GetValueOrDefault());
         NearlyEqual(-0.5, placedNote.SongPosition);
+    }
+
+    [Fact]
+    public void RuntimeNoteDraftConvertsHoldBeatsToSeconds()
+    {
+        ChartTempoMap tempoMap = new(new Chart
+        {
+            BPM = 120,
+            Offset = 0,
+            ChartVersion = 2
+        });
+        RuntimeNoteDraft draft = new(4.0, new SeaponyNotePayload(SeaponyAction.Swim), HoldBeats: 2.0);
+
+        ChartNote note = draft.ToChartNote(tempoMap);
+
+        NearlyEqual(2.0, note.SongPosition);
+        NearlyEqual(1.0, note.HoldDuration);
+        NearlyEqual(2.0, note.HoldBeats.GetValueOrDefault());
     }
 
     private static Chart CreateBeatFirstChart()

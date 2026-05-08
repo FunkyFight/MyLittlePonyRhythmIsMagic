@@ -3256,8 +3256,7 @@ public sealed class BeatmapEditorElement
             if (noteEndBeat < windowStart || noteStartBeat > windowEnd)
                 continue;
 
-            int variantIndex = EditorNoteDefinitions.FindVariantIndex(placement.Definition, note);
-            Color color = GetNoteColor(placement.Definition, variantIndex);
+            Color color = GetNoteColor(placement.Definition, note);
             float noteX = BeatToX(noteStartBeat, windowStart, windowEnd, area);
             float noteEndX = BeatToX(noteEndBeat, windowStart, windowEnd, area);
             int laneHeight = GetTrackLaneHeight(area);
@@ -3383,11 +3382,9 @@ public sealed class BeatmapEditorElement
         return new Rectangle((int)effectX - 7, area.Y + 20, 14, 30);
     }
 
-    private Color GetNoteColor(EditorNoteDefinition definition, int variantIndex)
+    private Color GetNoteColor(EditorNoteDefinition definition, ChartNote note)
     {
-        return definition != null && EditorNoteDefinitions.TryGetProvider(definition.TypeId, out IEditorNoteProvider provider)
-            ? provider.GetEditorColor(variantIndex)
-            : Color.DeepSkyBlue;
+        return EditorNoteDefinitions.GetEditorStyle(definition, note).Color;
     }
 
     private Color GetEffectColor(EditorEffectKind kind)
@@ -3404,30 +3401,13 @@ public sealed class BeatmapEditorElement
         if (definition == null)
             return Color.Gray;
 
-        if (EditorClipDefinitions.IsSwitchGame(definition))
-            return Color.LightGreen;
-
-        if (definition.RhythmGameId == EditorClipDefinitions.SeeSawGameId)
-        {
-            return definition.ClipTypeId switch
-            {
-                EditorClipDefinitions.SeeSawLongLong => Color.Orange,
-                EditorClipDefinitions.SeeSawLongShort => Color.Gold,
-                EditorClipDefinitions.SeeSawShortLong => Color.MediumPurple,
-                EditorClipDefinitions.SeeSawShortShort => Color.LightSalmon,
-                _ => Color.OrangeRed
-            };
-        }
-
-        if (definition.ClipTypeId == EditorClipDefinitions.NoHit)
+        if (definition.Category == EditorClipCategory.NoHit || definition.ClipTypeId == EditorClipDefinitions.NoHit)
             return Color.DimGray;
 
-        return definition.ClipTypeId switch
-        {
-            EditorClipDefinitions.SeaponyRoll => Color.DeepSkyBlue,
-            EditorClipDefinitions.SeaponyTapTap => Color.LightBlue,
-            _ => Color.CornflowerBlue
-        };
+        if (EditorClipDefinitions.IsSwitchGame(definition))
+            return definition.EditorStyle?.Color ?? Color.LightGreen;
+
+        return definition.EditorStyle?.Color ?? Color.CornflowerBlue;
     }
 
     private static bool IsInstantClip(EditorClipDefinition definition)

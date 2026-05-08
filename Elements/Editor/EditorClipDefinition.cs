@@ -60,7 +60,7 @@ public sealed class EditorClipFieldDefinition
 
 public sealed class EditorClipDefinition
 {
-    public EditorClipDefinition(string rhythmGameId, string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction, IReadOnlyDictionary<string, string> defaultData = null, IReadOnlyList<EditorClipFieldDefinition> fields = null)
+    public EditorClipDefinition(string rhythmGameId, string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction, IReadOnlyDictionary<string, string> defaultData = null, IReadOnlyList<EditorClipFieldDefinition> fields = null, EditorVisualStyle editorStyle = null)
     {
         RhythmGameId = rhythmGameId;
         ClipTypeId = clipTypeId;
@@ -70,6 +70,7 @@ public sealed class EditorClipDefinition
         InputAction = inputAction;
         DefaultData = defaultData ?? new Dictionary<string, string>();
         Fields = fields ?? Array.Empty<EditorClipFieldDefinition>();
+        EditorStyle = editorStyle;
     }
 
     public string RhythmGameId { get; }
@@ -80,6 +81,7 @@ public sealed class EditorClipDefinition
     public string InputAction { get; }
     public IReadOnlyDictionary<string, string> DefaultData { get; }
     public IReadOnlyList<EditorClipFieldDefinition> Fields { get; }
+    public EditorVisualStyle EditorStyle { get; }
 }
 
 public sealed class EditorRhythmGameDefinition

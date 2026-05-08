@@ -48,8 +48,8 @@ public sealed class BeatmapPackageTests
                     TrackIndex = 0,
                     StartBeat = 4,
                     LengthBeats = 2,
-                    RhythmGameId = EditorClipDefinitions.SeaponyParadeGameId,
-                    ClipTypeId = EditorClipDefinitions.SeaponySwim,
+                    RhythmGameId = SeaponyParadeEditorNoteProvider.GameId,
+                    ClipTypeId = SeaponyParadeEditorNoteProvider.SwimClipId,
                     ClipCategory = EditorClipCategory.Continuous.ToString(),
                     InputAction = "ReactMain",
                     Data = SeaponyNoteCodec.Write(SeaponyAction.Swim)
@@ -155,8 +155,8 @@ public sealed class BeatmapPackageTests
             ChartVersion = 2,
             EditorClips = new List<ChartEditorClip>
             {
-                CreateClip("swim", EditorClipDefinitions.SeaponySwim, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 4),
-                CreateClip("tap", EditorClipDefinitions.SeaponyTapTap, EditorClipCategory.SingleHit, startBeat: 8, lengthBeats: 0),
+                CreateClip("swim", SeaponyParadeEditorNoteProvider.SwimClipId, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 4),
+                CreateClip("tap", SeaponyParadeEditorNoteProvider.TapTapClipId, EditorClipCategory.SingleHit, startBeat: 8, lengthBeats: 0),
                 CreateClip("nohit", EditorClipDefinitions.NoHit, EditorClipCategory.NoHit, startBeat: 12, lengthBeats: 4)
             },
             EditorClipsSpecified = true
@@ -177,7 +177,7 @@ public sealed class BeatmapPackageTests
             ChartVersion = 2,
             EditorClips = new List<ChartEditorClip>
             {
-                CreateClip("roll", EditorClipDefinitions.SeaponyRoll, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 3)
+                CreateClip("roll", SeaponyParadeEditorNoteProvider.RollClipId, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 3)
             },
             EditorClipsSpecified = true
         };
@@ -197,7 +197,7 @@ public sealed class BeatmapPackageTests
             ChartVersion = 2,
             EditorClips = new List<ChartEditorClip>
             {
-                CreateClip("tap", EditorClipDefinitions.SeaponyTapTap, EditorClipCategory.SingleHit, startBeat: 0, lengthBeats: 0)
+                CreateClip("tap", SeaponyParadeEditorNoteProvider.TapTapClipId, EditorClipCategory.SingleHit, startBeat: 0, lengthBeats: 0)
             },
             EditorClipsSpecified = true
         };
@@ -213,7 +213,7 @@ public sealed class BeatmapPackageTests
         using TempWorkspace workspace = new();
         BeatmapEditorDocument document = BeatmapEditorDocument.CreateNew("", Path.Combine(workspace.Root, "Beatmaps", "Commands", "chart.xml"), 120);
         EditorCommandStack stack = new();
-        ChartEditorClip clip = CreateClip("clip-1", EditorClipDefinitions.SeaponySwim, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 4);
+        ChartEditorClip clip = CreateClip("clip-1", SeaponyParadeEditorNoteProvider.SwimClipId, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 4);
 
         stack.Execute(new CreateClipCommand(clip), document);
         Assert.Equal(new[] { 0.0, 2.0, 4.0 }, document.Chart.Notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
@@ -237,7 +237,7 @@ public sealed class BeatmapPackageTests
         using TempWorkspace workspace = new();
         string chartPath = Path.Combine(workspace.Root, "Beatmaps", "Clips", "chart.xml");
         BeatmapEditorDocument document = BeatmapEditorDocument.CreateNew("", chartPath, 120);
-        ChartEditorClip clip = CreateClip("clip-1", EditorClipDefinitions.SeaponySwim, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 4);
+        ChartEditorClip clip = CreateClip("clip-1", SeaponyParadeEditorNoteProvider.SwimClipId, EditorClipCategory.Continuous, startBeat: 0, lengthBeats: 4);
 
         Assert.True(document.AddEditorClip(clip, out string reason), reason);
         Assert.Equal(new[] { 0.0, 2.0, 4.0 }, document.Chart.Notes.Select(note => note.BeatPosition.GetValueOrDefault()).ToArray());
@@ -261,7 +261,7 @@ public sealed class BeatmapPackageTests
         using TempWorkspace workspace = new();
         BeatmapEditorDocument document = BeatmapEditorDocument.CreateNew("", Path.Combine(workspace.Root, "Beatmaps", "LegacyCommands", "chart.xml"), 120);
         EditorCommandStack stack = new();
-        EditorNoteDefinition definition = EditorNoteDefinitions.Get(SeaPonyParadeNoteEditor.TypeId);
+        EditorNoteDefinition definition = EditorNoteDefinitions.Get(SeaponyParadeEditorNoteProvider.TypeId);
         ChartNote note = definition.CreateChartNote(0, document.Crotchet, variantIndex: 0);
         ChartTiming.SetNoteBeat(note, 0);
 
@@ -306,14 +306,14 @@ public sealed class BeatmapPackageTests
 
     private static ChartEditorClip CreateClip(string id, string clipTypeId, EditorClipCategory category, double startBeat, double lengthBeats)
     {
-        EditorClipDefinition definition = EditorClipDefinitions.Find(EditorClipDefinitions.SeaponyParadeGameId, clipTypeId);
+        EditorClipDefinition definition = EditorClipDefinitions.Find(SeaponyParadeEditorNoteProvider.GameId, clipTypeId);
         return new ChartEditorClip
         {
             Id = id,
             TrackIndex = 0,
             StartBeat = startBeat,
             LengthBeats = lengthBeats,
-            RhythmGameId = EditorClipDefinitions.SeaponyParadeGameId,
+            RhythmGameId = SeaponyParadeEditorNoteProvider.GameId,
             ClipTypeId = clipTypeId,
             ClipCategory = category.ToString(),
             InputAction = "ReactMain",

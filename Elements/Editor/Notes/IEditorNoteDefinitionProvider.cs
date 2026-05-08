@@ -27,7 +27,9 @@ public interface IEditorNoteProvider
 
     string GetClipTypeIdFromLegacyNote(ChartNote note);
 
-    int FindVariantIndex(ChartNote note);
+    int GetNoteVariantIndex(ChartNote note);
+
+    EditorVisualStyle GetEditorStyle(ChartNote note);
 
     IReadOnlyDictionary<string, object> CreateTimingContext(Chart chart, ChartTempoMap tempoMap);
 
@@ -35,7 +37,6 @@ public interface IEditorNoteProvider
 
     bool AllowsBoundaryTouch(EditorNoteDefinition otherDefinition);
 
-    Color GetEditorColor(int variantIndex);
 }
 
 public sealed class EditorNoteValidationContext
@@ -97,9 +98,14 @@ public abstract class EditorNoteProvider : IEditorNoteProvider
             ?? EditorClipDefinitions.NoHit;
     }
 
-    public virtual int FindVariantIndex(ChartNote note)
+    public virtual int GetNoteVariantIndex(ChartNote note)
     {
-        return FindVariantIndexByExactData(Definition, note);
+        return GetNoteVariantIndexByExactData(Definition, note);
+    }
+
+    public virtual EditorVisualStyle GetEditorStyle(ChartNote note)
+    {
+        return Definition?.GetVariant(GetNoteVariantIndex(note))?.EditorStyle ?? EditorVisualStyle.Default;
     }
 
     public virtual IReadOnlyDictionary<string, object> CreateTimingContext(Chart chart, ChartTempoMap tempoMap)
@@ -118,16 +124,11 @@ public abstract class EditorNoteProvider : IEditorNoteProvider
         return false;
     }
 
-    public virtual Color GetEditorColor(int variantIndex)
-    {
-        return Color.DeepSkyBlue;
-    }
-
     protected virtual IReadOnlyList<EditorClipDefinition> CreateClips() => Array.Empty<EditorClipDefinition>();
 
-    protected EditorClipDefinition Clip(string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction = "ReactMain", IReadOnlyDictionary<string, string> defaultData = null, IReadOnlyList<EditorClipFieldDefinition> fields = null)
+    protected EditorClipDefinition Clip(string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction = "ReactMain", IReadOnlyDictionary<string, string> defaultData = null, IReadOnlyList<EditorClipFieldDefinition> fields = null, EditorVisualStyle editorStyle = null)
     {
-        return new EditorClipDefinition(RhythmGameId, clipTypeId, displayName, category, defaultLengthBeats, inputAction, defaultData, fields);
+        return new EditorClipDefinition(RhythmGameId, clipTypeId, displayName, category, defaultLengthBeats, inputAction, defaultData, fields, editorStyle);
     }
 
     protected IReadOnlyList<ChartNote> CompileContinuous(ChartEditorClip clip, ChartTempoMap tempoMap, IReadOnlyDictionary<string, string> data, double stepBeats)
@@ -190,7 +191,7 @@ public abstract class EditorNoteProvider : IEditorNoteProvider
             ?? EditorClipDefinitions.Find(clip?.RhythmGameId, clip?.ClipTypeId);
     }
 
-    protected static int FindVariantIndexByExactData(EditorNoteDefinition definition, ChartNote note)
+    protected static int GetNoteVariantIndexByExactData(EditorNoteDefinition definition, ChartNote note)
     {
         if (definition == null || note?.AdditionnalData == null)
             return 0;
@@ -224,6 +225,6 @@ public abstract class EditorNoteProvider : IEditorNoteProvider
         {
             [EditorClipDefinitions.SwitchGameEventKey] = EditorClipDefinitions.SwitchGameEventValue,
             [EditorClipDefinitions.SwitchGameTargetGameKey] = RhythmGameId
-        });
+        }, editorStyle: new EditorVisualStyle(Color.LightGreen));
     }
 }

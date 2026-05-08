@@ -6,21 +6,7 @@ namespace MLP_RiM.Elements.Editor;
 
 public static class EditorClipDefinitions
 {
-    public const string SeeSawGameId = SeeSawEditorNote.GameId;
-    public const string SeaponyParadeGameId = SeaPonyParadeNoteEditor.GameId;
     public const string UnknownGameId = "unknown";
-
-    public const string SeeSawLongLong = SeeSawEditorNote.LongLongClipId;
-    public const string SeeSawSwitchGame = SeeSawEditorNote.SwitchGameClipId;
-    public const string SeeSawLongShort = SeeSawEditorNote.LongShortClipId;
-    public const string SeeSawShortLong = SeeSawEditorNote.ShortLongClipId;
-    public const string SeeSawShortShort = SeeSawEditorNote.ShortShortClipId;
-    public const string SeeSawExit = SeeSawEditorNote.ExitClipId;
-
-    public const string SeaponySwitchGame = SeaPonyParadeNoteEditor.SwitchGameClipId;
-    public const string SeaponySwim = SeaPonyParadeNoteEditor.SwimClipId;
-    public const string SeaponyRoll = SeaPonyParadeNoteEditor.RollClipId;
-    public const string SeaponyTapTap = SeaPonyParadeNoteEditor.TapTapClipId;
     public const string NoHit = "no_hit";
 
     public const string SwitchGameEventKey = "editor_event";

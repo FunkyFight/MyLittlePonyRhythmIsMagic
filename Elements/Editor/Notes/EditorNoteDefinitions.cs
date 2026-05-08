@@ -86,12 +86,19 @@ public static class EditorNoteDefinitions
         return scene != null;
     }
 
-    public static int FindVariantIndex(EditorNoteDefinition definition, ChartNote note)
+    public static int GetNoteVariantIndex(EditorNoteDefinition definition, ChartNote note)
     {
         if (definition != null && ProvidersByTypeId.TryGetValue(definition.TypeId, out IEditorNoteProvider provider))
-            return provider.FindVariantIndex(note);
+            return provider.GetNoteVariantIndex(note);
 
         return 0;
+    }
+
+    public static EditorVisualStyle GetEditorStyle(EditorNoteDefinition definition, ChartNote note)
+    {
+        return definition != null && ProvidersByTypeId.TryGetValue(definition.TypeId, out IEditorNoteProvider provider)
+            ? provider.GetEditorStyle(note)
+            : EditorVisualStyle.Default;
     }
 
     private static IReadOnlyList<IEditorNoteProvider> CreateProviders()

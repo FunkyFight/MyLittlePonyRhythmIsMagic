@@ -81,8 +81,8 @@ public sealed class NotePayloadCodecTests
 
         ChartEditorClip clip = EditorClipCompiler.CreateClipFromLegacyNote(note, _ => 4, 0);
 
-        Assert.Equal(SeaPonyParadeNoteEditor.GameId, clip.RhythmGameId);
-        Assert.Equal(SeaPonyParadeNoteEditor.RollClipId, clip.ClipTypeId);
+        Assert.Equal(SeaponyParadeEditorNoteProvider.GameId, clip.RhythmGameId);
+        Assert.Equal(SeaponyParadeEditorNoteProvider.RollClipId, clip.ClipTypeId);
         Assert.Equal(3, clip.LengthBeats);
     }
 

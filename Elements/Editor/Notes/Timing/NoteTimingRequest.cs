@@ -6,11 +6,11 @@ namespace MLP_RiM.Elements.Editor;
 
 public sealed record NoteTimingRequest
 {
-    public NoteTimingRequest(ChartNote note, EditorNoteDefinition definition, int variantIndex, double beat, ChartTempoMap tempoMap, IReadOnlyList<ChartNote> previousNotes, IReadOnlyList<ChartNote> nextNotes, IReadOnlyDictionary<string, object> gameContext)
+    public NoteTimingRequest(ChartNote note, EditorNoteDefinition definition, int noteVariantIndex, double beat, ChartTempoMap tempoMap, IReadOnlyList<ChartNote> previousNotes, IReadOnlyList<ChartNote> nextNotes, IReadOnlyDictionary<string, object> gameContext)
     {
         Note = note;
         Definition = definition;
-        VariantIndex = variantIndex;
+        NoteVariantIndex = noteVariantIndex;
         Beat = beat;
         TempoMap = tempoMap;
         PreviousNotes = previousNotes ?? Array.Empty<ChartNote>();
@@ -24,7 +24,7 @@ public sealed record NoteTimingRequest
     public EditorNoteDefinition Definition { get; init; }
     public NoteTypeId NoteType => Definition?.TypeId ?? default;
     public NoteTypeId NoteTypeId => NoteType;
-    public int VariantIndex { get; init; }
+    public int NoteVariantIndex { get; init; }
     public double Beat { get; init; }
     public ChartTempoMap TempoMap { get; init; }
     public IReadOnlyList<ChartNote> PreviousNotes { get; init; }

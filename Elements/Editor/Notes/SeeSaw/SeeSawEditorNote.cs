@@ -8,7 +8,6 @@ namespace MLP_RiM.Elements.Editor;
 public sealed class SeeSawEditorNote : EditorNoteProvider
 {
     public const string GameId = "see_saw";
-    public const string SwitchGameClipId = "see_saw.switch_game";
     public const string LongLongClipId = "see_saw.long_long";
     public const string LongShortClipId = "see_saw.long_short";
     public const string ShortLongClipId = "see_saw.short_long";
@@ -32,7 +31,11 @@ public sealed class SeeSawEditorNote : EditorNoteProvider
         .HitWindow(beforeBeats: 0, afterBeats: 4)
         .Timing(new SeeSawEditorNoteTiming())
         .Matches(SeeSawChartNoteMatcher.Matches)
-        .Variant("Default", CreateDefaultData())
+        .Variant("Long Long", CreatePatternData(SeeSawPatternKind.LongLong))
+        .Variant("Short Short", CreatePatternData(SeeSawPatternKind.ShortShort))
+        .Variant("Long Short", CreatePatternData(SeeSawPatternKind.LongShort))
+        .Variant("Short Long", CreatePatternData(SeeSawPatternKind.ShortLong))
+        .Variant("Exit", SeeSawAction.Exit.ToAdditionnalData())
         .Build();
 
     public override IEditorNoteOptionsPanel OptionsPanel { get; } = new SeeSawEditorNoteOptionsPanel();
@@ -42,7 +45,7 @@ public sealed class SeeSawEditorNote : EditorNoteProvider
         return new SeeSawScene();
     }
 
-    public override int FindVariantIndex(ChartNote note)
+    public override int GetNoteVariantIndex(ChartNote note)
     {
         if (SeeSawAction.TryGetPattern(note?.AdditionnalData, out SeeSawPatternKind pattern))
         {
@@ -85,9 +88,9 @@ public sealed class SeeSawEditorNote : EditorNoteProvider
         return otherDefinition != null && otherDefinition.TypeId == Definition.TypeId;
     }
 
-    public override Color GetEditorColor(int variantIndex)
+    public override EditorVisualStyle GetEditorStyle(ChartNote note)
     {
-        return variantIndex switch
+        Color color = GetNoteVariantIndex(note) switch
         {
             1 => Color.LightSalmon,
             2 => Color.Gold,
@@ -95,6 +98,8 @@ public sealed class SeeSawEditorNote : EditorNoteProvider
             4 => Color.OrangeRed,
             _ => Color.Orange
         };
+
+        return new EditorVisualStyle(color);
     }
 
     public override string GetClipTypeIdFromLegacyNote(ChartNote note)
@@ -120,26 +125,24 @@ public sealed class SeeSawEditorNote : EditorNoteProvider
     {
         return new[]
         {
-            CreateSeeSawClip(LongLongClipId, "Long Long", SeeSawPatternKind.LongLong),
-            CreateSeeSawClip(ShortShortClipId, "Short Short", SeeSawPatternKind.ShortShort),
-            CreateSeeSawClip(LongShortClipId, "Long Short", SeeSawPatternKind.LongShort),
-            CreateSeeSawClip(ShortLongClipId, "Short Long", SeeSawPatternKind.ShortLong),
-            Clip(ExitClipId, "Exit", EditorClipCategory.SingleHit, 0, "ReactMain", SeeSawAction.Exit.ToAdditionnalData())
+            CreateSeeSawClip(LongLongClipId, "Long Long", SeeSawPatternKind.LongLong, Color.Orange),
+            CreateSeeSawClip(ShortShortClipId, "Short Short", SeeSawPatternKind.ShortShort, Color.LightSalmon),
+            CreateSeeSawClip(LongShortClipId, "Long Short", SeeSawPatternKind.LongShort, Color.Gold),
+            CreateSeeSawClip(ShortLongClipId, "Short Long", SeeSawPatternKind.ShortLong, Color.MediumPurple),
+            Clip(ExitClipId, "Exit", EditorClipCategory.SingleHit, 0, "ReactMain", SeeSawAction.Exit.ToAdditionnalData(), editorStyle: new EditorVisualStyle(Color.OrangeRed))
         };
     }
 
-    private static IReadOnlyDictionary<string, string> CreateDefaultData()
-    {
-        Dictionary<string, string> data = new();
-        SeeSawAction.SetPattern(data, SeeSawPatternKind.LongLong);
-        return data;
-    }
-
-    private EditorClipDefinition CreateSeeSawClip(string clipTypeId, string displayName, SeeSawPatternKind pattern)
+    private static IReadOnlyDictionary<string, string> CreatePatternData(SeeSawPatternKind pattern)
     {
         Dictionary<string, string> data = new();
         SeeSawAction.SetPattern(data, pattern);
-        return Clip(clipTypeId, displayName, EditorClipCategory.SingleHit, GetPatternLengthBeats(pattern), "ReactMain", data, JumpClipFields);
+        return data;
+    }
+
+    private EditorClipDefinition CreateSeeSawClip(string clipTypeId, string displayName, SeeSawPatternKind pattern, Color color)
+    {
+        return Clip(clipTypeId, displayName, EditorClipCategory.SingleHit, GetPatternLengthBeats(pattern), "ReactMain", CreatePatternData(pattern), JumpClipFields, new EditorVisualStyle(color));
     }
 
     private static double GetPatternLengthBeats(SeeSawPatternKind pattern)

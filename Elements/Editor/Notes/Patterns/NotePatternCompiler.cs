@@ -12,11 +12,15 @@ public sealed record RuntimeNoteDraft(double Beat, INotePayload Payload, double 
     public ChartNote ToChartNote(ChartTempoMap tempoMap)
     {
         double songPosition = tempoMap.BeatToSeconds(Beat);
+        double holdDuration = HoldBeats > 0.0
+            ? tempoMap.BeatToSeconds(Beat + HoldBeats) - songPosition
+            : 0.0;
+
         return new ChartNote
         {
             SongPosition = songPosition,
             BeatPosition = Beat,
-            HoldDuration = 0,
+            HoldDuration = holdDuration,
             HoldBeats = HoldBeats,
             InputActionToPress = InputAction,
             AdditionnalData = Payload?.ToLegacyData() ?? new Dictionary<string, string>()

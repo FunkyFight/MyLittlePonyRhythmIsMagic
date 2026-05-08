@@ -35,7 +35,7 @@ public sealed class SeeSawEditorNoteTiming : IEditorNoteTiming
         if (request.Note != null)
             return SeeSawChartCompiler.GetTimingForChartNote(contextualNotes, request.Note, note => ChartTiming.GetNoteBeat(note, request.TempoMap), leadInBeats);
 
-        return SeeSawChartCompiler.GetPreviewTiming(contextualNotes, request.Definition.GetVariant(request.VariantIndex).AdditionnalData, request.Beat, note => ChartTiming.GetNoteBeat(note, request.TempoMap), leadInBeats);
+        return SeeSawChartCompiler.GetPreviewTiming(contextualNotes, request.Definition.GetVariant(request.NoteVariantIndex).AdditionnalData, request.Beat, note => ChartTiming.GetNoteBeat(note, request.TempoMap), leadInBeats);
     }
 
     private static double GetLeadInBeats(NoteTimingRequest request)

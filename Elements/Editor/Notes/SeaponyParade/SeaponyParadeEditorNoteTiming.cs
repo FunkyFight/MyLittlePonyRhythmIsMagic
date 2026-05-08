@@ -1,7 +1,8 @@
-using MLP_RiM.Elements.Editor;
 using Rhythm.Note;
 
-public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
+namespace MLP_RiM.Elements.Editor;
+
+public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
 {
     public NoteTimingResult GetTiming(NoteTimingRequest request)
     {
@@ -114,7 +115,7 @@ public class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
         if (request.Note != null)
             return SeaponyNoteCodec.ReadAction(request.Note.AdditionnalData);
 
-        return SeaponyNoteCodec.ReadAction(request.Definition.GetVariant(request.VariantIndex).AdditionnalData);
+        return SeaponyNoteCodec.ReadAction(request.Definition.GetVariant(request.NoteVariantIndex).AdditionnalData);
     }
 
     private static bool IsRollBefore(NoteTimingRequest request)
