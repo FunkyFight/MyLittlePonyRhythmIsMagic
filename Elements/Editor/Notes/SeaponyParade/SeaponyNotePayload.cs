@@ -29,10 +29,7 @@ public static class SeaponyNoteCodec
     public const string NoteId = "note";
     public const int SchemaVersion = 1;
 
-    private const string ActionKey = NotePayloadKeys.Action;
-    private const string SwimActionValue = "seapony_parade_swim";
-    private const string RollActionValue = "seapony_parade_roll";
-    private const string TapTapActionValue = "seapony_parade_tap_tap";
+    private static readonly EnumNoteCodec<SeaponyAction> Codec = new(GameId, NoteId, schemaVersion: SchemaVersion);
 
     public static readonly IReadOnlyList<SeaponyAction> EditorActions = new[]
     {
@@ -50,15 +47,9 @@ public static class SeaponyNoteCodec
 
     public static bool TryRead(IReadOnlyDictionary<string, string> data, out SeaponyNotePayload payload)
     {
-        if (HasExplicitMetadata(data) && !HasMatchingMetadata(data))
+        if (Codec.TryRead(data, out EnumNotePayload<SeaponyAction> enumPayload))
         {
-            payload = default;
-            return false;
-        }
-
-        if (TryReadAction(data, out SeaponyAction action))
-        {
-            payload = new SeaponyNotePayload(action);
+            payload = new SeaponyNotePayload(enumPayload.Action);
             return true;
         }
 
@@ -73,13 +64,7 @@ public static class SeaponyNoteCodec
 
     public static bool TryReadAction(IReadOnlyDictionary<string, string> data, out SeaponyAction action)
     {
-        if (data != null
-            && data.TryGetValue(ActionKey, out string value)
-            && TryParseAction(value, out action))
-            return true;
-
-        action = default;
-        return false;
+        return Codec.TryReadAction(data, out action);
     }
 
     public static bool Matches(IReadOnlyDictionary<string, string> data)
@@ -89,50 +74,22 @@ public static class SeaponyNoteCodec
 
     public static bool IsAction(IReadOnlyDictionary<string, string> data, SeaponyAction expected)
     {
-        return TryRead(data, out SeaponyNotePayload payload) && payload.Action == expected;
+        return Codec.IsAction(data, expected);
     }
 
     public static Dictionary<string, string> Write(SeaponyAction action)
     {
-        return Write(new SeaponyNotePayload(action));
+        return Codec.Write(action);
     }
 
     public static Dictionary<string, string> Write(SeaponyNotePayload payload)
     {
-        return new Dictionary<string, string>
-        {
-            [NotePayloadKeys.Game] = GameId,
-            [NotePayloadKeys.Type] = NoteId,
-            [NotePayloadKeys.Version] = SchemaVersion.ToString(),
-            [ActionKey] = ToLegacyActionValue(payload.Action)
-        };
+        return Codec.Write(payload?.Action ?? SeaponyAction.Swim);
     }
 
     public static Dictionary<string, string> WithAction(IReadOnlyDictionary<string, string> data, SeaponyAction action)
     {
-        Dictionary<string, string> result = new(data ?? new Dictionary<string, string>());
-        result[NotePayloadKeys.Game] = GameId;
-        result[NotePayloadKeys.Type] = NoteId;
-        result[NotePayloadKeys.Version] = SchemaVersion.ToString();
-        result[ActionKey] = ToLegacyActionValue(action);
-        return result;
-    }
-
-    private static bool HasExplicitMetadata(IReadOnlyDictionary<string, string> data)
-    {
-        return data != null
-            && (data.ContainsKey(NotePayloadKeys.Game)
-                || data.ContainsKey(NotePayloadKeys.Type)
-                || data.ContainsKey(NotePayloadKeys.Version));
-    }
-
-    private static bool HasMatchingMetadata(IReadOnlyDictionary<string, string> data)
-    {
-        return data != null
-            && data.TryGetValue(NotePayloadKeys.Game, out string gameId)
-            && gameId == GameId
-            && data.TryGetValue(NotePayloadKeys.Type, out string noteId)
-            && noteId == NoteId;
+        return Codec.WithAction(data, action);
     }
 
     public static string GetDisplayName(SeaponyAction action)
@@ -154,34 +111,5 @@ public static class SeaponyNoteCodec
     public static SeaponyAction GetEditorActionAt(int index)
     {
         return EditorActions[Math.Clamp(index, 0, EditorActions.Count - 1)];
-    }
-
-    private static bool TryParseAction(string value, out SeaponyAction action)
-    {
-        switch (value)
-        {
-            case SwimActionValue:
-                action = SeaponyAction.Swim;
-                return true;
-            case RollActionValue:
-                action = SeaponyAction.Roll;
-                return true;
-            case TapTapActionValue:
-                action = SeaponyAction.TapTap;
-                return true;
-            default:
-                action = default;
-                return false;
-        }
-    }
-
-    private static string ToLegacyActionValue(SeaponyAction action)
-    {
-        return action switch
-        {
-            SeaponyAction.Roll => RollActionValue,
-            SeaponyAction.TapTap => TapTapActionValue,
-            _ => SwimActionValue
-        };
     }
 }
