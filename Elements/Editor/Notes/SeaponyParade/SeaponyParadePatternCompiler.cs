@@ -13,6 +13,8 @@ public sealed class SeaponyParadePatternCompiler : INotePatternCompiler
     public const double TapTapCueLeadBeats = 2.0;
     public const double TapTapSecondHitOffsetBeats = 0.5;
     public const double TapTapPairStepBeats = 1.5;
+    public const double LeaveDefaultLengthBeats = 4.0;
+    public const double EnterDefaultLengthBeats = 4.0;
 
     private const double InclusiveEndEpsilonBeats = 0.000001;
 
@@ -25,8 +27,22 @@ public sealed class SeaponyParadePatternCompiler : INotePatternCompiler
         {
             SeaponyAction.Roll => CompileRoll(intent, context, payload),
             SeaponyAction.TapTap => CompileTapTap(intent, payload),
+            SeaponyAction.Leave => CompileLeave(intent, payload),
+            SeaponyAction.Enter => CompileEnter(intent, payload),
             _ => CompileSwim(intent, payload)
         };
+    }
+
+    private static IReadOnlyList<RuntimeNoteDraft> CompileLeave(NoteAuthoringIntent intent, SeaponyNotePayload payload)
+    {
+        double length = Math.Max(0.0, intent.LengthBeats);
+        return new[] { CreateDraft(intent.StartBeat, payload, length) };
+    }
+
+    private static IReadOnlyList<RuntimeNoteDraft> CompileEnter(NoteAuthoringIntent intent, SeaponyNotePayload payload)
+    {
+        double length = Math.Max(0.0, intent.LengthBeats);
+        return new[] { CreateDraft(intent.StartBeat, payload, length) };
     }
 
     private static IReadOnlyList<RuntimeNoteDraft> CompileSwim(NoteAuthoringIntent intent, SeaponyNotePayload payload)
@@ -96,9 +112,9 @@ public sealed class SeaponyParadePatternCompiler : INotePatternCompiler
         return notes;
     }
 
-    private static RuntimeNoteDraft CreateDraft(double beat, SeaponyNotePayload payload)
+    private static RuntimeNoteDraft CreateDraft(double beat, SeaponyNotePayload payload, double holdBeats = 0.0)
     {
-        return new RuntimeNoteDraft(beat, payload);
+        return new RuntimeNoteDraft(beat, payload, holdBeats);
     }
 
     private static RollSeriesInfo GetCombinedRollSeries(IReadOnlyList<RuntimeNoteDraft> generatedRolls, IReadOnlyList<ChartNote> existingNotes, ChartTempoMap tempoMap)

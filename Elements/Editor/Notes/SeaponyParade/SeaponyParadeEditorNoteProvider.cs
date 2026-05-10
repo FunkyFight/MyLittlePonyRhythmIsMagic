@@ -8,6 +8,8 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
     public const string SwimClipId = "seapony_parade.swim";
     public const string RollClipId = "seapony_parade.roll";
     public const string TapTapClipId = "seapony_parade.tap_tap";
+    public const string LeaveClipId = "seapony_parade.leave";
+    public const string EnterClipId = "seapony_parade.enter";
     public static readonly NoteTypeId TypeId = new(GameId, SeaponyNoteCodec.NoteId);
 
     protected override void Build(RhythmGameBuilder<SeaponyAction> game)
@@ -47,6 +49,20 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
             .LeadIn(2)
             .Pair(0.5)
             .RepeatPairsEvery(1.5);
+
+        game.Clip(SeaponyAction.Leave)
+            .Id(LeaveClipId)
+            .Name("Leave")
+            .Color(Color.MediumPurple)
+            .Continuous(4)
+            .HoldForClipLength();
+
+        game.Clip(SeaponyAction.Enter)
+            .Id(EnterClipId)
+            .Name("Enter")
+            .Color(Color.MediumSeaGreen)
+            .Continuous(4)
+            .HoldForClipLength();
 
         game.NoHit(1)
             .Color(Color.DimGray);

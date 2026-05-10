@@ -1,4 +1,5 @@
 using Rhythm.Note;
+using System;
 
 namespace MLP_RiM.Elements.Editor;
 
@@ -29,6 +30,10 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
 
             case SeaponyAction.TapTap:
                 return request.Beat + 2;
+
+            case SeaponyAction.Leave:
+            case SeaponyAction.Enter:
+                return request.Beat + GetGroupMoveHoldBeats(request);
         }
 
         return request.Beat;
@@ -48,6 +53,10 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
 
             case SeaponyAction.TapTap:
                 return request.Beat + 2;
+
+            case SeaponyAction.Leave:
+            case SeaponyAction.Enter:
+                return GetEndBeat(request);
         }
 
         return request.Beat;
@@ -60,6 +69,8 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
             case SeaponyAction.Swim:
             case SeaponyAction.Roll:
             case SeaponyAction.TapTap:
+            case SeaponyAction.Leave:
+            case SeaponyAction.Enter:
                 return request.Beat;
         }
 
@@ -82,6 +93,10 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
                 return IsTapTapBefore(request)
                     ? request.Beat
                     : request.Beat - 2;
+
+            case SeaponyAction.Leave:
+            case SeaponyAction.Enter:
+                return request.Beat;
         }
 
         return request.Beat;
@@ -167,5 +182,15 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
             paddingBeats = 1;
 
         return paddingBeats;
+    }
+
+    private static double GetGroupMoveHoldBeats(NoteTimingRequest request)
+    {
+        if(request.Note != null)
+            return Math.Max(0.0, ChartTiming.GetNoteHoldBeats(request.Note, request.Definition, request.TempoMap));
+
+        return GetSelectedAction(request) == SeaponyAction.Enter
+            ? SeaponyParadePatternCompiler.EnterDefaultLengthBeats
+            : SeaponyParadePatternCompiler.LeaveDefaultLengthBeats;
     }
 }

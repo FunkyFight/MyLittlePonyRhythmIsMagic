@@ -40,6 +40,9 @@ public sealed class RhythmGameDefinition<TAction>
             ? new SimpleClipDefinition<TAction>(this, builder.NoHitClipConfiguration)
             : null;
 
+        ValidateRuntimeActions(RuntimeClips);
+        ValidateClipIds(RuntimeClips, NoHitClip);
+
         EditorClips = RuntimeClips
             .Concat(NoHitClip != null ? new[] { NoHitClip } : Array.Empty<SimpleClipDefinition<TAction>>())
             .Select(clip => clip.EditorClip)
@@ -47,12 +50,10 @@ public sealed class RhythmGameDefinition<TAction>
 
         _variantIndicesByAction = RuntimeClips
             .Select((clip, index) => new { clip.Action, Index = index })
-            .GroupBy(item => item.Action)
-            .ToDictionary(group => group.Key, group => group.First().Index);
+            .ToDictionary(item => item.Action, item => item.Index);
 
         _clipsByAction = RuntimeClips
-            .GroupBy(clip => clip.Action)
-            .ToDictionary(group => group.Key, group => group.First());
+            .ToDictionary(clip => clip.Action);
 
         EditorDefinition = CreateEditorDefinition();
         _patternCompiler = new SimplePatternCompiler<TAction>(this);
@@ -244,6 +245,41 @@ public sealed class RhythmGameDefinition<TAction>
             throw new InvalidOperationException($"{label} must be configured before the rhythm game definition is used.");
 
         return value;
+    }
+
+    private void ValidateRuntimeActions(IReadOnlyList<SimpleClipDefinition<TAction>> runtimeClips)
+    {
+        IGrouping<TAction, SimpleClipDefinition<TAction>> duplicateAction = runtimeClips
+            .GroupBy(clip => clip.Action)
+            .FirstOrDefault(group => group.Count() > 1);
+
+        if (duplicateAction == null)
+            return;
+
+        string clipIds = string.Join(", ", duplicateAction.Select(clip => $"'{clip.ClipTypeId}'"));
+        throw new InvalidOperationException($"Simple rhythm game '{RhythmGameId}' declares multiple runtime clips for action '{duplicateAction.Key}': {clipIds}. Each runtime action can only be declared once.");
+    }
+
+    private void ValidateClipIds(IReadOnlyList<SimpleClipDefinition<TAction>> runtimeClips, SimpleClipDefinition<TAction> noHitClip)
+    {
+        IEnumerable<SimpleClipDefinition<TAction>> clips = runtimeClips
+            .Concat(noHitClip != null ? new[] { noHitClip } : Array.Empty<SimpleClipDefinition<TAction>>());
+        IGrouping<string, SimpleClipDefinition<TAction>> duplicateClipId = clips
+            .GroupBy(clip => clip.ClipTypeId, StringComparer.Ordinal)
+            .FirstOrDefault(group => group.Count() > 1);
+
+        if (duplicateClipId == null)
+            return;
+
+        string owners = string.Join(", ", duplicateClipId.Select(DescribeClipOwner));
+        throw new InvalidOperationException($"Simple rhythm game '{RhythmGameId}' declares duplicate clip id '{duplicateClipId.Key}' for {owners}. Clip ids must be unique within a rhythm game.");
+    }
+
+    private static string DescribeClipOwner(SimpleClipDefinition<TAction> clip)
+    {
+        return clip.IsRuntime
+            ? $"action '{clip.Action}'"
+            : "No Hit clip";
     }
 }
 

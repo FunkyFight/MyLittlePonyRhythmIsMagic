@@ -1,0 +1,2004 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>赤毛ポニー</SongName>
+  <BeatmapName>kompa pasion</BeatmapName>
+  <Beatmapper>Unknown</Beatmapper>
+  <ArtistName>Unknown</ArtistName>
+  <MusicName>赤毛ポニー</MusicName>
+  <SongPath>Beatmaps\kompa pasion\song.mp3</SongPath>
+  <BPM>98</BPM>
+  <Offset>0.1</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>0.1</SongPosition>
+      <BeatPosition>0</BeatPosition>
+      <HoldDuration>9.795918367346939</HoldDuration>
+      <HoldBeats>16</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_enter" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.508163265306122</SongPosition>
+      <BeatPosition>17</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>11.73265306122449</SongPosition>
+      <BeatPosition>19</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>12.957142857142857</SongPosition>
+      <BeatPosition>21</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>14.181632653061225</SongPosition>
+      <BeatPosition>23</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>15.406122448979591</SongPosition>
+      <BeatPosition>25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>16.63061224489796</SongPosition>
+      <BeatPosition>27</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.855102040816327</SongPosition>
+      <BeatPosition>29</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.079591836734696</SongPosition>
+      <BeatPosition>31</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>20.916326530612245</SongPosition>
+      <BeatPosition>34</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>21.528571428571432</SongPosition>
+      <BeatPosition>35</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>22.140816326530615</SongPosition>
+      <BeatPosition>36</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>22.753061224489798</SongPosition>
+      <BeatPosition>37</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>23.977551020408164</SongPosition>
+      <BeatPosition>39</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.202040816326534</SongPosition>
+      <BeatPosition>41</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>26.4265306122449</SongPosition>
+      <BeatPosition>43</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.651020408163266</SongPosition>
+      <BeatPosition>45</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>28.875510204081635</SongPosition>
+      <BeatPosition>47</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.712244897959184</SongPosition>
+      <BeatPosition>50</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.018367346938778</SongPosition>
+      <BeatPosition>50.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.63061224489796</SongPosition>
+      <BeatPosition>51.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.936734693877554</SongPosition>
+      <BeatPosition>52</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>32.54897959183673</SongPosition>
+      <BeatPosition>53</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>32.85510204081633</SongPosition>
+      <BeatPosition>53.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33.46734693877551</SongPosition>
+      <BeatPosition>54.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33.77346938775511</SongPosition>
+      <BeatPosition>55</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>34.385714285714286</SongPosition>
+      <BeatPosition>56</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>36.375510204081635</SongPosition>
+      <BeatPosition>59.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>37.6</SongPosition>
+      <BeatPosition>61.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>38.82448979591837</SongPosition>
+      <BeatPosition>63.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>40.04897959183673</SongPosition>
+      <BeatPosition>65.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>41.27346938775511</SongPosition>
+      <BeatPosition>67.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>42.49795918367347</SongPosition>
+      <BeatPosition>69.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>43.72244897959184</SongPosition>
+      <BeatPosition>71.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>44.334693877551025</SongPosition>
+      <BeatPosition>72.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>44.946938775510205</SongPosition>
+      <BeatPosition>73.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.55918367346939</SongPosition>
+      <BeatPosition>74.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>46.17142857142857</SongPosition>
+      <BeatPosition>75.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>46.78367346938776</SongPosition>
+      <BeatPosition>76.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>47.395918367346944</SongPosition>
+      <BeatPosition>77.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>48.00816326530612</SongPosition>
+      <BeatPosition>78.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>48.62040816326531</SongPosition>
+      <BeatPosition>79.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>52.29387755102041</SongPosition>
+      <BeatPosition>85.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>53.51836734693878</SongPosition>
+      <BeatPosition>87.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>54.74285714285715</SongPosition>
+      <BeatPosition>89.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>55.96734693877551</SongPosition>
+      <BeatPosition>91.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>57.19183673469388</SongPosition>
+      <BeatPosition>93.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>58.416326530612245</SongPosition>
+      <BeatPosition>95.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>59.64081632653061</SongPosition>
+      <BeatPosition>97.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>60.865306122448985</SongPosition>
+      <BeatPosition>99.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>62.08979591836735</SongPosition>
+      <BeatPosition>101.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>63.31428571428572</SongPosition>
+      <BeatPosition>103.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>64.53877551020408</SongPosition>
+      <BeatPosition>105.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>65.76326530612245</SongPosition>
+      <BeatPosition>107.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>66.98775510204081</SongPosition>
+      <BeatPosition>109.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>68.21224489795918</SongPosition>
+      <BeatPosition>111.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>68.82448979591837</SongPosition>
+      <BeatPosition>112.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>69.13061224489796</SongPosition>
+      <BeatPosition>112.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>69.74285714285713</SongPosition>
+      <BeatPosition>113.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.04897959183673</SongPosition>
+      <BeatPosition>114.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.66122448979591</SongPosition>
+      <BeatPosition>115.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.9673469387755</SongPosition>
+      <BeatPosition>115.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>71.57959183673469</SongPosition>
+      <BeatPosition>116.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>71.88571428571429</SongPosition>
+      <BeatPosition>117.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>72.49795918367346</SongPosition>
+      <BeatPosition>118.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>72.80408163265305</SongPosition>
+      <BeatPosition>118.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>75.1</SongPosition>
+      <BeatPosition>122.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>75.71224489795918</SongPosition>
+      <BeatPosition>123.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>76.32448979591837</SongPosition>
+      <BeatPosition>124.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>76.93673469387755</SongPosition>
+      <BeatPosition>125.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>77.54897959183673</SongPosition>
+      <BeatPosition>126.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>78.16122448979591</SongPosition>
+      <BeatPosition>127.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>78.7734693877551</SongPosition>
+      <BeatPosition>128.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>79.38571428571429</SongPosition>
+      <BeatPosition>129.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>79.99795918367346</SongPosition>
+      <BeatPosition>130.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>80.61020408163265</SongPosition>
+      <BeatPosition>131.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>81.22244897959183</SongPosition>
+      <BeatPosition>132.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>81.83469387755102</SongPosition>
+      <BeatPosition>133.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>88.56938775510204</SongPosition>
+      <BeatPosition>144.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>89.7938775510204</SongPosition>
+      <BeatPosition>146.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>91.01836734693877</SongPosition>
+      <BeatPosition>148.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>92.24285714285713</SongPosition>
+      <BeatPosition>150.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>93.4673469387755</SongPosition>
+      <BeatPosition>152.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>94.69183673469388</SongPosition>
+      <BeatPosition>154.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>95.91632653061224</SongPosition>
+      <BeatPosition>156.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>97.14081632653061</SongPosition>
+      <BeatPosition>158.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>98.36530612244897</SongPosition>
+      <BeatPosition>160.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>99.58979591836734</SongPosition>
+      <BeatPosition>162.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>100.81428571428572</SongPosition>
+      <BeatPosition>164.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>102.03877551020408</SongPosition>
+      <BeatPosition>166.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>103.26326530612245</SongPosition>
+      <BeatPosition>168.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>104.48775510204081</SongPosition>
+      <BeatPosition>170.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>105.71224489795918</SongPosition>
+      <BeatPosition>172.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>106.93673469387755</SongPosition>
+      <BeatPosition>174.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>108.45510204081631</SongPosition>
+      <BeatPosition>177</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>109.65510204081632</SongPosition>
+      <BeatPosition>179</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>110.85510204081632</SongPosition>
+      <BeatPosition>181</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>112.05510204081632</SongPosition>
+      <BeatPosition>183</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>113.25510204081633</SongPosition>
+      <BeatPosition>185</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>114.45510204081631</SongPosition>
+      <BeatPosition>187</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>115.65510204081632</SongPosition>
+      <BeatPosition>189</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>116.85510204081632</SongPosition>
+      <BeatPosition>191</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>118.05510204081632</SongPosition>
+      <BeatPosition>193</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>119.85510204081632</SongPosition>
+      <BeatPosition>196</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>120.15510204081632</SongPosition>
+      <BeatPosition>196.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>121.80510204081632</SongPosition>
+      <BeatPosition>199.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>122.40510204081632</SongPosition>
+      <BeatPosition>200.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>123.00510204081633</SongPosition>
+      <BeatPosition>201.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>123.60510204081632</SongPosition>
+      <BeatPosition>202.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>124.95510204081631</SongPosition>
+      <BeatPosition>204.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>125.25510204081633</SongPosition>
+      <BeatPosition>205</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>125.85510204081632</SongPosition>
+      <BeatPosition>206</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>126.15510204081632</SongPosition>
+      <BeatPosition>206.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>127.95510204081631</SongPosition>
+      <BeatPosition>209.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>129.15510204081633</SongPosition>
+      <BeatPosition>211.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>130.35510204081632</SongPosition>
+      <BeatPosition>213.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>131.5551020408163</SongPosition>
+      <BeatPosition>215.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>132.75510204081633</SongPosition>
+      <BeatPosition>217.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>133.9551020408163</SongPosition>
+      <BeatPosition>219.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>135.15510204081633</SongPosition>
+      <BeatPosition>221.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>136.35510204081632</SongPosition>
+      <BeatPosition>223.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>137.5551020408163</SongPosition>
+      <BeatPosition>225.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>138.75510204081633</SongPosition>
+      <BeatPosition>227.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>139.9551020408163</SongPosition>
+      <BeatPosition>229.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>141.1551020408163</SongPosition>
+      <BeatPosition>231.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>141.75510204081633</SongPosition>
+      <BeatPosition>232.5</BeatPosition>
+      <HoldDuration>2.0999999999999943</HoldDuration>
+      <HoldBeats>3.5</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_leave" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects>
+    <Effect>
+      <SongPosition>107.85510204081632</SongPosition>
+      <BeatPosition>176</BeatPosition>
+      <EffectType>bpm_change</EffectType>
+      <Data>
+        <Entry Key="bpm" Value="100" />
+        <Entry Key="section_offset" Value="0" />
+      </Data>
+    </Effect>
+  </Effects>
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>90e36876a838434bbafd2a95d5aa0f3c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>0</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.switch_game</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="switch_game" />
+        <Entry Key="target_game" Value="seapony_parade" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1b1f38ff64d141c2a11c860b6e424e67</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>0</StartBeat>
+      <LengthBeats>16</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.enter</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_enter" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>00362a807fa14e509960d8b59232d892</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>17</StartBeat>
+      <LengthBeats>14.25</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7bfad28f5c53408fa98333faca0a81d7</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>32</StartBeat>
+      <LengthBeats>1.75</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.roll</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>56125e0ca0a34dbab45dd3964c468d8d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>39</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f085be8faf7b44d2bd61cf68de4f3285</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>48</StartBeat>
+      <LengthBeats>6.25</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.tap_tap</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f3781deec7e447f3b6f49caea9063dd8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>59.25</StartBeat>
+      <LengthBeats>12</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3ae096b572634e4ab3e8cfa57ce9297d</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>70.25</StartBeat>
+      <LengthBeats>5.75</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.roll</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>87ad1712758942308ca58d1d410cf508</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>85.25</StartBeat>
+      <LengthBeats>27.25</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>91dc0e86d6664ab58761778c7ba500fe</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>110.25</StartBeat>
+      <LengthBeats>6.5</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.tap_tap</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>829afc700a6a447ea1019cc1c7a14257</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>120.5</StartBeat>
+      <LengthBeats>11</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.roll</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5e822eaede1242568c80b100c81379f5</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>144.5</StartBeat>
+      <LengthBeats>31.75</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>05286eed8f854c1fbb0df6f943d6047e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>177</StartBeat>
+      <LengthBeats>16.25</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>27a289adb101411ebb8fbbfbc1da1427</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>194</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.tap_tap</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5a43602b6adc4e6fa5559500a24dfa3f</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>197.25</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.roll</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_roll" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>13f7428d944e4e11b91d24d6ad04152c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>202.5</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.tap_tap</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_tap_tap" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0029e49e28ab462ba8c6f05b7691a46e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>209.5</StartBeat>
+      <LengthBeats>23.25</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ddf14eb22aea453491c2887305ca3dd9</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>232.5</StartBeat>
+      <LengthBeats>3.5</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.leave</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_leave" />
+      </Data>
+    </Clip>
+  </EditorClips>
+</Chart>

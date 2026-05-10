@@ -4,7 +4,7 @@
  * Contains references to each image within the sprite sheet.
  *
  * https://www.codeandweb.com/texturepacker
- * $TexturePacker:SmartUpdate:ea96a42f59548b5f140d6d363dc28449:dd0daee79574286b198e9dbe059e8d58:bb8c871ba50dcb594d48391b0a334787$
+ * $TexturePacker:SmartUpdate:06cb753c4aa47ae5caa9bd515cab1bfb:9b913dc060d4acf5ac2b1828f81fb05e:bb8c871ba50dcb594d48391b0a334787$
  *
  */
 namespace TexturePackerMonoGameDefinitions
@@ -27,6 +27,7 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Applejack_pony_tap1 = "applejack-pony-tap1";
 		public const string Applejack_pony_tap2 = "applejack-pony-tap2";
 		public const string Applejack_true_idle = "applejack-true-idle";
+		public const string Arbustes = "arbustes";
 		public const string Coral1 = "coral1";
 		public const string Coral2 = "coral2";
 		public const string Coral3 = "coral3";
@@ -34,6 +35,15 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Coral5 = "coral5";
 		public const string Coral6 = "coral6";
 		public const string Coral7 = "coral7";
+		public const string Fences = "fences";
+		public const string Fluttershy_pony_idle1 = "fluttershy-pony-idle1";
+		public const string Fluttershy_pony_idle2 = "fluttershy-pony-idle2";
+		public const string Fluttershy_pony_star = "fluttershy-pony-star";
+		public const string Fluttershy_pony_swim1 = "fluttershy-pony-swim1";
+		public const string Fluttershy_pony_swim2 = "fluttershy-pony-swim2";
+		public const string Fluttershy_pony_tap1 = "fluttershy-pony-tap1";
+		public const string Fluttershy_pony_tap2 = "fluttershy-pony-tap2";
+		public const string Jump_effect = "jump effect";
 		public const string Pinkiepie_pony_idle1 = "pinkiepie-pony-idle1";
 		public const string Pinkiepie_pony_idle2 = "pinkiepie-pony-idle2";
 		public const string Pinkiepie_pony_star = "pinkiepie-pony-star";
@@ -56,16 +66,18 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Rainbowdash_land1 = "rainbowdash-land1";
 		public const string Rainbowdash_land2 = "rainbowdash-land2";
 		public const string Rainbowdash_land3 = "rainbowdash-land3";
+		public const string Rarity_pony_idle1 = "rarity-pony-idle1";
+		public const string Rarity_pony_idle2 = "rarity-pony-idle2";
+		public const string Rarity_pony_star = "rarity-pony-star";
+		public const string Rarity_pony_swim1 = "rarity-pony-swim1";
+		public const string Rarity_pony_swim2 = "rarity-pony-swim2";
+		public const string Rarity_pony_tap1 = "rarity-pony-tap1";
+		public const string Rarity_pony_tap2 = "rarity-pony-tap2";
 		public const string Sand1 = "sand1";
 		public const string Sand2 = "sand2";
 		public const string Sand3 = "sand3";
+		public const string Seapony_parade_clap_effect = "seapony_parade_clap_effect";
 		public const string Stand = "stand";
-		public const string Template_pony_idle1 = "template-pony-idle1";
-		public const string Template_pony_idle2 = "template-pony-idle2";
-		public const string Template_pony_star = "template-pony-star";
-		public const string Template_pony_swim1 = "template-pony-swim1";
-		public const string Template_pony_swim2 = "template-pony-swim2";
-		public const string Template_pony_tap1 = "template-pony-tap1";
-		public const string Template_pony_tap2 = "template-pony-tap2";
+		public const string Tree = "tree";
 	}
 }

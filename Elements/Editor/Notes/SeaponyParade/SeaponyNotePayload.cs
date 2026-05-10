@@ -8,7 +8,9 @@ public enum SeaponyAction
 {
     Swim,
     Roll,
-    TapTap
+    TapTap,
+    Leave,
+    Enter
 }
 
 public sealed record SeaponyNotePayload(SeaponyAction Action) : INotePayload
@@ -35,7 +37,9 @@ public static class SeaponyNoteCodec
     {
         SeaponyAction.Swim,
         SeaponyAction.Roll,
-        SeaponyAction.TapTap
+        SeaponyAction.TapTap,
+        SeaponyAction.Leave,
+        SeaponyAction.Enter
     };
 
     public static SeaponyNotePayload Read(IReadOnlyDictionary<string, string> data)
@@ -98,6 +102,8 @@ public static class SeaponyNoteCodec
         {
             SeaponyAction.Roll => "Roll",
             SeaponyAction.TapTap => "Tap Tap",
+            SeaponyAction.Leave => "Leave",
+            SeaponyAction.Enter => "Enter",
             _ => "Swim"
         };
     }

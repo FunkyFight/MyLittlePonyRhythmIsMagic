@@ -29,6 +29,9 @@ public sealed class BeatmapEditorDocument
     private bool _needsV1Backup;
     private string _v1BackupSourcePath;
     private bool _editorClipsAreRuntimeSource;
+    private IReadOnlyList<ChartNote> _sortedChartNotesCache;
+    private readonly Dictionary<ChartNote, NoteTimingResult> _chartNoteTimingCache = new();
+    private readonly Dictionary<NoteTypeId, IReadOnlyDictionary<string, object>> _timingContextCache = new();
 
     private BeatmapEditorDocument(Chart chart, string songPath, string chartPath)
     {
@@ -1080,7 +1083,15 @@ public sealed class BeatmapEditorDocument
         if (definition == null)
             return NoteTimingResult.AtBeat(GetNoteBeat(note));
 
-        return definition.GetTiming(CreateNoteTimingRequest(note, definition, contextualNotes));
+        bool useChartCache = UsesDefaultTimingContext(contextualNotes) && note != null;
+        if (useChartCache && _chartNoteTimingCache.TryGetValue(note, out NoteTimingResult cachedTiming))
+            return cachedTiming;
+
+        NoteTimingResult timing = definition.GetTiming(CreateNoteTimingRequest(note, definition, contextualNotes));
+        if (useChartCache)
+            _chartNoteTimingCache[note] = timing;
+
+        return timing;
     }
 
     private NoteTimingRequest CreateNoteTimingRequest(ChartNote note, EditorNoteDefinition definition, IReadOnlyList<ChartNote> contextualNotes)
@@ -1093,9 +1104,17 @@ public sealed class BeatmapEditorDocument
 
     private IReadOnlyDictionary<string, object> CreateTimingContext(EditorNoteDefinition definition)
     {
-        return definition != null && EditorNoteDefinitions.TryGetProvider(definition.TypeId, out IEditorNoteProvider provider)
+        if (definition == null)
+            return new Dictionary<string, object>();
+
+        if (_timingContextCache.TryGetValue(definition.TypeId, out IReadOnlyDictionary<string, object> cachedContext))
+            return cachedContext;
+
+        IReadOnlyDictionary<string, object> context = EditorNoteDefinitions.TryGetProvider(definition.TypeId, out IEditorNoteProvider provider)
             ? provider.CreateTimingContext(Chart, TempoMap)
             : new Dictionary<string, object>();
+        _timingContextCache[definition.TypeId] = context;
+        return context;
     }
 
     private void SplitContextualNotes(ChartNote note, double beat, IReadOnlyList<ChartNote> contextualNotes, out IReadOnlyList<ChartNote> previousNotes, out IReadOnlyList<ChartNote> nextNotes)
@@ -1115,10 +1134,21 @@ public sealed class BeatmapEditorDocument
 
     private IReadOnlyList<ChartNote> SortContextualNotes(IReadOnlyList<ChartNote> notes)
     {
+        if (ReferenceEquals(notes, Chart?.Notes))
+            return _sortedChartNotesCache ??= Chart.Notes
+                .Where(note => note != null)
+                .OrderBy(GetNoteBeat)
+                .ToArray();
+
         return (notes ?? Array.Empty<ChartNote>())
             .Where(note => note != null)
             .OrderBy(GetNoteBeat)
             .ToArray();
+    }
+
+    private bool UsesDefaultTimingContext(IReadOnlyList<ChartNote> contextualNotes)
+    {
+        return contextualNotes == null || ReferenceEquals(contextualNotes, Chart?.Notes);
     }
 
     private ChartNote FindBlockingNote(EditorNotePlacement placed, IReadOnlyList<ChartNote> contextualNotes)
@@ -1284,6 +1314,14 @@ public sealed class BeatmapEditorDocument
     private void InvalidateTempoMap()
     {
         _tempoMap = null;
+        InvalidateTimingCaches();
+    }
+
+    private void InvalidateTimingCaches()
+    {
+        _sortedChartNotesCache = null;
+        _chartNoteTimingCache.Clear();
+        _timingContextCache.Clear();
     }
 
     private static double GetEffectiveSnapDivisions(double snapDivisions)
@@ -1603,6 +1641,7 @@ public sealed class BeatmapEditorDocument
 
     private void SortNotes()
     {
+        InvalidateTimingCaches();
         Chart.Notes = Chart.Notes.OrderBy(GetNoteBeat).ToList();
     }
 

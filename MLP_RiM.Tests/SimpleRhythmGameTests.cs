@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MLP_RiM.Elements.Editor;
@@ -102,6 +103,32 @@ public sealed class SimpleRhythmGameTests
         Assert.Equal(1, provider.GetNoteVariantIndex(note));
     }
 
+    [Fact]
+    public void SimpleProviderRejectsDuplicateRuntimeActions()
+    {
+        DuplicateRuntimeActionRhythmGame provider = new();
+
+        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => _ = provider.Clips);
+
+        Assert.Contains("Simple rhythm game 'my_game'", exception.Message);
+        Assert.Contains("multiple runtime clips for action 'Basic'", exception.Message);
+        Assert.Contains("'my_game.basic_a'", exception.Message);
+        Assert.Contains("'my_game.basic_b'", exception.Message);
+    }
+
+    [Fact]
+    public void SimpleProviderRejectsDuplicateClipIds()
+    {
+        DuplicateClipIdRhythmGame provider = new();
+
+        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => _ = provider.Clips);
+
+        Assert.Contains("Simple rhythm game 'my_game'", exception.Message);
+        Assert.Contains("duplicate clip id 'my_game.duplicate'", exception.Message);
+        Assert.Contains("action 'Basic'", exception.Message);
+        Assert.Contains("action 'DoubleTap'", exception.Message);
+    }
+
     private static ChartEditorClip CreateClip(SimpleTestRhythmGame provider, string clipTypeId, double startBeat, double lengthBeats)
     {
         EditorClipDefinition definition = provider.Clips.First(clip => clip.ClipTypeId == clipTypeId);
@@ -172,6 +199,44 @@ public sealed class SimpleRhythmGameTests
                 .HoldForClipLength();
 
             game.NoHit(1);
+        }
+    }
+
+    private sealed class DuplicateRuntimeActionRhythmGame : SimpleRhythmGame<SimpleTestAction>
+    {
+        protected override void Build(RhythmGameBuilder<SimpleTestAction> game)
+        {
+            game.Id("my_game")
+                .DisplayName("My Game");
+
+            game.RuntimeNote();
+
+            game.Clip(SimpleTestAction.Basic)
+                .Id("my_game.basic_a")
+                .SingleHit();
+
+            game.Clip(SimpleTestAction.Basic)
+                .Id("my_game.basic_b")
+                .SingleHit();
+        }
+    }
+
+    private sealed class DuplicateClipIdRhythmGame : SimpleRhythmGame<SimpleTestAction>
+    {
+        protected override void Build(RhythmGameBuilder<SimpleTestAction> game)
+        {
+            game.Id("my_game")
+                .DisplayName("My Game");
+
+            game.RuntimeNote();
+
+            game.Clip(SimpleTestAction.Basic)
+                .Id("my_game.duplicate")
+                .SingleHit();
+
+            game.Clip(SimpleTestAction.DoubleTap)
+                .Id("my_game.duplicate")
+                .SingleHit();
         }
     }
 }

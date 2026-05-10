@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using GameCore;
 using GameCore.Animation;
 using GameCore.Audio;
 using GameCore.GameObjects;
 using GameCore.Scenes;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MLP_RiM.Elements.Editor;
 using Rhythm.Note;
 
@@ -858,6 +860,16 @@ public static class SeeSawChartCompiler
 
     public static SeeSawCompiledEventTiming GetTimingForChartNote(IReadOnlyList<ChartNote> notes, ChartNote targetNote, Func<ChartNote, double> getNoteBeat, double leadInBeats = 0.0)
     {
+        return GetTimingForChartNote(notes, targetNote, getNoteBeat, leadInBeats, includeAutoExit: true);
+    }
+
+    public static SeeSawCompiledEventTiming GetEditorTimingForChartNote(IReadOnlyList<ChartNote> notes, ChartNote targetNote, Func<ChartNote, double> getNoteBeat, double leadInBeats = 0.0)
+    {
+        return GetTimingForChartNote(notes, targetNote, getNoteBeat, leadInBeats, includeAutoExit: false);
+    }
+
+    private static SeeSawCompiledEventTiming GetTimingForChartNote(IReadOnlyList<ChartNote> notes, ChartNote targetNote, Func<ChartNote, double> getNoteBeat, double leadInBeats, bool includeAutoExit)
+    {
         if (targetNote == null || notes == null || getNoteBeat == null)
             return default;
 
@@ -873,7 +885,8 @@ public static class SeeSawChartCompiler
             ChartNote note = entry.Note;
 
             double hitBeat = getNoteBeat(note);
-            SeeSawCompiledEventTiming timing = CreateTiming(entry.Command, state, hitBeat, ShouldAutoExitAfterHit(commandEntries, i));
+            bool exitAfterHit = includeAutoExit && ShouldAutoExitAfterHit(commandEntries, i);
+            SeeSawCompiledEventTiming timing = CreateTiming(entry.Command, state, hitBeat, exitAfterHit);
             if (ReferenceEquals(note, targetNote))
                 return timing;
 
@@ -1235,22 +1248,30 @@ public readonly struct SeeSawLayout
 
 public readonly struct SeeSawPose
 {
-    public SeeSawPose(Vector2 position, float progression)
+    public SeeSawPose(Vector2 position, float progression, float visualProgression = -1f, bool isVisualApexHold = false)
     {
         Position = position;
         Progression = progression;
+        VisualProgression = visualProgression < 0f ? progression : visualProgression;
+        IsVisualApexHold = isVisualApexHold;
     }
 
     public Vector2 Position { get; }
     public float Progression { get; }
+    public float VisualProgression { get; }
+    public bool IsVisualApexHold { get; }
 }
 
 public sealed class SeeSawPathCatalog
 {
-    private const float OuterJumpHeight = 450f;
-    private const float InnerJumpHeight = 180f;
-    private const float ExitJumpHeight = 560f;
-    private const float BigLeapJumpHeight = OuterJumpHeight * 4f;
+    private const float OuterJumpHeight = 787.5f;
+    private const float InnerJumpHeight = 315f;
+    private const float ExitJumpHeight = 980f;
+    private const float BigLeapJumpHeight = 3200f;
+    private const float RainbowHighLaunchEnd = 0.22f;
+    private const float RainbowHighHangEnd = 0.46f;
+    private const float RainbowHighHangStartProgression = 0.47f;
+    private const float RainbowHighHangEndProgression = 0.55f;
 
     private readonly SeeSawLayout _layout;
 
@@ -1267,8 +1288,12 @@ public sealed class SeeSawPathCatalog
         Vector2 from = _layout.GetPosition(segment.Actor, segment.FromSide);
         Vector2 to = _layout.GetPosition(segment.Actor, segment.ToSide);
         float height = GetJumpHeight(segment);
+        float visualProgression = GetVisualProgression(segment, progression);
+        bool isVisualApexHold = IsRainbowHighJumpApexHold(segment, progression);
 
-        return new SeeSawPose(RhythmVisualUtils.SineArc(from, to, height, progression), progression);
+        Vector2 basePosition = Vector2.Lerp(from, to, progression);
+        Vector2 position = new(basePosition.X, basePosition.Y - height * RhythmVisualUtils.SineArcHeight(visualProgression));
+        return new SeeSawPose(position, progression, visualProgression, isVisualApexHold);
     }
 
     public SeeSawPose GetGroundedPose(SeeSawActor actor, SeeSawSide side)
@@ -1288,6 +1313,41 @@ public sealed class SeeSawPathCatalog
             return ExitJumpHeight;
 
         return segment.FromSide == SeeSawSide.Inner ? InnerJumpHeight : OuterJumpHeight;
+    }
+
+    private static float GetVisualProgression(SeeSawJumpSegment segment, float progression)
+    {
+        if (segment?.Actor != SeeSawActor.RainbowDash || !segment.High)
+            return progression;
+
+        return GetRainbowHighJumpVisualProgression(progression);
+    }
+
+    private static float GetRainbowHighJumpVisualProgression(float progression)
+    {
+        progression = Math.Clamp(progression, 0f, 1f);
+        if (progression <= RainbowHighLaunchEnd)
+        {
+            float launchProgress = progression / RainbowHighLaunchEnd;
+            return MathHelper.Lerp(0f, RainbowHighHangStartProgression, Interpolation.EaseOutQuart(launchProgress));
+        }
+
+        if (progression <= RainbowHighHangEnd)
+        {
+            float hangProgress = (progression - RainbowHighLaunchEnd) / (RainbowHighHangEnd - RainbowHighLaunchEnd);
+            return MathHelper.Lerp(RainbowHighHangStartProgression, RainbowHighHangEndProgression, Interpolation.EaseInOutSine(hangProgress));
+        }
+
+        float descentProgress = (progression - RainbowHighHangEnd) / (1f - RainbowHighHangEnd);
+        return MathHelper.Lerp(RainbowHighHangEndProgression, 1f, Interpolation.EaseInQuart(descentProgress));
+    }
+
+    private static bool IsRainbowHighJumpApexHold(SeeSawJumpSegment segment, float progression)
+    {
+        return segment?.Actor == SeeSawActor.RainbowDash
+            && segment.High
+            && progression > RainbowHighLaunchEnd
+            && progression <= RainbowHighHangEnd;
     }
 }
 
@@ -1368,19 +1428,24 @@ public sealed class SeeSawActorController
         }
     }
 
-    public void SetIdleForSide(SeeSawSide side)
+    public void SetIdleForSide(SeeSawSide _)
     {
         if (IsEventStatePlaying())
             return;
 
-        string state = _actor == SeeSawActor.Applejack && side == SeeSawSide.Exit ? ApplejackStartIdleState : IdleState;
+        string state = GetIdleStateForSide(_);
         RhythmVisualUtils.ForceAnimationState(_stateMachine, state);
     }
 
-    public void ResetToIdle(SeeSawSide side)
+    public void ResetToIdle(SeeSawSide _)
     {
-        string state = _actor == SeeSawActor.Applejack && side == SeeSawSide.Exit ? ApplejackStartIdleState : IdleState;
+        string state = GetIdleStateForSide(_);
         _stateMachine?.ForceState(state);
+    }
+
+    private string GetIdleStateForSide(SeeSawSide side)
+    {
+        return _actor == SeeSawActor.Applejack && side == SeeSawSide.Exit ? ApplejackStartIdleState : IdleState;
     }
 
     private bool IsFeedbackStateActive()
@@ -1444,13 +1509,15 @@ public sealed class SeeSawBeamController
 
 public sealed class SeeSawCameraController
 {
-    private const float BigLeapCameraVerticalMargin = 160f;
+    private const float BigLeapCameraTargetViewportY = 220f;
 
     private readonly Camera _camera;
+    private readonly Viewport _viewport;
 
     public SeeSawCameraController(Camera camera)
     {
         _camera = camera;
+        _viewport = GLOBALS.graphicsDevice.Viewport;
     }
 
     public void Apply(SeeSawJumpSegment rainbowSegment, SeeSawPose rainbowPose, SeeSawJumpSegment applejackSegment, SeeSawPose applejackPose)
@@ -1475,8 +1542,8 @@ public sealed class SeeSawCameraController
 
     private void ApplyHighJump(SeeSawPose pose)
     {
-        float t = RhythmVisualUtils.SineArcHeight(pose.Progression);
-        float targetY = pose.Position.Y - BigLeapCameraVerticalMargin;
+        float t = RhythmVisualUtils.SineArcHeight(pose.VisualProgression);
+        float targetY = pose.Position.Y - BigLeapCameraTargetViewportY;
         _camera.Position = new Vector2(0f, MathHelper.Lerp(0f, targetY, t));
     }
 }
@@ -1584,11 +1651,96 @@ public sealed class SeeSawSoundScheduler
     }
 }
 
+public sealed class SeeSawCameraEffectController
+{
+    private const float BigLeapSpeedLineSpeed = 3200.0f;
+    private const float BigLeapSpeedLineAreaHeightRatio = 0.55f;
+
+    private readonly Camera _camera;
+    private readonly Viewport _viewport;
+    private SpeedLinesCameraEffect _bigLeapEffect;
+
+    public SeeSawCameraEffectController(Camera camera)
+    {
+        _camera = camera;
+        _viewport = GLOBALS.graphicsDevice.Viewport;
+    }
+
+    public void ApplyRainbowHighJump(SeeSawJumpSegment rainbowSegment, SeeSawPose rainbowPose)
+    {
+        bool shouldShow = rainbowSegment?.High == true;
+        if (shouldShow)
+        {
+            EnsureBigLeapEffect();
+            if (_bigLeapEffect != null)
+            {
+                _bigLeapEffect.Speed = rainbowPose.VisualProgression < 0.5f ? BigLeapSpeedLineSpeed : -BigLeapSpeedLineSpeed;
+                _bigLeapEffect.Area = GetSpeedLineArea(rainbowPose);
+            }
+
+            return;
+        }
+
+        ClearBigLeapEffect();
+    }
+
+    public void Reset()
+    {
+        ClearBigLeapEffect();
+    }
+
+    private void ClearBigLeapEffect()
+    {
+        _camera?.RemoveEffect(_bigLeapEffect);
+        _bigLeapEffect = null;
+    }
+
+    private void EnsureBigLeapEffect()
+    {
+        if (_camera == null || _bigLeapEffect != null)
+            return;
+
+        _bigLeapEffect = new SpeedLinesCameraEffect
+        {
+            Orientation = SpeedLineOrientation.Vertical,
+            LineCount = 55,
+            MinLength = 180.0f,
+            MaxLength = 520.0f,
+            MinThickness = 6.0f,
+            MaxThickness = 16.0f,
+            Color = Color.Black * 0.85f,
+            Speed = BigLeapSpeedLineSpeed,
+            CenterGapRatio = 0.0f,
+            RandomSeed = 123
+        };
+
+        _camera.AddEffect(_bigLeapEffect);
+    }
+
+    private Rectangle GetSpeedLineArea(SeeSawPose rainbowPose)
+    {
+        int areaHeight = Math.Max(1, (int)MathF.Round(_viewport.Height * BigLeapSpeedLineAreaHeightRatio));
+        float rawTop;
+
+        if (rainbowPose.VisualProgression < 0.5f)
+        {
+            float ascentProgress = MathHelper.Clamp(rainbowPose.VisualProgression / 0.5f, 0f, 1f);
+            rawTop = MathHelper.Lerp(0f, _viewport.Height, ascentProgress);
+        }
+        else
+        {
+            float descentProgress = MathHelper.Clamp((rainbowPose.VisualProgression - 0.5f) / 0.5f, 0f, 1f);
+            rawTop = MathHelper.Lerp(-areaHeight, 0f, descentProgress);
+        }
+
+        return new Rectangle(0, (int)MathF.Round(rawTop), _viewport.Width, areaHeight);
+    }
+}
+
 public sealed class SeeSawDirector
 {
     private const double RewindThresholdBeats = 0.001;
     private const double MissWindowSeconds = 0.25;
-    private const float JumpApexProgression = 0.5f;
 
     private readonly SeeSawTimeline _timeline;
     private readonly SeeSawActorController _rainbow;
@@ -1598,6 +1750,7 @@ public sealed class SeeSawDirector
     private readonly SeeSawPathCatalog _pathCatalog;
     private readonly SeeSawCameraController _cameraController;
     private readonly SeeSawSoundScheduler _soundScheduler;
+    private readonly SeeSawCameraEffectController _cameraEffectController;
     private readonly Func<double, double> _getBeatAt;
     private readonly Func<double, double> _getCrotchetAt;
     private readonly double _fallbackCrotchet;
@@ -1612,16 +1765,16 @@ public sealed class SeeSawDirector
     private bool _hasLastRainbowTrailPosition;
 
     public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, double crotchet)
-        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, _ => crotchet, crotchet)
+        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, null, _ => crotchet, crotchet)
     {
     }
 
     public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
-        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, getCrotchetAt, fallbackCrotchet)
+        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, null, getCrotchetAt, fallbackCrotchet)
     {
     }
 
-    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, Func<double, double> getBeatAt, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
+    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, SeeSawCameraEffectController cameraEffectController, Func<double, double> getBeatAt, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
     {
         _timeline = timeline;
         _rainbow = rainbow;
@@ -1631,6 +1784,7 @@ public sealed class SeeSawDirector
         _pathCatalog = pathCatalog;
         _cameraController = cameraController;
         _soundScheduler = soundScheduler;
+        _cameraEffectController = cameraEffectController;
         _getBeatAt = getBeatAt;
         _getCrotchetAt = getCrotchetAt;
         _fallbackCrotchet = fallbackCrotchet > 0.0 ? fallbackCrotchet : 0.6;
@@ -1646,6 +1800,7 @@ public sealed class SeeSawDirector
         _triggeredRainbowHighApexSegmentIds.Clear();
         _timeline?.ResetJudgements();
         _cameraController?.Reset();
+        _cameraEffectController?.Reset();
         _hasLastRainbowTrailPosition = false;
         ResetRainbowTrail();
         _beam?.Reset();
@@ -1686,6 +1841,7 @@ public sealed class SeeSawDirector
 
         ApplyRainbowTrail(rainbowSegment, rainbowPose);
         ApplyRainbowHighApexSfx(rainbowSegment, rainbowPose);
+        _cameraEffectController?.ApplyRainbowHighJump(rainbowSegment, rainbowPose);
         ApplyBeamIdle(beat, songPosition);
         _cameraController?.Apply(rainbowSegment, rainbowPose, applejackSegment, applejackPose);
 
@@ -1792,7 +1948,7 @@ public sealed class SeeSawDirector
         _rainbowTrail.Scale = Vector2.One;
         _rainbowTrail.Rotation = 0f;
 
-        bool shouldEmit = rainbowSegment?.High == true;
+        bool shouldEmit = rainbowSegment?.High == true && !rainbowPose.IsVisualApexHold;
         _lastRainbowTrailPosition = trailPosition;
         _hasLastRainbowTrailPosition = true;
 
@@ -1806,7 +1962,7 @@ public sealed class SeeSawDirector
 
     private void ApplyRainbowHighApexSfx(SeeSawJumpSegment rainbowSegment, SeeSawPose rainbowPose)
     {
-        if (rainbowSegment?.High != true || rainbowPose.Progression < JumpApexProgression || !_triggeredRainbowHighApexSegmentIds.Add(rainbowSegment.Id))
+        if (rainbowSegment?.High != true || !rainbowPose.IsVisualApexHold || !_triggeredRainbowHighApexSegmentIds.Add(rainbowSegment.Id))
             return;
 
         _soundScheduler?.OnRainbowHighApex();

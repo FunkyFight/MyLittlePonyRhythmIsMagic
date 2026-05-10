@@ -20,13 +20,17 @@ public class SeeSawScene : Scene
 {
     private const float BeamTiltDegrees = 10f;
     private const float ApplejackTiltDegrees = -15f;
-
+    private const float BackgroundPropsScale = 8f;
+    private const float TreeScale = 12f;
     private readonly Game1 game;
 
     public GameObject SeeSaw1;
     public GameObject SeeSaw2;
     public GameObject Applejack;
     public GameObject Rainbow;
+    public GameObject Tree;
+    public GameObject Fences;
+    public GameObject Arbustes;
 
     private AnimationStateMachine RainbowState;
     private AnimationStateMachine ApplejackState;
@@ -42,6 +46,7 @@ public class SeeSawScene : Scene
     private Vector2 rainbowInnerPos;
 
     private TrailGameObject rainbowTrail;
+    private Texture2D groundTexture;
 
     private SeeSawDirector _director;
     private ChartPlayer _reactionChartPlayer;
@@ -64,6 +69,9 @@ public class SeeSawScene : Scene
         SeeSaw2 = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Planks_idle)));
         Applejack = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Applejack_afk1)));
         Rainbow = new GameObject(new Sprite(GLOBALS.main_atlas.GetRegion(MainAtlas.Rainbowdash_idle1)));
+        Tree = new GameObject(GLOBALS.main_atlas.CreateSprite(MainAtlas.Tree));
+        Fences = new GameObject(GLOBALS.main_atlas.CreateSprite(MainAtlas.Fences));
+        Arbustes = new GameObject(GLOBALS.main_atlas.CreateSprite(MainAtlas.Arbustes));
 
         SeeSaw1.sprite.CenterOrigin();
         SeeSaw2.sprite.CenterOrigin();
@@ -72,11 +80,23 @@ public class SeeSawScene : Scene
         SeeSaw2.Scale = new Vector2(seeSawScale + 0.5f, seeSawScale);
         Applejack.Scale = new Vector2(ponyScale, ponyScale);
         Rainbow.Scale = new Vector2(ponyScale, ponyScale);
+        Tree.Scale = new Vector2(TreeScale, TreeScale);
+        Fences.Scale = new Vector2(BackgroundPropsScale, BackgroundPropsScale);
+        Arbustes.Scale = new Vector2(BackgroundPropsScale, BackgroundPropsScale);
+
+        Tree.sprite.CenterOrigin();
+        Fences.sprite.CenterOrigin();
+        Arbustes.sprite.CenterOrigin();
 
         SeeSaw2.Position = new Vector2(vp.Width * 0.5008f, vp.Height * 0.8064f);
         SeeSaw1.Position = new Vector2(vp.Width / 2, vp.Height / 2 + (vp.Height / 5) * 1.5f);
         Rainbow.Position = new Vector2(vp.Width * 0.6305f, vp.Height * 0.55f);
-        Applejack.Position = new Vector2(vp.Width * 0.0289f, vp.Height * 0.6139f);
+        Applejack.Position = new Vector2(vp.Width * 0.0351f, vp.Height * 0.6176f);
+
+        // Temporary placeholders: replace with final coordinates.
+        Tree.Position = new Vector2(vp.Width * 1.0042f, vp.Height * 0.5537f);
+        Fences.Position = new Vector2(vp.Width * 0.9146f, vp.Height * 0.8237f);
+        Arbustes.Position = new Vector2(vp.Width * 0.0627f, vp.Height * 0.67f);
 
         applejackExitPos = Applejack.Position;
         applejackOuterPos = new Vector2(vp.Width * 0.1906f, vp.Height * 0.6708f);
@@ -90,7 +110,9 @@ public class SeeSawScene : Scene
         rainbowTrail.EmitTrail = false;
         rainbowTrail.MinDistance = 0.05f;
         rainbowTrail.sprite.DrawOffset += new Vector2(20, 20);
-        
+
+        groundTexture = new Texture2D(GLOBALS.graphicsDevice, 1, 1);
+        groundTexture.SetData([Color.White]);
 
         ResetActors();
         SetupAnimations();
@@ -102,6 +124,9 @@ public class SeeSawScene : Scene
             OnBeatmapStarted();
 
         GameObjects.Add(rainbowTrail);
+        GameObjects.Add(Tree);
+        GameObjects.Add(Fences);
+        GameObjects.Add(Arbustes);
         GameObjects.Add(Rainbow);
         GameObjects.Add(Applejack);
         GameObjects.Add(SeeSaw2);
@@ -140,6 +165,7 @@ public class SeeSawScene : Scene
             pathCatalog,
             new SeeSawCameraController(sceneCamera),
             new SeeSawSoundScheduler(this),
+            new SeeSawCameraEffectController(sceneCamera),
             GLOBALS.beatmapPlayer.GetBeatAt,
             GLOBALS.beatmapPlayer.GetCrotchetAt,
             baseCrotchet);
@@ -167,7 +193,7 @@ public class SeeSawScene : Scene
         Applejack.Position = applejackExitPos;
         SeeSaw2.Rotation = 0f;
         Rainbow.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
-        Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
+        Applejack.Rotation = 0f;
         sceneCamera.Position = Vector2.Zero;
     }
 
@@ -184,6 +210,8 @@ public class SeeSawScene : Scene
 
         _director?.Reset();
         _director = null;
+        groundTexture?.Dispose();
+        groundTexture = null;
         sceneCamera.Position = Vector2.Zero;
     }
 
@@ -224,7 +252,9 @@ public class SeeSawScene : Scene
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        GLOBALS.graphicsDevice.Clear(Color.Cyan);
+        GLOBALS.graphicsDevice.Clear(new Color(190, 220, 235));
+        Viewport vp = GLOBALS.graphicsDevice.Viewport;
+        spriteBatch.Draw(groundTexture, new Rectangle(0, (int)(vp.Height * 0.905f), vp.Width, (int)(vp.Height * 0.15f)), new Color(147, 176, 160, 255));
         base.Draw(spriteBatch);
     }
 
@@ -268,7 +298,7 @@ public class SeeSawScene : Scene
                     {
                         Rainbow.Rotation = MathHelper.ToRadians(BeamTiltDegrees);
                         Rainbow.sprite = GLOBALS.main_atlas.CreateAnimatedSprite("rainbowdash-land");
-                        Rainbow.sprite.DrawOffset = new Vector2(0, 35);
+                        Rainbow.sprite.DrawOffset = new Vector2(0, 55);
                         ((AnimatedSprite)Rainbow.sprite).Restart();
                     },
                     isLooping: false
@@ -375,7 +405,7 @@ public class SeeSawScene : Scene
                     duration: 1,
                     onEnter: () =>
                     {
-                        Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
+                        Applejack.Rotation = 0f;
                         Applejack.sprite = GLOBALS.main_atlas.CreateSprite(MainAtlas.Applejack_true_idle);
                     },
                     isLooping: false
