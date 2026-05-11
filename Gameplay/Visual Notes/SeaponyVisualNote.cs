@@ -8,10 +8,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MLP_RiM.Elements.Editor;
 using Rhythm.Note;
-using Rhythm.Note.Visual;
 
-public class SeaponyVisualNote : VisualNote
+public class SeaponyVisualNote : DirectedVisualNote
 {
+    private const string SeaPonyTrackPrefix = "seapony";
     private const string IdleState = "idle";
     private const string SwimAnticipationState = "swim_anticipation";
     private const string SwimState = "swim";
@@ -34,6 +34,9 @@ public class SeaponyVisualNote : VisualNote
     private readonly Func<Note, bool> _hasSuccessfulReactionProvider;
     private readonly Func<Note, bool> _hasPerfectReactionProvider;
     private readonly Func<bool> _canApplyState;
+    private readonly bool _usesRuntimeOwnership;
+    private readonly string _seaPonyTrackId;
+    private readonly string _seaPonyAnimationTrackId;
 
     private Scene _scene;
     private GameObject _seaPony;
@@ -41,16 +44,33 @@ public class SeaponyVisualNote : VisualNote
     private int _seaPonyIndex;
     private readonly Vector2 _baseSeaPonyPosition;
 
-    private int _backgroundScrollDestinationBeat;
-
     private bool _wasControlling = false;
-    private double _lastSongPosition = double.NaN;
     private int _lastTapTapHitsPassed = int.MinValue;
     private bool _lastTapTapReactionState = false;
 
     public bool _canRoll = true;
 
-    public SeaponyVisualNote(Note logicalNote, double approachDuration, Scene scene, GameObject seaPony, AnimationStateMachine seaPonyStateMachine, int seaPonyIndex, double crotchet, float rollTargetRotation = 0f, double despawnDelay = 0, bool canRoll = true, int rollIndexInSequence = 0, int rollsRemainingInSequence = 0, Func<int, Note, bool> canRollProvider = null, Func<Note, bool> hasSuccessfulReactionProvider = null, Func<Note, bool> hasPerfectReactionProvider = null, Func<bool> canApplyState = null, int tapTapIndexInSequence = 0, int tapTapHitsRemainingInSequence = 1, Vector2? baseSeaPonyPosition = null) : base(logicalNote, approachDuration, despawnDelay)
+    /// <summary>
+    /// Retourne l'identifiant de track runtime qui représente le GameObject d'un sea pony.
+    /// </summary>
+    /// <param name="seaPonyIndex">Index logique du sea pony dans la scène.</param>
+    /// <returns>Identifiant stable de track objet.</returns>
+    public static string GetPonyTrackId(int seaPonyIndex)
+    {
+        return $"{SeaPonyTrackPrefix}.{seaPonyIndex}.object";
+    }
+
+    /// <summary>
+    /// Retourne l'identifiant de track runtime qui représente la machine d'animation d'un sea pony.
+    /// </summary>
+    /// <param name="seaPonyIndex">Index logique du sea pony dans la scène.</param>
+    /// <returns>Identifiant stable de track animation.</returns>
+    public static string GetPonyAnimationTrackId(int seaPonyIndex)
+    {
+        return $"{SeaPonyTrackPrefix}.{seaPonyIndex}.animation";
+    }
+
+    public SeaponyVisualNote(Note logicalNote, double approachDuration, Scene scene, GameObject seaPony, AnimationStateMachine seaPonyStateMachine, int seaPonyIndex, double crotchet, float rollTargetRotation = 0f, double despawnDelay = 0, bool canRoll = true, int rollIndexInSequence = 0, int rollsRemainingInSequence = 0, Func<int, Note, bool> canRollProvider = null, Func<Note, bool> hasSuccessfulReactionProvider = null, Func<Note, bool> hasPerfectReactionProvider = null, Func<bool> canApplyState = null, int tapTapIndexInSequence = 0, int tapTapHitsRemainingInSequence = 1, Vector2? baseSeaPonyPosition = null, VisualRuntime runtime = null, string seaPonyTrackId = null, string seaPonyAnimationTrackId = null) : base(logicalNote, runtime ?? new VisualRuntime(), approachDuration, despawnDelay)
     {
         this._scene = scene;
         this._seaPony = seaPony;
@@ -67,15 +87,47 @@ public class SeaponyVisualNote : VisualNote
         _hasSuccessfulReactionProvider = hasSuccessfulReactionProvider;
         _hasPerfectReactionProvider = hasPerfectReactionProvider;
         _canApplyState = canApplyState;
+        _usesRuntimeOwnership = runtime != null;
+        _seaPonyTrackId = seaPonyTrackId ?? GetPonyTrackId(seaPonyIndex);
+        _seaPonyAnimationTrackId = seaPonyAnimationTrackId ?? GetPonyAnimationTrackId(seaPonyIndex);
         this.RollTargetRotation = rollTargetRotation;
         this._canRoll = canRoll;
     }
 
-    public override void Update(double currentSongPosition)
+    /// <summary>
+    /// Déclare les blocs de timeline qui recouvrent toute la durée de vie de la note SeaPony.
+    /// </summary>
+    /// <param name="timeline">Timeline déclarative fournie par <see cref="DirectedVisualNote"/>.</param>
+    protected override void Build(VisualTimeline timeline)
     {
-        base.Update(currentSongPosition);
+        timeline.StableBefore("seapony_before_approach")
+            .Owns(_seaPonyTrackId, _seaPonyAnimationTrackId)
+            .Do(sample);
 
-        if(RhythmVisualUtils.HasRewound(currentSongPosition, _lastSongPosition))
+        timeline.DuringApproach("seapony_approach")
+            .Owns(_seaPonyTrackId, _seaPonyAnimationTrackId)
+            .Do((ctx, phase) =>
+            {
+                if(ctx.IsAtOrAfterHit)
+                    return;
+
+                sample(ctx);
+            });
+
+        timeline.AfterHitUntilDespawn("seapony_after_hit")
+            .Owns(_seaPonyTrackId, _seaPonyAnimationTrackId)
+            .Do((ctx, phase) => sample(ctx));
+
+        timeline.StableAfter("seapony_after_despawn")
+            .Owns(_seaPonyTrackId, _seaPonyAnimationTrackId)
+            .Do(sample);
+    }
+
+    private void sample(VisualContext ctx)
+    {
+        double currentSongPosition = ctx.SongPosition;
+
+        if(ctx.HasRewound)
         {
             resetTapTapScale();
             _wasControlling = false;
@@ -84,34 +136,30 @@ public class SeaponyVisualNote : VisualNote
         }
 
         if(!tryGetAction(out SeaponyAction action))
-        {
-            _lastSongPosition = currentSongPosition;
             return;
-        }
 
         bool inTimeWindow = RhythmVisualUtils.IsInTimeWindow(currentSongPosition, Note.SongPosition, ApproachDuration, DespawnDelay);
 
         if(action == SeaponyAction.TapTap)
-            handleTapTapSfx(currentSongPosition);
+            handleTapTapSfx(ctx);
 
-        if(!RhythmVisualUtils.CanApplyState(_canApplyState))
+        if(!canApplyState(ctx))
         {
             if(action == SeaponyAction.TapTap && _wasControlling && !hasNextTapTapTakenOver(currentSongPosition))
                 resetTapTapScale();
 
             _wasControlling = false;
-            _lastSongPosition = currentSongPosition;
             return;
         }
 
         switch(action)
         {
             case SeaponyAction.Swim:
-                handleSwim(inTimeWindow, currentSongPosition);
+                handleSwim(inTimeWindow, currentSongPosition, ctx);
                 break;
 
             case SeaponyAction.Roll:
-                handleRoll(inTimeWindow, currentSongPosition);
+                handleRoll(inTimeWindow, currentSongPosition, ctx);
                 break;
 
             case SeaponyAction.TapTap:
@@ -125,11 +173,9 @@ public class SeaponyVisualNote : VisualNote
             default:
                 break;
         }
-
-        _lastSongPosition = currentSongPosition;
     }
 
-    private void handleRoll(bool inTimeWindow, double currentSongPosition)
+    private void handleRoll(bool inTimeWindow, double currentSongPosition, VisualContext ctx)
     {
         float startRoll = _rollTargetRotation - 90;
 
@@ -189,7 +235,7 @@ public class SeaponyVisualNote : VisualNote
         }
 
         if(_rollsRemainingInSequence == 1)
-            playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/AndStop.wav");
+            playSfxOnForwardCross(Note.SongPosition, "SFX/AndStop.wav", ctx);
 
         double rollDuration = DespawnDelay <= double.Epsilon ? ApproachDuration : DespawnDelay;
         double rollStartSongPosition = Note.SongPosition;
@@ -242,7 +288,7 @@ public class SeaponyVisualNote : VisualNote
             && currentSongPosition < PreviousNote.SongPosition + _crotchet * 2;
     }
 
-    private void handleSwim(bool inTimeWindow, double currentSongPosition)
+    private void handleSwim(bool inTimeWindow, double currentSongPosition, VisualContext ctx)
     {
         if(!inTimeWindow)
         {
@@ -264,7 +310,7 @@ public class SeaponyVisualNote : VisualNote
             return;
         }
 
-        playSfxOnForwardCross(Note.SongPosition - ApproachDuration, currentSongPosition, "SFX/Bubble.wav");
+        playSfxOnForwardCross(Note.SongPosition - ApproachDuration, "SFX/Bubble.wav", ctx);
 
         if(currentSongPosition < Note.SongPosition)
         {
@@ -357,11 +403,11 @@ public class SeaponyVisualNote : VisualNote
         return getTapTapHitsPassed(currentSongPosition);
     }
 
-    private void handleTapTapSfx(double currentSongPosition)
+    private void handleTapTapSfx(VisualContext ctx)
     {
-        playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/seapony_parade_roll.wav");
+        playSfxOnForwardCross(Note.SongPosition, "SFX/seapony_parade_roll.wav", ctx);
         if(_tapTapHitsRemainingInSequence == 1)
-            playSfxOnForwardCross(Note.SongPosition, currentSongPosition, "SFX/AndStop.wav");
+            playSfxOnForwardCross(Note.SongPosition, "SFX/AndStop.wav", ctx);
     }
 
     private void applyTapTapOrientation(int poseIndex)
@@ -475,21 +521,31 @@ public class SeaponyVisualNote : VisualNote
         };
     }
 
-    private void playSfxOnForwardCross(double cuePosition, double currentSongPosition, string filePath)
+    private void playSfxOnForwardCross(double cuePosition, string filePath, VisualContext ctx)
     {
         if(_seaPonyIndex != 0)
             return;
 
-        if(double.IsNaN(_lastSongPosition))
-            return;
-
-        if(_lastSongPosition < cuePosition && currentSongPosition >= cuePosition && GLOBALS.SfxVolume > 0)
+        if(ctx.ForwardCrossed(filePath, cuePosition) && GLOBALS.SfxVolume > 0)
             SFX.Play(_scene, filePath, 4);
     }
 
     private bool canRoll()
     {
         return _canRoll && (_canRollProvider?.Invoke(_seaPonyIndex, Note) ?? true);
+    }
+
+    /// <summary>
+    /// Indique si cette visual note peut muter le sea pony partagé pendant la frame courante.
+    /// </summary>
+    /// <param name="currentSongPosition">Position musicale courante, réservée au runtime pour ses policies.</param>
+    /// <returns><c>true</c> si les tracks runtime sont drivées par cette note, ou si le guard legacy l'autorise.</returns>
+    private bool canApplyState(VisualContext ctx)
+    {
+        if(_usesRuntimeOwnership)
+            return ctx.CanWrite(_seaPonyTrackId) && ctx.CanWrite(_seaPonyAnimationTrackId);
+
+        return RhythmVisualUtils.CanApplyState(_canApplyState);
     }
 
     private bool hasSuccessfulReaction()

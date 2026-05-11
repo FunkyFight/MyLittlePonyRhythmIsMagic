@@ -1,48 +1,57 @@
 using System;
 using GameCore;
-using GameCore.Animation;
 using GameCore.GameObjects;
 using Microsoft.Xna.Framework.Graphics;
 using MLP_RiM.Elements.Editor;
 using Rhythm.Note;
-using Rhythm.Note.Visual;
 
-public class SeaponyBgVisualNote : VisualNote
+/// <summary>
+/// Visual note dirigée qui pilote le scrolling du background de SeaPony Parade après le hit.
+/// </summary>
+/// <remarks>
+/// Cette classe est la première migration vers <see cref="DirectedVisualNote"/>. Elle ne reçoit plus de
+/// <c>Func&lt;bool&gt;</c> de ownership : elle déclare la track <c>background</c> dans sa timeline et laisse
+/// <see cref="VisualRuntime"/> autoriser l'écriture uniquement pour la note conductrice courante.
+/// </remarks>
+public class SeaponyBgVisualNote : DirectedVisualNote
 {
-    private InfiniteScrollBackground _background;
-    private int _backgroundScrollDestinationBeat;
-    private readonly Func<bool> _canApplyState;
+    private readonly int _backgroundScrollDestinationBeat;
 
-    public SeaponyBgVisualNote(Note logicalNote, double approachDuration, InfiniteScrollBackground background, int backgroundScrollDestinationBeat, double despawnDelay = 0, Func<bool> canApplyState = null) : base(logicalNote, approachDuration, despawnDelay)
+    /// <summary>
+    /// Crée la visual note de background pour une note SeaPony.
+    /// </summary>
+    /// <param name="logicalNote">Note logique SeaPony qui déclenche le scroll.</param>
+    /// <param name="runtime">Runtime contenant la track <c>background</c>.</param>
+    /// <param name="approachDuration">Durée d'approche conservée pour rester compatible avec le manager.</param>
+    /// <param name="backgroundScrollDestinationBeat">Index de beat visuel que le background doit atteindre.</param>
+    /// <param name="despawnDelay">Durée pendant laquelle le scroll post-hit est interpolé.</param>
+    public SeaponyBgVisualNote(Note logicalNote, VisualRuntime runtime, double approachDuration, int backgroundScrollDestinationBeat, double despawnDelay = 0) : base(logicalNote, runtime, approachDuration, despawnDelay)
     {
-        this._background = background;
-        this._backgroundScrollDestinationBeat = backgroundScrollDestinationBeat;
-        _canApplyState = canApplyState;
+        _backgroundScrollDestinationBeat = backgroundScrollDestinationBeat;
     }
 
-    public override void Update(double currentSongPosition)
+    /// <summary>
+    /// Déclare la phase post-hit qui interpole la progression du background.
+    /// </summary>
+    /// <param name="timeline">Timeline fournie par <see cref="DirectedVisualNote"/>.</param>
+    protected override void Build(VisualTimeline timeline)
     {
-        base.Update(currentSongPosition);
+        timeline.AfterHitUntilDespawn("background_scroll")
+            .Owns("background")
+            .DoOwned<InfiniteScrollBackground>("background", (ctx, phase, background) =>
+            {
+                if(!SeaponyNoteCodec.TryReadAction(ctx.Note?.AdditionnalData, out _))
+                    return;
 
-        bool inTimeWindow = RhythmVisualUtils.IsInTimeWindow(currentSongPosition, Note.SongPosition, ApproachDuration, DespawnDelay, true);
-        bool inAtOrAfterHit = RhythmVisualUtils.IsAtOrAfterHit(currentSongPosition, Note.SongPosition);
-
-        if(!inTimeWindow || !inAtOrAfterHit) return;
-        if(!RhythmVisualUtils.CanApplyState(_canApplyState)) return;
-
-        if(SeaponyNoteCodec.TryReadAction(Note?.AdditionnalData, out _))
-            handleScroll(currentSongPosition);
+                float interpolated = Interpolation.EaseOutQuart(ctx.PostHitProgress);
+                background.Progression = Single.Lerp(_backgroundScrollDestinationBeat - 1, _backgroundScrollDestinationBeat, interpolated);
+            });
     }
 
-    private void handleScroll(double currentSongPosition)
-    {
-        float despawnDelayProgression = (float) RhythmVisualUtils.GetProgression(Note.SongPosition, Note.SongPosition + DespawnDelay, currentSongPosition);
-        float interpolated = Interpolation.EaseOutQuart(despawnDelayProgression);
-        float backgroundScrollBeat = Single.Lerp(_backgroundScrollDestinationBeat - 1, _backgroundScrollDestinationBeat, interpolated);
-
-        _background.Progression = backgroundScrollBeat;
-    }
-
+    /// <summary>
+    /// Aucun rendu direct : cette visual note modifie seulement la track de background partagée.
+    /// </summary>
+    /// <param name="spriteBatch">Batch de rendu fourni par le manager.</param>
     public override void Draw(SpriteBatch spriteBatch)
     {
     }

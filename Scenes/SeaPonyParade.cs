@@ -93,6 +93,14 @@ public class SeaPonyParade : Scene
 
     private InfiniteScrollBackground _infiniteScrollBg;
     private VisualNoteManager<SeaponyBgVisualNote> _infiniteScrollBgVisualNotes;
+    /// <summary>
+    /// Runtime partagé par les visual notes dirigées de la scène.
+    /// </summary>
+    /// <remarks>
+    /// Il est recréé avec les managers dans <see cref="createVisualNotes"/> afin de survivre proprement aux
+    /// redémarrages de beatmap. Pour le premier incrément il ne contient que la track <c>background</c>.
+    /// </remarks>
+    private VisualRuntime _visualRuntime;
 
     private DevUiRenderer _devUIRenderer;
 
@@ -432,6 +440,14 @@ public class SeaPonyParade : Scene
         return idleRegion.EndsWith("1") ? idleRegion.Substring(0, idleRegion.Length - 1) : idleRegion;
     }
 
+    /// <summary>
+    /// Reconstruit les managers de visual notes et le runtime de tracks associé.
+    /// </summary>
+    /// <remarks>
+    /// Les visual notes SeaPony existantes gardent leur logique legacy. Le background passe par
+    /// <see cref="VisualRuntime"/> : la track <c>background</c> référence <see cref="_infiniteScrollBg"/>
+    /// et <see cref="SeaponyBgVisualNote"/> la mute seulement si son note driver est actif.
+    /// </remarks>
     private void createVisualNotes()
     {
         if(GLOBALS.beatmapPlayer.ChartPlayer == null || GLOBALS.beatmapPlayer.Conductor == null)
@@ -439,6 +455,9 @@ public class SeaPonyParade : Scene
 
         resetDrivingSeaPonyNotes();
         ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
+        _visualRuntime = new VisualRuntime();
+        _visualRuntime.RegisterTrack("background", _infiniteScrollBg);
+        registerSeaPonyVisualTracks();
 
         for(int i = 0; i < SeaPonyCount; i++)
         {
@@ -455,12 +474,12 @@ public class SeaPonyParade : Scene
                 switch(action)
                 {
                     case SeaponyAction.Swim:
-                        return new SeaponyVisualNote(note, crotchet, this, seaPony, animationState, seaPonyId, crotchet, despawnDelay: crotchet, hasSuccessfulReactionProvider: hasSuccessfulReaction, canApplyState: () => canSeaPonyApplyState(seaPonyId, note), baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId]);
+                        return new SeaponyVisualNote(note, crotchet, this, seaPony, animationState, seaPonyId, crotchet, despawnDelay: crotchet, hasSuccessfulReactionProvider: hasSuccessfulReaction, baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId], runtime: _visualRuntime, seaPonyTrackId: SeaponyVisualNote.GetPonyTrackId(seaPonyId), seaPonyAnimationTrackId: SeaponyVisualNote.GetPonyAnimationTrackId(seaPonyId));
                     case SeaponyAction.Roll:
-                        return new SeaponyVisualNote(note, crotchet * 2, this, seaPony, animationState, seaPonyId, crotchet, getRollTargetRotation(note), getRollDespawnDelay(note), rollIndexInSequence: getRollIndexInSequence(note), rollsRemainingInSequence: getRollsRemainingInSequence(note), canRollProvider: canSeaPonyRoll, canApplyState: () => canSeaPonyApplyState(seaPonyId, note), baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId]);
+                        return new SeaponyVisualNote(note, crotchet * 2, this, seaPony, animationState, seaPonyId, crotchet, getRollTargetRotation(note), getRollDespawnDelay(note), rollIndexInSequence: getRollIndexInSequence(note), rollsRemainingInSequence: getRollsRemainingInSequence(note), canRollProvider: canSeaPonyRoll, baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId], runtime: _visualRuntime, seaPonyTrackId: SeaponyVisualNote.GetPonyTrackId(seaPonyId), seaPonyAnimationTrackId: SeaponyVisualNote.GetPonyAnimationTrackId(seaPonyId));
                     case SeaponyAction.TapTap:
                         int tapTapHitsRemaining = getTapTapHitsRemainingInSequence(note);
-                        return new SeaponyVisualNote(note, crotchet * 2, this, seaPony, animationState, seaPonyId, crotchet, despawnDelay: getTapTapDespawnDelay(note), tapTapIndexInSequence: getTapTapIndexInSequence(note), tapTapHitsRemainingInSequence: tapTapHitsRemaining, hasSuccessfulReactionProvider: hasSuccessfulReaction, hasPerfectReactionProvider: hasPerfectReaction, canApplyState: () => canSeaPonyApplyState(seaPonyId, note), baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId]);
+                        return new SeaponyVisualNote(note, crotchet * 2, this, seaPony, animationState, seaPonyId, crotchet, despawnDelay: getTapTapDespawnDelay(note), tapTapIndexInSequence: getTapTapIndexInSequence(note), tapTapHitsRemainingInSequence: tapTapHitsRemaining, hasSuccessfulReactionProvider: hasSuccessfulReaction, hasPerfectReactionProvider: hasPerfectReaction, baseSeaPonyPosition: _seaPonyBasePositions[seaPonyId], runtime: _visualRuntime, seaPonyTrackId: SeaponyVisualNote.GetPonyTrackId(seaPonyId), seaPonyAnimationTrackId: SeaponyVisualNote.GetPonyAnimationTrackId(seaPonyId));
                     case SeaponyAction.Leave:
                     case SeaponyAction.Enter:
                         return null;
@@ -483,11 +502,27 @@ public class SeaPonyParade : Scene
                 return null;
 
             double crotchet = getCrotchetAt(note);
-            return new SeaponyBgVisualNote(note, crotchet, _infiniteScrollBg, getBackgroundScrollDestinationBeat(note), getBackgroundScrollDuration(action, note), canApplyState: () => ReferenceEquals(_drivingBackgroundNote, note));
+            return new SeaponyBgVisualNote(note, _visualRuntime, crotchet, getBackgroundScrollDestinationBeat(note), getBackgroundScrollDuration(action, note));
         });
 
         _infiniteScrollBgVisualNotes.LookAheadSeconds = getMaxCrotchet() * 2;
         _infiniteScrollBgVisualNotes.LookBehindSeconds = getMaxCrotchet() * 2;
+    }
+
+    /// <summary>
+    /// Enregistre les tracks runtime qui représentent les sea ponies et leurs machines d'animation.
+    /// </summary>
+    /// <remarks>
+    /// Ces tracks remplacent le guard legacy <c>Func&lt;bool&gt; canApplyState</c> pour <see cref="SeaponyVisualNote"/>.
+    /// La scène garde la même décision de driver qu'avant, mais l'écriture passe par <see cref="VisualRuntime"/>.
+    /// </remarks>
+    private void registerSeaPonyVisualTracks()
+    {
+        for(int i = 0; i < SeaPonyCount; i++)
+        {
+            _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyTrackId(i), _seaPonies[i]);
+            _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyAnimationTrackId(i), _seaPoniesAnimationStates[i]);
+        }
     }
 
     private bool canSeaPonyRoll(int seaPonyIndex, Note note)
@@ -505,18 +540,25 @@ public class SeaPonyParade : Scene
         return note != null && note.HasReacted && _perfectReactionNotes.Contains(note);
     }
 
-    private bool canSeaPonyApplyState(int seaPonyIndex, Note note)
-    {
-        return seaPonyIndex >= 0
-            && seaPonyIndex < _drivingSeaPonyNotes.Length
-            && ReferenceEquals(_drivingSeaPonyNotes[seaPonyIndex], note);
-    }
-
     private void updateDrivingSeaPonyNotes(double songPosition)
     {
         Note drivingNote = findDrivingSeaPonyNote(songPosition);
         for(int i = 0; i < SeaPonyCount; i++)
+        {
             _drivingSeaPonyNotes[i] = drivingNote;
+            updateSeaPonyVisualDriver(i, drivingNote);
+        }
+    }
+
+    /// <summary>
+    /// Synchronise les drivers runtime des tracks d'un sea pony pour la frame courante.
+    /// </summary>
+    /// <param name="seaPonyIndex">Index du sea pony à piloter.</param>
+    /// <param name="drivingNote">Note autorisée à muter ses tracks, ou <c>null</c>.</param>
+    private void updateSeaPonyVisualDriver(int seaPonyIndex, Note drivingNote)
+    {
+        _visualRuntime?.SetDriver(SeaponyVisualNote.GetPonyTrackId(seaPonyIndex), drivingNote);
+        _visualRuntime?.SetDriver(SeaponyVisualNote.GetPonyAnimationTrackId(seaPonyIndex), drivingNote);
     }
 
     private Note findDrivingSeaPonyNote(double songPosition)
@@ -597,6 +639,20 @@ public class SeaPonyParade : Scene
         return drivingNote;
     }
 
+    /// <summary>
+    /// Synchronise le driver manuel de la track background avant l'update du manager correspondant.
+    /// </summary>
+    /// <param name="drivingBackgroundNote">Note SeaPony autorisée à piloter le background pour la frame courante.</param>
+    /// <remarks>
+    /// Les visual notes background peuvent se chevaucher dans la fenêtre du manager. Cette affectation remplace
+    /// l'ancien <c>Func&lt;bool&gt; canApplyState</c> en ne laissant écrire que la note retournée par
+    /// <see cref="findDrivingBackgroundNote"/>.
+    /// </remarks>
+    private void updateBackgroundVisualDriver(Note drivingBackgroundNote)
+    {
+        _visualRuntime?.SetDriver("background", drivingBackgroundNote);
+    }
+
     private double getSeaponyApproachDuration(SeaponyAction action, Note note)
     {
         double crotchet = getCrotchetAt(note);
@@ -621,6 +677,7 @@ public class SeaPonyParade : Scene
     private void resetDrivingSeaPonyNotes()
     {
         Array.Clear(_drivingSeaPonyNotes, 0, _drivingSeaPonyNotes.Length);
+        _visualRuntime?.ClearDrivers();
     }
 
     private void resetSeaPonyTimelineState()
@@ -1142,6 +1199,7 @@ public class SeaPonyParade : Scene
         _seaPonyGroupOffset = getSeaPonyGroupOffset(songPos);
         updateDrivingSeaPonyNotes(songPos);
         _drivingBackgroundNote = findDrivingBackgroundNote(songPos);
+        updateBackgroundVisualDriver(_drivingBackgroundNote);
         playStartCues(songPos, gameTime.ElapsedGameTime.TotalSeconds);
         applyBaseStateForIdleSeaPonies(songPos);
 

@@ -2,7 +2,6 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rhythm.Note;
-using Rhythm.Note.Visual;
 using GameCore.GameObjects;
 using System.Collections.Generic;
 using GameCore.Animation;
@@ -22,8 +21,10 @@ using GameCore;
 /// de la frame. Cela rend le scrubbing editeur et les rewinds stables: appeler Update avec la
 /// meme position musicale doit toujours replacer les acteurs au meme endroit.
 /// </remarks>
-public class SeeSawVisualNote : VisualNote
+public class SeeSawVisualNote : DirectedVisualNote
 {
+    public const string DefaultRuntimeTrackId = "see_saw";
+
     private const string JumpState = "jump";
     private const string FallState = "fall";
     private const string LandState = "land";
@@ -51,6 +52,8 @@ public class SeeSawVisualNote : VisualNote
     private readonly bool _applyBeamRotation;
     private readonly Func<bool> _canApplyState;
     private readonly Func<bool> _shouldPreserveRainbowFeedbackAnimation;
+    private readonly bool _usesRuntimeOwnership;
+    private readonly string _runtimeTrackId;
     private bool _isBigLeap;
     private bool _counterJumpStarted;
     private bool _counterLanded;
@@ -59,7 +62,6 @@ public class SeeSawVisualNote : VisualNote
     private bool _rainbowSnapLandRequested;
     private bool _rainbowFailRequested;
     private bool _rainbowFeedbackStateApplied;
-    private double _lastSongPosition = double.NaN;
 
     internal const float OuterJumpHeight = 450f;
     internal const float InnerJumpHeight = 180f;
@@ -215,8 +217,8 @@ public class SeeSawVisualNote : VisualNote
     /// <param name="canApplyState">Predicate indiquant si ce visuel peut muter les objets partages cette frame.</param>
     /// <param name="despawnDelay">Duree de vie supplementaire apres la fin de la note.</param>
     /// <param name="approachDuration">Override optionnel de la duree d'approche, en secondes.</param>
-    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression, bool counterIsBigLeap = false, SeeSawSimultaneousJump? simultaneousJump = null, float? mainJumpStartProgression = null, Func<bool> shouldPreserveRainbowFeedbackAnimation = null)
-        : base(logicalNote, approachDuration ?? jumperPath.GetApproachDuration(crotchet), despawnDelay)
+    public SeeSawVisualNote(Note logicalNote, Dictionary<SeeSawJumper, GameObject> jumpers, Dictionary<SeeSawJumper, AnimationStateMachine> animationStates, SeeSawJumper jumper, SeeSawJumpPath jumperPath, double crotchet, GameObject seeSawBeam, Camera sceneCamera, float fromRotation, float targetRotation, SeeSawCounterJump? counterJump = null, float counterRotationProgression = DefaultCounterRotationProgression, float jumperStartProgression = DefaultJumperStartProgression, Func<bool> canApplyState = null, double despawnDelay = 0, double? approachDuration = null, bool isBigLeap = false, float jumpMultiplier = 1, float counterJumpEndProgression = CounterJumpEndProgression, bool counterIsBigLeap = false, SeeSawSimultaneousJump? simultaneousJump = null, float? mainJumpStartProgression = null, Func<bool> shouldPreserveRainbowFeedbackAnimation = null, VisualRuntime runtime = null, string runtimeTrackId = DefaultRuntimeTrackId)
+        : base(logicalNote, runtime ?? new VisualRuntime(), approachDuration ?? jumperPath.GetApproachDuration(crotchet), despawnDelay)
     {
         _jumpers = jumpers;
         _animationStates = animationStates;
@@ -238,6 +240,8 @@ public class SeeSawVisualNote : VisualNote
         _applyBeamRotation = seeSawBeam != null;
         _canApplyState = canApplyState;
         _shouldPreserveRainbowFeedbackAnimation = shouldPreserveRainbowFeedbackAnimation;
+        _usesRuntimeOwnership = runtime != null;
+        _runtimeTrackId = string.IsNullOrWhiteSpace(runtimeTrackId) ? DefaultRuntimeTrackId : runtimeTrackId;
         _isBigLeap = isBigLeap;
     }
 
@@ -279,52 +283,84 @@ public class SeeSawVisualNote : VisualNote
     }
 
     /// <summary>
-    /// Met a jour les positions des acteurs, la rotation de poutre et les animations pour un temps musical donne.
+    /// Déclare la timeline See-Saw legacy avec les blocs déclaratifs de <see cref="DirectedVisualNote"/>.
     /// </summary>
-    /// <param name="currentSongPosition">Position musicale courante, en secondes.</param>
-    public override void Update(double currentSongPosition)
+    /// <param name="timeline">Timeline à remplir.</param>
+    protected override void Build(VisualTimeline timeline)
     {
-        UpdateState(currentSongPosition);
+        timeline.StableBefore("see_saw_before_approach")
+            .Owns(_runtimeTrackId)
+            .Do(sampleBeforeApproach);
 
-        // Un rewind peut replacer cette meme note avant un trigger jump/land deja joue.
-        // Les flags one-shot doivent etre remis a zero pour rejouer correctement les animations.
-        if (RhythmVisualUtils.HasRewound(currentSongPosition, _lastSongPosition))
-            ResetAnimationTriggers();
+        timeline.DuringApproach("see_saw_approach")
+            .Owns(_runtimeTrackId)
+            .Do((ctx, phase) =>
+            {
+                if(ctx.IsAtOrAfterHit)
+                    return;
 
-        _lastSongPosition = currentSongPosition;
+                sampleApproach(ctx, phase.GlobalProgress);
+            });
+
+        timeline.AfterHitUntilDespawn("see_saw_after_hit")
+            .Owns(_runtimeTrackId)
+            .Do((ctx, phase) => sampleAfterHit(ctx));
+
+        timeline.StableAfter("see_saw_after_despawn")
+            .Owns(_runtimeTrackId)
+            .Do(sampleAfterHit);
+    }
+
+    private void sampleBeforeApproach(VisualContext ctx)
+    {
+        resetOnRewind(ctx);
+
+        if (!CanApplyState(ctx))
+            return;
+
+        // Si le manager met a jour cette note avant sa fenetre d'approche, aucun ancien
+        // trigger one-shot issu d'un seek precedent ne doit rester actif.
+        ResetAnimationTriggers();
+    }
+
+    private void sampleApproach(VisualContext ctx, float progression)
+    {
+        resetOnRewind(ctx);
 
         // Plusieurs notes visuelles peuvent etre vivantes en meme temps. La scene decide laquelle
         // possede les acteurs partages sur cette frame pour eviter des mutations concurrentes.
-        if (!RhythmVisualUtils.CanApplyState(_canApplyState))
+        if (!CanApplyState(ctx))
             return;
-
-        if (RhythmVisualUtils.IsBeforeApproach(currentSongPosition, Note.SongPosition, ApproachDuration))
-        {
-            // Si le manager met a jour cette note avant sa fenetre d'approche, aucun ancien
-            // trigger one-shot issu d'un seek precedent ne doit rester actif.
-            ResetAnimationTriggers();
-            return; 
-        }
-
-        float progression = RhythmVisualUtils.GetApproachProgress(currentSongPosition, Note.SongPosition, ApproachDuration);
-
-        if (RhythmVisualUtils.IsAtOrAfterHit(currentSongPosition, Note.SongPosition))
-        {
-            if (_jumper == SeeSawJumper.RAINBOW_DASH && !_rainbowSnapLandRequested && !_rainbowFailRequested)
-            {
-                ApplyRainbowPostHitMissWindow(currentSongPosition);
-                return;
-            }
-
-            ApplyCompletedState();
-            return;
-        }
 
         ApplyCounterJump(progression);
         ApplyMainJump(progression);
         ApplySimultaneousJump(progression);
         ApplyCameraJump(progression);
         ApplyBeamRotation(progression);
+    }
+
+    private void sampleAfterHit(VisualContext ctx)
+    {
+        resetOnRewind(ctx);
+
+        if (!CanApplyState(ctx))
+            return;
+
+        if (_jumper == SeeSawJumper.RAINBOW_DASH && !_rainbowSnapLandRequested && !_rainbowFailRequested)
+        {
+            ApplyRainbowPostHitMissWindow(ctx.SongPosition);
+            return;
+        }
+
+        ApplyCompletedState();
+    }
+
+    private void resetOnRewind(VisualContext ctx)
+    {
+        // Un rewind peut replacer cette meme note avant un trigger jump/land deja joue.
+        // Les flags one-shot doivent etre remis a zero pour rejouer correctement les animations.
+        if (ctx.HasRewound)
+            ResetAnimationTriggers();
     }
 
     
@@ -684,6 +720,19 @@ public class SeeSawVisualNote : VisualNote
         _jumperJumpStarted = false;
         _jumperLanded = false;
         _rainbowFeedbackStateApplied = false;
+    }
+
+    /// <summary>
+    /// Indique si cette note legacy est autorisée à écrire sur les acteurs See-Saw partagés.
+    /// </summary>
+    /// <param name="currentSongPosition">Position musicale courante, réservée au runtime pour ses policies.</param>
+    /// <returns><c>true</c> si la track runtime est drivé par cette note, ou si le guard legacy l'autorise.</returns>
+    private bool CanApplyState(VisualContext ctx)
+    {
+        if (_usesRuntimeOwnership)
+            return ctx.CanWrite(_runtimeTrackId);
+
+        return RhythmVisualUtils.CanApplyState(_canApplyState);
     }
 
 
