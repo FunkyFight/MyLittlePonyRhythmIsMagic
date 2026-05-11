@@ -67,6 +67,140 @@ public sealed class DirectedVisualNoteTests
     }
 
     /// <summary>
+    /// Vérifie que le runtime peut choisir le driver d'une track via une policy, sans SetDriver manuel par frame.
+    /// </summary>
+    [Fact]
+    public void ResolveDriversUsesTrackPolicy()
+    {
+        VisualRuntime runtime = new();
+        Counter target = new();
+        Note first = new(1.0);
+        Note second = new(2.0);
+        runtime.RegisterTrack("target", target)
+            .UseDriverResolver(ctx => ctx.Notes[ctx.Notes.Count - 1]);
+
+        runtime.ResolveDrivers(1.5, new[] { first, second });
+
+        Assert.Same(second, runtime.Track("target").DriverNote);
+    }
+
+    /// <summary>
+    /// Vérifie que la policy de background SeaPony choisit la dernière note dont la fenêtre de scroll est active.
+    /// </summary>
+    [Fact]
+    public void ResolveDriversUsesSeaponyBackgroundDriverPolicy()
+    {
+        Note first = CreateSeaponyNote(1.0, SeaponyAction.Swim);
+        Note second = CreateSeaponyNote(1.5, SeaponyAction.Roll);
+
+        Assert.Null(ResolveSeaponyBackgroundDriver(0.9, first, second));
+        Assert.Same(first, ResolveSeaponyBackgroundDriver(1.2, first, second));
+        Assert.Same(second, ResolveSeaponyBackgroundDriver(1.6, first, second));
+        Assert.Null(ResolveSeaponyBackgroundDriver(2.6, first, second));
+    }
+
+    /// <summary>
+    /// Vérifie qu'une note SeaPony en approche peut piloter les acteurs quand aucune note post-hit ne gagne.
+    /// </summary>
+    [Fact]
+    public void SeaponyActorDriverPolicySelectsApproachNote()
+    {
+        Note approach = CreateSeaponyNote(2.0, SeaponyAction.Swim);
+
+        Assert.Same(approach, ResolveSeaponyActorDriver(1.5, approach));
+    }
+
+    /// <summary>
+    /// Vérifie que la priorité legacy conserve une note post-hit devant une autre note en approche.
+    /// </summary>
+    [Fact]
+    public void SeaponyActorDriverPolicyPrefersPostHitOverApproach()
+    {
+        Note postHit = CreateSeaponyNote(1.0, SeaponyAction.Swim);
+        Note approach = CreateSeaponyNote(1.75, SeaponyAction.Swim);
+
+        Assert.Same(postHit, ResolveSeaponyActorDriver(1.5, postHit, approach));
+    }
+
+    /// <summary>
+    /// Vérifie l'exception legacy : une approche Roll recouvre la queue post-hit d'un TapTap.
+    /// </summary>
+    [Fact]
+    public void SeaponyActorDriverPolicyLetsRollApproachOverrideTapTapTail()
+    {
+        Note tapTapTail = CreateSeaponyNote(1.0, SeaponyAction.TapTap);
+        Note rollApproach = CreateSeaponyNote(1.75, SeaponyAction.Roll);
+
+        Assert.Same(rollApproach, ResolveSeaponyActorDriver(1.5, tapTapTail, rollApproach));
+    }
+
+    /// <summary>
+    /// Vérifie que les mutations ignorées exposent une raison de debug exploitable.
+    /// </summary>
+    [Fact]
+    public void MutateReportsIgnoredReason()
+    {
+        VisualRuntime runtime = new();
+        Counter target = new();
+        Note note = new(1.0);
+        VisualMutationIgnored ignored = null;
+        runtime.RegisterTrack("target", target);
+        runtime.MutationIgnored += info => ignored = info;
+
+        TestDirectedVisualNote visual = new(note, runtime, timeline =>
+        {
+            timeline.AfterHitUntilDespawn("post")
+                .Do((ctx, phase) => ctx.Mutate<Counter>("target", counter => counter.Value++));
+        });
+
+        visual.Update(1.25);
+
+        Assert.NotNull(ignored);
+        Assert.Equal("target", ignored.TrackId);
+        Assert.Equal(VisualMutationIgnoredReason.TrackNotOwned, ignored.Reason);
+        Assert.Equal(0, target.Value);
+    }
+
+    /// <summary>
+    /// Vérifie que chaque no-op de mutation expose sa raison précise côté diagnostics.
+    /// </summary>
+    [Fact]
+    public void MutateReportsSpecificIgnoredReasons()
+    {
+        VisualRuntime runtime = new();
+        Note note = new(1.0);
+        Note otherNote = new(1.0);
+        List<VisualMutationIgnored> ignored = new();
+        runtime.RegisterTrack("no_driver", new Counter());
+        runtime.RegisterTrack("wrong_driver", new Counter());
+        runtime.RegisterTrack("wrong_type", new Counter());
+        runtime.SetDriver("wrong_driver", otherNote);
+        runtime.SetDriver("wrong_type", note);
+        runtime.MutationIgnored += info => ignored.Add(info);
+
+        TestDirectedVisualNote visual = new(note, runtime, timeline =>
+        {
+            timeline.AfterHitUntilDespawn("post")
+                .Owns("missing", "no_driver", "wrong_driver", "wrong_type")
+                .Do((ctx, phase) =>
+                {
+                    ctx.Mutate<Counter>("missing", counter => counter.Value++);
+                    ctx.Mutate<Counter>("no_driver", counter => counter.Value++);
+                    ctx.Mutate<Counter>("wrong_driver", counter => counter.Value++);
+                    ctx.Mutate<string>("wrong_type", value => _ = value.Length);
+                });
+        });
+
+        visual.Update(1.25);
+
+        Assert.Equal(4, ignored.Count);
+        Assert.Contains(ignored, info => info.TrackId == "missing" && info.Reason == VisualMutationIgnoredReason.TrackMissing);
+        Assert.Contains(ignored, info => info.TrackId == "no_driver" && info.Reason == VisualMutationIgnoredReason.NoDriver);
+        Assert.Contains(ignored, info => info.TrackId == "wrong_driver" && info.Reason == VisualMutationIgnoredReason.WrongDriver);
+        Assert.Contains(ignored, info => info.TrackId == "wrong_type" && info.Reason == VisualMutationIgnoredReason.WrongTargetType);
+    }
+
+    /// <summary>
     /// Vérifie les progressions locale/globale d'une phase et ses crossings de phase.
     /// </summary>
     [Fact]
@@ -214,7 +348,11 @@ public sealed class DirectedVisualNoteTests
             [SeeSawJumper.RAINBOW_DASH] = CreateSeeSawStateMachine(),
             [SeeSawJumper.APPLEJACK] = CreateSeeSawStateMachine()
         };
-        runtime.RegisterTrack(SeeSawVisualNote.DefaultRuntimeTrackId, beam);
+        string rainbowTrackId = SeeSawVisualNote.GetJumperTrackId(SeeSawJumper.RAINBOW_DASH);
+        string rainbowAnimationTrackId = SeeSawVisualNote.GetJumperAnimationTrackId(SeeSawJumper.RAINBOW_DASH);
+        runtime.RegisterTrack(rainbowTrackId, rainbow);
+        runtime.RegisterTrack(rainbowAnimationTrackId, states[SeeSawJumper.RAINBOW_DASH]);
+        runtime.RegisterTrack(SeeSawVisualNote.BeamTrackId, beam);
 
         SeeSawVisualNote visual = new(
             note,
@@ -229,11 +367,15 @@ public sealed class DirectedVisualNoteTests
             targetRotation: 1f,
             runtime: runtime);
 
-        runtime.SetDriver(SeeSawVisualNote.DefaultRuntimeTrackId, otherNote);
+        runtime.SetDriver(rainbowTrackId, otherNote);
+        runtime.SetDriver(rainbowAnimationTrackId, otherNote);
+        runtime.SetDriver(SeeSawVisualNote.BeamTrackId, otherNote);
         visual.Update(0.5);
         Assert.Null(states[SeeSawJumper.RAINBOW_DASH].CurrentState);
 
-        runtime.SetDriver(SeeSawVisualNote.DefaultRuntimeTrackId, note);
+        runtime.SetDriver(rainbowTrackId, note);
+        runtime.SetDriver(rainbowAnimationTrackId, note);
+        runtime.SetDriver(SeeSawVisualNote.BeamTrackId, note);
         visual.Update(0.5);
         Assert.Equal("jump", states[SeeSawJumper.RAINBOW_DASH].CurrentState.Name);
     }
@@ -252,6 +394,51 @@ public sealed class DirectedVisualNoteTests
             })
             .WithPixelsPerProgress(Vector2.One)
             .Build();
+    }
+
+    /// <summary>
+    /// Crée une note SeaPony logique avec l'action encodée comme dans les charts.
+    /// </summary>
+    private static Note CreateSeaponyNote(double songPosition, SeaponyAction action)
+    {
+        return new Note(songPosition, additionnalData: SeaponyNoteCodec.Write(action));
+    }
+
+    /// <summary>
+    /// Résout le driver SeaPony acteur avec des durées de test déterministes.
+    /// </summary>
+    private static Note ResolveSeaponyActorDriver(double songPosition, params Note[] notes)
+    {
+        VisualRuntime runtime = new();
+        runtime.RegisterTrack("actor", new Counter())
+            .UseDriverPolicy(new SeaponyActorDriverPolicy(
+                getApproachDuration: (_, _) => 1.0,
+                getDespawnDelay: GetTestSeaponyDespawnDelay,
+                getMaxApproachDuration: () => 1.0));
+
+        runtime.ResolveDrivers(songPosition, notes);
+        return runtime.Track("actor").DriverNote;
+    }
+
+    /// <summary>
+    /// Résout le driver SeaPony background avec une durée de scroll fixe.
+    /// </summary>
+    private static Note ResolveSeaponyBackgroundDriver(double songPosition, params Note[] notes)
+    {
+        VisualRuntime runtime = new();
+        runtime.RegisterTrack("background", new Counter())
+            .UseDriverPolicy(new SeaponyBackgroundDriverPolicy((_, _) => 1.0));
+
+        runtime.ResolveDrivers(songPosition, notes);
+        return runtime.Track("background").DriverNote;
+    }
+
+    /// <summary>
+    /// Donne aux TapTap une queue plus longue afin de tester le recouvrement Roll legacy.
+    /// </summary>
+    private static double GetTestSeaponyDespawnDelay(SeaponyAction action, Note note)
+    {
+        return action == SeaponyAction.TapTap ? 1.0 : 0.75;
     }
 
     /// <summary>

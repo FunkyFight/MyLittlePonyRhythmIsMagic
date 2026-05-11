@@ -6,7 +6,8 @@ using Rhythm.Note;
 /// </summary>
 /// <remarks>
 /// Une track sert de point d'arbitrage entre les notes qui coexistent dans les fenêtres de look-ahead/look-behind.
-/// Le <see cref="DriverNote"/> indique la note actuellement autorisée par la scène à écrire sur cette ressource.
+/// Le <see cref="DriverNote"/> indique la note actuellement autorisée à écrire sur cette ressource.
+/// Il peut être défini manuellement ou résolu par une <see cref="DriverPolicy"/>.
 /// </remarks>
 public class VisualTrack
 {
@@ -35,6 +36,11 @@ public class VisualTrack
     public object Target { get; }
 
     /// <summary>
+    /// Policy optionnelle qui choisit automatiquement le driver de cette track.
+    /// </summary>
+    public IVisualDriverPolicy DriverPolicy { get; private set; }
+
+    /// <summary>
     /// Note courante autorisée à écrire sur cette track, ou <c>null</c> si aucune note ne la pilote.
     /// </summary>
     public Note DriverNote { get; private set; }
@@ -46,6 +52,27 @@ public class VisualTrack
     public void SetDriver(Note note)
     {
         DriverNote = note;
+    }
+
+    /// <summary>
+    /// Attache une policy qui résoudra automatiquement le driver pendant <see cref="VisualRuntime.ResolveDrivers"/>.
+    /// </summary>
+    /// <param name="policy">Policy à utiliser, ou <c>null</c> pour revenir au driver manuel.</param>
+    /// <returns>Cette track pour continuer la configuration fluent.</returns>
+    public VisualTrack UseDriverPolicy(IVisualDriverPolicy policy)
+    {
+        DriverPolicy = policy;
+        return this;
+    }
+
+    /// <summary>
+    /// Attache un résolveur lambda comme policy de driver.
+    /// </summary>
+    /// <param name="resolver">Fonction qui choisit la note conductrice.</param>
+    /// <returns>Cette track pour continuer la configuration fluent.</returns>
+    public VisualTrack UseDriverResolver(Func<VisualDriverContext, Note> resolver)
+    {
+        return UseDriverPolicy(new DelegateVisualDriverPolicy(resolver));
     }
 }
 
@@ -70,4 +97,22 @@ public sealed class VisualTrack<T> : VisualTrack
     /// Ressource visuelle partagée avec son type concret.
     /// </summary>
     public new T Target { get; }
+
+    /// <summary>
+    /// Attache une policy et conserve le type fluent de la track.
+    /// </summary>
+    public new VisualTrack<T> UseDriverPolicy(IVisualDriverPolicy policy)
+    {
+        base.UseDriverPolicy(policy);
+        return this;
+    }
+
+    /// <summary>
+    /// Attache un résolveur lambda et conserve le type fluent de la track.
+    /// </summary>
+    public new VisualTrack<T> UseDriverResolver(Func<VisualDriverContext, Note> resolver)
+    {
+        base.UseDriverResolver(resolver);
+        return this;
+    }
 }

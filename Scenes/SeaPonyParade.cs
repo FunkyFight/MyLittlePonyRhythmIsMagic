@@ -83,10 +83,8 @@ public class SeaPonyParade : Scene
     private HashSet<Note> _playerTapClapEffectNotes = new HashSet<Note>();
     private HashSet<Note> _autoTapClapEffectNotes = new HashSet<Note>();
     private List<GameObject> _tapClapEffects = new List<GameObject>();
-    private Note[] _drivingSeaPonyNotes = new Note[SeaPonyCount];
     private VisualNoteManager<SeaponyVisualNote>[] _seaPoniesVisualNotes = new VisualNoteManager<SeaponyVisualNote>[SeaPonyCount];
     private ChartPlayer _reactionChartPlayer;
-    private Note _drivingBackgroundNote;
     private Note _activeGroupMoveNote;
     private double _lastSeaPonySongPosition = double.NaN;
     private Vector2 _seaPonyGroupOffset = Vector2.Zero;
@@ -453,11 +451,13 @@ public class SeaPonyParade : Scene
         if(GLOBALS.beatmapPlayer.ChartPlayer == null || GLOBALS.beatmapPlayer.Conductor == null)
             return;
 
-        resetDrivingSeaPonyNotes();
+        clearVisualRuntimeDrivers();
         ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
         _visualRuntime = new VisualRuntime();
-        _visualRuntime.RegisterTrack("background", _infiniteScrollBg);
-        registerSeaPonyVisualTracks();
+        SeaponyActorDriverPolicy seaPonyDriverPolicy = new(getSeaponyApproachDuration, getSeaponyDespawnDelay, () => getMaxCrotchet() * 2);
+        _visualRuntime.RegisterTrack("background", _infiniteScrollBg)
+            .UseDriverPolicy(new SeaponyBackgroundDriverPolicy(getBackgroundScrollDuration));
+        registerSeaPonyVisualTracks(seaPonyDriverPolicy);
 
         for(int i = 0; i < SeaPonyCount; i++)
         {
@@ -514,14 +514,16 @@ public class SeaPonyParade : Scene
     /// </summary>
     /// <remarks>
     /// Ces tracks remplacent le guard legacy <c>Func&lt;bool&gt; canApplyState</c> pour <see cref="SeaponyVisualNote"/>.
-    /// La scène garde la même décision de driver qu'avant, mais l'écriture passe par <see cref="VisualRuntime"/>.
+    /// La policy attachée choisit automatiquement la note conductrice pendant <see cref="VisualRuntime.ResolveDrivers"/>.
     /// </remarks>
-    private void registerSeaPonyVisualTracks()
+    private void registerSeaPonyVisualTracks(SeaponyActorDriverPolicy driverPolicy)
     {
         for(int i = 0; i < SeaPonyCount; i++)
         {
-            _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyTrackId(i), _seaPonies[i]);
-            _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyAnimationTrackId(i), _seaPoniesAnimationStates[i]);
+            _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyTrackId(i), _seaPonies[i])
+                .UseDriverPolicy(driverPolicy);
+            _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyAnimationTrackId(i), _seaPoniesAnimationStates[i])
+                .UseDriverPolicy(driverPolicy);
         }
     }
 
@@ -538,119 +540,6 @@ public class SeaPonyParade : Scene
     private bool hasPerfectReaction(Note note)
     {
         return note != null && note.HasReacted && _perfectReactionNotes.Contains(note);
-    }
-
-    private void updateDrivingSeaPonyNotes(double songPosition)
-    {
-        Note drivingNote = findDrivingSeaPonyNote(songPosition);
-        for(int i = 0; i < SeaPonyCount; i++)
-        {
-            _drivingSeaPonyNotes[i] = drivingNote;
-            updateSeaPonyVisualDriver(i, drivingNote);
-        }
-    }
-
-    /// <summary>
-    /// Synchronise les drivers runtime des tracks d'un sea pony pour la frame courante.
-    /// </summary>
-    /// <param name="seaPonyIndex">Index du sea pony à piloter.</param>
-    /// <param name="drivingNote">Note autorisée à muter ses tracks, ou <c>null</c>.</param>
-    private void updateSeaPonyVisualDriver(int seaPonyIndex, Note drivingNote)
-    {
-        _visualRuntime?.SetDriver(SeaponyVisualNote.GetPonyTrackId(seaPonyIndex), drivingNote);
-        _visualRuntime?.SetDriver(SeaponyVisualNote.GetPonyAnimationTrackId(seaPonyIndex), drivingNote);
-    }
-
-    private Note findDrivingSeaPonyNote(double songPosition)
-    {
-        ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
-        if(chartPlayer == null || GLOBALS.beatmapPlayer.Conductor == null)
-            return null;
-
-        Note postHitNote = null;
-        Note approachNote = null;
-        double closestApproachTime = double.PositiveInfinity;
-        double maxApproachDuration = getMaxCrotchet() * 2;
-
-        foreach(Note note in chartPlayer.Notes)
-        {
-            if(!TryGetSeaponyAction(note, out SeaponyAction action))
-                continue;
-
-            if(note.SongPosition - maxApproachDuration > songPosition)
-                break;
-
-            double approachDuration = getSeaponyApproachDuration(action, note);
-            double despawnDelay = getSeaponyDespawnDelay(action, note);
-            double approachStart = note.SongPosition - approachDuration;
-            double despawnEnd = note.SongPosition + despawnDelay;
-
-            if(songPosition >= note.SongPosition && songPosition < despawnEnd)
-            {
-                if(postHitNote == null || note.SongPosition >= postHitNote.SongPosition)
-                    postHitNote = note;
-
-                continue;
-            }
-
-            if(songPosition >= approachStart && songPosition < note.SongPosition)
-            {
-                double approachTime = note.SongPosition - songPosition;
-                if(approachTime < closestApproachTime)
-                {
-                    closestApproachTime = approachTime;
-                    approachNote = note;
-                }
-            }
-        }
-
-        if(isRollApproachOverlappingTapTail(postHitNote, approachNote))
-            return approachNote;
-
-        return postHitNote ?? approachNote;
-    }
-
-    private static bool isRollApproachOverlappingTapTail(Note postHitNote, Note approachNote)
-    {
-        return IsSeaponyAction(postHitNote, SeaponyAction.TapTap)
-            && IsSeaponyAction(approachNote, SeaponyAction.Roll);
-    }
-
-    private Note findDrivingBackgroundNote(double songPosition)
-    {
-        ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
-        if(chartPlayer == null || GLOBALS.beatmapPlayer.Conductor == null)
-            return null;
-
-        Note drivingNote = null;
-        foreach(Note note in chartPlayer.Notes)
-        {
-            if(!TryGetSeaponyAction(note, out SeaponyAction action))
-                continue;
-
-            double scrollEnd = note.SongPosition + getBackgroundScrollDuration(action, note);
-            if(songPosition >= note.SongPosition && songPosition <= scrollEnd)
-                drivingNote = note;
-
-            if(note.SongPosition > songPosition)
-                break;
-        }
-
-        return drivingNote;
-    }
-
-    /// <summary>
-    /// Synchronise le driver manuel de la track background avant l'update du manager correspondant.
-    /// </summary>
-    /// <param name="drivingBackgroundNote">Note SeaPony autorisée à piloter le background pour la frame courante.</param>
-    /// <remarks>
-    /// Les visual notes background peuvent se chevaucher dans la fenêtre du manager. Cette affectation remplace
-    /// l'ancien <c>Func&lt;bool&gt; canApplyState</c> en ne laissant écrire que la note retournée par
-    /// <see cref="findDrivingBackgroundNote"/>.
-    /// </remarks>
-    private void updateBackgroundVisualDriver(Note drivingBackgroundNote)
-    {
-        _visualRuntime?.SetDriver("background", drivingBackgroundNote);
     }
 
     private double getSeaponyApproachDuration(SeaponyAction action, Note note)
@@ -674,9 +563,8 @@ public class SeaPonyParade : Scene
         return crotchet;
     }
 
-    private void resetDrivingSeaPonyNotes()
+    private void clearVisualRuntimeDrivers()
     {
-        Array.Clear(_drivingSeaPonyNotes, 0, _drivingSeaPonyNotes.Length);
         _visualRuntime?.ClearDrivers();
     }
 
@@ -688,8 +576,7 @@ public class SeaPonyParade : Scene
         _playerTapClapEffectNotes.Clear();
         _autoTapClapEffectNotes.Clear();
         clearTapClapEffects();
-        resetDrivingSeaPonyNotes();
-        _drivingBackgroundNote = null;
+        clearVisualRuntimeDrivers();
         _activeGroupMoveNote = null;
         _lastSeaPonySongPosition = double.NaN;
         _seaPonyGroupOffset = Vector2.Zero;
@@ -729,7 +616,7 @@ public class SeaPonyParade : Scene
                 continue;
             }
 
-            if(_drivingSeaPonyNotes[i] != null)
+            if(hasSeaPonyVisualDriver(i))
                 continue;
 
             RhythmVisualUtils.ForceAnimationState(_seaPoniesAnimationStates[i], "idle");
@@ -1151,6 +1038,11 @@ public class SeaPonyParade : Scene
         clearTapClapEffects();
     }
 
+    private bool hasSeaPonyVisualDriver(int seaPonyIndex)
+    {
+        return _visualRuntime?.Track(SeaponyVisualNote.GetPonyTrackId(seaPonyIndex))?.DriverNote != null;
+    }
+
     private float _elapsed = 0; 
     public override void Update(GameTime gameTime)
     {
@@ -1197,9 +1089,7 @@ public class SeaPonyParade : Scene
 
         _activeGroupMoveNote = findActiveGroupMoveNote(songPos);
         _seaPonyGroupOffset = getSeaPonyGroupOffset(songPos);
-        updateDrivingSeaPonyNotes(songPos);
-        _drivingBackgroundNote = findDrivingBackgroundNote(songPos);
-        updateBackgroundVisualDriver(_drivingBackgroundNote);
+        resolveVisualDrivers(songPos);
         playStartCues(songPos, gameTime.ElapsedGameTime.TotalSeconds);
         applyBaseStateForIdleSeaPonies(songPos);
 
@@ -1212,6 +1102,21 @@ public class SeaPonyParade : Scene
         spawnTapClapEffectsOnForwardCross(songPos, gameTime.ElapsedGameTime.TotalSeconds);
         _infiniteScrollBgVisualNotes?.Update(songPos);
         _lastSeaPonySongPosition = songPos;
+    }
+
+    /// <summary>
+    /// Résout tous les drivers de tracks visuelles pour la frame courante.
+    /// </summary>
+    /// <param name="songPosition">Position musicale courante.</param>
+    private void resolveVisualDrivers(double songPosition)
+    {
+        if(GLOBALS.beatmapPlayer.ChartPlayer == null)
+        {
+            _visualRuntime?.ClearDrivers();
+            return;
+        }
+
+        _visualRuntime?.ResolveDrivers(songPosition, GLOBALS.beatmapPlayer.ChartPlayer.Notes);
     }
 
     private void spawnTapClapEffectsOnForwardCross(double songPosition, double elapsedSeconds)

@@ -1,18 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Rhythm.Note;
 
 /// <summary>
 /// Registre de tracks visuelles et arbitre central des écritures effectuées par les notes dirigées.
 /// </summary>
 /// <remarks>
-/// Le runtime ne décide pas encore lui-même quelle note pilote une track : la scène appelle
-/// <see cref="SetDriver"/> pour préserver la logique existante. Les mutations restent sûres : une track
-/// inconnue ou pilotée par une autre note produit un no-op via <see cref="VisualContext.Mutate{T}"/>.
+/// Une track peut être pilotée manuellement avec <see cref="SetDriver"/> ou automatiquement par une
+/// <see cref="IVisualDriverPolicy"/> résolue via <see cref="ResolveDrivers"/>. Les mutations restent sûres :
+/// une track inconnue, non possédée ou pilotée par une autre note produit un no-op via <see cref="VisualContext.Mutate{T}"/>.
 /// </remarks>
 public sealed class VisualRuntime
 {
     private readonly Dictionary<string, VisualTrack> _tracks = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Active l'écriture des mutations ignorées dans <see cref="Debug"/>.
+    /// </summary>
+    public bool DebugIgnoredMutations { get; set; }
+
+    /// <summary>
+    /// Évènement émis à chaque mutation ignorée pour faciliter les tests et le debug runtime.
+    /// </summary>
+    public event Action<VisualMutationIgnored> MutationIgnored;
 
     /// <summary>
     /// Enregistre ou remplace une track typée dans ce runtime.
@@ -50,8 +61,24 @@ public sealed class VisualRuntime
     /// <returns><c>true</c> seulement si la track existe et référence exactement cette note comme driver.</returns>
     public bool CanWrite(string trackId, Note note, double songPosition)
     {
-        VisualTrack track = Track(trackId);
-        return track != null && ReferenceEquals(track.DriverNote, note);
+        return TryGetWritableTrack(trackId, note, songPosition, out _, out _);
+    }
+
+    /// <summary>
+    /// Résout les drivers de toutes les tracks qui ont une policy attachée.
+    /// </summary>
+    /// <param name="songPosition">Position musicale courante.</param>
+    /// <param name="notes">Notes du chart utilisées par les policies.</param>
+    public void ResolveDrivers(double songPosition, IReadOnlyList<Note> notes)
+    {
+        foreach(VisualTrack track in _tracks.Values)
+        {
+            if(track.DriverPolicy == null)
+                continue;
+
+            VisualDriverContext context = new(this, track, songPosition, notes);
+            track.SetDriver(track.DriverPolicy.ResolveDriver(context));
+        }
     }
 
     /// <summary>
@@ -90,5 +117,47 @@ public sealed class VisualRuntime
     {
         foreach(VisualTrack track in _tracks.Values)
             track.SetDriver(null);
+    }
+
+    internal bool TryGetWritableTrack(string trackId, Note note, double songPosition, out VisualTrack track, out VisualMutationIgnoredReason reason)
+    {
+        track = Track(trackId);
+        if(track == null)
+        {
+            reason = VisualMutationIgnoredReason.TrackMissing;
+            return false;
+        }
+
+        if(track.DriverNote == null)
+        {
+            reason = VisualMutationIgnoredReason.NoDriver;
+            return false;
+        }
+
+        if(!ReferenceEquals(track.DriverNote, note))
+        {
+            reason = VisualMutationIgnoredReason.WrongDriver;
+            return false;
+        }
+
+        reason = default;
+        return true;
+    }
+
+    internal void ReportIgnoredMutation(string trackId, Note callerNote, Type expectedType, double songPosition, VisualMutationIgnoredReason reason)
+    {
+        VisualTrack track = Track(trackId);
+        VisualMutationIgnored ignored = new(trackId, callerNote, track?.DriverNote, expectedType, songPosition, reason);
+        MutationIgnored?.Invoke(ignored);
+
+        if(!DebugIgnoredMutations)
+            return;
+
+        Debug.WriteLine($"[VisualRuntime] Mutate ignored: track='{trackId}', reason={reason}, caller={DescribeNote(callerNote)}, driver={DescribeNote(track?.DriverNote)}, expected={expectedType?.Name ?? "<unknown>"}, song={songPosition:0.###}");
+    }
+
+    private static string DescribeNote(Note note)
+    {
+        return note == null ? "<none>" : $"note@{note.SongPosition:0.###}";
     }
 }

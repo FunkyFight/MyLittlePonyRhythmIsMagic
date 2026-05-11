@@ -172,11 +172,28 @@ public sealed class VisualContext
     /// </remarks>
     public void Mutate<T>(string trackId, Action<T> mutation)
     {
-        if(mutation == null || !CanWrite(trackId))
+        if(mutation == null)
             return;
 
-        if(TryRead(trackId, out T target))
-            mutation(target);
+        if(!_ownedTrackIds.Contains(trackId))
+        {
+            _runtime.ReportIgnoredMutation(trackId, Note, typeof(T), SongPosition, VisualMutationIgnoredReason.TrackNotOwned);
+            return;
+        }
+
+        if(!_runtime.TryGetWritableTrack(trackId, Note, SongPosition, out VisualTrack track, out VisualMutationIgnoredReason reason))
+        {
+            _runtime.ReportIgnoredMutation(trackId, Note, typeof(T), SongPosition, reason);
+            return;
+        }
+
+        if(track.Target is not T target)
+        {
+            _runtime.ReportIgnoredMutation(trackId, Note, typeof(T), SongPosition, VisualMutationIgnoredReason.WrongTargetType);
+            return;
+        }
+
+        mutation(target);
     }
 
     /// <summary>

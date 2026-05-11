@@ -27,12 +27,14 @@ Une visual note dirigée fait trois choses :
 
 Le cycle d'update est :
 
-1. `VisualNoteManager<T>.Update(songPosition)` appelle `visual.Update(songPosition)`.
-2. `DirectedVisualNote.Update(...)` met à jour le `VisualNoteState` de base.
-3. Un `VisualContext` est construit avec la note, le song position courant, le song position précédent et les progressions.
-4. La `VisualTimeline` est samplée.
-5. Chaque phase active exécute ses lambdas.
-6. Les mutations passent par `ctx.Mutate(...)` ou `DoOwned(...)`, donc elles respectent l'ownership et le driver courant.
+1. La scène enregistre ses tracks et leur policy de driver.
+2. À chaque frame, la scène appelle `VisualRuntime.ResolveDrivers(songPosition, notes)`.
+3. `VisualNoteManager<T>.Update(songPosition)` appelle `visual.Update(songPosition)`.
+4. `DirectedVisualNote.Update(...)` met à jour le `VisualNoteState` de base.
+5. Un `VisualContext` est construit avec la note, le song position courant, le song position précédent et les progressions.
+6. La `VisualTimeline` est samplée.
+7. Chaque phase active exécute ses lambdas.
+8. Les mutations passent par `ctx.Mutate(...)`, `ctx.ForceAnimation(...)` ou `DoOwned(...)`, donc elles respectent l'ownership et le driver courant.
 
 `DirectedVisualNote.Update(...)` est `sealed`. Une visual note dirigée ne doit pas override `Update`; elle doit déclarer ses phases dans `Build(...)`.
 
@@ -67,24 +69,31 @@ Une phase reçoit un `PhaseContext`. Un bloc stable reçoit seulement le `Visual
 
 Une track est une ressource nommée : background, pony, animation state machine, caméra, beam, etc.
 
-La scène enregistre les tracks au moment où elle crée ou recrée les visual notes :
+La scène enregistre les tracks au moment où elle crée ou recrée les visual notes. Elle peut aussi attacher une policy qui choisira automatiquement la note conductrice :
 
 ```csharp
 _visualRuntime = new VisualRuntime();
-_visualRuntime.RegisterTrack("background", _infiniteScrollBg);
-_visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyTrackId(i), _seaPonies[i]);
-_visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyAnimationTrackId(i), _seaPoniesAnimationStates[i]);
+_visualRuntime.RegisterTrack("background", _infiniteScrollBg)
+    .UseDriverPolicy(new SeaponyBackgroundDriverPolicy(GetBackgroundScrollDuration));
+
+_visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyTrackId(i), _seaPonies[i])
+    .UseDriverPolicy(actorDriverPolicy);
+
+_visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyAnimationTrackId(i), _seaPoniesAnimationStates[i])
+    .UseDriverPolicy(actorDriverPolicy);
 ```
 
-Ensuite, à chaque frame, la scène désigne quelle note pilote chaque track :
+Ensuite, à chaque frame, la scène résout tous les drivers en une fois avant d'updater les managers :
 
 ```csharp
-_visualRuntime.SetDriver("background", _drivingBackgroundNote);
-_visualRuntime.SetDriver(SeaponyVisualNote.GetPonyTrackId(i), drivingNote);
-_visualRuntime.SetDriver(SeaponyVisualNote.GetPonyAnimationTrackId(i), drivingNote);
+_visualRuntime.ResolveDrivers(songPosition, GLOBALS.beatmapPlayer.ChartPlayer.Notes);
+_seaPonyVisualNotes.Update(songPosition);
+_infiniteScrollBgVisualNotes.Update(songPosition);
 ```
 
-Si la track n'existe pas ou si la note courante n'est pas le driver, la mutation est un no-op.
+`UseDriverPolicy(...)` accepte une classe dédiée. `UseDriverResolver(...)` permet le même branchement avec une lambda courte. `SetDriver(...)` reste disponible pour les cas manuels et les tests ciblés, mais il ne doit plus être nécessaire pour l'arbitrage SeaPony frame par frame.
+
+Si la track n'existe pas, si aucun driver n'est résolu ou si la note courante n'est pas le driver, la mutation est un no-op observable via `VisualRuntime.MutationIgnored`.
 
 ### `VisualContext`
 
@@ -96,7 +105,7 @@ Si la track n'existe pas ou si la note courante n'est pas le driver, la mutation
 4. `NoteProgress`, `UnclampedNoteProgress`, `PostHitProgress`.
 5. `LastNoteProgress`, `LastPostHitProgress`.
 6. `HasRewound`, `IsBeforeApproach`, `IsAtOrAfterHit`.
-7. Les méthodes de tracks : `CanWrite`, `TryRead`, `Read`, `Mutate`.
+7. Les méthodes de tracks : `CanWrite`, `TryRead`, `Read`, `Mutate`, `ForceAnimation`.
 8. Les helpers d'évènements : `ForwardCrossed`, `ForwardCrossedProgress`, `PlaySfxOnForwardCross`, `SpawnOnForwardCross`.
 
 ### `PhaseContext`
@@ -132,10 +141,13 @@ timeline.AfterHitUntilDespawn("background_scroll")
     });
 ```
 
-Le second niveau vient de la scène : le runtime doit avoir défini la note courante comme driver de la track.
+Le second niveau vient du runtime : la note courante doit être le driver de la track. Ce driver est généralement choisi par une policy pendant `ResolveDrivers(...)`.
 
 ```csharp
-_visualRuntime.SetDriver("background", _drivingBackgroundNote);
+_visualRuntime.RegisterTrack("background", _background)
+    .UseDriverResolver(ctx => FindBackgroundDriver(ctx.SongPosition, ctx.Notes));
+
+_visualRuntime.ResolveDrivers(songPosition, notes);
 ```
 
 La mutation passe seulement si :
@@ -156,6 +168,19 @@ timeline.AfterHitUntilDespawn("background_scroll")
 ```
 
 `DoOwned<T>` appelle automatiquement `.Owns(trackId)` puis `ctx.Mutate<T>(...)`.
+
+## Diagnostics de mutations ignorées
+
+Une mutation refusée reste un no-op, mais elle peut être observée pour debug ou test :
+
+```csharp
+_visualRuntime.MutationIgnored += ignored =>
+{
+    Debug.WriteLine($"{ignored.TrackId}: {ignored.Reason}");
+};
+```
+
+Les raisons exposées sont `TrackNotOwned`, `TrackMissing`, `NoDriver`, `WrongDriver` et `WrongTargetType`. `DebugIgnoredMutations` écrit aussi ces diagnostics dans `System.Diagnostics.Debug`.
 
 ## Crossings forward-only
 
@@ -204,17 +229,18 @@ public sealed class MyBgVisualNote : DirectedVisualNote
 }
 ```
 
-La scène doit enregistrer la track :
+La scène doit enregistrer la track et son resolver :
 
 ```csharp
 _visualRuntime = new VisualRuntime();
-_visualRuntime.RegisterTrack("background", _background);
+_visualRuntime.RegisterTrack("background", _background)
+    .UseDriverResolver(ctx => CurrentBackgroundNote(ctx.SongPosition, ctx.Notes));
 ```
 
-Puis définir le driver avant l'update du manager :
+Puis résoudre les drivers avant l'update du manager :
 
 ```csharp
-_visualRuntime.SetDriver("background", currentBackgroundNote);
+_visualRuntime.ResolveDrivers(songPosition, notes);
 _backgroundVisualNotes.Update(songPosition);
 ```
 
@@ -237,15 +263,17 @@ timeline.AfterHitUntilDespawn("background_scroll")
     });
 ```
 
-La scène fait l'arbitrage :
+La scène attache maintenant l'arbitrage au runtime :
 
 ```csharp
-_drivingBackgroundNote = findDrivingBackgroundNote(songPosition);
-_visualRuntime.SetDriver("background", _drivingBackgroundNote);
+_visualRuntime.RegisterTrack("background", _infiniteScrollBg)
+    .UseDriverPolicy(new SeaponyBackgroundDriverPolicy(GetBackgroundScrollDuration));
+
+_visualRuntime.ResolveDrivers(songPosition, GLOBALS.beatmapPlayer.ChartPlayer.Notes);
 _infiniteScrollBgVisualNotes.Update(songPosition);
 ```
 
-Ce pattern remplace l'ancien `Func<bool> canApplyState`.
+Ce pattern remplace l'ancien `Func<bool> canApplyState` et évite de recalculer un `_drivingBackgroundNote` manuel dans la scène.
 
 ## Exemple SeaPony acteur
 
@@ -256,11 +284,20 @@ _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyTrackId(i), _seaPonies[i])
 _visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyAnimationTrackId(i), _seaPoniesAnimationStates[i]);
 ```
 
-Puis elle synchronise les drivers :
+Puis elle utilise une même policy pour les tracks objet et animation :
 
 ```csharp
-_visualRuntime.SetDriver(SeaponyVisualNote.GetPonyTrackId(i), drivingNote);
-_visualRuntime.SetDriver(SeaponyVisualNote.GetPonyAnimationTrackId(i), drivingNote);
+SeaponyActorDriverPolicy actorDriverPolicy = new(
+    GetSeaPonyApproachDuration,
+    GetSeaPonyDespawnDelay,
+    GetMaxSeaPonyApproachDuration);
+
+_visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyTrackId(i), _seaPonies[i])
+    .UseDriverPolicy(actorDriverPolicy);
+_visualRuntime.RegisterTrack(SeaponyVisualNote.GetPonyAnimationTrackId(i), _seaPoniesAnimationStates[i])
+    .UseDriverPolicy(actorDriverPolicy);
+
+_visualRuntime.ResolveDrivers(songPosition, GLOBALS.beatmapPlayer.ChartPlayer.Notes);
 ```
 
 La visual note déclare les blocs qui recouvrent son cycle :
@@ -328,21 +365,23 @@ Attention : si la factory retourne `null`, `VisualNoteManager` met la note dans 
 1. Créer une classe qui hérite de `DirectedVisualNote`.
 2. Passer un `VisualRuntime` partagé dans le constructeur.
 3. Enregistrer les tracks nécessaires dans la scène.
-4. Mettre à jour les drivers avant l'update du manager.
+4. Attacher une `IVisualDriverPolicy` ou un `UseDriverResolver(...)` aux tracks partagées.
 5. Déclarer les blocs dans `Build(VisualTimeline timeline)`.
 6. Utiliser `.Owns(...)` ou `DoOwned<T>(...)` pour chaque ressource mutée.
-7. Utiliser `ctx.ForwardCrossed(...)` pour les one-shots.
-8. Utiliser `ctx.HasRewound` pour reset les flags locaux.
-9. Ne pas override `Update(...)`.
-10. Garder `Draw(...)` vide si la visual note pilote seulement des objets de scène.
+7. Utiliser `ctx.Mutate(...)` et `ctx.ForceAnimation(...)` pour toute mutation partagée.
+8. Appeler `runtime.ResolveDrivers(songPosition, notes)` avant les managers.
+9. Utiliser `ctx.ForwardCrossed(...)` pour les one-shots.
+10. Utiliser `ctx.HasRewound` pour reset les flags locaux.
+11. Ne pas override `Update(...)`.
+12. Garder `Draw(...)` vide si la visual note pilote seulement des objets de scène.
 
 ## Erreurs fréquentes
 
 Ne pas enregistrer la track : la mutation devient un no-op.
 
-Ne pas définir le driver avant le manager : la visual note voit l'ancien driver ou aucun driver.
+Ne pas appeler `ResolveDrivers(...)` avant le manager : la visual note voit l'ancien driver ou aucun driver.
 
-Muter directement un objet partagé sans `ctx.Mutate` : l'ownership runtime est contourné.
+Muter directement un objet partagé sans `ctx.Mutate` ou `ctx.ForceAnimation` : l'ownership runtime est contourné.
 
 Utiliser `ForwardCrossed` pour une pose stable : après un seek direct, la pose ne sera pas reconstruite.
 
