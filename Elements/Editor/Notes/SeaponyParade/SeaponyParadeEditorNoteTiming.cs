@@ -21,7 +21,7 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
         switch(GetSelectedAction(request))
         {
             case SeaponyAction.Swim:
-                return request.Beat + 1;
+                return GetOccupiedEndBeat(request);
 
             case SeaponyAction.Roll:
                 return IsRollAfter(request)
@@ -29,11 +29,11 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
                     : request.Beat + GetRollStopCueBeats(request);
 
             case SeaponyAction.TapTap:
-                return request.Beat + 2;
+                return GetOccupiedEndBeat(request);
 
             case SeaponyAction.Leave:
             case SeaponyAction.Enter:
-                return request.Beat + GetGroupMoveHoldBeats(request);
+                return GetOccupiedEndBeat(request);
         }
 
         return request.Beat;
@@ -44,19 +44,19 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
         switch(GetSelectedAction(request))
         {
             case SeaponyAction.Swim:
-                return request.Beat + 2;
+                return GetDefaultHitWindowEndBeat(request);
 
             case SeaponyAction.Roll:
                 return IsRollAfter(request)
                     ? request.GetBeat(request.GetNextNote(1))
-                    : GetEndBeat(request) + 1;
+                    : GetEndBeat(request) + GetHitWindowExtensionAfterOccupiedEnd(request);
 
             case SeaponyAction.TapTap:
-                return request.Beat + 2;
+                return GetDefaultHitWindowEndBeat(request);
 
             case SeaponyAction.Leave:
             case SeaponyAction.Enter:
-                return GetEndBeat(request);
+                return GetDefaultHitWindowEndBeat(request);
         }
 
         return request.Beat;
@@ -71,7 +71,7 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
             case SeaponyAction.TapTap:
             case SeaponyAction.Leave:
             case SeaponyAction.Enter:
-                return request.Beat;
+                return request.Beat - request.TimingProfile.HitWindowBeforeBeats;
         }
 
         return request.Beat;
@@ -82,21 +82,21 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
         switch(GetSelectedAction(request))
         {
             case SeaponyAction.Swim:
-                return request.Beat - 1;
+                return GetOccupiedStartBeat(request);
 
             case SeaponyAction.Roll:
                 return IsRollBefore(request)
                     ? request.Beat
-                    : request.Beat - 2;
+                    : GetOccupiedStartBeat(request);
 
             case SeaponyAction.TapTap:
                 return IsTapTapBefore(request)
                     ? request.Beat
-                    : request.Beat - 2;
+                    : GetOccupiedStartBeat(request);
 
             case SeaponyAction.Leave:
             case SeaponyAction.Enter:
-                return request.Beat;
+                return GetOccupiedStartBeat(request);
         }
 
         return request.Beat;
@@ -106,7 +106,7 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
     {
         SeaponyAction action = GetSelectedAction(request);
         if(action == SeaponyAction.Roll || action == SeaponyAction.TapTap)
-            return request.Beat;
+            return request.Beat - request.TimingProfile.SameVariantHitWindowBeforeBeats;
 
         return GetHitWindowStartBeat(request);
     }
@@ -115,12 +115,12 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
     {
         SeaponyAction action = GetSelectedAction(request);
         if(action == SeaponyAction.Roll)
-            return request.Beat + 1;
+            return request.Beat + request.TimingProfile.SameVariantHitWindowAfterBeats;
 
         if(action == SeaponyAction.TapTap)
             return IsNextTapTapInSamePair(request)
                 ? request.Beat + 0.5
-                : request.Beat + 1;
+                : request.Beat + request.TimingProfile.SameVariantHitWindowAfterBeats;
 
         return GetHitWindowEndBeat(request);
     }
@@ -192,5 +192,33 @@ public sealed class SeaponyParadeEditorNoteTiming : IEditorNoteTiming
         return GetSelectedAction(request) == SeaponyAction.Enter
             ? SeaponyParadePatternCompiler.EnterDefaultLengthBeats
             : SeaponyParadePatternCompiler.LeaveDefaultLengthBeats;
+    }
+
+    private static double GetOccupiedStartBeat(NoteTimingRequest request)
+    {
+        return request.Beat - request.TimingProfile.OccupyBeforeBeats;
+    }
+
+    private static double GetOccupiedEndBeat(NoteTimingRequest request)
+    {
+        return request.Beat + Math.Max(GetHoldBeats(request), request.TimingProfile.OccupyAfterBeats);
+    }
+
+    private static double GetDefaultHitWindowEndBeat(NoteTimingRequest request)
+    {
+        return request.Beat + Math.Max(GetHoldBeats(request), request.TimingProfile.HitWindowAfterBeats);
+    }
+
+    private static double GetHitWindowExtensionAfterOccupiedEnd(NoteTimingRequest request)
+    {
+        return Math.Max(0.0, request.TimingProfile.HitWindowAfterBeats - request.TimingProfile.OccupyAfterBeats);
+    }
+
+    private static double GetHoldBeats(NoteTimingRequest request)
+    {
+        if (GetSelectedAction(request) == SeaponyAction.Leave || GetSelectedAction(request) == SeaponyAction.Enter)
+            return GetGroupMoveHoldBeats(request);
+
+        return Math.Max(0.0, ChartTiming.GetNoteHoldBeats(request.Note, request.Definition, request.TempoMap));
     }
 }

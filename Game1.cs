@@ -144,6 +144,7 @@ public class Game1 : Core
         {
             if(_inputActionManager.IsPressedOnce("ReactMain")) 
             {
+                GLOBALS.ReactMainInputSerial++;
                 GLOBALS.beatmapPlayer.ChartPlayer.React("ReactMain", GLOBALS.beatmapPlayer.Conductor.SongPosition);
             }
         }

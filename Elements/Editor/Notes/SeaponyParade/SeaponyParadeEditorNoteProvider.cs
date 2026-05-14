@@ -21,8 +21,6 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
 
         game.RuntimeNote(SeaponyNoteCodec.NoteId)
             .Input("ReactMain")
-            .Occupies(1, 1)
-            .HitWindow(0, 2)
             .Timing(new SeaponyParadeEditorNoteTiming());
 
         game.Clip(SeaponyAction.Swim)
@@ -30,6 +28,8 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
             .Name("Swim")
             .Color(Color.CornflowerBlue)
             .Continuous(2)
+            .Occupies(1, 1)
+            .HitWindow(0, 2)
             .RepeatEvery(2);
 
         game.Clip(SeaponyAction.Roll)
@@ -37,6 +37,9 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
             .Name("Roll")
             .Color(Color.DeepSkyBlue)
             .Continuous(3)
+            .Occupies(2, 1)
+            .HitWindow(0, 2)
+            .SameVariantHitWindow(0, 1)
             .LeadIn(2)
             .RepeatEvery(1)
             .PadToMultipleOf(4);
@@ -46,6 +49,9 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
             .Name("Tap Tap")
             .Color(Color.LightBlue)
             .SingleHit()
+            .Occupies(2, 2)
+            .HitWindow(0, 2)
+            .SameVariantHitWindow(0, 1)
             .LeadIn(2)
             .Pair(0.5)
             .RepeatPairsEvery(1.5);
@@ -55,6 +61,8 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
             .Name("Leave")
             .Color(Color.MediumPurple)
             .Continuous(4)
+            .Occupies(0, 0)
+            .HitWindow(0, 0)
             .HoldForClipLength();
 
         game.Clip(SeaponyAction.Enter)
@@ -62,6 +70,8 @@ public sealed class SeaponyParadeEditorNoteProvider : SimpleRhythmGame<SeaponyAc
             .Name("Enter")
             .Color(Color.MediumSeaGreen)
             .Continuous(4)
+            .Occupies(0, 0)
+            .HitWindow(0, 0)
             .HoldForClipLength();
 
         game.NoHit(1)

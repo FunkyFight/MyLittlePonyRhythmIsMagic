@@ -3014,6 +3014,7 @@ public sealed class BeatmapEditorElement
                 _ui.Stroke(spriteBatch, bounds, Color.Yellow, 2);
 
             _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, Math.Min(5, bounds.Width), bounds.Height), color);
+            DrawClipHitMarkers(spriteBatch, clip, definition, bounds, windowStart, windowEnd, area, color);
             DrawClipResizeHandles(spriteBatch, bounds, Color.White * 0.8f);
 
             if (bounds.Width > 58)
@@ -3083,6 +3084,7 @@ public sealed class BeatmapEditorElement
         _ui.Fill(spriteBatch, bounds, color * 0.45f);
         _ui.Stroke(spriteBatch, bounds, Color.Yellow, 2);
         _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, Math.Min(5, bounds.Width), bounds.Height), color);
+        DrawClipHitMarkers(spriteBatch, previewClip, definition, bounds, windowStart, windowEnd, area, color);
         DrawClipResizeHandles(spriteBatch, bounds, Color.Yellow);
         if (bounds.Width > 58)
             _ui.Label(spriteBatch, definition.DisplayName, new Vector2(bounds.X + 8, bounds.Y + Math.Max(4, bounds.Height / 2 - 6)), Color.White, 2);
@@ -3138,6 +3140,30 @@ public sealed class BeatmapEditorElement
         int handleWidth = Math.Min(6, Math.Max(2, bounds.Width / 4));
         _ui.Fill(spriteBatch, new Rectangle(bounds.X, bounds.Y, handleWidth, bounds.Height), color * 0.5f);
         _ui.Fill(spriteBatch, new Rectangle(bounds.Right - handleWidth, bounds.Y, handleWidth, bounds.Height), color * 0.5f);
+    }
+
+    private void DrawClipHitMarkers(SpriteBatch spriteBatch, ChartEditorClip clip, EditorClipDefinition definition, Rectangle bounds, double windowStart, double windowEnd, Rectangle area, Color clipColor)
+    {
+        if (clip == null || definition == null || definition.Category == EditorClipCategory.NoHit)
+            return;
+
+        IReadOnlyList<ChartNote> notes = EditorClipCompiler.CompileClip(clip, _document.TempoMap);
+        if (notes.Count == 0)
+            return;
+
+        Color markerColor = GetOppositeColor(clipColor);
+        foreach (ChartNote note in notes)
+        {
+            double beat = ChartTiming.GetNoteBeat(note, _document.TempoMap);
+            if (beat < windowStart || beat > windowEnd)
+                continue;
+
+            int x = (int)MathF.Round(BeatToX(beat, windowStart, windowEnd, area));
+            if (x < bounds.X || x > bounds.Right)
+                continue;
+
+            _ui.Line(spriteBatch, new Vector2(x, bounds.Y + 2), new Vector2(x, bounds.Bottom - 2), markerColor, 2);
+        }
     }
 
     private void DrawInstantClipMarker(SpriteBatch spriteBatch, Rectangle bounds, Color fillColor, Color strokeColor)
@@ -3645,6 +3671,11 @@ public sealed class BeatmapEditorElement
             return definition.EditorStyle?.Color ?? Color.LightGreen;
 
         return definition.EditorStyle?.Color ?? Color.CornflowerBlue;
+    }
+
+    private static Color GetOppositeColor(Color color)
+    {
+        return new Color(255 - color.R, 255 - color.G, 255 - color.B, color.A);
     }
 
     private static bool IsInstantClip(EditorClipDefinition definition)

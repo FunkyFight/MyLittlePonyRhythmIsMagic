@@ -86,6 +86,48 @@ public sealed class SimpleClipBuilder<TAction>
     }
 
     /// <summary>
+    /// Definit l'espace occupe par les notes runtime produites par ce clip sur la timeline de l'editeur.
+    /// </summary>
+    /// <param name="beforeBeats">Nombre de beats occupes avant le beat de chaque note produite.</param>
+    /// <param name="afterBeats">Nombre de beats occupes apres le beat de chaque note produite.</param>
+    /// <returns>Ce builder pour continuer la declaration.</returns>
+    public SimpleClipBuilder<TAction> Occupies(double beforeBeats, double afterBeats)
+    {
+        _configuration.HasOccupies = true;
+        _configuration.OccupyBeforeBeats = Math.Max(0.0, beforeBeats);
+        _configuration.OccupyAfterBeats = Math.Max(0.0, afterBeats);
+        return this;
+    }
+
+    /// <summary>
+    /// Definit la fenetre de hit et de conflit des notes runtime produites par ce clip.
+    /// </summary>
+    /// <param name="beforeBeats">Nombre de beats avant le beat de chaque note produite.</param>
+    /// <param name="afterBeats">Nombre de beats apres le beat de chaque note produite.</param>
+    /// <returns>Ce builder pour continuer la declaration.</returns>
+    public SimpleClipBuilder<TAction> HitWindow(double beforeBeats, double afterBeats)
+    {
+        _configuration.HasHitWindow = true;
+        _configuration.HitWindowBeforeBeats = Math.Max(0.0, beforeBeats);
+        _configuration.HitWindowAfterBeats = Math.Max(0.0, afterBeats);
+        return this;
+    }
+
+    /// <summary>
+    /// Definit la fenetre de conflit entre notes du meme variant produites par ce clip.
+    /// </summary>
+    /// <param name="beforeBeats">Nombre de beats avant le beat de chaque note produite.</param>
+    /// <param name="afterBeats">Nombre de beats apres le beat de chaque note produite.</param>
+    /// <returns>Ce builder pour continuer la declaration.</returns>
+    public SimpleClipBuilder<TAction> SameVariantHitWindow(double beforeBeats, double afterBeats)
+    {
+        _configuration.HasSameVariantHitWindow = true;
+        _configuration.SameVariantHitWindowBeforeBeats = Math.Max(0.0, beforeBeats);
+        _configuration.SameVariantHitWindowAfterBeats = Math.Max(0.0, afterBeats);
+        return this;
+    }
+
+    /// <summary>
     /// Ajoute un champ configurable au clip auteur.
     /// </summary>
     /// <param name="field">Definition du champ a afficher dans l'editeur.</param>
@@ -248,6 +290,15 @@ internal sealed class SimpleClipConfiguration<TAction>
     public EditorClipCategory Category { get; set; }
     public double DefaultLengthBeats { get; set; }
     public EditorVisualStyle EditorStyle { get; set; }
+    public bool HasOccupies { get; set; }
+    public double OccupyBeforeBeats { get; set; }
+    public double OccupyAfterBeats { get; set; }
+    public bool HasHitWindow { get; set; }
+    public double HitWindowBeforeBeats { get; set; }
+    public double HitWindowAfterBeats { get; set; }
+    public bool HasSameVariantHitWindow { get; set; }
+    public double SameVariantHitWindowBeforeBeats { get; set; }
+    public double SameVariantHitWindowAfterBeats { get; set; }
     public List<EditorClipFieldDefinition> Fields { get; } = new();
     public Dictionary<string, string> Data { get; } = new();
     public double LeadInBeats { get; set; }

@@ -229,11 +229,12 @@ public sealed class RhythmGameDefinition<TAction>
         foreach (SimpleClipDefinition<TAction> clip in RuntimeClips)
         {
             builder.Variant(
-                clip.VariantId,
-                clip.DisplayName,
-                CreatePayload(clip.Action),
-                payload => Codec.IsPayloadAction(payload, clip.Action),
-                editorStyle: clip.EditorStyle ?? EditorVisualStyle.Default);
+                id: clip.VariantId,
+                displayName: clip.DisplayName,
+                defaultPayload: CreatePayload(clip.Action),
+                matches: payload => Codec.IsPayloadAction(payload, clip.Action),
+                editorStyle: clip.EditorStyle ?? EditorVisualStyle.Default,
+                timingProfile: clip.TimingProfile);
         }
 
         return builder.Build();
@@ -301,6 +302,7 @@ internal sealed class SimpleClipDefinition<TAction>
         DefaultLengthBeats = Math.Max(0.0, configuration.DefaultLengthBeats);
         InputAction = game.RuntimeNote.InputAction;
         EditorStyle = configuration.EditorStyle;
+        TimingProfile = CreateTimingProfile(game.RuntimeNote, configuration);
         LeadInBeats = configuration.LeadInBeats;
         Emits = configuration.Emits.ToArray();
         RepeatEveryBeats = configuration.RepeatEveryBeats;
@@ -321,7 +323,8 @@ internal sealed class SimpleClipDefinition<TAction>
             InputAction,
             defaultData,
             configuration.Fields.ToArray(),
-            EditorStyle);
+            EditorStyle,
+            TimingProfile);
     }
 
     public bool IsRuntime { get; }
@@ -333,6 +336,7 @@ internal sealed class SimpleClipDefinition<TAction>
     public double DefaultLengthBeats { get; }
     public string InputAction { get; }
     public EditorVisualStyle EditorStyle { get; }
+    public EditorNoteTimingProfile TimingProfile { get; }
     public double LeadInBeats { get; }
     public IReadOnlyList<SimpleClipEmit> Emits { get; }
     public double? RepeatEveryBeats { get; }
@@ -340,4 +344,20 @@ internal sealed class SimpleClipDefinition<TAction>
     public bool HoldForClipLength { get; }
     public Action<SimpleClipCompileContext<TAction>, SimpleRuntimeNoteEmitter<TAction>> CustomCompiler { get; }
     public EditorClipDefinition EditorClip { get; }
+
+    private static EditorNoteTimingProfile CreateTimingProfile(SimpleRuntimeNoteConfiguration runtime, SimpleClipConfiguration<TAction> configuration)
+    {
+        double occupyBeforeBeats = configuration.HasOccupies ? configuration.OccupyBeforeBeats : runtime.OccupyBeforeBeats;
+        double occupyAfterBeats = configuration.HasOccupies ? configuration.OccupyAfterBeats : runtime.OccupyAfterBeats;
+        double hitWindowBeforeBeats = configuration.HasHitWindow ? configuration.HitWindowBeforeBeats : runtime.HitWindowBeforeBeats;
+        double hitWindowAfterBeats = configuration.HasHitWindow ? configuration.HitWindowAfterBeats : runtime.HitWindowAfterBeats;
+        double? sameVariantHitWindowBeforeBeats = configuration.HasSameVariantHitWindow
+            ? configuration.SameVariantHitWindowBeforeBeats
+            : runtime.HasSameVariantHitWindow ? runtime.SameVariantHitWindowBeforeBeats : null;
+        double? sameVariantHitWindowAfterBeats = configuration.HasSameVariantHitWindow
+            ? configuration.SameVariantHitWindowAfterBeats
+            : runtime.HasSameVariantHitWindow ? runtime.SameVariantHitWindowAfterBeats : null;
+
+        return new EditorNoteTimingProfile(occupyBeforeBeats, occupyAfterBeats, hitWindowBeforeBeats, hitWindowAfterBeats, sameVariantHitWindowBeforeBeats, sameVariantHitWindowAfterBeats);
+    }
 }

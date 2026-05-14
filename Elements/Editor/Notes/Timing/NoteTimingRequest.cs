@@ -25,6 +25,8 @@ public sealed record NoteTimingRequest
     public NoteTypeId NoteType => Definition?.TypeId ?? default;
     public NoteTypeId NoteTypeId => NoteType;
     public int NoteVariantIndex { get; init; }
+    public EditorNoteVariant Variant => Definition?.GetVariant(NoteVariantIndex);
+    public EditorNoteTimingProfile TimingProfile => Definition?.GetTimingProfile(NoteVariantIndex) ?? EditorNoteTimingProfile.Zero;
     public double Beat { get; init; }
     public ChartTempoMap TempoMap { get; init; }
     public IReadOnlyList<ChartNote> PreviousNotes { get; init; }

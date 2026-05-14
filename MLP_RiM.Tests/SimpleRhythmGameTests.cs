@@ -88,6 +88,37 @@ public sealed class SimpleRhythmGameTests
     }
 
     [Fact]
+    public void SimpleClipDeclaresTimingIndependentlyFromRuntimeNoteDefaults()
+    {
+        SimpleTestRhythmGame provider = new();
+        EditorClipDefinition clip = provider.Clips.First(definition => definition.ClipTypeId == "my_game.basic");
+        EditorNoteDefinition noteDefinition = provider.Definition;
+        ChartNote note = noteDefinition.CreateChartNote(0, 0.5, variantIndex: 0);
+        ChartTiming.SetNoteBeat(note, 10.0);
+
+        NoteTimingResult timing = noteDefinition.GetTiming(new NoteTimingRequest(
+            note,
+            noteDefinition,
+            noteVariantIndex: 0,
+            beat: 10.0,
+            tempoMap: CreateTempoMap(),
+            previousNotes: Array.Empty<ChartNote>(),
+            nextNotes: Array.Empty<ChartNote>(),
+            gameContext: null));
+
+        NearlyEqual(2.0, clip.TimingProfile.OccupyBeforeBeats);
+        NearlyEqual(3.0, clip.TimingProfile.OccupyAfterBeats);
+        NearlyEqual(0.25, clip.TimingProfile.HitWindowBeforeBeats);
+        NearlyEqual(0.75, clip.TimingProfile.HitWindowAfterBeats);
+        NearlyEqual(8.0, timing.StartBeat);
+        NearlyEqual(13.0, timing.EndBeat);
+        NearlyEqual(9.75, timing.HitStartBeat);
+        NearlyEqual(10.75, timing.HitEndBeat);
+        NearlyEqual(10.0, timing.SameVariantHitStartBeat);
+        NearlyEqual(10.5, timing.SameVariantHitEndBeat);
+    }
+
+    [Fact]
     public void SimpleProviderMapsLegacyRuntimeNoteToMatchingClipAndVariant()
     {
         SimpleTestRhythmGame provider = new();
@@ -183,7 +214,10 @@ public sealed class SimpleRhythmGameTests
                 .HitWindow(0, 1);
 
             game.Clip(SimpleTestAction.Basic)
-                .SingleHit();
+                .SingleHit()
+                .Occupies(2, 3)
+                .HitWindow(0.25, 0.75)
+                .SameVariantHitWindow(0, 0.5);
 
             game.Clip(SimpleTestAction.DoubleTap)
                 .SingleHit()

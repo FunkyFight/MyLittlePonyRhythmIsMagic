@@ -126,9 +126,9 @@ public abstract class EditorNoteProvider : IEditorNoteProvider
 
     protected virtual IReadOnlyList<EditorClipDefinition> CreateClips() => Array.Empty<EditorClipDefinition>();
 
-    protected EditorClipDefinition Clip(string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction = "ReactMain", IReadOnlyDictionary<string, string> defaultData = null, IReadOnlyList<EditorClipFieldDefinition> fields = null, EditorVisualStyle editorStyle = null)
+    protected EditorClipDefinition Clip(string clipTypeId, string displayName, EditorClipCategory category, double defaultLengthBeats, string inputAction = "ReactMain", IReadOnlyDictionary<string, string> defaultData = null, IReadOnlyList<EditorClipFieldDefinition> fields = null, EditorVisualStyle editorStyle = null, EditorNoteTimingProfile timingProfile = null)
     {
-        return new EditorClipDefinition(RhythmGameId, clipTypeId, displayName, category, defaultLengthBeats, inputAction, defaultData, fields, editorStyle);
+        return new EditorClipDefinition(RhythmGameId, clipTypeId, displayName, category, defaultLengthBeats, inputAction, defaultData, fields, editorStyle, timingProfile);
     }
 
     protected IReadOnlyList<ChartNote> CompileContinuous(ChartEditorClip clip, ChartTempoMap tempoMap, IReadOnlyDictionary<string, string> data, double stepBeats)

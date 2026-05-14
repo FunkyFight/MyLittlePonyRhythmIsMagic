@@ -216,6 +216,28 @@ public sealed record EditorVisualStyle(Color Color)
     public static readonly EditorVisualStyle Default = new(Color.DeepSkyBlue);
 }
 
+public sealed class EditorNoteTimingProfile
+{
+    public static readonly EditorNoteTimingProfile Zero = new(0, 0, 0, 0);
+
+    public EditorNoteTimingProfile(double occupyBeforeBeats, double occupyAfterBeats, double hitWindowBeforeBeats, double hitWindowAfterBeats, double? sameVariantHitWindowBeforeBeats = null, double? sameVariantHitWindowAfterBeats = null)
+    {
+        OccupyBeforeBeats = occupyBeforeBeats;
+        OccupyAfterBeats = occupyAfterBeats;
+        HitWindowBeforeBeats = hitWindowBeforeBeats;
+        HitWindowAfterBeats = hitWindowAfterBeats;
+        SameVariantHitWindowBeforeBeats = sameVariantHitWindowBeforeBeats ?? hitWindowBeforeBeats;
+        SameVariantHitWindowAfterBeats = sameVariantHitWindowAfterBeats ?? hitWindowAfterBeats;
+    }
+
+    public double OccupyBeforeBeats { get; }
+    public double OccupyAfterBeats { get; }
+    public double HitWindowBeforeBeats { get; }
+    public double HitWindowAfterBeats { get; }
+    public double SameVariantHitWindowBeforeBeats { get; }
+    public double SameVariantHitWindowAfterBeats { get; }
+}
+
 public sealed class EditorNoteVariant
 {
     private readonly IReadOnlyDictionary<string, string> _legacyData;
@@ -226,7 +248,7 @@ public sealed class EditorNoteVariant
         _legacyData = additionnalData ?? new Dictionary<string, string>();
     }
 
-    public EditorNoteVariant(string id, string displayName, INotePayload defaultPayload, Func<INotePayload, bool> matches = null, NoteTimingPreset timingPreset = null, EditorVisualStyle editorStyle = null)
+    public EditorNoteVariant(string id, string displayName, INotePayload defaultPayload, Func<INotePayload, bool> matches = null, NoteTimingPreset timingPreset = null, EditorVisualStyle editorStyle = null, EditorNoteTimingProfile timingProfile = null)
     {
         Id = string.IsNullOrWhiteSpace(id) ? CreateId(displayName) : id;
         DisplayName = displayName;
@@ -234,6 +256,7 @@ public sealed class EditorNoteVariant
         Matches = matches ?? (_ => false);
         TimingPreset = timingPreset ?? NoteTimingPreset.Default;
         EditorStyle = editorStyle ?? EditorVisualStyle.Default;
+        TimingProfile = timingProfile;
         _legacyData = defaultPayload?.ToLegacyData() ?? new Dictionary<string, string>();
     }
 
@@ -243,6 +266,7 @@ public sealed class EditorNoteVariant
     public Func<INotePayload, bool> Matches { get; }
     public NoteTimingPreset TimingPreset { get; }
     public EditorVisualStyle EditorStyle { get; }
+    public EditorNoteTimingProfile TimingProfile { get; }
     public IReadOnlyDictionary<string, string> AdditionnalData => DefaultPayload?.ToLegacyData() ?? _legacyData;
 
     public bool MatchesPayload(INotePayload payload)
@@ -271,6 +295,7 @@ public sealed class EditorNoteDefinition
     public double HitWindowAfterBeats { get; }
     public double SameVariantHitWindowBeforeBeats { get; }
     public double SameVariantHitWindowAfterBeats { get; }
+    public EditorNoteTimingProfile TimingProfile { get; }
     public IReadOnlyList<EditorNoteVariant> Variants { get; }
     private IEditorNoteTiming Timing { get; }
     private Func<ChartNote, bool> MatchesChartNote { get; }
@@ -313,6 +338,7 @@ public sealed class EditorNoteDefinition
         HitWindowAfterBeats = hitWindowAfterBeats;
         SameVariantHitWindowBeforeBeats = sameVariantHitWindowBeforeBeats ?? hitWindowBeforeBeats;
         SameVariantHitWindowAfterBeats = sameVariantHitWindowAfterBeats ?? hitWindowAfterBeats;
+        TimingProfile = new EditorNoteTimingProfile(occupyBeforeBeats, occupyAfterBeats, hitWindowBeforeBeats, hitWindowAfterBeats, SameVariantHitWindowBeforeBeats, SameVariantHitWindowAfterBeats);
         Variants = variants;
         Timing = timing;
         MatchesChartNote = matchesChartNote;
@@ -354,6 +380,11 @@ public sealed class EditorNoteDefinition
             return new EditorNoteVariant(DisplayName, new Dictionary<string, string>());
 
         return Variants[Math.Clamp(variantIndex, 0, Variants.Count - 1)];
+    }
+
+    public EditorNoteTimingProfile GetTimingProfile(int variantIndex)
+    {
+        return GetVariant(variantIndex).TimingProfile ?? TimingProfile;
     }
 
     public bool Occupies(double noteSongPosition, double crotchet, double testedSongPosition)

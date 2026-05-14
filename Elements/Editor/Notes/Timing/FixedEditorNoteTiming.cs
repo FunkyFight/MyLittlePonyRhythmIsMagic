@@ -12,13 +12,14 @@ public sealed class FixedEditorNoteTiming : IEditorNoteTiming
 
         double beat = request.Beat;
         double holdBeats = ChartTiming.GetNoteHoldBeats(request.Note, definition, request.TempoMap);
+        EditorNoteTimingProfile timing = request.TimingProfile;
 
         return new NoteTimingResult(
-            StartBeat: beat - definition.OccupyBeforeBeats,
-            EndBeat: beat + Math.Max(holdBeats, definition.OccupyAfterBeats),
-            HitStartBeat: beat - definition.HitWindowBeforeBeats,
-            HitEndBeat: beat + Math.Max(holdBeats, definition.HitWindowAfterBeats),
-            SameVariantHitStartBeat: beat - definition.SameVariantHitWindowBeforeBeats,
-            SameVariantHitEndBeat: beat + Math.Max(holdBeats, definition.SameVariantHitWindowAfterBeats));
+            StartBeat: beat - timing.OccupyBeforeBeats,
+            EndBeat: beat + Math.Max(holdBeats, timing.OccupyAfterBeats),
+            HitStartBeat: beat - timing.HitWindowBeforeBeats,
+            HitEndBeat: beat + Math.Max(holdBeats, timing.HitWindowAfterBeats),
+            SameVariantHitStartBeat: beat - timing.SameVariantHitWindowBeforeBeats,
+            SameVariantHitEndBeat: beat + Math.Max(holdBeats, timing.SameVariantHitWindowAfterBeats));
     }
 }

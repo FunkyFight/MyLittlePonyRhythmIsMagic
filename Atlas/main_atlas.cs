@@ -4,7 +4,7 @@
  * Contains references to each image within the sprite sheet.
  *
  * https://www.codeandweb.com/texturepacker
- * $TexturePacker:SmartUpdate:06cb753c4aa47ae5caa9bd515cab1bfb:9b913dc060d4acf5ac2b1828f81fb05e:bb8c871ba50dcb594d48391b0a334787$
+ * $TexturePacker:SmartUpdate:d7ab211b7f83be78bf8c5acc5877827f:ad1d443fadc52f920b9733bd32c89dac:bb8c871ba50dcb594d48391b0a334787$
  *
  */
 namespace TexturePackerMonoGameDefinitions
@@ -35,6 +35,42 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Coral5 = "coral5";
 		public const string Coral6 = "coral6";
 		public const string Coral7 = "coral7";
+		public const string Cutie_cupcake_crew_applebloom1 = "cutie-cupcake-crew-applebloom1";
+		public const string Cutie_cupcake_crew_applebloom2 = "cutie-cupcake-crew-applebloom2";
+		public const string Cutie_cupcake_crew_applebloom3 = "cutie-cupcake-crew-applebloom3";
+		public const string Cutie_cupcake_crew_applebloom4 = "cutie-cupcake-crew-applebloom4";
+		public const string Cutie_cupcake_crew_cupcake_apple_bloom1 = "cutie-cupcake-crew-cupcake-apple-bloom1";
+		public const string Cutie_cupcake_crew_cupcake_apple_bloom2 = "cutie-cupcake-crew-cupcake-apple-bloom2";
+		public const string Cutie_cupcake_crew_cupcake_apple_bloom3 = "cutie-cupcake-crew-cupcake-apple-bloom3";
+		public const string Cutie_cupcake_crew_cupcake_applebloom1 = "cutie-cupcake-crew-cupcake-applebloom1";
+		public const string Cutie_cupcake_crew_cupcake_applebloom2 = "cutie-cupcake-crew-cupcake-applebloom2";
+		public const string Cutie_cupcake_crew_cupcake_applebloom3 = "cutie-cupcake-crew-cupcake-applebloom3";
+		public const string Cutie_cupcake_crew_cupcake_pinkie_pie1 = "cutie-cupcake-crew-cupcake-pinkie-pie1";
+		public const string Cutie_cupcake_crew_cupcake_pinkie_pie2 = "cutie-cupcake-crew-cupcake-pinkie-pie2";
+		public const string Cutie_cupcake_crew_cupcake_pinkie_pie3 = "cutie-cupcake-crew-cupcake-pinkie-pie3";
+		public const string Cutie_cupcake_crew_cupcake_scootaloo1 = "cutie-cupcake-crew-cupcake-scootaloo1";
+		public const string Cutie_cupcake_crew_cupcake_scootaloo2 = "cutie-cupcake-crew-cupcake-scootaloo2";
+		public const string Cutie_cupcake_crew_cupcake_scootaloo3 = "cutie-cupcake-crew-cupcake-scootaloo3";
+		public const string Cutie_cupcake_crew_cupcake_sweetie_belle1 = "cutie-cupcake-crew-cupcake-sweetie-belle1";
+		public const string Cutie_cupcake_crew_cupcake_sweetie_belle2 = "cutie-cupcake-crew-cupcake-sweetie-belle2";
+		public const string Cutie_cupcake_crew_cupcake_sweetie_belle3 = "cutie-cupcake-crew-cupcake-sweetie-belle3";
+		public const string Cutie_cupcake_crew_pinkie_pie1 = "cutie-cupcake-crew-pinkie-pie1";
+		public const string Cutie_cupcake_crew_pinkie_pie2 = "cutie-cupcake-crew-pinkie-pie2";
+		public const string Cutie_cupcake_crew_pinkie_pie3 = "cutie-cupcake-crew-pinkie-pie3";
+		public const string Cutie_cupcake_crew_scootaloo1 = "cutie-cupcake-crew-scootaloo1";
+		public const string Cutie_cupcake_crew_scootaloo2 = "cutie-cupcake-crew-scootaloo2";
+		public const string Cutie_cupcake_crew_scootaloo3 = "cutie-cupcake-crew-scootaloo3";
+		public const string Cutie_cupcake_crew_sweetie_belle1 = "cutie-cupcake-crew-sweetie belle1";
+		public const string Cutie_cupcake_crew_sweetie_belle2 = "cutie-cupcake-crew-sweetie belle2";
+		public const string Cutie_cupcake_crew_sweetie_belle3 = "cutie-cupcake-crew-sweetie belle3";
+		public const string Deco_m1 = "deco-m1";
+		public const string Deco_m2 = "deco-m2";
+		public const string Deco2 = "deco2";
+		public const string Derpy = "derpy";
+		public const string Derpy2 = "derpy2";
+		public const string Enveloppe = "enveloppe";
+		public const string Enveloppe1 = "enveloppe1";
+		public const string Enveloppe2 = "enveloppe2";
 		public const string Fences = "fences";
 		public const string Fluttershy_pony_idle1 = "fluttershy-pony-idle1";
 		public const string Fluttershy_pony_idle2 = "fluttershy-pony-idle2";
@@ -44,6 +80,10 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Fluttershy_pony_tap1 = "fluttershy-pony-tap1";
 		public const string Fluttershy_pony_tap2 = "fluttershy-pony-tap2";
 		public const string Jump_effect = "jump effect";
+		public const string Parcel1 = "parcel1";
+		public const string Parcel2 = "parcel2";
+		public const string Parcel3 = "parcel3";
+		public const string Parcel4 = "parcel4";
 		public const string Pinkiepie_pony_idle1 = "pinkiepie-pony-idle1";
 		public const string Pinkiepie_pony_idle2 = "pinkiepie-pony-idle2";
 		public const string Pinkiepie_pony_star = "pinkiepie-pony-star";
@@ -78,6 +118,7 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Sand3 = "sand3";
 		public const string Seapony_parade_clap_effect = "seapony_parade_clap_effect";
 		public const string Stand = "stand";
+		public const string Table = "table";
 		public const string Tree = "tree";
 	}
 }

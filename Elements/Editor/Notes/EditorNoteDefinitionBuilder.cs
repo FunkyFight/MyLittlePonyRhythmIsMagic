@@ -146,9 +146,9 @@ public sealed class EditorNoteDefinitionBuilder
         return this;
     }
 
-    public EditorNoteDefinitionBuilder Variant(string id, string displayName, INotePayload defaultPayload, Func<INotePayload, bool> matches = null, NoteTimingPreset timingPreset = null, EditorVisualStyle editorStyle = null)
+    public EditorNoteDefinitionBuilder Variant(string id, string displayName, INotePayload defaultPayload, Func<INotePayload, bool> matches = null, NoteTimingPreset timingPreset = null, EditorVisualStyle editorStyle = null, EditorNoteTimingProfile timingProfile = null)
     {
-        _variants.Add(new EditorNoteVariant(id, displayName, defaultPayload, matches, timingPreset, editorStyle));
+        _variants.Add(new EditorNoteVariant(id, displayName, defaultPayload, matches, timingPreset, editorStyle, timingProfile));
         return this;
     }
 

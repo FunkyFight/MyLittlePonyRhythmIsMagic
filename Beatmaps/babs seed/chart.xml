@@ -1,0 +1,4966 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>song</SongName>
+  <BeatmapName>babs seed</BeatmapName>
+  <Beatmapper>Unknown</Beatmapper>
+  <ArtistName>Unknown</ArtistName>
+  <MusicName>song</MusicName>
+  <SongPath>Beatmaps\babs seed\song.mp3</SongPath>
+  <BPM>135</BPM>
+  <Offset>0.18</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>1.0688888888888888</SongPosition>
+      <BeatPosition>2</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>1.9577777777777776</SongPosition>
+      <BeatPosition>4</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>2.8466666666666667</SongPosition>
+      <BeatPosition>6</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>3.291111111111111</SongPosition>
+      <BeatPosition>7</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>3.513333333333333</SongPosition>
+      <BeatPosition>7.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>3.7355555555555555</SongPosition>
+      <BeatPosition>8</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>4.624444444444444</SongPosition>
+      <BeatPosition>10</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>5.513333333333333</SongPosition>
+      <BeatPosition>12</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>6.402222222222221</SongPosition>
+      <BeatPosition>14</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>6.6244444444444435</SongPosition>
+      <BeatPosition>14.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>6.846666666666666</SongPosition>
+      <BeatPosition>15</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>7.29111111111111</SongPosition>
+      <BeatPosition>16</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>8.18</SongPosition>
+      <BeatPosition>18</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>9.068888888888889</SongPosition>
+      <BeatPosition>20</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>9.957777777777777</SongPosition>
+      <BeatPosition>22</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.402222222222221</SongPosition>
+      <BeatPosition>23</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.624444444444444</SongPosition>
+      <BeatPosition>23.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.846666666666666</SongPosition>
+      <BeatPosition>24</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>11.29111111111111</SongPosition>
+      <BeatPosition>25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>12.18</SongPosition>
+      <BeatPosition>27</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>13.068888888888887</SongPosition>
+      <BeatPosition>29</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>13.957777777777777</SongPosition>
+      <BeatPosition>31</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>14.18</SongPosition>
+      <BeatPosition>31.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>14.402222222222221</SongPosition>
+      <BeatPosition>32</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>14.846666666666666</SongPosition>
+      <BeatPosition>33</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>16.18</SongPosition>
+      <BeatPosition>36</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.06888888888889</SongPosition>
+      <BeatPosition>38</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.513333333333332</SongPosition>
+      <BeatPosition>39</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.735555555555553</SongPosition>
+      <BeatPosition>39.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.95777777777778</SongPosition>
+      <BeatPosition>40</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>18.40222222222222</SongPosition>
+      <BeatPosition>41</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.29111111111111</SongPosition>
+      <BeatPosition>43</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>20.18</SongPosition>
+      <BeatPosition>45</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>20.40222222222222</SongPosition>
+      <BeatPosition>45.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>20.624444444444443</SongPosition>
+      <BeatPosition>46</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>21.06888888888889</SongPosition>
+      <BeatPosition>47</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>21.957777777777775</SongPosition>
+      <BeatPosition>49</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>22.846666666666664</SongPosition>
+      <BeatPosition>51</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>23.735555555555553</SongPosition>
+      <BeatPosition>53</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>24.624444444444443</SongPosition>
+      <BeatPosition>55</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>24.846666666666664</SongPosition>
+      <BeatPosition>55.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.068888888888885</SongPosition>
+      <BeatPosition>56</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.513333333333332</SongPosition>
+      <BeatPosition>57</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>26.40222222222222</SongPosition>
+      <BeatPosition>59</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.29111111111111</SongPosition>
+      <BeatPosition>61</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.513333333333332</SongPosition>
+      <BeatPosition>61.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.735555555555553</SongPosition>
+      <BeatPosition>62</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>28.18</SongPosition>
+      <BeatPosition>63</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>28.624444444444443</SongPosition>
+      <BeatPosition>64</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>28.846666666666664</SongPosition>
+      <BeatPosition>64.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.068888888888885</SongPosition>
+      <BeatPosition>65</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.513333333333332</SongPosition>
+      <BeatPosition>66</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.957777777777775</SongPosition>
+      <BeatPosition>67</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.40222222222222</SongPosition>
+      <BeatPosition>68</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.624444444444443</SongPosition>
+      <BeatPosition>68.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.846666666666664</SongPosition>
+      <BeatPosition>69</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.29111111111111</SongPosition>
+      <BeatPosition>70</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.735555555555553</SongPosition>
+      <BeatPosition>71</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>32.62444444444444</SongPosition>
+      <BeatPosition>73</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33.51333333333333</SongPosition>
+      <BeatPosition>75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>34.40222222222222</SongPosition>
+      <BeatPosition>77</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>34.62444444444444</SongPosition>
+      <BeatPosition>77.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>34.846666666666664</SongPosition>
+      <BeatPosition>78</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>35.29111111111111</SongPosition>
+      <BeatPosition>79</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>35.73555555555556</SongPosition>
+      <BeatPosition>80</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>35.95777777777778</SongPosition>
+      <BeatPosition>80.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>36.18</SongPosition>
+      <BeatPosition>81</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>36.62444444444444</SongPosition>
+      <BeatPosition>82</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>37.068888888888885</SongPosition>
+      <BeatPosition>83</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>37.51333333333333</SongPosition>
+      <BeatPosition>84</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>37.73555555555555</SongPosition>
+      <BeatPosition>84.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>37.95777777777778</SongPosition>
+      <BeatPosition>85</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>38.40222222222222</SongPosition>
+      <BeatPosition>86</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>39.29111111111111</SongPosition>
+      <BeatPosition>88</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>40.18</SongPosition>
+      <BeatPosition>90</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>41.068888888888885</SongPosition>
+      <BeatPosition>92</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>41.95777777777778</SongPosition>
+      <BeatPosition>94</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>42.18</SongPosition>
+      <BeatPosition>94.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>42.40222222222222</SongPosition>
+      <BeatPosition>95</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>42.846666666666664</SongPosition>
+      <BeatPosition>96</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>43.29111111111111</SongPosition>
+      <BeatPosition>97</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>43.73555555555555</SongPosition>
+      <BeatPosition>98</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>43.95777777777778</SongPosition>
+      <BeatPosition>98.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>44.18</SongPosition>
+      <BeatPosition>99</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>44.62444444444444</SongPosition>
+      <BeatPosition>100</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.51333333333333</SongPosition>
+      <BeatPosition>102</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.73555555555555</SongPosition>
+      <BeatPosition>102.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.95777777777778</SongPosition>
+      <BeatPosition>103</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>46.40222222222222</SongPosition>
+      <BeatPosition>104</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>47.29111111111111</SongPosition>
+      <BeatPosition>106</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>47.51333333333333</SongPosition>
+      <BeatPosition>106.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>47.73555555555555</SongPosition>
+      <BeatPosition>107</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>48.18</SongPosition>
+      <BeatPosition>108</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>48.40222222222222</SongPosition>
+      <BeatPosition>108.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>48.62444444444444</SongPosition>
+      <BeatPosition>109</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>49.068888888888885</SongPosition>
+      <BeatPosition>110</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>49.29111111111111</SongPosition>
+      <BeatPosition>110.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>49.51333333333333</SongPosition>
+      <BeatPosition>111</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>50.40222222222222</SongPosition>
+      <BeatPosition>113</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>51.29111111111111</SongPosition>
+      <BeatPosition>115</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>52.18</SongPosition>
+      <BeatPosition>117</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>52.62444444444444</SongPosition>
+      <BeatPosition>118</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>52.846666666666664</SongPosition>
+      <BeatPosition>118.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>53.068888888888885</SongPosition>
+      <BeatPosition>119</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>53.51333333333333</SongPosition>
+      <BeatPosition>120</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>54.40222222222222</SongPosition>
+      <BeatPosition>122</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>55.29111111111111</SongPosition>
+      <BeatPosition>124</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>55.51333333333333</SongPosition>
+      <BeatPosition>124.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>55.73555555555555</SongPosition>
+      <BeatPosition>125</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>56.18</SongPosition>
+      <BeatPosition>126</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>57.068888888888885</SongPosition>
+      <BeatPosition>128</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>57.95777777777777</SongPosition>
+      <BeatPosition>130</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>58.846666666666664</SongPosition>
+      <BeatPosition>132</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>59.29111111111111</SongPosition>
+      <BeatPosition>133</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>59.51333333333333</SongPosition>
+      <BeatPosition>133.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>59.73555555555555</SongPosition>
+      <BeatPosition>134</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>60.18</SongPosition>
+      <BeatPosition>135</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>60.40222222222222</SongPosition>
+      <BeatPosition>135.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>60.62444444444444</SongPosition>
+      <BeatPosition>136</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>61.068888888888885</SongPosition>
+      <BeatPosition>137</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>61.95777777777777</SongPosition>
+      <BeatPosition>139</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>62.846666666666664</SongPosition>
+      <BeatPosition>141</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>63.068888888888885</SongPosition>
+      <BeatPosition>141.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>63.29111111111111</SongPosition>
+      <BeatPosition>142</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>63.73555555555555</SongPosition>
+      <BeatPosition>143</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>63.95777777777777</SongPosition>
+      <BeatPosition>143.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>64.18</SongPosition>
+      <BeatPosition>144</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>64.62444444444445</SongPosition>
+      <BeatPosition>145</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>65.51333333333334</SongPosition>
+      <BeatPosition>147</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>66.62444444444445</SongPosition>
+      <BeatPosition>149.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>66.84666666666666</SongPosition>
+      <BeatPosition>150</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>67.06888888888889</SongPosition>
+      <BeatPosition>150.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>67.73555555555556</SongPosition>
+      <BeatPosition>152</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>68.18</SongPosition>
+      <BeatPosition>153</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>69.06888888888889</SongPosition>
+      <BeatPosition>155</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>69.95777777777778</SongPosition>
+      <BeatPosition>157</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.18</SongPosition>
+      <BeatPosition>157.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.40222222222222</SongPosition>
+      <BeatPosition>158</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.84666666666666</SongPosition>
+      <BeatPosition>159</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>71.29111111111112</SongPosition>
+      <BeatPosition>160</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>71.73555555555556</SongPosition>
+      <BeatPosition>161</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>72.18</SongPosition>
+      <BeatPosition>162</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>72.40222222222222</SongPosition>
+      <BeatPosition>162.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>72.62444444444445</SongPosition>
+      <BeatPosition>163</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.06888888888889</SongPosition>
+      <BeatPosition>164</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.2911111111111</SongPosition>
+      <BeatPosition>164.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.51333333333334</SongPosition>
+      <BeatPosition>165</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.95777777777778</SongPosition>
+      <BeatPosition>166</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>74.18</SongPosition>
+      <BeatPosition>166.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>74.40222222222222</SongPosition>
+      <BeatPosition>167</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>75.2911111111111</SongPosition>
+      <BeatPosition>169</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>76.18</SongPosition>
+      <BeatPosition>171</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>77.06888888888889</SongPosition>
+      <BeatPosition>173</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>77.2911111111111</SongPosition>
+      <BeatPosition>173.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>77.51333333333334</SongPosition>
+      <BeatPosition>174</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>77.95777777777778</SongPosition>
+      <BeatPosition>175</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>78.40222222222222</SongPosition>
+      <BeatPosition>176</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>78.62444444444445</SongPosition>
+      <BeatPosition>176.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>78.84666666666666</SongPosition>
+      <BeatPosition>177</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>79.2911111111111</SongPosition>
+      <BeatPosition>178</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>80.18</SongPosition>
+      <BeatPosition>180</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>80.40222222222222</SongPosition>
+      <BeatPosition>180.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>80.62444444444445</SongPosition>
+      <BeatPosition>181</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>81.06888888888889</SongPosition>
+      <BeatPosition>182</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>81.51333333333334</SongPosition>
+      <BeatPosition>183</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>82.40222222222222</SongPosition>
+      <BeatPosition>185</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>83.2911111111111</SongPosition>
+      <BeatPosition>187</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>83.73555555555556</SongPosition>
+      <BeatPosition>188</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>84.18</SongPosition>
+      <BeatPosition>189</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>84.62444444444445</SongPosition>
+      <BeatPosition>190</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>85.06888888888889</SongPosition>
+      <BeatPosition>191</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>85.95777777777778</SongPosition>
+      <BeatPosition>193</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>86.40222222222222</SongPosition>
+      <BeatPosition>194</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>87.2911111111111</SongPosition>
+      <BeatPosition>196</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>87.73555555555556</SongPosition>
+      <BeatPosition>197</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>88.18</SongPosition>
+      <BeatPosition>198</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>88.62444444444445</SongPosition>
+      <BeatPosition>199</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>89.51333333333334</SongPosition>
+      <BeatPosition>201</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>89.73555555555556</SongPosition>
+      <BeatPosition>201.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>89.95777777777778</SongPosition>
+      <BeatPosition>202</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>90.40222222222222</SongPosition>
+      <BeatPosition>203</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>91.2911111111111</SongPosition>
+      <BeatPosition>205</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>91.51333333333334</SongPosition>
+      <BeatPosition>205.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>91.73555555555556</SongPosition>
+      <BeatPosition>206</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>92.18</SongPosition>
+      <BeatPosition>207</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>93.06888888888889</SongPosition>
+      <BeatPosition>209</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>93.2911111111111</SongPosition>
+      <BeatPosition>209.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>93.51333333333334</SongPosition>
+      <BeatPosition>210</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>93.95777777777778</SongPosition>
+      <BeatPosition>211</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>94.84666666666666</SongPosition>
+      <BeatPosition>213</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>95.73555555555556</SongPosition>
+      <BeatPosition>215</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>96.62444444444445</SongPosition>
+      <BeatPosition>217</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>97.51333333333334</SongPosition>
+      <BeatPosition>219</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>98.84666666666666</SongPosition>
+      <BeatPosition>222</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>99.06888888888889</SongPosition>
+      <BeatPosition>222.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>99.2911111111111</SongPosition>
+      <BeatPosition>223</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>99.73555555555555</SongPosition>
+      <BeatPosition>224</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>100.62444444444445</SongPosition>
+      <BeatPosition>226</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>101.51333333333334</SongPosition>
+      <BeatPosition>228</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>102.18</SongPosition>
+      <BeatPosition>229.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>102.40222222222222</SongPosition>
+      <BeatPosition>230</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>102.62444444444445</SongPosition>
+      <BeatPosition>230.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>103.2911111111111</SongPosition>
+      <BeatPosition>232</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>104.18</SongPosition>
+      <BeatPosition>234</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>105.06888888888889</SongPosition>
+      <BeatPosition>236</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>105.95777777777778</SongPosition>
+      <BeatPosition>238</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>106.18</SongPosition>
+      <BeatPosition>238.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>106.40222222222222</SongPosition>
+      <BeatPosition>239</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>106.84666666666666</SongPosition>
+      <BeatPosition>240</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>107.2911111111111</SongPosition>
+      <BeatPosition>241</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>107.73555555555555</SongPosition>
+      <BeatPosition>242</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects />
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>c82f7850c54a49d3bd9cea8639d3601f</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>-0.0728</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.switch_game</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="switch_game" />
+        <Entry Key="target_game" Value="derpy_stampede" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>26c843a9c52b436987eecc79406a6569</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>2</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>62d4fe6fd5174f67b4f4a72a96718241</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>4</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>62322ae294f64a5f9ca41a90d9e6a20a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>6</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6f80f98cd9b14e9ba9085cf8f0629982</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>7</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>cffdc74d1b344f89a86bb843fd929754</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>10</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>65e8c76f647342c9b4c52ce160b74457</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>12</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>68058a36b7b94c77902cfc1dbe3c9e22</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>14</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8033c4b7ebd34022aa0519f23d0830ed</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>16</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7baf3527f2374cd2b8bbc460199b814c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>18</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0c772532b34d402fa14104be2b22a174</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>20</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ec9aa4c9d52c41a9ba8512fce7532dca</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>22</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e6ef15941d044f29bde6eebcd7d223c9</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>23</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e6acbf870dbd4a119e7a72a118fa6cb3</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>25</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f1cc0fe3fe8e4289add47ac1ed30e841</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>27</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d35a705156d1473eae410528b94ec59d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>29</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>327ac6c839114444ad717cb280f904fe</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>31</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a14a31cc71b54760b45eb97226aefd5e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>33</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a3e0ac741cce4ad4831af9496d0c853e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>36</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9b9eaeb31f5142a091dabeab2e1df85f</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>38</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6ed7c6594ee742e780cb30e88cb94344</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>39</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>48ed429a95834fd590bf4154fcfd60f0</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>41</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e84c9a6880d643a5b516841d0be75088</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>43</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>00850f002b9a415e8fcac9561ca3354b</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>45</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>af904d22a46746998a3c754d938697c9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>47</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d6a1ce2a24d74b73a03160d40d61d657</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>49</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8a4e74a2d12f430ea29285840f626867</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>51</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2a678f7154d9455ba1145834e7a9e0f3</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>53</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>dde771edea5f47c99fe6625eb5c9ee74</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>55</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9d13a36c6be14b9ea5a2cdc2556a9452</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>57</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9a616b680c494720938186cd949a4a86</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>59</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>756f8492fe9b4f1d944b49506eeacb24</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>61</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fdb2f65724964c4f8f7e8c57024a8fd2</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>63</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>bc01b8de1b2241df90c19e5f3b9f74fe</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>64</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1038da445e5846dc84c03d40d48f1bdb</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>66</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>990662a0f5e0403d83deab22dd85591f</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>67</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f161455e05d1417d8003708f20480fda</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>68</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9cae8494f4d74e1ba412b70d94df0c23</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>70</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>996a603cf5494d30a1c5f81925a9f3f6</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>71</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>106643e104014ddc8543d14aa9937ca6</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>73</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0a213a043d1f42d9a2675d99d8015e2b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>75</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>26accdca059443a091841f6e5530f08b</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>77</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0ce902524ade42f7928812cd977fec2e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>79</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8f2ecf39579b4032ad4c8113d84aa63a</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>80</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>4d4d15cc14804ca28be4b63e08e009a9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>82</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3b3df86a98424ce6bad1a514bd37e3a6</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>83</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d5074c1fb40945a08774cd188b84ef92</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>84</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8795204639704c17bc338a6e617d3190</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>86</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b766ebc37f0845bf88c001b87e4cd90a</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>88</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a246a3b631144d0fa047dbc8156f67dc</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>90</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1698e5d2cc54436e8e579958b1ca8cf3</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>92</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>44e3c7b98a7044fd995648d498b4f8d6</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>94</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>27598773aaed467d86813a2c2d115b66</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>96</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>bb7d9fd9c0234a0c9d6593458ed827dc</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>97</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>83141c66ddab4dacbca4453189762ef9</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>98</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ba22e181ffcb47bba96a3ae256a75f49</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>102</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ae07ed9041d544eb866b91322047f00c</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>100</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>01823a303a7440aa84fe1cea37bc760e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>104</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fee6faa07ebe4732a3828dd237b4f54a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>106</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2c6429afc7bc4ddea6dc31ca684be7ec</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>108</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3a78d010ec0c409a8bc35e335d644799</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>110</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>636806dff4854b4997becc8e7a8f7a65</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>113</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5b389aa35c7640d0b8b4d94b3c149f12</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>115</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fa9cf3a62fa34107b6bb8738afd229c5</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>117</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e70f8cfdc0ac40d6ad514ddf582bc307</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>118</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>636daddbd7854576b053821dfbe442bc</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>120</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e109df3de2794ecfb0dca0d2b720cb83</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>122</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>011175f731f4441d99e8380532349432</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>124</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c05f6c7505804e6087ca50eecb60a019</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>126</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e17185bf3f024fba815a796bb992e92b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>128</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>45ab911fc120427d97c82a6c5e680e19</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>130</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6c5d7db24ce748169ba7e5febae6f68b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>132</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6ab20d84729740e9979116608cb70961</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>133</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6e9e01a25b4f497e9db9c91ef4551872</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>135</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>430284e0d5bb4effb28d61dfd86d6aba</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>137</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>138ae9871af54609a9e84ca69bec967d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>139</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>63437599e2c840c589dd25ba9638d072</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>141</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3996f6ff6bcf474fa7db31b59ac870cb</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>143</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>84e20f7ca5cd4a498af83ce6d850d059</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>145</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>67efc71fd13843bfa8654df392a5f915</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>147</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>42917e52495b464b86ca9f11799e529b</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>149.5</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>eb0d73eff86e4c4f91bfbe395a8cc722</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>152</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>4cd9b3e254c346e9a51b7229f6ad1bfe</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>153</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e0f7f2e61f7043e6a221b5c0d176e8d9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>155</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d80c7ef2bf7b4814861ae0ee577a1437</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>157</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c8e087b8a4e4452f9d58a61b49930f3e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>159</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5e0dfa4bfb464beeae232c2a9e63cf4e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>160</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2b72e6e8de4844dbb9fa224b7e3430e4</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>161</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>bee0f6598d94422ab373a0dac044ed50</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>162</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>4994ada056c54c1fbdeaabd3da5841b4</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>164</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>48bd0cdeb49145b8b7bf60743bdac5c8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>169</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>180b0ebde296498582777a959989e917</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>171</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>26baf62732ef4ab3bccdd9ae5cb25a7d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>173</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>70279796642a4faab17a5fa9db1ecc74</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>175</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>28a3c826bc4a4280b9afd6ac2d36e44b</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>176</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6395694403454fb89b66013f6f777f0f</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>178</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d10d38d246bb4794a7956143f8ef4e07</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>180</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0e7c30b3b3954e6bb9b23ce3416a7f88</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>182</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>bf7aff4fb94747f0aa38744a1602cbd1</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>183</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>414472a6bbfd4f5b872c554fc1cf0edb</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>185</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3af27c1bb9a94ecc8b9b0e0ee89b572b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>187</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2d6aa53f559241af917064ea4911b490</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>188</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>30897b3775834e1ebeae6268d4a17bbb</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>189</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>50c934f5b76e4e0a80aa9a8448dcb253</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>190</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ba48acc3d12949e784fda67f631b22a8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>191</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fc7b13a55945439e8c1fb34265d653c4</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>193</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0718d416549a4b18a1c510e2b73f991d</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>194</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>90d1a4998f134df09a5aec5dd044430a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>196</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>cb045ced87534363ad876ac9969ce47e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>197</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5cac34a1c8064a318fc5b2803503cf04</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>198</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3bdd3f5d04fc4d69964d18f1b8eee929</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>199</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>45a66eb456a04f4c9fc987b1c7d4b3a8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>201</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ec885fae215145858f3728dc032002fe</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>203</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>59490ef5701743c4ac779229cc7a5439</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>205</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a540cf6294a645d893b1497b1f2c3bbb</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>207</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ded7310b046e4845ab491bb8930fe60d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>209</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ce2087f67dff482a91758314a82ba958</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>211</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ebd88e72a5d84f1193b7b2dadf7651f9</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>213</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b9a2816fe1cb4dbcb436748c9bda1868</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>215</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>73c65883964544eab9f25255cdb8ed89</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>217</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9372d76e79f24c0e8f8e2681a28eced2</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>219</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>70351a2ae44d4d0385ddacb8b80df7c6</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>222</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>23e88d60e3ba49baa2d35b2423f46b67</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>224</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8899f0423708471b8408a62039dbb5e9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>226</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>105769ddc9f945bdbb4a1220635c1b81</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>228</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ac6f1819332f460d941350fcaf436a6e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>229.5</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0fa1e6a433a54388986d65f05f40a7b5</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>232</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3df1927f0a414c2db31422ae4bf613a8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>234</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>03188d48f21e49f1b886ca71af9a2ee3</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>236</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a0752a50fc9a43bcafa94e2961b1bc1c</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>238</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f582ea67a2a44398beb51c207be0ea8a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>240</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e1173698f9954b4e964b687e9350a873</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>241</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b495985c31e745df8f8f638c4e41e5e1</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>242</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e41c8b04d97343d7bae816ea6966996b</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>166</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>170859e2611b452c9e3cd7394011a901</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>-0.405</StartBeat>
+      <LengthBeats>1.405</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.entry</ClipTypeId>
+      <ClipCategory>NoHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data />
+    </Clip>
+  </EditorClips>
+</Chart>
