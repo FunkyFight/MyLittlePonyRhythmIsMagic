@@ -1,0 +1,1813 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>song</SongName>
+  <BeatmapName>Cutie cupcake Crew</BeatmapName>
+  <Beatmapper>Unknown</Beatmapper>
+  <ArtistName>Unknown</ArtistName>
+  <MusicName>song</MusicName>
+  <SongPath>Beatmaps\Cutie cupcake Crew_2\song.mp3</SongPath>
+  <BPM>160</BPM>
+  <Offset>0</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>4.5</SongPosition>
+      <BeatPosition>12</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>6.5625</SongPosition>
+      <BeatPosition>17.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>6.75</SongPosition>
+      <BeatPosition>18</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>8.15625</SongPosition>
+      <BeatPosition>21.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>8.34375</SongPosition>
+      <BeatPosition>22.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.5</SongPosition>
+      <BeatPosition>28</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>12.75</SongPosition>
+      <BeatPosition>34</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>16.125</SongPosition>
+      <BeatPosition>43</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>16.5</SongPosition>
+      <BeatPosition>44</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.625</SongPosition>
+      <BeatPosition>47</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.together_frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.875</SongPosition>
+      <BeatPosition>53</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>22.125</SongPosition>
+      <BeatPosition>59</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.125</SongPosition>
+      <BeatPosition>67</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>28.875</SongPosition>
+      <BeatPosition>77</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.25</SongPosition>
+      <BeatPosition>78</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>32.25</SongPosition>
+      <BeatPosition>86</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33</SongPosition>
+      <BeatPosition>88</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.together_frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>35.25</SongPosition>
+      <BeatPosition>94</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>37.125</SongPosition>
+      <BeatPosition>99</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>38.25</SongPosition>
+      <BeatPosition>102</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>39.375</SongPosition>
+      <BeatPosition>105</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>40.5</SongPosition>
+      <BeatPosition>108</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>41.53125</SongPosition>
+      <BeatPosition>110.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>42.75</SongPosition>
+      <BeatPosition>114</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>43.875</SongPosition>
+      <BeatPosition>117</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.375</SongPosition>
+      <BeatPosition>121</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>46.5</SongPosition>
+      <BeatPosition>124</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>47.25</SongPosition>
+      <BeatPosition>126</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.together_frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>49.125</SongPosition>
+      <BeatPosition>131</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>52.125</SongPosition>
+      <BeatPosition>139</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>55.125</SongPosition>
+      <BeatPosition>147</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>59.25</SongPosition>
+      <BeatPosition>158</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>59.625</SongPosition>
+      <BeatPosition>159</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>61.875</SongPosition>
+      <BeatPosition>165</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>64.125</SongPosition>
+      <BeatPosition>171</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>66.375</SongPosition>
+      <BeatPosition>177</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>68.15625</SongPosition>
+      <BeatPosition>181.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.5</SongPosition>
+      <BeatPosition>188</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.875</SongPosition>
+      <BeatPosition>197</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>74.25</SongPosition>
+      <BeatPosition>198</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>76.5</SongPosition>
+      <BeatPosition>204</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>77.4375</SongPosition>
+      <BeatPosition>206.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.together_frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>79.875</SongPosition>
+      <BeatPosition>213</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>82.875</SongPosition>
+      <BeatPosition>221</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>83.0625</SongPosition>
+      <BeatPosition>221.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>85.125</SongPosition>
+      <BeatPosition>227</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>88.125</SongPosition>
+      <BeatPosition>235</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>91.125</SongPosition>
+      <BeatPosition>243</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>92.625</SongPosition>
+      <BeatPosition>247</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.together_frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>95.4375</SongPosition>
+      <BeatPosition>254.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.together_frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>97.875</SongPosition>
+      <BeatPosition>261</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>100.125</SongPosition>
+      <BeatPosition>267</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>104.25</SongPosition>
+      <BeatPosition>278</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>104.625</SongPosition>
+      <BeatPosition>279</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_personal_touch_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.personal_touch" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>106.125</SongPosition>
+      <BeatPosition>283</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>106.875</SongPosition>
+      <BeatPosition>285</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>108.9375</SongPosition>
+      <BeatPosition>290.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>111.9375</SongPosition>
+      <BeatPosition>298.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>114.9375</SongPosition>
+      <BeatPosition>306.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>117.5625</SongPosition>
+      <BeatPosition>313.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>119.4375</SongPosition>
+      <BeatPosition>318.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.together_frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>121.875</SongPosition>
+      <BeatPosition>325</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>124.125</SongPosition>
+      <BeatPosition>331</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>126.375</SongPosition>
+      <BeatPosition>337</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>128.625</SongPosition>
+      <BeatPosition>343</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="cutie_cupcake_crew" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="cutie_cupcake_crew_apple_bloom_frost_hit" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="source_clip" Value="cutie_cupcake_crew.frost" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects />
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>a95d7704d40b4a90b87d1e679da17aef</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>8</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e30a6351801647c4869e87db21db0a3a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>14</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6e0c0455280945138e0845d75f347140</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>18.25</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>37bb28cbf4ad4818b154b32c0ac97ad3</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>24</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fa57047d63e54b50a24a50f55a2e92c2</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>30</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>cb484eccc00c4e95a3544147b4a60c19</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>36</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ff5026eadea24d41b18cf3b4330db95c</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>44</StartBeat>
+      <LengthBeats>5</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.together_frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7306ff83688c4547ac7007f7138e9c21</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>49</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>83471044cc8347b7978606399d67f7eb</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>55</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9dd6f5f0c6ff4219a53f8352ac7885d5</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>63</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>4400d02d68c24cdfbca6ad6318cf0549</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>70</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>39d32fdfe81048da867f4462b5443910</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>82</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e788f6a6de534b7a8e60a2e833838efe</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>85</StartBeat>
+      <LengthBeats>5</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.together_frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fe44ea256264462ea281d9629a9f6506</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>92</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>abd5c6aacca441bc91e3e06d83c078f2</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>95</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>dbec4321bf954f5aa198da4b9932c37a</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>100</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>41a876d819c449fa89424f12d71c96ca</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>103</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>51181d745034447a9c8687f9b64e5502</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>106</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6b0cc4ec3f81453fb0d24889dc7aa2fe</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>108.75</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5bfa8aaeec26478aae622dfc57f7e547</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>112</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>984716c944d54fabbe20386e154ac15e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>115</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>4059913dc0324be3ae0b8c6b7a49f244</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>119</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>087fca1cc7124062b14e61fe2e05fd51</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>122</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b0b713fa5ad84849b2c759e4589899f0</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>124.5</StartBeat>
+      <LengthBeats>5</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.together_frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>421bbde15e9c46b3a100dea43ab2ba64</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>127</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>26dc2c17c62947c8af40ad22b93b15ff</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>135</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>60cbe8cd0ca04d52bb255062031ea613</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>143</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f28a3607640b4304a10d218e4f25a507</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>151</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7656b74916524217b2c042e63e1c4718</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>161</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>93bab912d22b41ebbf038f98c0367605</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>167</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7423d5307dd741bd8b84a63074515769</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>173</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>92ace86c002e47de95098b8f6cf804c1</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>179.75</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2abc794956b94c0ebf198aaf14390f79</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>184</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>4a8075c851ec45218c2cb2c123e2d400</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>190</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>28a02ca4f8cf4305b2a2cbffa77a7c5a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>200</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7d42f1c0043a4101a0ab71c59de50249</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>203.5</StartBeat>
+      <LengthBeats>5</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.together_frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b016a973a7f6481ba7bd5c44c7e489a2</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>209</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9ec89c218a24442db180f08231272f28</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>217.5</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e5f82ca45c024ecb9d0814320428d381</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>223</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ebcd09f165bc49538e5edfeda19a02d8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>231</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>4bdfa9834edf49368ae66f6c75c8e836</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>239</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b89a5611a5b64f02becb9baff7e2d309</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>244</StartBeat>
+      <LengthBeats>5</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.together_frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>65b79b8f17dc409aa782242f38ff024f</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>251.5</StartBeat>
+      <LengthBeats>5</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.together_frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a487f96abb68432fa9ff5a664e54735c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>257</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>29e046787ee6430ab5bbf1901187dac6</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>263</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5b4a0974a59e4933a6f5c844fa1b6213</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>271</StartBeat>
+      <LengthBeats>10</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.personal_touch</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>be989d91867243788c583228e63e9060</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>281</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>270764b7ae534382b1d05f48be50bb7c</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>283</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="0.5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8adb989981c2404ba04311390d542b32</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>286.5</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>64d5580fb5a34daa8afe83c6fa8d0931</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>294.5</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a71c2694f28c4e269570441639b8b822</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>302.5</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e5adb31703dc4369bea0f8551e9a70f8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>309.5</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5072a10c80cf403bad994750092bad25</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>315.5</StartBeat>
+      <LengthBeats>5</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.together_frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b2a6f2e70916471c8cab646163b9b9da</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>321</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>475567316d26423f8ff023f0e5d14835</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>327</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>60278b150533477ab5230cf850863edb</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>333</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0e1b57239ca14471a75b2740a525082c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>339</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.frost</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d00df719577b461c9a765035cd3ac8e0</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>0</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.switch_game</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="switch_game" />
+        <Entry Key="target_game" Value="cutie_cupcake_crew" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>edcf59d2264a469e8e7da37768ea8f3c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>-0</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>cutie_cupcake_crew</RhythmGameId>
+      <ClipTypeId>cutie_cupcake_crew.entry</ClipTypeId>
+      <ClipCategory>NoHit</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="beat_spacing" Value="1" />
+      </Data>
+    </Clip>
+  </EditorClips>
+</Chart>

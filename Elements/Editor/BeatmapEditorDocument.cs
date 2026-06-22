@@ -55,6 +55,7 @@ public sealed class BeatmapEditorDocument
             ArtistName = "Unknown",
             MusicName = songName,
             SongPath = songPath,
+            MusicVolume = Rhythm.Note.Chart.DefaultMusicVolume,
             BPM = bpm,
             Offset = 0.078,
             LeadInBeats = 0,
@@ -643,6 +644,15 @@ public sealed class BeatmapEditorDocument
     {
         Chart.LeadInBeats = Math.Max(0.0, leadInBeats);
         SynchronizeAllDerivedTiming();
+        IsDirty = true;
+    }
+
+    public void SetMusicVolume(double musicVolume)
+    {
+        if (double.IsNaN(musicVolume) || double.IsInfinity(musicVolume))
+            musicVolume = Rhythm.Note.Chart.DefaultMusicVolume;
+
+        Chart.MusicVolume = Math.Clamp(musicVolume, 0.0, Rhythm.Note.Chart.MaxMusicVolume);
         IsDirty = true;
     }
 
@@ -1533,6 +1543,11 @@ public sealed class BeatmapEditorDocument
 
         if (Chart.BPM <= 0)
             Chart.BPM = 100;
+
+        if (double.IsNaN(Chart.MusicVolume) || double.IsInfinity(Chart.MusicVolume))
+            Chart.MusicVolume = Rhythm.Note.Chart.DefaultMusicVolume;
+        else
+            Chart.MusicVolume = Math.Clamp(Chart.MusicVolume, 0.0, Rhythm.Note.Chart.MaxMusicVolume);
 
         if (double.IsNaN(Chart.LeadInBeats) || double.IsInfinity(Chart.LeadInBeats) || Chart.LeadInBeats < 0.0)
             Chart.LeadInBeats = 0.0;

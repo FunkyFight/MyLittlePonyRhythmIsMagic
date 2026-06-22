@@ -573,7 +573,7 @@ public class SeaponyVisualNote : DirectedVisualNote
             return;
 
         if(ctx.ForwardCrossed(filePath, cuePosition) && GLOBALS.SfxVolume > 0)
-            SFX.Play(_scene, filePath, 4);
+            SFX.Play(_scene, filePath, 1);
     }
 
     private bool canRoll()

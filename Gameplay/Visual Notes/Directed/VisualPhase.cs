@@ -93,8 +93,8 @@ public sealed class VisualPhase : IVisualTimelineBlock
         if(!isInWindow(context))
             return;
 
-        float globalProgress = _kind == VisualPhaseKind.PostHit ? context.PostHitProgress : context.NoteProgress;
-        float lastGlobalProgress = _kind == VisualPhaseKind.PostHit ? context.LastPostHitProgress : context.LastNoteProgress;
+        float globalProgress = getGlobalProgress(context);
+        float lastGlobalProgress = getLastGlobalProgress(context);
         PhaseContext phase = new(_id, _startProgress, _endProgress, globalProgress, lastGlobalProgress, context, _eventGate);
 
         if(!phase.IsActive)
@@ -109,11 +109,36 @@ public sealed class VisualPhase : IVisualTimelineBlock
 
     private bool isInWindow(VisualContext context)
     {
+        if(_kind == VisualPhaseKind.Hold)
+            return context.Note.HoldDuration > 0
+                && context.SongPosition >= context.Note.SongPosition
+                && context.SongPosition <= context.Note.EndSongPosition;
+
         if(_kind == VisualPhaseKind.PostHit)
             return context.SongPosition >= context.Note.EndSongPosition
                 && context.SongPosition <= context.Note.EndSongPosition + context.DespawnDelay;
 
         return context.SongPosition >= context.Note.SongPosition - context.ApproachDuration
             && context.SongPosition <= context.Note.SongPosition;
+    }
+
+    private float getGlobalProgress(VisualContext context)
+    {
+        return _kind switch
+        {
+            VisualPhaseKind.Hold => context.HoldProgress,
+            VisualPhaseKind.PostHit => context.PostHitProgress,
+            _ => context.NoteProgress
+        };
+    }
+
+    private float getLastGlobalProgress(VisualContext context)
+    {
+        return _kind switch
+        {
+            VisualPhaseKind.Hold => context.LastHoldProgress,
+            VisualPhaseKind.PostHit => context.LastPostHitProgress,
+            _ => context.LastNoteProgress
+        };
     }
 }

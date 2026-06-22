@@ -81,6 +81,7 @@ public sealed class BeatmapEditorElement
     private readonly Texture2D _pixel;
     private readonly string _defaultSongPath;
     private readonly string _defaultChartPath;
+    private readonly EditorSettings _settings;
     private readonly double _snapDivisions;
     private readonly List<string> _availableSongs = new();
     private readonly List<string> _availableCharts = new();
@@ -89,7 +90,7 @@ public sealed class BeatmapEditorElement
     private PlacementOptions _lastIntervalPlacementOptions = new(IntervalEditorNoteProvider.DefaultDurationBeats, IntervalEditorNoteProvider.DefaultStepBeats);
     private readonly EditorCommandStack _commandStack = new();
     private readonly IEditorNoteOptionsPanel _intervalOptionsPanel = new IntervalEditorNoteOptionsPanel();
-    private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset", "LeadInBeats" };
+    private readonly string[] _metadataFields = { "BeatmapName", "Beatmapper", "ArtistName", "MusicName", "BPM", "Offset", "LeadInBeats", "MusicVolume" };
     private const float ScenePreviewScale = 0.5f;
     private const int TimelineTrackCount = 10;
     private const int TimelineTrackLabelWidth = 180;
@@ -98,6 +99,7 @@ public sealed class BeatmapEditorElement
     private const double HeldArrowSeekInitialDelaySeconds = 0.25;
     private const double HeldArrowSeekRepeatSeconds = 0.075;
     private const double ClipWindowCullPaddingBeats = 8.0;
+    private const double PreviewAutoplayEpsilonSeconds = 0.000001;
 
     private BeatmapEditorDocument _document;
     private EditorRhythmInputVisualElement _rhythmVisuals;
@@ -119,6 +121,9 @@ public sealed class BeatmapEditorElement
     private int _selectedMetadataField;
     private bool _isEditingText;
     private bool _isPreviewPlaying;
+    private bool _previewAutoplayEnabled;
+    private int _previewAutoplayNextNoteIndex;
+    private double _previewAutoplayLastSongPosition = double.NaN;
     private bool _editorPlaybackPlaying;
     private string _textBuffer = "";
     private ChartNote _optionsNote;
@@ -145,6 +150,7 @@ public sealed class BeatmapEditorElement
     private ChartNote _selectedTimelineNote;
     private ChartEffect _selectedTimelineEffect;
     private string _selectedTimelineClipId;
+    private ChartEditorClip _clipboardClip;
     private double _dragPointerOffsetBeats;
     private double _dragStartBeat;
     private double _dragEndBeat;
@@ -168,6 +174,7 @@ public sealed class BeatmapEditorElement
         _defaultSongPath = songPath;
         _defaultChartPath = chartPath;
         _snapDivisions = snapDivisions;
+        _settings = EditorSettings.Load();
         _ui = new DevUiRenderer(GLOBALS.graphicsDevice);
         _noteOptionsWindow = new DevUiFloatingWindow(_ui);
         _newBeatmapWindow = new DevUiFloatingWindow(_ui);
@@ -188,6 +195,7 @@ public sealed class BeatmapEditorElement
     }
 
     public bool IsPreviewPlaying => _isPreviewPlaying;
+    public bool IsPreviewAutoplayEnabled => _previewAutoplayEnabled;
     public bool IsEditorPlaybackPlaying => _editorPlaybackPlaying;
 
     public void ConfigureSceneViewport(RenderViewport viewport)
@@ -234,6 +242,7 @@ public sealed class BeatmapEditorElement
 
         if (_isPreviewPlaying)
         {
+            ApplyPreviewAutoplay();
             HandlePreviewCommands();
             return;
         }
@@ -325,6 +334,18 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.N) && IsControlDown())
         {
             OpenNewBeatmapModal();
+            return;
+        }
+
+        if (Pressed(Keys.C) && IsControlDown())
+        {
+            CopySelectedClip();
+            return;
+        }
+
+        if (Pressed(Keys.V) && IsControlDown())
+        {
+            PasteCopiedClip();
             return;
         }
 
@@ -1027,6 +1048,68 @@ public sealed class BeatmapEditorElement
         return OpenClipOptionsWindow(selectedClip ?? FindNearestEditorClipAtBeat(CurrentBeatPosition(), GetSelectionDistance()), showStatusWhenMissing: false);
     }
 
+    private void CopySelectedClip()
+    {
+        ChartEditorClip clip = ResolveSelectedOrNearbyClip();
+        if (clip == null)
+        {
+            _status = "No clip selected to copy";
+            return;
+        }
+
+        _clipboardClip = EditorCommandCloning.CloneClip(clip);
+        EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+        _status = $"Copied {definition?.DisplayName ?? clip.ClipTypeId ?? "clip"}";
+    }
+
+    private void PasteCopiedClip()
+    {
+        if (_clipboardClip == null)
+        {
+            _status = "No copied clip to paste";
+            return;
+        }
+
+        EditorClipDefinition definition = EditorClipDefinitions.Find(_clipboardClip.RhythmGameId, _clipboardClip.ClipTypeId);
+        bool isInstant = IsInstantClip(definition, _clipboardClip);
+        ChartEditorClip pastedClip = EditorCommandCloning.CloneClip(_clipboardClip);
+        pastedClip.Id = Guid.NewGuid().ToString("N");
+        pastedClip.StartBeat = SnapPlacementBeat(CurrentBeatPosition());
+        pastedClip.TrackIndex = isInstant ? 0 : Math.Clamp(pastedClip.TrackIndex, 0, TimelineTrackCount - 1);
+        pastedClip.LengthBeats = isInstant ? 0.0 : Math.Max(0.0, pastedClip.LengthBeats);
+        pastedClip.ClipCategory = definition?.Category.ToString() ?? pastedClip.ClipCategory;
+        pastedClip.InputAction = definition?.InputAction ?? pastedClip.InputAction;
+
+        if (!ExecuteCommand(new CreateClipCommand(pastedClip)))
+            return;
+
+        _selectedTimelineClipId = pastedClip.Id;
+        _selectedTimelineNote = null;
+        _selectedTimelineEffect = null;
+        _status = $"Pasted {definition?.DisplayName ?? pastedClip.ClipTypeId ?? "clip"} at {pastedClip.StartBeat:0.###}b";
+    }
+
+    private ChartEditorClip ResolveSelectedOrNearbyClip()
+    {
+        if (!string.IsNullOrWhiteSpace(_selectedTimelineClipId))
+        {
+            ChartEditorClip selected = _document.FindEditorClip(_selectedTimelineClipId);
+            if (selected != null)
+                return selected;
+
+            _selectedTimelineClipId = null;
+        }
+
+        if (_optionsIsClip && _optionsClip != null)
+        {
+            ChartEditorClip optionsClip = _document.FindEditorClip(_optionsClip.Id);
+            if (optionsClip != null)
+                return optionsClip;
+        }
+
+        return FindNearestEditorClipAtBeat(CurrentBeatPosition(), GetSelectionDistance());
+    }
+
     private bool OpenClipOptionsWindow(ChartEditorClip clip, bool showStatusWhenMissing = true)
     {
         if (clip == null)
@@ -1422,9 +1505,61 @@ public sealed class BeatmapEditorElement
         _editorPlaybackPlaying = false;
         _beatmapPlayer.StartBeatmapPaused(_document.SongPath, _document.Chart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
         SyncPlaybackToEditorPosition(position, resetVisuals: true);
+        ResetPreviewAutoplayCursor(position);
         _beatmapPlayer.Conductor.Play();
         _isPreviewPlaying = true;
-        _status = "Preview playing — ESC to stop";
+        _status = _previewAutoplayEnabled ? "Preview playing with autoplay — ESC to stop" : "Preview playing — ESC to stop";
+    }
+
+    private void TogglePreviewAutoplay()
+    {
+        _previewAutoplayEnabled = !_previewAutoplayEnabled;
+        ResetPreviewAutoplayCursor(CurrentSongPosition());
+        _status = _previewAutoplayEnabled ? "Preview autoplay enabled" : "Preview autoplay disabled";
+    }
+
+    private void ResetPreviewAutoplayCursor(double songPosition)
+    {
+        _previewAutoplayNextNoteIndex = 0;
+        _previewAutoplayLastSongPosition = songPosition;
+
+        IReadOnlyList<Note> notes = _beatmapPlayer.ChartPlayer?.Notes;
+        if (notes == null)
+            return;
+
+        while (_previewAutoplayNextNoteIndex < notes.Count
+            && notes[_previewAutoplayNextNoteIndex].SongPosition < songPosition - PreviewAutoplayEpsilonSeconds)
+        {
+            _previewAutoplayNextNoteIndex++;
+        }
+    }
+
+    private void ApplyPreviewAutoplay()
+    {
+        if (!_previewAutoplayEnabled || _beatmapPlayer.Conductor == null || _beatmapPlayer.ChartPlayer == null)
+            return;
+
+        double songPosition = _beatmapPlayer.Conductor.SongPosition;
+        if (double.IsNaN(_previewAutoplayLastSongPosition) || songPosition < _previewAutoplayLastSongPosition - PreviewAutoplayEpsilonSeconds)
+            ResetPreviewAutoplayCursor(songPosition);
+
+        IReadOnlyList<Note> notes = _beatmapPlayer.ChartPlayer.Notes;
+        while (_previewAutoplayNextNoteIndex < notes.Count)
+        {
+            Note note = notes[_previewAutoplayNextNoteIndex];
+            if (note.SongPosition > songPosition + PreviewAutoplayEpsilonSeconds)
+                break;
+
+            _previewAutoplayNextNoteIndex++;
+            if (note.HasReacted || string.IsNullOrWhiteSpace(note.InputActionToPress))
+                continue;
+
+            _beatmapPlayer.ChartPlayer.React(note.InputActionToPress, note.SongPosition);
+            if (note.InputActionToPress == "ReactMain")
+                GLOBALS.ReactMainInputSerial++;
+        }
+
+        _previewAutoplayLastSongPosition = songPosition;
     }
 
     private void HandlePreviewCommands()
@@ -1452,11 +1587,31 @@ public sealed class BeatmapEditorElement
         string songPath = !string.IsNullOrWhiteSpace(_defaultSongPath)
             ? _defaultSongPath
             : _availableSongs.FirstOrDefault() ?? "";
-        string chartPath = !string.IsNullOrWhiteSpace(_defaultChartPath) && _availableCharts.Contains(_defaultChartPath)
-            ? _defaultChartPath
-            : _availableCharts.FirstOrDefault() ?? _defaultChartPath;
+        string chartPath = GetInitialChartPath();
 
         LoadDocument(songPath, chartPath);
+    }
+
+    private string GetInitialChartPath()
+    {
+        string lastChartPath = FindAvailableChartPath(_settings.LastChartPath);
+        if (!string.IsNullOrWhiteSpace(lastChartPath))
+            return lastChartPath;
+
+        string defaultChartPath = FindAvailableChartPath(_defaultChartPath);
+        if (!string.IsNullOrWhiteSpace(defaultChartPath))
+            return defaultChartPath;
+
+        return _availableCharts.FirstOrDefault() ?? _defaultChartPath;
+    }
+
+    private string FindAvailableChartPath(string chartPath)
+    {
+        if (string.IsNullOrWhiteSpace(chartPath))
+            return null;
+
+        string resolvedChartPath = BeatmapPackagePaths.ResolveChartPath(chartPath);
+        return _availableCharts.FirstOrDefault(path => PathEquals(path, resolvedChartPath));
     }
 
     private void ReloadCurrentDocument()
@@ -1621,7 +1776,17 @@ public sealed class BeatmapEditorElement
         SyncSelectedSongIndex();
         SyncSelectedChartIndex();
         RebuildPlayback(false);
+        RememberCurrentBeatmap();
         CloseNewBeatmapModal($"New beatmap {GetChartDisplayName(chartPath)} ready");
+    }
+
+    private void RememberCurrentBeatmap()
+    {
+        if (_document == null || string.IsNullOrWhiteSpace(_document.ChartPath))
+            return;
+
+        _settings.LastChartPath = _document.ChartPath;
+        _settings.Save();
     }
 
     private void CloseNewBeatmapModal(string status)
@@ -2294,6 +2459,7 @@ public sealed class BeatmapEditorElement
 
         string songPath = _document?.SongPath ?? _defaultSongPath;
         LoadDocument(songPath, chartPath);
+        RememberCurrentBeatmap();
         _openBeatmapWindow.Close();
         _status = $"Opened {GetChartDisplayName(chartPath)}";
     }
@@ -2426,6 +2592,8 @@ public sealed class BeatmapEditorElement
             updated = ExecuteCommand(new SetOffsetCommand(offset));
         else if (field == "LeadInBeats" && double.TryParse(_textBuffer, out double leadInBeats))
             updated = ExecuteCommand(new SetLeadInBeatsCommand(leadInBeats));
+        else if (field == "MusicVolume" && double.TryParse(_textBuffer, out double musicVolume))
+            updated = ExecuteCommand(new SetMusicVolumeCommand(musicVolume));
         else if (field == "BeatmapName")
             updated = ExecuteCommand(new SetMetadataCommand(EditorMetadataField.BeatmapName, _textBuffer), rebuildPlayback: false);
         else if (field == "Beatmapper")
@@ -2802,6 +2970,7 @@ public sealed class BeatmapEditorElement
             {
                 new EditorTopBarMenuItem(_editorPlaybackPlaying ? "Pause" : "Play", TogglePlayback),
                 new EditorTopBarMenuItem("Preview", StartPreview),
+                new EditorTopBarMenuItem(_previewAutoplayEnabled ? "Autoplay: ON" : "Autoplay: OFF", TogglePreviewAutoplay),
                 new EditorTopBarMenuItem("Rebuild Playback", () => RebuildPlayback(false)),
                 new EditorTopBarMenuItem("Undo", UndoCommand),
                 new EditorTopBarMenuItem("Redo", RedoCommand)
@@ -3155,6 +3324,10 @@ public sealed class BeatmapEditorElement
         foreach (ChartNote note in notes)
         {
             double beat = ChartTiming.GetNoteBeat(note, _document.TempoMap);
+            bool isRubyHold = TryGetGemwalkRubyHoldBeats(note, out double rubyHoldBeats);
+            if (isRubyHold)
+                DrawGemwalkRubyHoldMarker(spriteBatch, beat, rubyHoldBeats, bounds, windowStart, windowEnd, area, markerColor);
+
             if (beat < windowStart || beat > windowEnd)
                 continue;
 
@@ -3162,8 +3335,47 @@ public sealed class BeatmapEditorElement
             if (x < bounds.X || x > bounds.Right)
                 continue;
 
-            _ui.Line(spriteBatch, new Vector2(x, bounds.Y + 2), new Vector2(x, bounds.Bottom - 2), markerColor, 2);
+            _ui.Line(spriteBatch, new Vector2(x, bounds.Y + 2), new Vector2(x, bounds.Bottom - 2), markerColor, isRubyHold ? 3 : 2);
         }
+    }
+
+    private bool TryGetGemwalkRubyHoldBeats(ChartNote note, out double holdBeats)
+    {
+        holdBeats = 0.0;
+        if (!GemwalkGlamourNoteCodec.TryReadAction(note?.AdditionnalData, out GemwalkGlamourAction action)
+            || action != GemwalkGlamourAction.Ruby)
+            return false;
+
+        holdBeats = ChartTiming.GetNoteHoldBeats(note, EditorNoteDefinitions.FromChartNote(note), _document?.TempoMap);
+        return holdBeats > 0.0;
+    }
+
+    private void DrawGemwalkRubyHoldMarker(SpriteBatch spriteBatch, double hitBeat, double holdBeats, Rectangle bounds, double windowStart, double windowEnd, Rectangle area, Color markerColor)
+    {
+        double releaseBeat = hitBeat + holdBeats;
+        if (releaseBeat < windowStart || hitBeat > windowEnd)
+            return;
+
+        float hitX = BeatToX(hitBeat, windowStart, windowEnd, area);
+        float releaseX = BeatToX(releaseBeat, windowStart, windowEnd, area);
+        float leftX = Math.Clamp(Math.Min(hitX, releaseX), bounds.X, bounds.Right);
+        float rightX = Math.Clamp(Math.Max(hitX, releaseX), bounds.X, bounds.Right);
+        float centerY = bounds.Y + bounds.Height / 2f;
+
+        if (rightX - leftX > 1f)
+        {
+            _ui.Line(spriteBatch, new Vector2(leftX, centerY), new Vector2(rightX, centerY), markerColor * 0.35f, 7f);
+            _ui.Line(spriteBatch, new Vector2(leftX, centerY), new Vector2(rightX, centerY), markerColor * 0.9f, 2f);
+        }
+
+        if (releaseBeat < windowStart || releaseBeat > windowEnd || releaseX < bounds.X || releaseX > bounds.Right)
+            return;
+
+        const float capHalfWidth = 5f;
+        Color releaseColor = Color.White;
+        _ui.Line(spriteBatch, new Vector2(releaseX, bounds.Y + 2), new Vector2(releaseX, bounds.Bottom - 2), releaseColor, 3f);
+        _ui.Line(spriteBatch, new Vector2(releaseX - capHalfWidth, bounds.Y + 4), new Vector2(releaseX + capHalfWidth, bounds.Y + 4), releaseColor, 2f);
+        _ui.Line(spriteBatch, new Vector2(releaseX - capHalfWidth, bounds.Bottom - 4), new Vector2(releaseX + capHalfWidth, bounds.Bottom - 4), releaseColor, 2f);
     }
 
     private void DrawInstantClipMarker(SpriteBatch spriteBatch, Rectangle bounds, Color fillColor, Color strokeColor)
@@ -3802,6 +4014,9 @@ public sealed class BeatmapEditorElement
             DevUiWindowRow.FloatInput("metadata.offset", "Offset", _document.Chart.Offset, SetMetadataOffset),
             DevUiWindowRow.FloatInput("metadata.leadIn", "Lead-In Beats", _document.Chart.LeadInBeats, SetMetadataLeadInBeats),
 
+            DevUiWindowRow.Category("Audio"),
+            DevUiWindowRow.FloatInput("metadata.musicVolume", "Music Volume", _document.Chart.MusicVolume, SetMetadataMusicVolume),
+
             DevUiWindowRow.Category("Package"),
             DevUiWindowRow.Value("Chart", _document.ChartPath ?? string.Empty),
             DevUiWindowRow.Value("Song", string.IsNullOrWhiteSpace(_document.SongPath) ? "<none>" : _document.SongPath),
@@ -3862,6 +4077,16 @@ public sealed class BeatmapEditorElement
     {
         if (ExecuteCommand(new SetLeadInBeatsCommand(Math.Max(0.0, leadInBeats))))
             _status = $"Updated lead-in to {Math.Max(0.0, leadInBeats).ToString("0.###", CultureInfo.InvariantCulture)} beats";
+    }
+
+    private void SetMetadataMusicVolume(double musicVolume)
+    {
+        double normalizedVolume = double.IsNaN(musicVolume) || double.IsInfinity(musicVolume)
+            ? Chart.DefaultMusicVolume
+            : Math.Clamp(musicVolume, 0.0, Chart.MaxMusicVolume);
+
+        if (ExecuteCommand(new SetMusicVolumeCommand(normalizedVolume)))
+            _status = $"Updated music volume to {normalizedVolume.ToString("0.###", CultureInfo.InvariantCulture)}";
     }
 
     private void ToggleMetadataFlashWarning()
@@ -4151,7 +4376,30 @@ public sealed class BeatmapEditorElement
         return ((value % count) + count) % count;
     }
 
-    private string NormalizePath(string path)
+    private static bool PathEquals(string left, string right)
+    {
+        if (string.IsNullOrWhiteSpace(left) || string.IsNullOrWhiteSpace(right))
+            return false;
+
+        if (string.Equals(NormalizePath(left), NormalizePath(right), StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return string.Equals(NormalizePath(GetFullPathOrOriginal(left)), NormalizePath(GetFullPathOrOriginal(right)), StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string GetFullPathOrOriginal(string path)
+    {
+        try
+        {
+            return Path.GetFullPath(path);
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is NotSupportedException || ex is PathTooLongException)
+        {
+            return path;
+        }
+    }
+
+    private static string NormalizePath(string path)
     {
         return path.Replace('\\', '/');
     }

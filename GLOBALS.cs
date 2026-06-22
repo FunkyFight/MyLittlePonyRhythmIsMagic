@@ -18,6 +18,9 @@ public static class GLOBALS
     public static MouseViewportCoordinatesElement mouseViewportCoordinatesElement;
     public static BeatmapEditorElement beatmapEditorElement;
     public static uint ReactMainInputSerial;
+    public static bool ReactMainIsPressed;
+    public static uint ReactMainReleaseSerial;
+    public static double ReactMainReleaseSongPosition = double.NaN;
 
     public static float SfxVolume { get; set; } = 0.0f;
 }

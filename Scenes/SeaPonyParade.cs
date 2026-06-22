@@ -160,12 +160,12 @@ public class SeaPonyParade : Scene
                     _perfectReactionNotes.Add(note);
 
                 int clapIndex = Random.Shared.Next(1, 5);
-                SFX.Play(this, $"SFX/clap{clapIndex}.wav", 4);
+                SFX.Play(this, $"SFX/clap{clapIndex}.wav", 1);
                 break;
         }
 
         if(action != SeaponyAction.TapTap)
-            SFX.Play(this, "SFX/BubbleSwim.wav", GLOBALS.SfxVolume);
+            SFX.Play(this, "SFX/BubbleSwim.wav", 0.75f);
     }
 
     private void unsubscribeReactionChartPlayer()
@@ -1182,7 +1182,7 @@ public class SeaPonyParade : Scene
     private void playSfxOnForwardCross(double previousSongPosition, double cuePosition, double currentSongPosition, string filePath)
     {
         if(previousSongPosition < cuePosition && currentSongPosition >= cuePosition)
-            SFX.Play(this, filePath, 4);
+            SFX.Play(this, filePath, 1);
     }
 
     public override void Draw(SpriteBatch spriteBatch)

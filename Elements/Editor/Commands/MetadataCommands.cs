@@ -118,6 +118,36 @@ public sealed class SetLeadInBeatsCommand : IEditorCommand
     }
 }
 
+public sealed class SetMusicVolumeCommand : IEditorCommand
+{
+    private readonly double _newValue;
+    private double _oldValue;
+    private bool _hasOldValue;
+
+    public SetMusicVolumeCommand(double newValue)
+    {
+        _newValue = newValue;
+    }
+
+    public string Name => "Set Music Volume";
+
+    public void Execute(BeatmapEditorDocument document)
+    {
+        if (!_hasOldValue)
+        {
+            _oldValue = document.Chart.MusicVolume;
+            _hasOldValue = true;
+        }
+
+        document.SetMusicVolume(_newValue);
+    }
+
+    public void Undo(BeatmapEditorDocument document)
+    {
+        document.SetMusicVolume(_oldValue);
+    }
+}
+
 public sealed class SetFlashingEffectsWarningCommand : IEditorCommand
 {
     private readonly bool _newValue;

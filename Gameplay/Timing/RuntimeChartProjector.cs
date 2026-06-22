@@ -18,6 +18,7 @@ public static class RuntimeChartProjector
             ArtistName = source.ArtistName,
             MusicName = source.MusicName,
             SongPath = source.SongPath,
+            MusicVolume = source.MusicVolume,
             BPM = source.BPM,
             Offset = source.Offset,
             LeadInBeats = source.LeadInBeats,

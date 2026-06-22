@@ -4,7 +4,7 @@
  * Contains references to each image within the sprite sheet.
  *
  * https://www.codeandweb.com/texturepacker
- * $TexturePacker:SmartUpdate:d7ab211b7f83be78bf8c5acc5877827f:ad1d443fadc52f920b9733bd32c89dac:bb8c871ba50dcb594d48391b0a334787$
+ * $TexturePacker:SmartUpdate:8713507ea8f4cbfce91e1f2bb7b54767:b7efe521886fc972d9be6b590d8f1292:bb8c871ba50dcb594d48391b0a334787$
  *
  */
 namespace TexturePackerMonoGameDefinitions
@@ -28,6 +28,22 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Applejack_pony_tap2 = "applejack-pony-tap2";
 		public const string Applejack_true_idle = "applejack-true-idle";
 		public const string Arbustes = "arbustes";
+		public const string Box_applejack = "box_applejack";
+		public const string Box_fluttershy = "box_fluttershy";
+		public const string Box_pinkiepie = "box_pinkiepie";
+		public const string Box_twilight = "box_twilight";
+		public const string Carton_canter_applejack1 = "carton_canter_applejack1";
+		public const string Carton_canter_applejack2 = "carton_canter_applejack2";
+		public const string Carton_canter_applejack3 = "carton_canter_applejack3";
+		public const string Carton_canter_fluttershy1 = "carton_canter_fluttershy1";
+		public const string Carton_canter_fluttershy2 = "carton_canter_fluttershy2";
+		public const string Carton_canter_fluttershy3 = "carton_canter_fluttershy3";
+		public const string Carton_canter_pinkie_pie1 = "carton_canter_pinkie_pie1";
+		public const string Carton_canter_pinkie_pie2 = "carton_canter_pinkie_pie2";
+		public const string Carton_canter_pinkie_pie3 = "carton_canter_pinkie_pie3";
+		public const string Carton_canter_twilight1 = "carton_canter_twilight1";
+		public const string Carton_canter_twilight2 = "carton_canter_twilight2";
+		public const string Carton_canter_twilight3 = "carton_canter_twilight3";
 		public const string Coral1 = "coral1";
 		public const string Coral2 = "coral2";
 		public const string Coral3 = "coral3";
@@ -44,7 +60,6 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Cutie_cupcake_crew_cupcake_apple_bloom3 = "cutie-cupcake-crew-cupcake-apple-bloom3";
 		public const string Cutie_cupcake_crew_cupcake_applebloom1 = "cutie-cupcake-crew-cupcake-applebloom1";
 		public const string Cutie_cupcake_crew_cupcake_applebloom2 = "cutie-cupcake-crew-cupcake-applebloom2";
-		public const string Cutie_cupcake_crew_cupcake_applebloom3 = "cutie-cupcake-crew-cupcake-applebloom3";
 		public const string Cutie_cupcake_crew_cupcake_pinkie_pie1 = "cutie-cupcake-crew-cupcake-pinkie-pie1";
 		public const string Cutie_cupcake_crew_cupcake_pinkie_pie2 = "cutie-cupcake-crew-cupcake-pinkie-pie2";
 		public const string Cutie_cupcake_crew_cupcake_pinkie_pie3 = "cutie-cupcake-crew-cupcake-pinkie-pie3";
@@ -65,6 +80,7 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Cutie_cupcake_crew_sweetie_belle3 = "cutie-cupcake-crew-sweetie belle3";
 		public const string Deco_m1 = "deco-m1";
 		public const string Deco_m2 = "deco-m2";
+		public const string Deco1 = "deco1";
 		public const string Deco2 = "deco2";
 		public const string Derpy = "derpy";
 		public const string Derpy2 = "derpy2";
@@ -79,6 +95,30 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Fluttershy_pony_swim2 = "fluttershy-pony-swim2";
 		public const string Fluttershy_pony_tap1 = "fluttershy-pony-tap1";
 		public const string Fluttershy_pony_tap2 = "fluttershy-pony-tap2";
+		public const string Gemwalk_glammour_bourse1 = "gemwalk_glammour_bourse1";
+		public const string Gemwalk_glammour_bourse2 = "gemwalk_glammour_bourse2";
+		public const string Gemwalk_glammour_bourse3 = "gemwalk_glammour_bourse3";
+		public const string Gemwalk_glammour_bourse4 = "gemwalk_glammour_bourse4";
+		public const string Gemwalk_glammour_bourse5 = "gemwalk_glammour_bourse5";
+		public const string Gemwalk_glammour_ore_ruby1 = "gemwalk_glammour_ore_ruby1";
+		public const string Gemwalk_glammour_ore_ruby2 = "gemwalk_glammour_ore_ruby2";
+		public const string Gemwalk_glammour_ore_sapphire1 = "gemwalk_glammour_ore_sapphire1";
+		public const string Gemwalk_glammour_ore_sapphire2 = "gemwalk_glammour_ore_sapphire2";
+		public const string Gemwalk_glammour_pickaxe1 = "gemwalk_glammour_pickaxe1";
+		public const string Gemwalk_glammour_pickaxe2 = "gemwalk_glammour_pickaxe2";
+		public const string Gemwalk_glammour_pickaxe3 = "gemwalk_glammour_pickaxe3";
+		public const string Gemwalk_glammour_pickaxe4 = "gemwalk_glammour_pickaxe4";
+		public const string Gemwalk_glammour_pickaxe5 = "gemwalk_glammour_pickaxe5";
+		public const string Gemwalk_glammour_rarity_walk1 = "gemwalk_glammour_rarity_walk1";
+		public const string Gemwalk_glammour_rarity_walk2 = "gemwalk_glammour_rarity_walk2";
+		public const string Gemwalk_glammour_rarity_walk3 = "gemwalk_glammour_rarity_walk3";
+		public const string Gemwalk_glammour_rarity_walk4 = "gemwalk_glammour_rarity_walk4";
+		public const string Gemwalk_glammour_rarity_walk5 = "gemwalk_glammour_rarity_walk5";
+		public const string Gemwalk_glammour_rarity_walk6 = "gemwalk_glammour_rarity_walk6";
+		public const string Gemwalk_glammour_rarity_walk7 = "gemwalk_glammour_rarity_walk7";
+		public const string Gemwalk_glammour_rarity_walk8 = "gemwalk_glammour_rarity_walk8";
+		public const string Gemwalk_glammour_rarity_walk9 = "gemwalk_glammour_rarity_walk9";
+		public const string Gemwalk_glammour_rarity_walk10 = "gemwalk_glammour_rarity_walk10";
 		public const string Jump_effect = "jump effect";
 		public const string Parcel1 = "parcel1";
 		public const string Parcel2 = "parcel2";
@@ -96,6 +136,7 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Planks_left2 = "planks_left2";
 		public const string Planks_left3 = "planks_left3";
 		public const string Planks_left4 = "planks_left4";
+		public const string Radial_light = "radial light";
 		public const string Rainbow_trail = "rainbow_trail";
 		public const string Rainbowdash_fail = "rainbowdash-fail";
 		public const string Rainbowdash_idle1 = "rainbowdash-idle1";
@@ -117,6 +158,12 @@ namespace TexturePackerMonoGameDefinitions
 		public const string Sand2 = "sand2";
 		public const string Sand3 = "sand3";
 		public const string Seapony_parade_clap_effect = "seapony_parade_clap_effect";
+		public const string Stalagtite1 = "stalagtite1";
+		public const string Stalagtite2 = "stalagtite2";
+		public const string Stalagtite3 = "stalagtite3";
+		public const string Stalagtite4 = "stalagtite4";
+		public const string Stalagtite5 = "stalagtite5";
+		public const string Stalagtite6 = "stalagtite6";
 		public const string Stand = "stand";
 		public const string Table = "table";
 		public const string Tree = "tree";

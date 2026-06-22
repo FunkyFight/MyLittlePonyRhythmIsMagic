@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using GameCore;
 using Microsoft.Xna.Framework;
 using MLP_RiM.Elements.Editor;
 using Rhythm.Conductor;
@@ -7,9 +9,15 @@ using Rhythm.Note;
 using Rhythm.Note.Evaluator;
 using Rhythm.Note.Visual;
 
+public readonly record struct ViewportCameraState(Vector2 Offset, float Rotation, Vector2 Zoom)
+{
+    public static readonly ViewportCameraState Identity = new(Vector2.Zero, 0f, Vector2.One);
+}
+
 public class BeatmapPlayer : IDisposable
 {
     private const double TimelineEventEpsilonSeconds = 0.000001;
+    private const double SwitchGameBlackoutLeadBeats = 0.25;
 
     public Conductor Conductor {get; private set;}
     public ChartPlayer ChartPlayer {get; private set;}
@@ -17,6 +25,11 @@ public class BeatmapPlayer : IDisposable
     public bool HasAChartLoaded { get; private set; }
     public VisualNoteManager<VisualNote> VisualNoteMng {get; set;}
     public TempoMappedRhythmClock Clock { get; private set; }
+    public bool IsSwitchGameBlackoutActive { get; private set; }
+    public bool IsBlackAndWhiteActive { get; private set; }
+    public ViewportCameraState CameraEffectState { get; private set; } = ViewportCameraState.Identity;
+    public float FlashIntensity { get; private set; }
+    public float CameraSaturation { get; private set; } = 1f;
 
     public event Action BeatmapStarted;
     public event Action<string> RhythmGameSwitchRequested;
@@ -26,13 +39,41 @@ public class BeatmapPlayer : IDisposable
     private bool _startupComplete;
     private ChartTempoMap _tempoMap;
     private readonly List<RhythmGameSwitchMarker> _switchGameMarkers = new();
+    private readonly List<double> _blackAndWhiteToggleMarkers = new();
+    private readonly List<SaturationMarker> _saturationMarkers = new();
+    private readonly List<ViewportOffsetClip> _viewportOffsetClips = new();
+    private readonly List<FlashClip> _flashClips = new();
     private int _nextSwitchGameMarkerIndex;
+    private int _nextBlackAndWhiteToggleMarkerIndex;
     private string _currentSwitchGameId;
 
     private sealed class RhythmGameSwitchMarker
     {
         public double SongPosition { get; init; }
+        public double BlackoutStartSongPosition { get; init; }
         public string RhythmGameId { get; init; }
+    }
+
+    private sealed class SaturationMarker
+    {
+        public double SongPosition { get; init; }
+        public float Saturation { get; init; }
+    }
+
+    private sealed class ViewportOffsetClip
+    {
+        public double StartSongPosition { get; init; }
+        public double EndSongPosition { get; init; }
+        public ViewportCameraState StartState { get; set; }
+        public ViewportCameraState TargetState { get; init; }
+        public bool Instant { get; init; }
+        public string Interpolation { get; init; }
+    }
+
+    private sealed class FlashClip
+    {
+        public double StartSongPosition { get; init; }
+        public double EndSongPosition { get; init; }
     }
 
     public BeatmapPlayer(Conductor conductor, ChartPlayer chartPlayer)
@@ -87,6 +128,10 @@ public class BeatmapPlayer : IDisposable
         CurrentChart = Chart.CreateMetronome(bpm, 200, startupDelaySeconds, additionnalData);
         _tempoMap = new ChartTempoMap(CurrentChart);
         RebuildSwitchGameMarkers();
+        RebuildBlackAndWhiteToggleMarkers();
+        RebuildSaturationMarkers();
+        RebuildViewportOffsetClips();
+        RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(CurrentChart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
@@ -129,6 +174,10 @@ public class BeatmapPlayer : IDisposable
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
         RebuildSwitchGameMarkers();
+        RebuildBlackAndWhiteToggleMarkers();
+        RebuildSaturationMarkers();
+        RebuildViewportOffsetClips();
+        RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
@@ -144,10 +193,14 @@ public class BeatmapPlayer : IDisposable
         _startupTimer = 0;
         _startupComplete = true;
 
-        Conductor = new Conductor(song_path, chart.BPM, chart.Offset);
+        Conductor = new Conductor(song_path, chart.BPM, chart.Offset, musicVolume: GetMusicVolume(chart));
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
         RebuildSwitchGameMarkers();
+        RebuildBlackAndWhiteToggleMarkers();
+        RebuildSaturationMarkers();
+        RebuildViewportOffsetClips();
+        RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
@@ -166,10 +219,14 @@ public class BeatmapPlayer : IDisposable
         _startupComplete = true;
 
         double beatDelay = double.IsNaN(firstBeatDelay) ? chart.Offset : firstBeatDelay;
-        Conductor = new Conductor(songPath, chart.BPM, beatDelay);
+        Conductor = new Conductor(songPath, chart.BPM, beatDelay, musicVolume: GetMusicVolume(chart));
         CurrentChart = chart;
         _tempoMap = new ChartTempoMap(CurrentChart);
         RebuildSwitchGameMarkers();
+        RebuildBlackAndWhiteToggleMarkers();
+        RebuildSaturationMarkers();
+        RebuildViewportOffsetClips();
+        RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
         ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
@@ -184,12 +241,15 @@ public class BeatmapPlayer : IDisposable
 
     public void ApplyEditorTimelineEventsAt(double songPosition, bool seek)
     {
-        if (_switchGameMarkers.Count == 0)
-            return;
+        UpdateSwitchGameBlackout(songPosition);
+        UpdateCameraSaturation(songPosition);
+        UpdateViewportCameraOffset(songPosition);
+        UpdateFlashIntensity(songPosition);
 
         if (seek)
         {
             ApplySwitchGameMarkerForSeek(songPosition);
+            ApplyBlackAndWhiteToggleMarkersForSeek(songPosition);
             return;
         }
 
@@ -198,6 +258,31 @@ public class BeatmapPlayer : IDisposable
         {
             RequestRhythmGameSwitch(_switchGameMarkers[_nextSwitchGameMarkerIndex].RhythmGameId);
             _nextSwitchGameMarkerIndex++;
+        }
+
+        while (_nextBlackAndWhiteToggleMarkerIndex < _blackAndWhiteToggleMarkers.Count
+            && _blackAndWhiteToggleMarkers[_nextBlackAndWhiteToggleMarkerIndex] <= songPosition + TimelineEventEpsilonSeconds)
+        {
+            IsBlackAndWhiteActive = !IsBlackAndWhiteActive;
+            _nextBlackAndWhiteToggleMarkerIndex++;
+        }
+    }
+
+    private void UpdateSwitchGameBlackout(double songPosition)
+    {
+        IsSwitchGameBlackoutActive = false;
+
+        for (int i = 1; i < _switchGameMarkers.Count; i++)
+        {
+            RhythmGameSwitchMarker marker = _switchGameMarkers[i];
+            if (songPosition + TimelineEventEpsilonSeconds < marker.BlackoutStartSongPosition)
+                break;
+
+            if (songPosition + TimelineEventEpsilonSeconds < marker.SongPosition)
+            {
+                IsSwitchGameBlackoutActive = true;
+                return;
+            }
         }
     }
 
@@ -217,6 +302,21 @@ public class BeatmapPlayer : IDisposable
             RequestRhythmGameSwitch(_switchGameMarkers[markerIndex].RhythmGameId);
     }
 
+    private void ApplyBlackAndWhiteToggleMarkersForSeek(double songPosition)
+    {
+        int togglesBeforePosition = 0;
+        for (int i = 0; i < _blackAndWhiteToggleMarkers.Count; i++)
+        {
+            if (_blackAndWhiteToggleMarkers[i] > songPosition + TimelineEventEpsilonSeconds)
+                break;
+
+            togglesBeforePosition++;
+        }
+
+        _nextBlackAndWhiteToggleMarkerIndex = togglesBeforePosition;
+        IsBlackAndWhiteActive = togglesBeforePosition % 2 == 1;
+    }
+
     private void RequestRhythmGameSwitch(string rhythmGameId)
     {
         if (string.IsNullOrWhiteSpace(rhythmGameId) || rhythmGameId == _currentSwitchGameId)
@@ -231,6 +331,7 @@ public class BeatmapPlayer : IDisposable
         _switchGameMarkers.Clear();
         _nextSwitchGameMarkerIndex = 0;
         _currentSwitchGameId = null;
+        IsSwitchGameBlackoutActive = false;
 
         if (CurrentChart?.EditorClips == null || _tempoMap == null)
             return;
@@ -247,11 +348,269 @@ public class BeatmapPlayer : IDisposable
             _switchGameMarkers.Add(new RhythmGameSwitchMarker
             {
                 SongPosition = _tempoMap.BeatToSeconds(clip.StartBeat),
+                BlackoutStartSongPosition = _tempoMap.BeatToSeconds(clip.StartBeat - SwitchGameBlackoutLeadBeats),
                 RhythmGameId = targetGameId
             });
         }
 
         _switchGameMarkers.Sort((a, b) => a.SongPosition.CompareTo(b.SongPosition));
+    }
+
+    private void RebuildBlackAndWhiteToggleMarkers()
+    {
+        _blackAndWhiteToggleMarkers.Clear();
+        _nextBlackAndWhiteToggleMarkerIndex = 0;
+        IsBlackAndWhiteActive = false;
+
+        if (CurrentChart?.EditorClips == null || _tempoMap == null)
+            return;
+
+        foreach (ChartEditorClip clip in CurrentChart.EditorClips)
+        {
+            if (EditorClipDefinitions.IsBlackAndWhiteToggle(clip))
+                _blackAndWhiteToggleMarkers.Add(_tempoMap.BeatToSeconds(clip.StartBeat));
+        }
+
+        _blackAndWhiteToggleMarkers.Sort();
+    }
+
+    private void RebuildSaturationMarkers()
+    {
+        _saturationMarkers.Clear();
+        CameraSaturation = 1f;
+
+        if (CurrentChart?.EditorClips == null || _tempoMap == null)
+            return;
+
+        foreach (ChartEditorClip clip in CurrentChart.EditorClips)
+        {
+            if (!EditorClipDefinitions.IsSaturation(clip))
+                continue;
+
+            Dictionary<string, string> data = CreateMergedClipData(clip);
+            _saturationMarkers.Add(new SaturationMarker
+            {
+                SongPosition = _tempoMap.BeatToSeconds(clip.StartBeat),
+                Saturation = Math.Max(0f, ParseFloat(data, GlobalEffectsProvider.SaturationValueKey, 1f))
+            });
+        }
+
+        _saturationMarkers.Sort((a, b) => a.SongPosition.CompareTo(b.SongPosition));
+    }
+
+    private void RebuildViewportOffsetClips()
+    {
+        _viewportOffsetClips.Clear();
+        CameraEffectState = ViewportCameraState.Identity;
+
+        if (CurrentChart?.EditorClips == null || _tempoMap == null)
+            return;
+
+        foreach (ChartEditorClip clip in CurrentChart.EditorClips)
+        {
+            if (!EditorClipDefinitions.IsViewportOffset(clip))
+                continue;
+
+            Dictionary<string, string> data = CreateMergedClipData(clip);
+            double startBeat = clip.StartBeat;
+            double endBeat = startBeat + Math.Max(0.0, clip.LengthBeats);
+            _viewportOffsetClips.Add(new ViewportOffsetClip
+            {
+                StartSongPosition = _tempoMap.BeatToSeconds(startBeat),
+                EndSongPosition = _tempoMap.BeatToSeconds(endBeat),
+                TargetState = new ViewportCameraState(
+                    new Vector2(
+                        ParseFloat(data, GlobalEffectsProvider.ViewportOffsetXKey),
+                        ParseFloat(data, GlobalEffectsProvider.ViewportOffsetYKey)),
+                    MathHelper.ToRadians(ParseFloat(data, GlobalEffectsProvider.ViewportRotationDegreesKey)),
+                    new Vector2(
+                        Math.Max(0.001f, ParseFloat(data, GlobalEffectsProvider.ViewportZoomXKey, 1f)),
+                        Math.Max(0.001f, ParseFloat(data, GlobalEffectsProvider.ViewportZoomYKey, 1f)))),
+                Instant = ParseBool(data, GlobalEffectsProvider.ViewportInstantKey),
+                Interpolation = data.TryGetValue(GlobalEffectsProvider.ViewportInterpolationKey, out string interpolation)
+                    ? interpolation
+                    : GlobalEffectsProvider.ViewportInterpolationEaseInOutCubic
+            });
+        }
+
+        _viewportOffsetClips.Sort((a, b) => a.StartSongPosition.CompareTo(b.StartSongPosition));
+        for (int i = 0; i < _viewportOffsetClips.Count; i++)
+            _viewportOffsetClips[i].StartState = EvaluateViewportCameraStateAt(_viewportOffsetClips[i].StartSongPosition, i);
+    }
+
+    private void RebuildFlashClips()
+    {
+        _flashClips.Clear();
+        FlashIntensity = 0f;
+
+        if (CurrentChart?.EditorClips == null || _tempoMap == null)
+            return;
+
+        foreach (ChartEditorClip clip in CurrentChart.EditorClips)
+        {
+            if (!EditorClipDefinitions.IsFlash(clip))
+                continue;
+
+            double startBeat = clip.StartBeat;
+            double endBeat = startBeat + Math.Max(0.000001, clip.LengthBeats);
+            _flashClips.Add(new FlashClip
+            {
+                StartSongPosition = _tempoMap.BeatToSeconds(startBeat),
+                EndSongPosition = _tempoMap.BeatToSeconds(endBeat)
+            });
+        }
+
+        _flashClips.Sort((a, b) => a.StartSongPosition.CompareTo(b.StartSongPosition));
+    }
+
+    private void UpdateFlashIntensity(double songPosition)
+    {
+        float intensity = 0f;
+        foreach (FlashClip clip in _flashClips)
+        {
+            if (songPosition + TimelineEventEpsilonSeconds < clip.StartSongPosition)
+                break;
+
+            if (songPosition > clip.EndSongPosition + TimelineEventEpsilonSeconds)
+                continue;
+
+            double duration = Math.Max(TimelineEventEpsilonSeconds, clip.EndSongPosition - clip.StartSongPosition);
+            float progress = MathHelper.Clamp((float)((songPosition - clip.StartSongPosition) / duration), 0f, 1f);
+            intensity = Math.Max(intensity, 1f - Interpolation.EaseOutQuad(progress));
+        }
+
+        FlashIntensity = MathHelper.Clamp(intensity, 0f, 1f);
+    }
+
+    private void UpdateCameraSaturation(double songPosition)
+    {
+        float saturation = 1f;
+        foreach (SaturationMarker marker in _saturationMarkers)
+        {
+            if (marker.SongPosition > songPosition + TimelineEventEpsilonSeconds)
+                break;
+
+            saturation = marker.Saturation;
+        }
+
+        CameraSaturation = saturation;
+    }
+
+    private void UpdateViewportCameraOffset(double songPosition)
+    {
+        CameraEffectState = EvaluateViewportCameraStateAt(songPosition, _viewportOffsetClips.Count);
+    }
+
+    private ViewportCameraState EvaluateViewportCameraStateAt(double songPosition, int clipCount)
+    {
+        ViewportCameraState state = ViewportCameraState.Identity;
+        int count = Math.Min(clipCount, _viewportOffsetClips.Count);
+        for (int i = 0; i < count; i++)
+        {
+            ViewportOffsetClip clip = _viewportOffsetClips[i];
+            if (songPosition + TimelineEventEpsilonSeconds < clip.StartSongPosition)
+                break;
+
+            float progress = GetViewportOffsetProgress(clip, songPosition);
+            state = LerpViewportCameraState(clip.StartState, clip.TargetState, progress);
+        }
+
+        return state;
+    }
+
+    private static ViewportCameraState LerpViewportCameraState(ViewportCameraState start, ViewportCameraState end, float progress)
+    {
+        return new ViewportCameraState(
+            Vector2.Lerp(start.Offset, end.Offset, progress),
+            MathHelper.Lerp(start.Rotation, end.Rotation, progress),
+            Vector2.Lerp(start.Zoom, end.Zoom, progress));
+    }
+
+    private static float GetViewportOffsetProgress(ViewportOffsetClip clip, double songPosition)
+    {
+        if (clip.Instant)
+            return 1f;
+
+        double duration = Math.Max(TimelineEventEpsilonSeconds, clip.EndSongPosition - clip.StartSongPosition);
+        float progress = MathHelper.Clamp((float)((songPosition - clip.StartSongPosition) / duration), 0f, 1f);
+        return ApplyViewportInterpolation(progress, clip.Interpolation);
+    }
+
+    private static float ApplyViewportInterpolation(float progress, string interpolation)
+    {
+        progress = MathHelper.Clamp(progress, 0f, 1f);
+        return interpolation switch
+        {
+            GlobalEffectsProvider.ViewportInterpolationLinear => Interpolation.Linear(progress),
+            "ease_in_sine" => Interpolation.EaseInSine(progress),
+            "ease_out_sine" => Interpolation.EaseOutSine(progress),
+            "ease_in_out_sine" => Interpolation.EaseInOutSine(progress),
+            "ease_in_quad" => Interpolation.EaseInQuad(progress),
+            "ease_out_quad" => Interpolation.EaseOutQuad(progress),
+            "ease_in_out_quad" => Interpolation.EaseInOutQuad(progress),
+            GlobalEffectsProvider.ViewportInterpolationEaseInCubic or "ease_in" => Interpolation.EaseInCubic(progress),
+            GlobalEffectsProvider.ViewportInterpolationEaseOutCubic or "ease_out" => Interpolation.EaseOutCubic(progress),
+            GlobalEffectsProvider.ViewportInterpolationEaseInOutCubic or "ease_in_out" => Interpolation.EaseInOutCubic(progress),
+            "ease_in_quart" => Interpolation.EaseInQuart(progress),
+            "ease_out_quart" => Interpolation.EaseOutQuart(progress),
+            "ease_in_out_quart" => Interpolation.EaseInOutQuart(progress),
+            "ease_in_quint" => Interpolation.EaseInQuint(progress),
+            "ease_out_quint" => Interpolation.EaseOutQuint(progress),
+            "ease_in_out_quint" => Interpolation.EaseInOutQuint(progress),
+            "ease_in_expo" => Interpolation.EaseInExpo(progress),
+            "ease_out_expo" => Interpolation.EaseOutExpo(progress),
+            "ease_in_out_expo" => Interpolation.EaseInOutExpo(progress),
+            "ease_in_circ" => Interpolation.EaseInCirc(progress),
+            "ease_out_circ" => Interpolation.EaseOutCirc(progress),
+            "ease_in_out_circ" => Interpolation.EaseInOutCirc(progress),
+            "ease_in_back" => Interpolation.EaseInBack(progress),
+            "ease_out_back" => Interpolation.EaseOutBack(progress),
+            "ease_in_out_back" => Interpolation.EaseInOutBack(progress),
+            "ease_in_elastic" => Interpolation.EaseInElastic(progress),
+            "ease_out_elastic" => Interpolation.EaseOutElastic(progress),
+            "ease_in_out_elastic" => Interpolation.EaseInOutElastic(progress),
+            "ease_in_bounce" => Interpolation.EaseInBounce(progress),
+            "ease_out_bounce" => Interpolation.EaseOutBounce(progress),
+            "ease_in_out_bounce" => Interpolation.EaseInOutBounce(progress),
+            "smooth_step" => Interpolation.SmoothStep(progress),
+            "smoother_step" => Interpolation.SmootherStep(progress),
+            _ => Interpolation.EaseInOutCubic(progress)
+        };
+    }
+
+    private static Dictionary<string, string> CreateMergedClipData(ChartEditorClip clip)
+    {
+        EditorClipDefinition definition = EditorClipDefinitions.Find(clip.RhythmGameId, clip.ClipTypeId);
+        Dictionary<string, string> data = new(definition?.DefaultData ?? new Dictionary<string, string>());
+        foreach (KeyValuePair<string, string> pair in clip.Data ?? new Dictionary<string, string>())
+            data[pair.Key] = pair.Value;
+
+        return data;
+    }
+
+    private static float GetMusicVolume(Chart chart)
+    {
+        if (chart == null || double.IsNaN(chart.MusicVolume) || double.IsInfinity(chart.MusicVolume))
+            return (float)Chart.DefaultMusicVolume;
+
+        return (float)Math.Clamp(chart.MusicVolume, 0.0, Chart.MaxMusicVolume);
+    }
+
+    private static float ParseFloat(IReadOnlyDictionary<string, string> data, string key, float fallback = 0f)
+    {
+        return data != null
+            && data.TryGetValue(key, out string value)
+            && float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float parsed)
+            ? parsed
+            : fallback;
+    }
+
+    private static bool ParseBool(IReadOnlyDictionary<string, string> data, string key)
+    {
+        return data != null
+            && data.TryGetValue(key, out string value)
+            && (bool.TryParse(value, out bool parsed) && parsed
+                || string.Equals(value, "1", StringComparison.OrdinalIgnoreCase));
     }
 
     public double GetBpmAt(double songPosition)
@@ -321,8 +680,18 @@ public class BeatmapPlayer : IDisposable
         ChartPlayer = null;
         VisualNoteMng = null;
         _switchGameMarkers.Clear();
+        _blackAndWhiteToggleMarkers.Clear();
+        _saturationMarkers.Clear();
+        _viewportOffsetClips.Clear();
+        _flashClips.Clear();
         _nextSwitchGameMarkerIndex = 0;
+        _nextBlackAndWhiteToggleMarkerIndex = 0;
         _currentSwitchGameId = null;
+        IsSwitchGameBlackoutActive = false;
+        IsBlackAndWhiteActive = false;
+        CameraSaturation = 1f;
+        CameraEffectState = ViewportCameraState.Identity;
+        FlashIntensity = 0f;
     }
 
     private ChartTempoMap GetTempoMap()

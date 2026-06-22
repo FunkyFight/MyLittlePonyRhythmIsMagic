@@ -20,6 +20,8 @@ public class Game1 : Core
 {
     private SceneManager _sceneManager;
     private string _currentRhythmGameSceneId;
+    private Texture2D _blackoutPixel;
+    private Effect _saturationEffect;
 
     private InputActionManager _inputActionManager;
     private KeyboardState _keyboard;
@@ -35,6 +37,8 @@ public class Game1 : Core
         base.Initialize();
 
         GLOBALS.graphicsDevice = GraphicsDevice;
+        _blackoutPixel = new Texture2D(GraphicsDevice, 1, 1);
+        _blackoutPixel.SetData(new[] { Color.White });
 
         // Controls
         _inputActionManager = new InputActionManager();
@@ -50,8 +54,8 @@ public class Game1 : Core
 
         // Beatmap editor
         GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
-        if (_currentRhythmGameSceneId == null && EditorNoteDefinitions.GameProviders.Count > 0)
-            SwitchRhythmGameScene(EditorNoteDefinitions.GameProviders[0].RhythmGameId);
+        if (_currentRhythmGameSceneId == null)
+            SwitchFirstAvailableRhythmGameScene();
 
 
         
@@ -72,6 +76,7 @@ public class Game1 : Core
         base.LoadContent();
         GLOBALS.controller_atlas = TextureAtlas.FromTexturePackerFile(Content, "atlas/xbox_controller", "atlas/xbox_controller.txt");
         GLOBALS.main_atlas = TextureAtlas.FromTexturePackerFile(Content, "atlas/main_atlas", "atlas/main_atlas.txt");
+        _saturationEffect = Content.Load<Effect>("Effects/Saturation");
     }
 
     protected override void Update(GameTime gameTime)
@@ -117,10 +122,13 @@ public class Game1 : Core
         else
             BeatmapEditorElement.ConfigureSceneViewportFullscreen(_sceneManager.Viewport);
 
-        _sceneManager.Draw(SpriteBatch);
+        DrawSceneWithCameraEffects(SpriteBatch);
+        DrawSceneSaturationOverlay(SpriteBatch);
+        DrawSceneFlashOverlay(SpriteBatch);
 
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        
+        DrawSwitchGameBlackout(SpriteBatch);
+
         GLOBALS.beatmapEditorElement?.Draw(SpriteBatch);
         if (_showMouseViewportCoordinates)
             GLOBALS.mouseViewportCoordinatesElement?.Draw(SpriteBatch);
@@ -136,6 +144,12 @@ public class Game1 : Core
     private void handleInputs()
     {
         _inputActionManager.Update();
+        GLOBALS.ReactMainIsPressed = _inputActionManager.IsPressed("ReactMain");
+        if (_inputActionManager.IsReleasedOnce("ReactMain"))
+        {
+            GLOBALS.ReactMainReleaseSerial++;
+            GLOBALS.ReactMainReleaseSongPosition = GLOBALS.beatmapPlayer?.Conductor?.SongPosition ?? double.NaN;
+        }
         
         if (GLOBALS.beatmapEditorElement != null && !GLOBALS.beatmapEditorElement.IsPreviewPlaying)
             return;
@@ -165,6 +179,103 @@ public class Game1 : Core
 
         _currentRhythmGameSceneId = rhythmGameId;
         _sceneManager.SetScene(scene);
+    }
+
+    private void SwitchFirstAvailableRhythmGameScene()
+    {
+        foreach (IEditorNoteProvider provider in EditorNoteDefinitions.GameProviders)
+        {
+            if (provider == null || string.IsNullOrWhiteSpace(provider.RhythmGameId))
+                continue;
+
+            if (!EditorNoteDefinitions.TryCreateScene(provider.RhythmGameId, out Scene scene))
+                continue;
+
+            _currentRhythmGameSceneId = provider.RhythmGameId;
+            _sceneManager.SetScene(scene);
+            return;
+        }
+    }
+
+    private void DrawSceneWithCameraEffects(SpriteBatch spriteBatch)
+    {
+        Scene scene = _sceneManager.CurrentScene;
+        if (scene == null)
+            return;
+
+        ViewportCameraState cameraState = GLOBALS.beatmapPlayer?.CameraEffectState ?? ViewportCameraState.Identity;
+        Vector2 originalCameraPosition = scene.sceneCamera.Position;
+        float originalCameraRotation = scene.sceneCamera.Rotation;
+        Vector2 originalCameraZoom = scene.sceneCamera.Zoom;
+        scene.sceneCamera.Position = originalCameraPosition + cameraState.Offset;
+        scene.sceneCamera.Rotation = originalCameraRotation + cameraState.Rotation;
+        scene.sceneCamera.Zoom = cameraState.Zoom;
+
+        try
+        {
+            _sceneManager.Draw(spriteBatch);
+        }
+        finally
+        {
+            scene.sceneCamera.Position = originalCameraPosition;
+            scene.sceneCamera.Rotation = originalCameraRotation;
+            scene.sceneCamera.Zoom = originalCameraZoom;
+        }
+    }
+
+    private void DrawSceneSaturationOverlay(SpriteBatch spriteBatch)
+    {
+        if (GLOBALS.beatmapPlayer == null || _saturationEffect == null)
+            return;
+
+        float saturation = GLOBALS.beatmapPlayer.IsBlackAndWhiteActive
+            ? 0f
+            : GLOBALS.beatmapPlayer.CameraSaturation;
+        if (Math.Abs(saturation - 1f) <= 0.0001f)
+            return;
+
+        RenderViewport viewport = _sceneManager.Viewport;
+        RenderTarget2D renderTarget = viewport.RenderTarget;
+        if (renderTarget == null || renderTarget.IsDisposed)
+            return;
+
+        _saturationEffect.Parameters["Saturation"]?.SetValue(saturation);
+        spriteBatch.Begin(blendState: viewport.BlendState, samplerState: viewport.PresentationSamplerState, effect: _saturationEffect);
+        spriteBatch.Draw(renderTarget, viewport.Position, null, Color.White, viewport.Rotation, viewport.Origin, viewport.Scale, SpriteEffects.None, 0.0f);
+        spriteBatch.End();
+    }
+
+    private void DrawSceneFlashOverlay(SpriteBatch spriteBatch)
+    {
+        float intensity = GLOBALS.beatmapPlayer?.FlashIntensity ?? 0f;
+        if (intensity <= 0f || _blackoutPixel == null)
+            return;
+
+        RenderViewport viewport = _sceneManager.Viewport;
+        Rectangle bounds = new Rectangle(
+            (int)MathF.Round(viewport.Position.X - viewport.Origin.X * viewport.Scale.X),
+            (int)MathF.Round(viewport.Position.Y - viewport.Origin.Y * viewport.Scale.Y),
+            (int)MathF.Round(viewport.Width * viewport.Scale.X),
+            (int)MathF.Round(viewport.Height * viewport.Scale.Y));
+
+        spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: viewport.PresentationSamplerState);
+        spriteBatch.Draw(_blackoutPixel, bounds, Color.White * intensity);
+        spriteBatch.End();
+    }
+
+    private void DrawSwitchGameBlackout(SpriteBatch spriteBatch)
+    {
+        if (GLOBALS.beatmapPlayer?.IsSwitchGameBlackoutActive != true || _blackoutPixel == null)
+            return;
+
+        RenderViewport viewport = _sceneManager.Viewport;
+        Rectangle bounds = new Rectangle(
+            (int)MathF.Round(viewport.Position.X - viewport.Origin.X * viewport.Scale.X),
+            (int)MathF.Round(viewport.Position.Y - viewport.Origin.Y * viewport.Scale.Y),
+            (int)MathF.Round(viewport.Width * viewport.Scale.X),
+            (int)MathF.Round(viewport.Height * viewport.Scale.Y));
+
+        spriteBatch.Draw(_blackoutPixel, bounds, Color.Black);
     }
 
     private void CopyMouseViewportCoordinates()

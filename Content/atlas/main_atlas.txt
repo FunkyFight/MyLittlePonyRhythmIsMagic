@@ -5,84 +5,124 @@
 # https://www.codeandweb.com/texturepacker/monogame
 #
 # Sprite sheet: main_atlas.png (1024 x 2048)
-# $TexturePacker:SmartUpdate:d7ab211b7f83be78bf8c5acc5877827f:ad1d443fadc52f920b9733bd32c89dac:bb8c871ba50dcb594d48391b0a334787$
+# $TexturePacker:SmartUpdate:8713507ea8f4cbfce91e1f2bb7b54767:b7efe521886fc972d9be6b590d8f1292:bb8c871ba50dcb594d48391b0a334787$
 #
 
-applejack afk1;1;467;993;89;77;77;89;0.5;0.5
-applejack afk2;1;558;993;89;77;77;89;0.5;0.5
-applejack afk3;1;649;1043;89;77;77;89;0.5;0.5
-applejack-jump1;0;115;1011;102;69;102;69;0.5;0.5
-applejack-jump2;0;1;1029;102;69;102;69;0.5;0.5
-applejack-land1;0;467;931;90;60;90;60;0.5;0.5
-applejack-land2;0;559;931;90;60;90;60;0.5;0.5
-applejack-land3;0;651;981;90;60;90;60;0.5;0.5
-applejack-pony-idle1;1;355;865;110;64;64;110;0.5;0.5
-applejack-pony-idle2;1;467;865;110;64;64;110;0.5;0.5
+applejack afk1;0;693;981;77;89;77;89;0.5;0.5
+applejack afk2;1;207;1017;89;77;77;89;0.5;0.5
+applejack afk3;1;93;1073;89;77;77;89;0.5;0.5
+applejack-jump1;0;579;997;102;69;102;69;0.5;0.5
+applejack-jump2;0;772;1023;102;69;102;69;0.5;0.5
+applejack-land1;0;233;955;90;60;90;60;0.5;0.5
+applejack-land2;0;115;1011;90;60;90;60;0.5;0.5
+applejack-land3;0;1;1035;90;60;90;60;0.5;0.5
+applejack-pony-idle1;1;583;865;110;64;64;110;0.5;0.5
+applejack-pony-idle2;1;469;925;110;64;64;110;0.5;0.5
 applejack-pony-star;0;969;221;42;96;42;96;0.5;0.5
 applejack-pony-swim1;1;237;775;116;88;88;116;0.5;0.5
 applejack-pony-swim2;1;355;775;116;88;88;116;0.5;0.5
 applejack-pony-tap1;1;905;533;116;102;102;116;0.5;0.5
 applejack-pony-tap2;1;905;637;116;102;102;116;0.5;0.5
-applejack-true-idle;0;743;1023;90;60;90;60;0.5;0.5
-arbustes;0;814;1103;64;64;64;64;0.5;0.5
-coral1;0;880;1103;64;64;64;64;0.5;0.5
-coral2;0;946;1103;64;64;64;64;0.5;0.5
-coral3;0;431;1072;64;64;64;64;0.5;0.5
-coral4;0;305;1073;64;64;64;64;0.5;0.5
-coral5;0;191;1097;64;64;64;64;0.5;0.5
-coral6;0;77;1158;64;64;64;64;0.5;0.5
-coral7;0;1;1164;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-applebloom1;0;497;1072;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-applebloom2;0;563;1072;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-applebloom3;0;629;1122;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-applebloom4;0;695;1149;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-apple-bloom1;0;371;1138;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-apple-bloom2;0;257;1139;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-apple-bloom3;0;143;1163;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-applebloom1;0;371;1138;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-applebloom2;0;257;1139;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-applebloom3;0;67;1224;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-pinkie-pie1;0;371;1138;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-pinkie-pie2;0;1;1230;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-pinkie-pie3;0;437;1138;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-scootaloo1;0;371;1138;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-scootaloo2;0;503;1138;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-scootaloo3;0;569;1188;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-sweetie-belle1;0;371;1138;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-sweetie-belle2;0;323;1204;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-cupcake-sweetie-belle3;0;209;1205;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-pinkie-pie1;0;133;1229;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-pinkie-pie2;0;67;1290;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-pinkie-pie3;0;1;1296;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-scootaloo1;0;389;1204;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-scootaloo2;0;455;1204;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-scootaloo3;0;761;1169;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-sweetie belle1;0;635;1215;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-sweetie belle2;0;521;1254;64;64;64;64;0.5;0.5
-cutie-cupcake-crew-sweetie belle3;0;827;1169;64;64;64;64;0.5;0.5
+applejack-true-idle;0;325;997;90;60;90;60;0.5;0.5
+arbustes;0;911;1111;64;64;64;64;0.5;0.5
+box_applejack;0;436;1261;64;64;64;64;0.5;0.5
+box_fluttershy;0;333;1271;64;64;64;64;0.5;0.5
+box_pinkiepie;0;245;1273;64;64;64;64;0.5;0.5
+box_twilight;0;157;1300;64;64;64;64;0.5;0.5
+carton_canter_applejack1;1;177;1168;76;64;64;76;0.5;0.5
+carton_canter_applejack2;1;89;1224;76;64;64;76;0.5;0.5
+carton_canter_applejack3;1;1;1241;76;64;64;76;0.5;0.5
+carton_canter_fluttershy1;1;358;1205;76;64;64;76;0.5;0.5
+carton_canter_fluttershy2;1;255;1207;76;64;64;76;0.5;0.5
+carton_canter_fluttershy3;1;167;1234;76;64;64;76;0.5;0.5
+carton_canter_pinkie_pie1;1;79;1290;76;64;64;76;0.5;0.5
+carton_canter_pinkie_pie2;1;1;1307;76;64;64;76;0.5;0.5
+carton_canter_pinkie_pie3;1;755;1094;76;64;64;76;0.5;0.5
+carton_canter_twilight1;1;667;1144;76;64;64;76;0.5;0.5
+carton_canter_twilight2;1;833;1111;76;64;64;76;0.5;0.5
+carton_canter_twilight3;1;745;1160;76;64;64;76;0.5;0.5
+coral1;0;79;1356;64;64;64;64;0.5;0.5
+coral2;0;1;1373;64;64;64;64;0.5;0.5
+coral3;0;823;1177;64;64;64;64;0.5;0.5
+coral4;0;743;1226;64;64;64;64;0.5;0.5
+coral5;0;634;1274;64;64;64;64;0.5;0.5
+coral6;0;502;1276;64;64;64;64;0.5;0.5
+coral7;0;568;1276;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-applebloom1;0;399;1327;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-applebloom2;0;311;1337;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-applebloom3;0;223;1339;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-applebloom4;0;145;1366;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-apple-bloom1;0;67;1422;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-apple-bloom2;0;1;1439;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-apple-bloom3;0;889;1177;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-applebloom1;0;67;1422;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-applebloom2;0;1;1439;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-pinkie-pie1;0;67;1422;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-pinkie-pie2;0;955;1177;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-pinkie-pie3;0;809;1243;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-scootaloo1;0;67;1422;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-scootaloo2;0;700;1292;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-scootaloo3;0;634;1340;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-sweetie-belle1;0;67;1422;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-sweetie-belle2;0;875;1243;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-cupcake-sweetie-belle3;0;941;1243;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-pinkie-pie1;0;465;1342;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-pinkie-pie2;0;377;1393;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-pinkie-pie3;0;289;1403;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-scootaloo1;0;211;1405;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-scootaloo2;0;133;1432;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-scootaloo3;0;67;1488;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-sweetie belle1;0;1;1505;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-sweetie belle2;0;531;1342;64;64;64;64;0.5;0.5
+cutie-cupcake-crew-sweetie belle3;0;766;1309;64;64;64;64;0.5;0.5
 deco-m1;1;709;775;64;112;112;64;0.5;0.5
 deco-m2;0;119;879;112;64;112;64;0.5;0.5
-deco2;0;119;945;112;64;112;64;0.5;0.5
+deco1;0;119;945;112;64;112;64;0.5;0.5
+deco2;0;1;969;112;64;112;64;0.5;0.5
 derpy;0;1;1;256;256;256;256;0.5;0.5
 derpy2;0;259;1;256;256;256;256;0.5;0.5
 enveloppe;0;517;1;256;256;256;256;0.5;0.5
 enveloppe1;0;517;1;256;256;256;256;0.5;0.5
 enveloppe2;0;1;259;256;256;256;256;0.5;0.5
 fences;1;969;319;24;64;64;24;0.5;0.5
-fluttershy-pony-idle1;1;579;865;110;64;64;110;0.5;0.5
-fluttershy-pony-idle2;1;771;957;110;64;64;110;0.5;0.5
-fluttershy-pony-star;1;1;969;112;58;58;112;0.5;0.5
+fluttershy-pony-idle1;1;355;931;110;64;64;110;0.5;0.5
+fluttershy-pony-idle2;1;581;931;110;64;64;110;0.5;0.5
+fluttershy-pony-star;1;469;865;112;58;58;112;0.5;0.5
 fluttershy-pony-swim1;1;473;775;116;88;88;116;0.5;0.5
 fluttershy-pony-swim2;1;591;775;116;88;88;116;0.5;0.5
 fluttershy-pony-tap1;1;775;659;116;102;102;116;0.5;0.5
 fluttershy-pony-tap2;1;893;741;116;102;102;116;0.5;0.5
-jump effect;0;893;1169;64;64;64;64;0.5;0.5
+gemwalk_glammour_bourse1;0;700;1358;64;64;64;64;0.5;0.5
+gemwalk_glammour_bourse2;0;597;1406;64;64;64;64;0.5;0.5
+gemwalk_glammour_bourse3;0;443;1408;64;64;64;64;0.5;0.5
+gemwalk_glammour_bourse4;0;355;1459;64;64;64;64;0.5;0.5
+gemwalk_glammour_bourse5;0;277;1469;64;64;64;64;0.5;0.5
+gemwalk_glammour_ore_ruby1;0;199;1471;64;64;64;64;0.5;0.5
+gemwalk_glammour_ore_ruby2;0;133;1498;64;64;64;64;0.5;0.5
+gemwalk_glammour_ore_sapphire1;0;67;1554;64;64;64;64;0.5;0.5
+gemwalk_glammour_ore_sapphire2;0;1;1571;64;64;64;64;0.5;0.5
+gemwalk_glammour_pickaxe1;0;509;1408;64;64;64;64;0.5;0.5
+gemwalk_glammour_pickaxe2;0;832;1309;64;64;64;64;0.5;0.5
+gemwalk_glammour_pickaxe3;0;898;1309;64;64;64;64;0.5;0.5
+gemwalk_glammour_pickaxe4;0;766;1375;64;64;64;64;0.5;0.5
+gemwalk_glammour_pickaxe5;0;663;1424;64;64;64;64;0.5;0.5
+gemwalk_glammour_rarity_walk1;0;1;1097;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk2;0;876;1039;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk3;0;417;1057;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk4;0;579;1068;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk5;0;667;1072;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk6;0;579;1140;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk7;0;298;1059;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk8;0;184;1096;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk9;0;89;1152;86;70;86;70;0.5;0.5
+gemwalk_glammour_rarity_walk10;0;1;1169;86;70;86;70;0.5;0.5
+jump effect;0;575;1472;64;64;64;64;0.5;0.5
 parcel1;0;259;259;256;256;256;256;0.5;0.5
 parcel2;0;517;259;256;256;256;256;0.5;0.5
 parcel3;0;1;517;256;256;256;256;0.5;0.5
 parcel4;0;259;517;256;256;256;256;0.5;0.5
-pinkiepie-pony-idle1;1;355;931;110;64;64;110;0.5;0.5
-pinkiepie-pony-idle2;1;233;955;110;64;64;110;0.5;0.5
+pinkiepie-pony-idle1;1;467;991;110;64;64;110;0.5;0.5
+pinkiepie-pony-idle2;1;775;957;110;64;64;110;0.5;0.5
 pinkiepie-pony-star;0;969;111;42;108;42;108;0.5;0.5
 pinkiepie-pony-swim1;1;775;867;116;88;88;116;0.5;0.5
 pinkiepie-pony-swim2;1;893;949;116;88;88;116;0.5;0.5
@@ -93,16 +133,17 @@ planks_left1;0;775;67;192;64;192;64;0.5;0.5
 planks_left2;0;775;133;192;64;192;64;0.5;0.5
 planks_left3;0;775;199;192;64;192;64;0.5;0.5
 planks_left4;0;775;265;192;64;192;64;0.5;0.5
+radial light;0;355;865;112;64;112;64;0.5;0.5
 rainbow_trail;0;775;331;128;128;128;128;0.5;0.5
-rainbowdash-fail;1;691;889;78;90;90;78;0.5;0.5
-rainbowdash-idle1;0;345;997;84;74;84;74;0.5;0.5
-rainbowdash-idle2;0;219;1021;84;74;84;74;0.5;0.5
-rainbowdash-idle3;0;105;1082;84;74;84;74;0.5;0.5
-rainbowdash-jump1;0;1;1100;74;62;74;62;0.5;0.5
-rainbowdash-jump2;0;835;1039;74;62;74;62;0.5;0.5
-rainbowdash-land1;0;740;1085;72;62;72;62;0.5;0.5
-rainbowdash-land2;0;911;1039;72;62;72;62;0.5;0.5
-rainbowdash-land3;0;740;1085;72;62;72;62;0.5;0.5
+rainbowdash-fail;1;695;889;78;90;90;78;0.5;0.5
+rainbowdash-idle1;0;386;1129;84;74;84;74;0.5;0.5
+rainbowdash-idle2;0;472;1185;84;74;84;74;0.5;0.5
+rainbowdash-idle3;0;272;1131;84;74;84;74;0.5;0.5
+rainbowdash-jump1;0;667;1210;74;62;74;62;0.5;0.5
+rainbowdash-jump2;0;558;1212;74;62;74;62;0.5;0.5
+rainbowdash-land1;0;505;1057;72;62;72;62;0.5;0.5
+rainbowdash-land2;0;505;1121;72;62;72;62;0.5;0.5
+rainbowdash-land3;0;505;1057;72;62;72;62;0.5;0.5
 rarity-pony-idle1;1;905;385;118;72;72;118;0.5;0.5
 rarity-pony-idle2;1;905;459;118;72;72;118;0.5;0.5
 rarity-pony-star;0;969;1;54;108;54;108;0.5;0.5
@@ -113,7 +154,13 @@ rarity-pony-tap2;1;119;775;116;102;102;116;0.5;0.5
 sand1;0;775;461;128;64;128;64;0.5;0.5
 sand2;0;775;527;128;64;128;64;0.5;0.5
 sand3;0;775;593;128;64;128;64;0.5;0.5
-seapony_parade_clap_effect;0;959;1169;64;64;64;64;0.5;0.5
-stand;0;275;1270;64;64;64;64;0.5;0.5
+seapony_parade_clap_effect;0;421;1474;64;64;64;64;0.5;0.5
+stalagtite1;0;343;1525;64;64;64;64;0.5;0.5
+stalagtite2;0;265;1535;64;64;64;64;0.5;0.5
+stalagtite3;0;199;1537;64;64;64;64;0.5;0.5
+stalagtite4;0;133;1564;64;64;64;64;0.5;0.5
+stalagtite5;0;67;1620;64;64;64;64;0.5;0.5
+stalagtite6;0;1;1637;64;64;64;64;0.5;0.5
+stand;0;487;1474;64;64;64;64;0.5;0.5
 table;0;517;517;256;256;256;256;0.5;0.5
-tree;0;199;1271;64;64;64;64;0.5;0.5
+tree;0;832;1375;64;64;64;64;0.5;0.5

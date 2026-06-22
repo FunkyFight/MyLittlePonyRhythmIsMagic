@@ -37,6 +37,18 @@ public sealed class VisualTimeline
     }
 
     /// <summary>
+    /// Ajoute une phase couvrant la durée tenue de la note, du hit au release.
+    /// </summary>
+    /// <param name="id">Identifiant de phase.</param>
+    /// <returns>La phase créée.</returns>
+    public VisualPhase DuringHold(string id)
+    {
+        VisualPhase phase = new(id, 0f, 1f, VisualPhaseKind.Hold, _eventGate);
+        _blocks.Add(phase);
+        return phase;
+    }
+
+    /// <summary>
     /// Ajoute une phase couvrant toute la fenêtre post-hit de la note.
     /// </summary>
     /// <param name="id">Identifiant de phase.</param>

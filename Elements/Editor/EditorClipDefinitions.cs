@@ -12,6 +12,10 @@ public static class EditorClipDefinitions
     public const string SwitchGameEventKey = "editor_event";
     public const string SwitchGameEventValue = "switch_game";
     public const string SwitchGameTargetGameKey = "target_game";
+    public const string BlackAndWhiteToggleEventValue = "black_and_white_toggle";
+    public const string ViewportOffsetEventValue = "viewport_offset";
+    public const string FlashEventValue = "flash";
+    public const string SaturationEventValue = "saturation";
 
     public static readonly IReadOnlyList<EditorRhythmGameDefinition> Games = EditorNoteDefinitions.GameProviders
         .Select(provider => new EditorRhythmGameDefinition(provider.RhythmGameId, provider.RhythmGameDisplayName, provider.Clips))
@@ -55,6 +59,80 @@ public static class EditorClipDefinitions
 
         EditorClipDefinition definition = Find(clip.RhythmGameId, clip.ClipTypeId);
         return definition?.RhythmGameId ?? clip.RhythmGameId;
+    }
+
+    public static bool IsBlackAndWhiteToggle(ChartEditorClip clip)
+    {
+        if (clip == null)
+            return false;
+
+        EditorClipDefinition definition = Find(clip.RhythmGameId, clip.ClipTypeId);
+        return IsBlackAndWhiteToggle(definition)
+            || clip.Data.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == BlackAndWhiteToggleEventValue;
+    }
+
+    public static bool IsBlackAndWhiteToggle(EditorClipDefinition definition)
+    {
+        return definition != null
+            && definition.Category == EditorClipCategory.Instant
+            && definition.DefaultData.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == BlackAndWhiteToggleEventValue;
+    }
+
+    public static bool IsViewportOffset(ChartEditorClip clip)
+    {
+        if (clip == null)
+            return false;
+
+        EditorClipDefinition definition = Find(clip.RhythmGameId, clip.ClipTypeId);
+        return IsViewportOffset(definition)
+            || clip.Data.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == ViewportOffsetEventValue;
+    }
+
+    public static bool IsViewportOffset(EditorClipDefinition definition)
+    {
+        return definition != null
+            && definition.DefaultData.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == ViewportOffsetEventValue;
+    }
+
+    public static bool IsFlash(ChartEditorClip clip)
+    {
+        if (clip == null)
+            return false;
+
+        EditorClipDefinition definition = Find(clip.RhythmGameId, clip.ClipTypeId);
+        return IsFlash(definition)
+            || clip.Data.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == FlashEventValue;
+    }
+
+    public static bool IsFlash(EditorClipDefinition definition)
+    {
+        return definition != null
+            && definition.DefaultData.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == FlashEventValue;
+    }
+
+    public static bool IsSaturation(ChartEditorClip clip)
+    {
+        if (clip == null)
+            return false;
+
+        EditorClipDefinition definition = Find(clip.RhythmGameId, clip.ClipTypeId);
+        return IsSaturation(definition)
+            || clip.Data.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == SaturationEventValue;
+    }
+
+    public static bool IsSaturation(EditorClipDefinition definition)
+    {
+        return definition != null
+            && definition.Category == EditorClipCategory.Instant
+            && definition.DefaultData.TryGetValue(SwitchGameEventKey, out string editorEvent)
+            && editorEvent == SaturationEventValue;
     }
 
 }

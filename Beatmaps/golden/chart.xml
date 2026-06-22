@@ -1,0 +1,4195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>song</SongName>
+  <BeatmapName>golden</BeatmapName>
+  <Beatmapper>Unknown</Beatmapper>
+  <ArtistName>Unknown</ArtistName>
+  <MusicName>song</MusicName>
+  <SongPath>Beatmaps\golden\song.mp3</SongPath>
+  <BPM>123</BPM>
+  <Offset>0.19</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>15.311951219512194</SongPosition>
+      <BeatPosition>31</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>17.26317073170732</SongPosition>
+      <BeatPosition>35</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.21439024390244</SongPosition>
+      <BeatPosition>39</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>21.165609756097563</SongPosition>
+      <BeatPosition>43</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>22.629024390243902</SongPosition>
+      <BeatPosition>46</BeatPosition>
+      <HoldDuration>0.9756097560975618</HoldDuration>
+      <HoldBeats>2</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="2" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.068048780487807</SongPosition>
+      <BeatPosition>51</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.019268292682927</SongPosition>
+      <BeatPosition>55</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>28.97048780487805</SongPosition>
+      <BeatPosition>59</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.94609756097561</SongPosition>
+      <BeatPosition>61</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.19</SongPosition>
+      <BeatPosition>61.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.43390243902439</SongPosition>
+      <BeatPosition>62</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>30.92170731707317</SongPosition>
+      <BeatPosition>63</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.897317073170733</SongPosition>
+      <BeatPosition>65</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>32.87292682926829</SongPosition>
+      <BeatPosition>67</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33.84853658536585</SongPosition>
+      <BeatPosition>69</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>34.82414634146341</SongPosition>
+      <BeatPosition>71</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>35.79975609756097</SongPosition>
+      <BeatPosition>73</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>36.775365853658535</SongPosition>
+      <BeatPosition>75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>37.26317073170731</SongPosition>
+      <BeatPosition>76</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>39.70219512195121</SongPosition>
+      <BeatPosition>81</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>40.677804878048775</SongPosition>
+      <BeatPosition>83</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>41.65341463414634</SongPosition>
+      <BeatPosition>85</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>42.6290243902439</SongPosition>
+      <BeatPosition>87</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>43.60463414634146</SongPosition>
+      <BeatPosition>89</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>44.09243902439024</SongPosition>
+      <BeatPosition>90</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>44.58024390243902</SongPosition>
+      <BeatPosition>91</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.0680487804878</SongPosition>
+      <BeatPosition>92</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.31195121951219</SongPosition>
+      <BeatPosition>92.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>45.555853658536584</SongPosition>
+      <BeatPosition>93</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>47.01926829268292</SongPosition>
+      <BeatPosition>96</BeatPosition>
+      <HoldDuration>5.901639344262293</HoldDuration>
+      <HoldBeats>6</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="6" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>54.88812075169932</SongPosition>
+      <BeatPosition>104</BeatPosition>
+      <HoldDuration>6.885245901639344</HoldDuration>
+      <HoldBeats>7</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="7" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>62.756973210715714</SongPosition>
+      <BeatPosition>112</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>63.61063174730108</SongPosition>
+      <BeatPosition>113.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>64.58624150339864</SongPosition>
+      <BeatPosition>115.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>65.5618512594962</SongPosition>
+      <BeatPosition>117.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>66.53746101559376</SongPosition>
+      <BeatPosition>119.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>67.51307077169132</SongPosition>
+      <BeatPosition>121.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>68.48868052778889</SongPosition>
+      <BeatPosition>123.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>69.46429028388644</SongPosition>
+      <BeatPosition>125.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.43990003998401</SongPosition>
+      <BeatPosition>127.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>70.92770491803279</SongPosition>
+      <BeatPosition>128.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>71.41550979608157</SongPosition>
+      <BeatPosition>129.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>72.39111955217913</SongPosition>
+      <BeatPosition>131.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.36672930827669</SongPosition>
+      <BeatPosition>133.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>74.34233906437424</SongPosition>
+      <BeatPosition>135.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>75.31794882047181</SongPosition>
+      <BeatPosition>137.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>76.29355857656937</SongPosition>
+      <BeatPosition>139.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>77.26916833266694</SongPosition>
+      <BeatPosition>141.75</BeatPosition>
+      <HoldDuration>2.439024390243901</HoldDuration>
+      <HoldBeats>5</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>80.19599760095961</SongPosition>
+      <BeatPosition>147.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>82.14721711315474</SongPosition>
+      <BeatPosition>151.75</BeatPosition>
+      <HoldDuration>1.9512195121951237</HoldDuration>
+      <HoldBeats>4</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>84.58624150339864</SongPosition>
+      <BeatPosition>156.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>85.07404638144742</SongPosition>
+      <BeatPosition>157.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>85.5618512594962</SongPosition>
+      <BeatPosition>158.75</BeatPosition>
+      <HoldDuration>1.9512195121951237</HoldDuration>
+      <HoldBeats>4</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>88.0008756497401</SongPosition>
+      <BeatPosition>163.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>89.95209516193523</SongPosition>
+      <BeatPosition>167.75</BeatPosition>
+      <HoldDuration>1.9512195121951095</HoldDuration>
+      <HoldBeats>4</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>95.88124731059956</SongPosition>
+      <BeatPosition>178</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>98.02410445345672</SongPosition>
+      <BeatPosition>180.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>99.92886635821861</SongPosition>
+      <BeatPosition>182.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>101.83362826298053</SongPosition>
+      <BeatPosition>184.25</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>103.97648540583766</SongPosition>
+      <BeatPosition>186.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>105.88124731059956</SongPosition>
+      <BeatPosition>188.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>107.78600921536147</SongPosition>
+      <BeatPosition>190.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>109.92886635821861</SongPosition>
+      <BeatPosition>192.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>112.07172350107575</SongPosition>
+      <BeatPosition>195</BeatPosition>
+      <HoldDuration>5.714285714285722</HoldDuration>
+      <HoldBeats>6</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="6" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>119.92886635821861</SongPosition>
+      <BeatPosition>203.25</BeatPosition>
+      <HoldDuration>6.666666666666671</HoldDuration>
+      <HoldBeats>7</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="7" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>128.02410445345672</SongPosition>
+      <BeatPosition>211.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>129.1158582281373</SongPosition>
+      <BeatPosition>213.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>130.0914679842349</SongPosition>
+      <BeatPosition>215.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>131.06707774033245</SongPosition>
+      <BeatPosition>217.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>132.04268749643</SongPosition>
+      <BeatPosition>219.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>133.01829725252756</SongPosition>
+      <BeatPosition>221.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>133.99390700862511</SongPosition>
+      <BeatPosition>223.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>134.9695167647227</SongPosition>
+      <BeatPosition>225.75</BeatPosition>
+      <HoldDuration>0.9756097560975547</HoldDuration>
+      <HoldBeats>2</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="2" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>136.43293139886902</SongPosition>
+      <BeatPosition>228.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>137.04268749643</SongPosition>
+      <BeatPosition>230</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>137.89634603301536</SongPosition>
+      <BeatPosition>231.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>138.87195578911292</SongPosition>
+      <BeatPosition>233.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>139.8475655452105</SongPosition>
+      <BeatPosition>235.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>140.82317530130805</SongPosition>
+      <BeatPosition>237.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>141.7987850574056</SongPosition>
+      <BeatPosition>239.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>143.75000456960075</SongPosition>
+      <BeatPosition>243.75</BeatPosition>
+      <HoldDuration>1.463414634146318</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>145.70122408179586</SongPosition>
+      <BeatPosition>247.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>147.652443593991</SongPosition>
+      <BeatPosition>251.75</BeatPosition>
+      <HoldDuration>1.463414634146318</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>149.6036631061861</SongPosition>
+      <BeatPosition>255.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>150.0914679842349</SongPosition>
+      <BeatPosition>256.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>150.57927286228366</SongPosition>
+      <BeatPosition>257.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>151.06707774033245</SongPosition>
+      <BeatPosition>258.75</BeatPosition>
+      <HoldDuration>1.9512195121951095</HoldDuration>
+      <HoldBeats>4</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>153.50610213057635</SongPosition>
+      <BeatPosition>263.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>155.45732164277146</SongPosition>
+      <BeatPosition>267.75</BeatPosition>
+      <HoldDuration>1.951219512195138</HoldDuration>
+      <HoldBeats>4</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>159.3597606671617</SongPosition>
+      <BeatPosition>275.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>159.8475655452105</SongPosition>
+      <BeatPosition>276.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>160.33537042325926</SongPosition>
+      <BeatPosition>277.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>160.82317530130805</SongPosition>
+      <BeatPosition>278.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>161.31098017935682</SongPosition>
+      <BeatPosition>279.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>161.7987850574056</SongPosition>
+      <BeatPosition>280.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>162.2865899354544</SongPosition>
+      <BeatPosition>281.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>162.77439481350316</SongPosition>
+      <BeatPosition>282.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>163.26219969155196</SongPosition>
+      <BeatPosition>283.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>163.75000456960072</SongPosition>
+      <BeatPosition>284.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>164.2378094476495</SongPosition>
+      <BeatPosition>285.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>164.7256143256983</SongPosition>
+      <BeatPosition>286.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>165.2134192037471</SongPosition>
+      <BeatPosition>287.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>165.70122408179586</SongPosition>
+      <BeatPosition>288.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>166.18902895984465</SongPosition>
+      <BeatPosition>289.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>166.6768338378934</SongPosition>
+      <BeatPosition>290.75</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>167.1646387159422</SongPosition>
+      <BeatPosition>291.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>169.1158582281373</SongPosition>
+      <BeatPosition>295.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>171.06707774033245</SongPosition>
+      <BeatPosition>299.75</BeatPosition>
+      <HoldDuration>1.9512195121951095</HoldDuration>
+      <HoldBeats>4</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>174.9695167647227</SongPosition>
+      <BeatPosition>307.75</BeatPosition>
+      <HoldDuration>1.463414634146318</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>176.9207362769178</SongPosition>
+      <BeatPosition>311.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>178.87195578911292</SongPosition>
+      <BeatPosition>315.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>180.82317530130805</SongPosition>
+      <BeatPosition>319.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>182.77439481350316</SongPosition>
+      <BeatPosition>323.75</BeatPosition>
+      <HoldDuration>1.4634146341463463</HoldDuration>
+      <HoldBeats>3</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>184.7256143256983</SongPosition>
+      <BeatPosition>327.75</BeatPosition>
+      <HoldDuration>1.9512195121951095</HoldDuration>
+      <HoldBeats>4</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>188.50610213057635</SongPosition>
+      <BeatPosition>335.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects>
+    <Effect>
+      <SongPosition>47.01926829268292</SongPosition>
+      <BeatPosition>96</BeatPosition>
+      <EffectType>bpm_change</EffectType>
+      <Data>
+        <Entry Key="bpm" Value="61" />
+        <Entry Key="section_offset" Value="0" />
+      </Data>
+    </Effect>
+    <Effect>
+      <SongPosition>62.756973210715714</SongPosition>
+      <BeatPosition>112</BeatPosition>
+      <EffectType>bpm_change</EffectType>
+      <Data>
+        <Entry Key="bpm" Value="123" />
+        <Entry Key="section_offset" Value="0" />
+      </Data>
+    </Effect>
+    <Effect>
+      <SongPosition>93.97648540583766</SongPosition>
+      <BeatPosition>176</BeatPosition>
+      <EffectType>bpm_change</EffectType>
+      <Data>
+        <Entry Key="bpm" Value="63" />
+        <Entry Key="section_offset" Value="0" />
+      </Data>
+    </Effect>
+    <Effect>
+      <SongPosition>128.26219969155196</SongPosition>
+      <BeatPosition>212</BeatPosition>
+      <EffectType>bpm_change</EffectType>
+      <Data>
+        <Entry Key="bpm" Value="123" />
+        <Entry Key="section_offset" Value="0" />
+      </Data>
+    </Effect>
+  </Effects>
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>eb79682410d044af8f4c4200f92cbf3e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>-0</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.switch_game</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="switch_game" />
+        <Entry Key="target_game" Value="gemwalk_glamour" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>310aab43982f4d0982867cb917ea122e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>-0.3895</StartBeat>
+      <LengthBeats>28.3895</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.rarity_entry</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.rarity_entry" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_rarity_entry" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0470eaa35c8244838c8f31302015b1b8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>29</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>96425483a9a24592bc82527fe274a85b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>33</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f14148f048bb4cbeb38d89ddd851f90f</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>37</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>cc69149a79014afd8a50cca4a2f0cc08</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>41</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c67bbf8bcce54ac9bd09d3abe9c5e4d2</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>44</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="2" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>84b2135176db4bbab1538ef0ebc5c188</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>49</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d9054de18ac045e9b0daab879d0e956c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>53</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7dd17f5b1f3a4a2e98bab939cab91ae5</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>57</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8648c382d4234b04bb939244eb768f78</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>58.5</StartBeat>
+      <LengthBeats>7</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.three_sapphires</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_three_sapphires" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9a3c7b80db834853b95ba19224a22ecd</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>61</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>38a26a7eab164aa18d09ea751f38c866</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>63</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>99f219b5b9c14bceb7c676e186412022</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>65</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2b7881c30e7848ddbad4df380e7deb24</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>67</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c2c16b95229b47449a9e6a8dc707d2ab</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>69</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>078e9ed432824b31a44d8882cc58a0c9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>71</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fdee3e14df74499da99e1eec2450e438</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>73</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3094504570634bbb8e66daf75b8d1472</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>74</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1fc65e6339dd454d827d5c91b7937ddc</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>79</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e8b61c769a6741d893f2589ad22f7b62</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>81</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3d506af8007f40198ac7c7b09eff4cbd</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>83</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c996c8f0556e43ba9f3009b811bbc8f1</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>85</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>55610a078566400d9138ef1387022ce1</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>86</StartBeat>
+      <LengthBeats>7</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.three_sapphires</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_three_sapphires" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d3aaf7bcf699492e9676d4e2acb4b5b6</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>89.5</StartBeat>
+      <LengthBeats>7</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.three_sapphires</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="0.5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_three_sapphires" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d636b744b0414c478fe73c9621a6129f</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>94</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="6" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6244f6d35cda45e9a71f50af369210fc</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>102</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="7" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>de7e185498de4aa7bcb5033adb99a5ac</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>110</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3d9e4a5ddb3e411c8e9713cb5423e61a</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>111.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b59d23b816ce4caf91705dfee8d07580</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>113.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6313a6ff3fe248ed90ab79aa2ddb2db9</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>115.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3a8f5a07cb464e48978352e91d182671</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>117.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ceea1dd0b7f6465ea669c12570483420</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>119.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1dc7b332891541b68a083bf4f2cd67a7</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>121.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>93ff1627e83540a68dabfc42557df737</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>123.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0008db9cecd24c9581c41d09755831b3</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>124.75</StartBeat>
+      <LengthBeats>7</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.three_sapphires</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_three_sapphires" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a2a3841b3e93458db223fa883f522a73</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>129.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e88a23d8a5af40f98566da297108b5fe</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>131.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b26476bad2e14702a57e652bbc7a2e42</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>133.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>722e71472a1342c68204c4f74a34d7f1</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>135.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f84336eeb0d04fcaba6dd4b8933e0a56</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>137.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5348b05c8ef14f038fbad71264332a69</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>139.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="5" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>af0ec1d5445942a6891640605a2d3e4b</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>145.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5f6e564858d84a9a8ea3dfeba18250ba</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>149.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e14a2c7c13024151ad72e3f3457eb3dc</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>154.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5381497850af4a0680fb407755863909</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>155.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c46a8fa9b0cc4ddd9ad36e22309874db</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>156.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1b4e53c3b0134352b5edb7a2813926cf</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>161.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a45862c83ce84e2ea4aad03eadb5c67c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>165.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>54e98dc3db614838856ad28982aa0a6b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>176</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>114a4a04f0cf409589db10682fe9ff04</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>178.25</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>81f87ad72d974956b22b46ff159a6e22</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>180.25</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1b288c5999f04f99b5d19c7ae66e1d4e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>182.25</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d85d8cb4aed546b99e19118f63a44382</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>184.5</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d1b17013b0a942f0be0a1e70f7bf9c7b</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>186.5</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>919aa02adcff4087b51a4f255330bbaf</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>188.5</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a39b54a19acf4a62a499421d9619a81d</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>190.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3ae6e304808e40079af88235c9e34578</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>193</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="6" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>74b61b6dc4bd44e7853542670475a0c8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>201.25</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="7" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f23f4c542b684ecf9ff81104b492c220</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>209.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3b136244f33d46939b56aebef4a8d71d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>211.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>903af6e5658b4d44b2f05fa7b44bf5e4</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>213.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>37e0746f40a34c218421b72858ff053c</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>215.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0cca152cede34eb99a0d74457b2dd44b</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>217.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a86d3ba4565d4a2c842b54bb564dfbe8</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>219.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3ea132ba2dbb4f608aaa473572e6b996</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>221.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>360c9df740c2491184af35a926877c6a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>223.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="2" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>48b2306dc7ad46419caa10cd2bc80957</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>229.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>35d8051e2d344802b2700fc1238b4a6e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>231.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a6c9382502cc490ea85d3cc45d86d7c4</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>233.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ab131961589a493cb3f242fae703bdb2</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>235.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fb648a64c4c34e17a295fb3dfc3af4ed</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>237.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6356e7f3a1194fa0862f6b580d60e8ba</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>241.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c90ab5cce7a24a7784e765e44b861e21</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>245.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e0e7d3155a9245448772b8f087b665a7</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>249.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>cc7d18802bb54cf19a640c32f30a7409</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>252.75</StartBeat>
+      <LengthBeats>7</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.three_sapphires</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.three_sapphires" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_three_sapphires" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5a799921304940a591e70309579cdff9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>256.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>edc54dc7709049c4b639a5ef489ad99b</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>261.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>116f3f0b984a4072aea6b00f9b420696</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>265.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>beca030e72fa481d827c31b40f04c0c3</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>273.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>11a1c206dfec49beb6d7e5eac98d76b1</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>274.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d3aab499bca84f81b2ad141d17a57186</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>275.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>90584a9f00024a78babbb6eb05b642b8</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>276.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2311577f94c14d1c94b1f8616457a8db</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>277.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>fffc32e585d641e294b42d92f30a1597</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>278.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5b96e3d032c949138f1eb23204ba6d32</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>279.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>0ac998d8781347268ba7d3f0c267ec6a</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>280.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1c53b7b6d2d84bee86c09e18e4fc73ee</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>281.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>890bf49c4a544c46870f081e173c3bff</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>282.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a732a42824ad482da651cd1a9869efae</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>283.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>cf772bae200e4314b924567563ec98ff</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>284.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6edfc3be109b4c079af6e7cbf8656b1d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>285.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f17693c4a87e4bcbbf41a81573d4a23e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>286.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d0ce86d850824e8da73b0e6d3e2b4d73</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>289.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>bfc0d5e67b0a42cf8ef0e856224ffcfa</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>293.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>276cb14699a844128a4cc7e3aa91f708</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>297.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f6a312f7a12b4ef59c36f24e99c15430</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>305.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>69c8348555f744db8c41ac58c7b4905e</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>309.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ad28c581ea004658b69f1377ef85be14</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>313.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>efb5c0d748a141329e9a62fcdbf57df4</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>317.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>684d35af33644d4283dd252cc42bb12b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>321.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="3" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>7c8e3c3dfbd042128201d06ada2c4c20</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>325.75</StartBeat>
+      <LengthBeats>8</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.ruby</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.ruby" />
+        <Entry Key="beat_spacing" Value="1" />
+        <Entry Key="cue_count" Value="4" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_ruby" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b2bfa712c6b04b8788ffbd2d4df4dcf9</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>333.5</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>35d28f980a08403092226fa8dbad7453</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>337.5</StartBeat>
+      <LengthBeats>5.25</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.rarity_exit</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.rarity_exit" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_rarity_exit" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>81ce31035c2c4d30aa87fed3e4d7fa60</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>96</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.black_and_white_toggle</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="black_and_white_toggle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5cb2a1ef2caf40ed8ab0eb54c904a049</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>112</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.black_and_white_toggle</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="black_and_white_toggle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d83876fd4c6d4ce3aed577696482ef01</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>175.75</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.black_and_white_toggle</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="black_and_white_toggle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>11d6022ec0d44a2989a042747e859ddf</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>212</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.black_and_white_toggle</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="black_and_white_toggle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>69babc1e925946cab31b592c52184d18</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>-0.3895</StartBeat>
+      <LengthBeats>0.1395</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="900" />
+        <Entry Key="offset_y" Value="400" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="true" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6583f859d1654cb48370c15667037fed</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>-0.3895</StartBeat>
+      <LengthBeats>28.3895</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="400" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="linear" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ed7ce13724be4c2ca8c010258f61f57b</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>28</StartBeat>
+      <LengthBeats>1</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="1" />
+        <Entry Key="zoom_y" Value="1" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_out_quint" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>a718b9a714e84eab9b0d44da90fbb49d</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>96</StartBeat>
+      <LengthBeats>1</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="500" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="true" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>39e0d4e346b0496699fa63f2049cb26e</Id>
+      <TrackIndex>4</TrackIndex>
+      <StartBeat>96</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="500" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="linear" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>903d4babaadd4dfd8a548ddc7bb200e0</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>102</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="500" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>69872bc1232540e6b67685c103419641</Id>
+      <TrackIndex>4</TrackIndex>
+      <StartBeat>104</StartBeat>
+      <LengthBeats>7</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="500" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="linear" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ec31273c60aa4062804cadd45f45de56</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>111</StartBeat>
+      <LengthBeats>1</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="1" />
+        <Entry Key="zoom_y" Value="1" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6057e2afca0046bd98d0bf93ea7a214e</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>176</StartBeat>
+      <LengthBeats>1</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="400" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="true" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>cea3fe2b4587451080fba7895465347b</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>176.25</StartBeat>
+      <LengthBeats>16.5</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="400" />
+        <Entry Key="offset_y" Value="400" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="linear" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6ecf164672154f348e393c9af6052cb3</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>192.75</StartBeat>
+      <LengthBeats>2.25</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="500" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>703c16357f594d2a9718b8728b6ce5b0</Id>
+      <TrackIndex>4</TrackIndex>
+      <StartBeat>195</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="500" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="linear" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>e59b8c1d50b14b21b37f380808aa1fcb</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>201.25</StartBeat>
+      <LengthBeats>2.25</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="500" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>49efb374b3fc457ab841f3cc768b6b4b</Id>
+      <TrackIndex>4</TrackIndex>
+      <StartBeat>203.5</StartBeat>
+      <LengthBeats>6.75</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="500" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="2" />
+        <Entry Key="zoom_y" Value="2" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="linear" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8c61df77794f4352a3e058e31cc19716</Id>
+      <TrackIndex>4</TrackIndex>
+      <StartBeat>210.25</StartBeat>
+      <LengthBeats>1.75</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="1" />
+        <Entry Key="zoom_y" Value="1" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f5c63fdeae4f42fe95f906c549584a5f</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>287.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>9f9b6ccfdc3d44b5be8bb2f6d4423c94</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>331.75</StartBeat>
+      <LengthBeats>3.75</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="1000" />
+        <Entry Key="offset_y" Value="130" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="3" />
+        <Entry Key="zoom_y" Value="3" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5810cceeb649435c9424cad287be1e6c</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>336</StartBeat>
+      <LengthBeats>1.5</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="1" />
+        <Entry Key="zoom_y" Value="1" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>99cbe8ad687a407281c051ccf3fa2407</Id>
+      <TrackIndex>5</TrackIndex>
+      <StartBeat>96</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.flash</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="flash" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ce8b048b8b414e1ab94cec3017300570</Id>
+      <TrackIndex>4</TrackIndex>
+      <StartBeat>175.75</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.flash</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="flash" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>6892bd4913094610abcb820f6e17f25c</Id>
+      <TrackIndex>5</TrackIndex>
+      <StartBeat>194.75</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.flash</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="flash" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>1addc9ee6e0445fb9922109c7a8044e1</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>288.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2ff3b2e8d8954f6d8fa343a5b59da720</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>335.5</StartBeat>
+      <LengthBeats>4.75</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.flash</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="flash" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d4aad24b658d4b2398701afca255e47a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>112</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.saturation</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="saturation" />
+        <Entry Key="saturation" Value="2" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>17d15845eedd4ac8bee37db4fb503d87</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>175.75</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.saturation</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="saturation" />
+        <Entry Key="saturation" Value="0" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>634cc9c95b764d6ead65b3cb2239a94a</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>212</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.saturation</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="saturation" />
+        <Entry Key="saturation" Value="5" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>be8e4a3cc048417a84c2b1e0a6c3a5ae</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>307.75</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.saturation</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="saturation" />
+        <Entry Key="saturation" Value="1" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>bfe90bc679eb404c9f2cd4344f458e65</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>307.5</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.flash</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="flash" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>efef69a090594ea2b59a2113db7a278d</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>226.75</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b443b2dc7f0a47539a5d6d21be0e01d3</Id>
+      <TrackIndex>3</TrackIndex>
+      <StartBeat>228</StartBeat>
+      <LengthBeats>4</LengthBeats>
+      <RhythmGameId>gemwalk_glamour</RhythmGameId>
+      <ClipTypeId>gemwalk_glamour.one_sapphire</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="source_clip" Value="gemwalk_glamour.one_sapphire" />
+        <Entry Key="_game" Value="gemwalk_glamour" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="gemwalk_glamour_one_sapphire" />
+      </Data>
+    </Clip>
+  </EditorClips>
+</Chart>

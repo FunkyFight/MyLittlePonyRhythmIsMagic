@@ -170,6 +170,17 @@ public class SeeSawScene : Scene
             GLOBALS.beatmapPlayer.GetCrotchetAt,
             baseCrotchet);
         _director.Reset();
+        SyncDirectorToCurrentSongPosition();
+    }
+
+    private void SyncDirectorToCurrentSongPosition()
+    {
+        if (_director == null || GLOBALS.beatmapPlayer?.Conductor == null)
+            return;
+
+        double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.Conductor.SongPosition;
+        double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
+        _director.SyncTo(beat, songSeconds);
     }
 
     private void SetupReactionFeedbacks()

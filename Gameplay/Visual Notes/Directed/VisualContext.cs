@@ -51,8 +51,10 @@ public sealed class VisualContext
 
         NoteProgress = (float)state.Progress;
         UnclampedNoteProgress = (float)state.UnclampedTravelProgress;
+        HoldProgress = (float)state.HoldProgress;
         PostHitProgress = (float)state.PostHitProgress;
         LastNoteProgress = calculateLastNoteProgress();
+        LastHoldProgress = calculateLastHoldProgress();
         LastPostHitProgress = calculateLastPostHitProgress();
         HasRewound = RhythmVisualUtils.HasRewound(songPosition, lastSongPosition);
         IsBeforeApproach = songPosition < Note.SongPosition - approachDuration;
@@ -100,6 +102,11 @@ public sealed class VisualContext
     public float PostHitProgress { get; }
 
     /// <summary>
+    /// Progression tenue bornée entre le hit et le release.
+    /// </summary>
+    public float HoldProgress { get; }
+
+    /// <summary>
     /// Indique si la position musicale a reculé depuis le sample précédent.
     /// </summary>
     public bool HasRewound { get; }
@@ -123,6 +130,11 @@ public sealed class VisualContext
     /// Progression post-hit du sample précédent, ou <see cref="float.NaN"/> au premier sample.
     /// </summary>
     public float LastPostHitProgress { get; }
+
+    /// <summary>
+    /// Progression tenue du sample précédent, ou <see cref="float.NaN"/> au premier sample.
+    /// </summary>
+    public float LastHoldProgress { get; }
 
     /// <summary>
     /// Indique si la lambda courante peut écrire sur une track.
@@ -286,6 +298,14 @@ public sealed class VisualContext
             return float.NaN;
 
         return (float)RhythmVisualUtils.GetProgression(Note.EndSongPosition, Note.EndSongPosition + DespawnDelay, LastSongPosition);
+    }
+
+    private float calculateLastHoldProgress()
+    {
+        if(double.IsNaN(LastSongPosition))
+            return float.NaN;
+
+        return (float)RhythmVisualUtils.GetProgression(Note.SongPosition, Note.EndSongPosition, LastSongPosition);
     }
 
     /// <summary>

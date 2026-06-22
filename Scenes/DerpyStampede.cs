@@ -13,7 +13,7 @@ using TexturePackerMonoGameDefinitions;
 public class DerpyStampede : Scene
 {
     private const double DerpyReactDuration = 0.12;
-    private const float SfxVolume = 4f;
+    private const float SfxVolume = 1f;
     private static readonly Vector2 DerpyDefaultPositionRatio = new(0.4969f, 0.5667f);
 
     private VisualRuntime _visualRuntime;
@@ -43,6 +43,7 @@ public class DerpyStampede : Scene
         _derpy.sprite.CenterOrigin();
         _derpy.Position = _derpyDefaultPosition;
         _derpy.Scale *= 4;
+        _lastReactMainInputSerial = GLOBALS.ReactMainInputSerial;
         
         GameObjects.Add(_derpy);
         GameObjects.Add(table);
@@ -53,6 +54,7 @@ public class DerpyStampede : Scene
 
     private void setupVisuals()
     {
+        _lastReactMainInputSerial = GLOBALS.ReactMainInputSerial;
         _visualRuntime = new VisualRuntime();
         _visualRuntime.RegisterTrack("derpy", _derpy)
         .UseDriverResolver(ctx =>
