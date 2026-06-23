@@ -21,6 +21,8 @@ public sealed class DevUiFloatingWindow
     private MouseState _mouse;
     private KeyboardState _previousKeyboard;
     private KeyboardState _keyboard;
+    private long _backspaceHoldStartMs;
+    private long _backspaceLastRepeatMs;
 
     public DevUiFloatingWindow(DevUiRenderer ui)
     {
@@ -46,6 +48,7 @@ public sealed class DevUiFloatingWindow
         _editingTextKey = null;
         _floatEditBuffer = "";
         _textEditBuffer = "";
+        ResetBackspaceRepeat();
     }
 
     public bool Update(Rectangle bounds, IReadOnlyList<DevUiWindowRow> rows)
@@ -483,6 +486,7 @@ public sealed class DevUiFloatingWindow
         _editingTextKey = null;
         _editingFloatKey = row.Key;
         _floatEditBuffer = row.FloatValue.ToString("0.###", CultureInfo.InvariantCulture);
+        ResetBackspaceRepeat();
     }
 
     private void BeginTextEdit(DevUiWindowRow row)
@@ -491,6 +495,7 @@ public sealed class DevUiFloatingWindow
         _editingFloatKey = null;
         _editingTextKey = row.Key;
         _textEditBuffer = row.TextValue ?? string.Empty;
+        ResetBackspaceRepeat();
     }
 
     private bool UpdateFloatEdit(IReadOnlyList<DevUiWindowRow> rows)
@@ -501,10 +506,11 @@ public sealed class DevUiFloatingWindow
         if (Pressed(Keys.Escape))
         {
             _editingFloatKey = null;
+            ResetBackspaceRepeat();
             return false;
         }
 
-        if (Pressed(Keys.Back) && _floatEditBuffer.Length > 0)
+        if (DevUiTextInput.ShouldBackspace(_keyboard, _previousKeyboard, ref _backspaceHoldStartMs, ref _backspaceLastRepeatMs) && _floatEditBuffer.Length > 0)
             _floatEditBuffer = _floatEditBuffer[..^1];
 
         foreach (Keys key in _keyboard.GetPressedKeys())
@@ -512,7 +518,7 @@ public sealed class DevUiFloatingWindow
             if (_previousKeyboard.IsKeyDown(key))
                 continue;
 
-            if (TryKeyToChar(key, out char c))
+            if (DevUiTextInput.TryGetFloatChar(key, _keyboard, out char c))
                 _floatEditBuffer += c;
         }
 
@@ -536,6 +542,7 @@ public sealed class DevUiFloatingWindow
 
         row.SetFloat?.Invoke(value);
         _editingFloatKey = null;
+        ResetBackspaceRepeat();
         return true;
     }
 
@@ -548,10 +555,11 @@ public sealed class DevUiFloatingWindow
         {
             _editingTextKey = null;
             _textEditBuffer = "";
+            ResetBackspaceRepeat();
             return false;
         }
 
-        if (Pressed(Keys.Back) && _textEditBuffer.Length > 0)
+        if (DevUiTextInput.ShouldBackspace(_keyboard, _previousKeyboard, ref _backspaceHoldStartMs, ref _backspaceLastRepeatMs) && _textEditBuffer.Length > 0)
             _textEditBuffer = _textEditBuffer[..^1];
 
         foreach (Keys key in _keyboard.GetPressedKeys())
@@ -559,7 +567,7 @@ public sealed class DevUiFloatingWindow
             if (_previousKeyboard.IsKeyDown(key))
                 continue;
 
-            if (TryTextKeyToChar(key, out char c))
+            if (DevUiTextInput.TryGetTypedChar(key, _keyboard, out char c))
                 _textEditBuffer += c;
         }
 
@@ -578,6 +586,7 @@ public sealed class DevUiFloatingWindow
         row.SetText?.Invoke(_textEditBuffer);
         _editingTextKey = null;
         _textEditBuffer = "";
+        ResetBackspaceRepeat();
         return true;
     }
 
@@ -707,85 +716,10 @@ public sealed class DevUiFloatingWindow
         return _keyboard.IsKeyDown(key) && !_previousKeyboard.IsKeyDown(key);
     }
 
-    private bool TryKeyToChar(Keys key, out char c)
+    private void ResetBackspaceRepeat()
     {
-        c = '\0';
-
-        if (key >= Keys.D0 && key <= Keys.D9)
-        {
-            c = (char)('0' + (key - Keys.D0));
-            return true;
-        }
-
-        if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
-        {
-            c = (char)('0' + (key - Keys.NumPad0));
-            return true;
-        }
-
-        c = key switch
-        {
-            Keys.OemPeriod or Keys.Decimal => '.',
-            Keys.OemComma => '.',
-            Keys.OemMinus or Keys.Subtract => '-',
-            _ => '\0'
-        };
-
-        return c != '\0';
-    }
-
-    private bool TryTextKeyToChar(Keys key, out char c)
-    {
-        bool shift = IsShiftDown();
-        c = '\0';
-
-        if (key >= Keys.A && key <= Keys.Z)
-        {
-            c = (char)('a' + (key - Keys.A));
-            if (shift)
-                c = char.ToUpperInvariant(c);
-
-            return true;
-        }
-
-        if (key >= Keys.D0 && key <= Keys.D9)
-        {
-            string normal = "0123456789";
-            string shifted = ")!@#$%^&*(";
-            int index = key - Keys.D0;
-            c = shift ? shifted[index] : normal[index];
-            return true;
-        }
-
-        if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
-        {
-            c = (char)('0' + (key - Keys.NumPad0));
-            return true;
-        }
-
-        c = key switch
-        {
-            Keys.Space => ' ',
-            Keys.OemPeriod or Keys.Decimal => shift ? '>' : '.',
-            Keys.OemComma => shift ? '<' : ',',
-            Keys.OemMinus or Keys.Subtract => shift ? '_' : '-',
-            Keys.OemPlus or Keys.Add => shift ? '+' : '=',
-            Keys.OemQuestion => shift ? '?' : '/',
-            Keys.OemPipe => shift ? '|' : '\\',
-            Keys.OemSemicolon => shift ? ':' : ';',
-            Keys.OemQuotes => shift ? '"' : '\'',
-            Keys.OemOpenBrackets => shift ? '{' : '[',
-            Keys.OemCloseBrackets => shift ? '}' : ']',
-            Keys.OemTilde => shift ? '~' : '`',
-            _ => '\0'
-        };
-
-        return c != '\0';
-    }
-
-    private bool IsShiftDown()
-    {
-        return _keyboard.IsKeyDown(Keys.LeftShift) || _keyboard.IsKeyDown(Keys.RightShift);
+        _backspaceHoldStartMs = 0;
+        _backspaceLastRepeatMs = 0;
     }
 
     private bool LeftPressed()

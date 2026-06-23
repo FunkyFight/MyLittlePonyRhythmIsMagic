@@ -30,8 +30,17 @@ public class BeatmapPlayer : IDisposable
     public ViewportCameraState CameraEffectState { get; private set; } = ViewportCameraState.Identity;
     public float FlashIntensity { get; private set; }
     public float CameraSaturation { get; private set; } = 1f;
+    public double GameplaySongPosition => _usesIndependentBeatmapClock ? _beatmapSongPosition : Conductor?.SongPosition ?? 0.0;
+    public bool IsContinuingEmptyBeatmap => _continueGameplayWithoutMusic;
+    public bool MusicPlaybackFinished => Conductor != null
+        && _startupComplete
+        && !_loopMusic
+        && _musicWasPlaying
+        && (!Conductor.isPlaying() || _musicPlaybackElapsedSeconds >= Conductor.Duration - TimelineEventEpsilonSeconds);
 
     public event Action BeatmapStarted;
+    public event Action BeatmapLoopAppended;
+    public event Action<IReadOnlyCollection<Note>> BeatmapNotesRemoved;
     public event Action<string> RhythmGameSwitchRequested;
 
     private double _startupDelay;
@@ -46,6 +55,13 @@ public class BeatmapPlayer : IDisposable
     private int _nextSwitchGameMarkerIndex;
     private int _nextBlackAndWhiteToggleMarkerIndex;
     private string _currentSwitchGameId;
+    private bool _usesIndependentBeatmapClock;
+    private bool _loopMusic;
+    private double _beatmapSongPosition;
+    private double _musicPlaybackElapsedSeconds;
+    private bool _musicWasPlaying;
+    private bool _continueGameplayWithoutMusic;
+    private Chart _runtimeChart;
 
     private sealed class RhythmGameSwitchMarker
     {
@@ -92,24 +108,51 @@ public class BeatmapPlayer : IDisposable
     {
         if(Conductor == null) return;
 
+        double elapsedSeconds = gameTime.ElapsedGameTime.TotalSeconds;
+        bool isMusicPlaying = Conductor.isPlaying();
+
+        if (_loopMusic && !isMusicPlaying)
+        {
+            Conductor.Seek(0);
+            Conductor.Play();
+            _musicPlaybackElapsedSeconds = 0.0;
+            isMusicPlaying = Conductor.isPlaying();
+        }
+
         if(!_startupComplete)
         {
-            _startupTimer += (double)gameTime.ElapsedGameTime.TotalSeconds;
+            _startupTimer += elapsedSeconds;
             if(_startupTimer >= _startupDelay)
             {
                 _startupComplete = true;
                 Conductor.Play();
+                isMusicPlaying = Conductor.isPlaying();
             }
-            return;
         }
 
-        if(Conductor.isPlaying())
+        if(isMusicPlaying)
         {
             Conductor.Update();
-            Clock?.Update(Conductor.SongPosition);
-            ApplyEditorTimelineEventsAt(Conductor.SongPosition, seek: false);
-            ChartPlayer?.Update(Conductor.SongPosition);
-            VisualNoteMng?.Update(Conductor.SongPosition);
+            _musicWasPlaying = true;
+            _musicPlaybackElapsedSeconds += elapsedSeconds;
+            if (_loopMusic && Conductor.SongPosition >= Conductor.Duration - TimelineEventEpsilonSeconds)
+            {
+                Conductor.Seek(0);
+                Conductor.Play();
+                _musicPlaybackElapsedSeconds = 0.0;
+            }
+        }
+
+        if(isMusicPlaying || _continueGameplayWithoutMusic)
+        {
+            double gameplaySongPosition = GameplaySongPosition;
+            Clock?.Update(gameplaySongPosition);
+            ApplyEditorTimelineEventsAt(gameplaySongPosition, seek: false);
+            ChartPlayer?.Update(gameplaySongPosition);
+            VisualNoteMng?.Update(gameplaySongPosition);
+
+            if (_usesIndependentBeatmapClock)
+                _beatmapSongPosition += elapsedSeconds;
         }
     }
     
@@ -121,6 +164,12 @@ public class BeatmapPlayer : IDisposable
         _startupDelay = startupDelaySeconds;
         _startupTimer = 0;
         _startupComplete = false;
+        _usesIndependentBeatmapClock = false;
+        _loopMusic = false;
+        _beatmapSongPosition = 0.0;
+        _musicPlaybackElapsedSeconds = 0.0;
+        _musicWasPlaying = false;
+        _continueGameplayWithoutMusic = false;
 
         int bpm = 100;
 
@@ -134,7 +183,8 @@ public class BeatmapPlayer : IDisposable
         RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(CurrentChart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
+        _runtimeChart = RuntimeChartProjector.Project(CurrentChart, _tempoMap);
+        ChartPlayer = new ChartPlayer(_runtimeChart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
         BeatmapStarted?.Invoke();
     }
@@ -146,6 +196,12 @@ public class BeatmapPlayer : IDisposable
         _startupDelay = startupDelaySeconds;
         _startupTimer = 0;
         _startupComplete = false;
+        _usesIndependentBeatmapClock = false;
+        _loopMusic = false;
+        _beatmapSongPosition = 0.0;
+        _musicPlaybackElapsedSeconds = 0.0;
+        _musicWasPlaying = false;
+        _continueGameplayWithoutMusic = false;
 
         int bpm = 100;
         double crotchet = 60.0 / bpm;
@@ -180,18 +236,25 @@ public class BeatmapPlayer : IDisposable
         RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
+        _runtimeChart = RuntimeChartProjector.Project(chart, _tempoMap);
+        ChartPlayer = new ChartPlayer(_runtimeChart, ReactionRules.RhythmHeavenLike(), new RhythmHeavenLikeReactionEvaluator());
 
         BeatmapStarted?.Invoke();
     }
 
-    public void StartBeatmap(string song_path, Chart chart, ReactionRules rules, IReactionEvaluator reactionEvaluator)
+    public void StartBeatmap(string song_path, Chart chart, ReactionRules rules, IReactionEvaluator reactionEvaluator, bool independentBeatmapClock = false, bool loopMusic = false)
     {
         DisposeConductor();
 
         _startupDelay = 0;
         _startupTimer = 0;
         _startupComplete = true;
+        _usesIndependentBeatmapClock = independentBeatmapClock;
+        _loopMusic = loopMusic;
+        _beatmapSongPosition = 0.0;
+        _musicPlaybackElapsedSeconds = 0.0;
+        _musicWasPlaying = false;
+        _continueGameplayWithoutMusic = false;
 
         Conductor = new Conductor(song_path, chart.BPM, chart.Offset, musicVolume: GetMusicVolume(chart));
         CurrentChart = chart;
@@ -203,8 +266,9 @@ public class BeatmapPlayer : IDisposable
         RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
-        Clock.Update(Conductor.SongPosition);
+        _runtimeChart = RuntimeChartProjector.Project(chart, _tempoMap);
+        ChartPlayer = new ChartPlayer(_runtimeChart, rules, reactionEvaluator);
+        Clock.Update(GameplaySongPosition);
         Conductor.Play();
         BeatmapStarted?.Invoke();
 
@@ -217,6 +281,12 @@ public class BeatmapPlayer : IDisposable
         _startupDelay = 0;
         _startupTimer = 0;
         _startupComplete = true;
+        _usesIndependentBeatmapClock = false;
+        _loopMusic = false;
+        _beatmapSongPosition = 0.0;
+        _musicPlaybackElapsedSeconds = 0.0;
+        _musicWasPlaying = false;
+        _continueGameplayWithoutMusic = false;
 
         double beatDelay = double.IsNaN(firstBeatDelay) ? chart.Offset : firstBeatDelay;
         Conductor = new Conductor(songPath, chart.BPM, beatDelay, musicVolume: GetMusicVolume(chart));
@@ -229,14 +299,63 @@ public class BeatmapPlayer : IDisposable
         RebuildFlashClips();
         Clock = new TempoMappedRhythmClock(_tempoMap);
         HasAChartLoaded = true;
-        ChartPlayer = new ChartPlayer(RuntimeChartProjector.Project(chart, _tempoMap), rules, reactionEvaluator);
-        Clock.Update(Conductor.SongPosition);
+        _runtimeChart = RuntimeChartProjector.Project(chart, _tempoMap);
+        ChartPlayer = new ChartPlayer(_runtimeChart, rules, reactionEvaluator);
+        Clock.Update(GameplaySongPosition);
         BeatmapStarted?.Invoke();
+    }
+
+    public IReadOnlyList<Note> AppendBeatmapLoop(bool skipInitialOffset)
+    {
+        if (ChartPlayer == null || CurrentChart == null || _runtimeChart == null)
+            return Array.Empty<Note>();
+
+        _usesIndependentBeatmapClock = true;
+        double sourceStart = skipInitialOffset ? RuntimeChartPlayableStartSongPosition : 0.0;
+        double loopStart = Math.Max(0.0, GameplaySongPosition);
+        IReadOnlyList<Note> appendedNotes = ChartPlayer.AppendChart(_runtimeChart, loopStart, sourceStart);
+        BeatmapLoopAppended?.Invoke();
+        return appendedNotes;
+    }
+
+    public double RuntimeChartPlayableStartSongPosition => GetChartPlayableStartSongPosition();
+    public double RuntimeChartLoopEndSongPosition => GetChartLoopEndSongPosition();
+
+    public IReadOnlyList<Note> AppendBeatmapLoopAt(double loopStartSongPosition, bool skipInitialOffset = false)
+    {
+        if (ChartPlayer == null || _runtimeChart == null)
+            return Array.Empty<Note>();
+
+        _usesIndependentBeatmapClock = true;
+        double sourceStart = skipInitialOffset ? RuntimeChartPlayableStartSongPosition : 0.0;
+        IReadOnlyList<Note> appendedNotes = ChartPlayer.AppendChart(_runtimeChart, Math.Max(0.0, loopStartSongPosition), sourceStart);
+        BeatmapLoopAppended?.Invoke();
+        return appendedNotes;
+    }
+
+    public void ContinueEmptyBeatmapWithoutMusic(IReadOnlyCollection<Note> notesToRemove)
+    {
+        ChartPlayer?.RemoveNotes(notesToRemove);
+        BeatmapNotesRemoved?.Invoke(notesToRemove);
+        _loopMusic = false;
+        _usesIndependentBeatmapClock = true;
+        _continueGameplayWithoutMusic = true;
+        if (Conductor != null)
+        {
+            Conductor.SetMusicVolume(0f);
+            if (!Conductor.isPlaying())
+                Conductor.Play();
+        }
     }
 
     public void ApplyChartEffectsAt(double songPosition)
     {
         Clock?.Update(songPosition);
+    }
+
+    public void StopBeatmap()
+    {
+        DisposeConductor();
     }
 
     public void ApplyEditorTimelineEventsAt(double songPosition, bool seek)
@@ -674,6 +793,7 @@ public class BeatmapPlayer : IDisposable
         Conductor?.Dispose();
         Conductor = null;
         CurrentChart = null;
+        _runtimeChart = null;
         _tempoMap = null;
         Clock = null;
         HasAChartLoaded = false;
@@ -692,6 +812,12 @@ public class BeatmapPlayer : IDisposable
         CameraSaturation = 1f;
         CameraEffectState = ViewportCameraState.Identity;
         FlashIntensity = 0f;
+        _usesIndependentBeatmapClock = false;
+        _loopMusic = false;
+        _beatmapSongPosition = 0.0;
+        _musicPlaybackElapsedSeconds = 0.0;
+        _musicWasPlaying = false;
+        _continueGameplayWithoutMusic = false;
     }
 
     private ChartTempoMap GetTempoMap()
@@ -700,5 +826,70 @@ public class BeatmapPlayer : IDisposable
             _tempoMap = new ChartTempoMap(CurrentChart);
 
         return _tempoMap;
+    }
+
+    private double GetChartPlayableStartSongPosition()
+    {
+        double start = double.PositiveInfinity;
+
+        if (_runtimeChart?.Notes != null)
+        {
+            foreach (ChartNote note in _runtimeChart.Notes)
+                start = Math.Min(start, note.SongPosition);
+        }
+
+        if (CurrentChart?.EditorClips != null && _tempoMap != null)
+        {
+            foreach (ChartEditorClip clip in CurrentChart.EditorClips)
+            {
+                if (!IsPlayableEditorClip(clip))
+                    continue;
+
+                start = Math.Min(start, _tempoMap.BeatToSeconds(clip.StartBeat));
+            }
+        }
+
+        if (double.IsPositiveInfinity(start))
+            return Math.Max(0.0, _runtimeChart?.Offset ?? CurrentChart?.Offset ?? 0.0);
+
+        return Math.Max(0.0, start);
+    }
+
+    private double GetChartLoopEndSongPosition()
+    {
+        double end = GetChartEndSongPosition(_runtimeChart);
+
+        if (CurrentChart?.EditorClips != null && _tempoMap != null)
+        {
+            foreach (ChartEditorClip clip in CurrentChart.EditorClips)
+            {
+                if (!IsPlayableEditorClip(clip))
+                    continue;
+
+                double clipEndBeat = clip.StartBeat + Math.Max(0.0, clip.LengthBeats);
+                end = Math.Max(end, _tempoMap.BeatToSeconds(clipEndBeat));
+            }
+        }
+
+        return Math.Max(0.0, end);
+    }
+
+    private static bool IsPlayableEditorClip(ChartEditorClip clip)
+    {
+        return clip != null
+            && clip.LengthBeats > 0.0
+            && !string.IsNullOrWhiteSpace(clip.InputAction);
+    }
+
+    private static double GetChartEndSongPosition(Chart chart)
+    {
+        if (chart?.Notes == null || chart.Notes.Count == 0)
+            return 0.0;
+
+        double end = 0.0;
+        foreach (ChartNote note in chart.Notes)
+            end = Math.Max(end, note.SongPosition + Math.Max(0.0, note.HoldDuration));
+
+        return end;
     }
 }

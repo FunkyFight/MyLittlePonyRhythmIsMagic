@@ -75,9 +75,10 @@ public sealed class BeatmapEditorElement
     private readonly BeatmapPlayer _beatmapPlayer;
     private readonly DevUiRenderer _ui;
     private readonly DevUiFloatingWindow _noteOptionsWindow;
-    private readonly DevUiFloatingWindow _newBeatmapWindow;
     private readonly DevUiFloatingWindow _openBeatmapWindow;
     private readonly DevUiFloatingWindow _metadataWindow;
+    private readonly BeatmapFolderExplorer _newBeatmapExplorer;
+    private readonly BeatmapFolderExplorer _openBeatmapExplorer;
     private readonly Texture2D _pixel;
     private readonly string _defaultSongPath;
     private readonly string _defaultChartPath;
@@ -143,6 +144,11 @@ public sealed class BeatmapEditorElement
     private PlacementOptions _pendingPlacementOptions = PlacementOptions.None;
     private bool _isCreatingNewBeatmap;
     private string _newBeatmapNameBuffer = "";
+    private string _newBeatmapFolderPath = BeatmapPackagePaths.BeatmapsRoot;
+    private bool _newBeatmapFolderNameFocused;
+    private int _newBeatmapFolderListScroll;
+    private long _customTextBackspaceHoldStartMs;
+    private long _customTextBackspaceLastRepeatMs;
     private ChartNote _draggedNote;
     private ChartEffect _draggedEffect;
     private ChartEditorClip _draggedClip;
@@ -177,9 +183,10 @@ public sealed class BeatmapEditorElement
         _settings = EditorSettings.Load();
         _ui = new DevUiRenderer(GLOBALS.graphicsDevice);
         _noteOptionsWindow = new DevUiFloatingWindow(_ui);
-        _newBeatmapWindow = new DevUiFloatingWindow(_ui);
         _openBeatmapWindow = new DevUiFloatingWindow(_ui);
         _metadataWindow = new DevUiFloatingWindow(_ui);
+        _newBeatmapExplorer = new BeatmapFolderExplorer(_ui);
+        _openBeatmapExplorer = new BeatmapFolderExplorer(_ui);
         _pixel = new Texture2D(GLOBALS.graphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
         _selectedNoteTypeId = GetDefaultNoteTypeId();
@@ -268,7 +275,7 @@ public sealed class BeatmapEditorElement
             return;
         }
 
-        if (_openBeatmapWindow.IsOpen)
+        if (_openBeatmapExplorer.IsOpen)
         {
             if (Pressed(Keys.Escape))
                 CloseOpenBeatmapWindow("Open beatmap cancelled");
@@ -1020,7 +1027,8 @@ public sealed class BeatmapEditorElement
     private bool MouseOverOpenWindow()
     {
         return (_noteOptionsWindow.IsOpen && GetNoteOptionsWindowBounds().Contains(_mouse.Position))
-            || (_newBeatmapWindow.IsOpen && GetNewBeatmapWindowBounds().Contains(_mouse.Position))
+            || _newBeatmapExplorer.IsOpen
+            || _openBeatmapExplorer.IsOpen
             || (_openBeatmapWindow.IsOpen && GetOpenBeatmapWindowBounds().Contains(_mouse.Position))
             || (_metadataWindow.IsOpen && GetMetadataWindowBounds().Contains(_mouse.Position));
     }
@@ -1723,46 +1731,139 @@ public sealed class BeatmapEditorElement
 
     private void OpenNewBeatmapModal()
     {
-        _newBeatmapNameBuffer = "New Beatmap";
         _isCreatingNewBeatmap = true;
-        _newBeatmapWindow.Open();
-        _status = "Creating new beatmap";
+        _newBeatmapExplorer.OpenCreateBeatmap(
+            "NEW BEATMAP",
+            CreateNewBeatmapAtPackagePath,
+            () => CloseNewBeatmapModal("New beatmap cancelled"),
+            status => _status = status);
     }
 
     private void HandleNewBeatmapModal()
     {
-        if (Pressed(Keys.Enter))
-        {
-            CreateNewBeatmap();
-            return;
-        }
-
-        if (Pressed(Keys.Escape))
+        if (!_newBeatmapExplorer.IsOpen)
         {
             CloseNewBeatmapModal("New beatmap cancelled");
             return;
         }
 
-        if (Pressed(Keys.Back) && _newBeatmapNameBuffer.Length > 0)
+        _newBeatmapExplorer.Update(_mouse, _previousMouse, _keyboard, _previousKeyboard, GLOBALS.graphicsDevice.Viewport);
+    }
+
+    private void HandleNewBeatmapExplorerMouse()
+    {
+        Rectangle modal = GetNewBeatmapExplorerBounds();
+        Rectangle sidebar = GetNewBeatmapSidebarBounds(modal);
+        Rectangle list = GetNewBeatmapFolderListBounds(modal);
+        Rectangle actions = GetNewBeatmapActionsBounds(modal);
+        IReadOnlyList<string> folders = GetNewBeatmapChildFolders();
+
+        ApplyNewBeatmapFolderListScroll(list, folders.Count);
+
+        if (!LeftPressed())
+            return;
+
+        if (GetNewBeatmapHeaderCloseButtonBounds(modal).Contains(_mouse.Position))
+        {
+            CloseNewBeatmapModal("New beatmap cancelled");
+            return;
+        }
+
+        Rectangle input = GetNewBeatmapFolderNameInputBounds(actions);
+        SetNewBeatmapFolderNameFocused(input.Contains(_mouse.Position));
+
+        if (GetNewBeatmapSidebarRootButtonBounds(sidebar).Contains(_mouse.Position))
+        {
+            NavigateToNewBeatmapFolder(BeatmapPackagePaths.BeatmapsRoot);
+            return;
+        }
+
+        Rectangle parentButton = GetNewBeatmapSidebarParentButtonBounds(sidebar);
+        if (!IsBeatmapsRoot(_newBeatmapFolderPath) && parentButton.Contains(_mouse.Position))
+        {
+            NavigateToParentNewBeatmapFolder();
+            return;
+        }
+
+        Rectangle listContent = GetNewBeatmapFolderListContentBounds(list);
+        if (listContent.Contains(_mouse.Position))
+        {
+            for (int i = 0; i < folders.Count; i++)
+            {
+                Rectangle row = GetNewBeatmapFolderRowBounds(list, i);
+                if (!listContent.Intersects(row) || !row.Contains(_mouse.Position))
+                    continue;
+
+                NavigateToNewBeatmapFolder(folders[i]);
+                return;
+            }
+        }
+
+        if (GetNewBeatmapCreateFolderButtonBounds(actions).Contains(_mouse.Position))
+        {
+            CreateNewBeatmapSubfolder();
+            return;
+        }
+
+        if (GetNewBeatmapCreateBeatmapButtonBounds(actions).Contains(_mouse.Position))
+        {
+            CreateNewBeatmap();
+            return;
+        }
+
+        if (GetNewBeatmapActionCancelButtonBounds(actions).Contains(_mouse.Position))
+            CloseNewBeatmapModal("New beatmap cancelled");
+    }
+
+    private void ApplyNewBeatmapFolderListScroll(Rectangle list, int folderCount)
+    {
+        int maxScroll = GetNewBeatmapFolderListMaxScroll(list, folderCount);
+        _newBeatmapFolderListScroll = Math.Clamp(_newBeatmapFolderListScroll, 0, maxScroll);
+
+        if (!GetNewBeatmapFolderListContentBounds(list).Contains(_mouse.Position))
+            return;
+
+        int wheelDelta = _mouse.ScrollWheelValue - _previousMouse.ScrollWheelValue;
+        if (wheelDelta == 0)
+            return;
+
+        _newBeatmapFolderListScroll -= Math.Sign(wheelDelta) * 34;
+        _newBeatmapFolderListScroll = Math.Clamp(_newBeatmapFolderListScroll, 0, maxScroll);
+    }
+
+    private void UpdateNewBeatmapFolderNameInput()
+    {
+        if (DevUiTextInput.ShouldBackspace(_keyboard, _previousKeyboard, ref _customTextBackspaceHoldStartMs, ref _customTextBackspaceLastRepeatMs) && _newBeatmapNameBuffer.Length > 0)
             _newBeatmapNameBuffer = _newBeatmapNameBuffer[..^1];
 
         foreach (Keys key in _keyboard.GetPressedKeys())
         {
-            if (_previousKeyboard.IsKeyDown(key))
+            if (_previousKeyboard.IsKeyDown(key) || key == Keys.Back)
                 continue;
 
-            if (TryKeyToChar(key, out char c))
+            if (DevUiTextInput.TryGetTypedChar(key, _keyboard, out char c) && _newBeatmapNameBuffer.Length < 80)
                 _newBeatmapNameBuffer += c;
         }
+    }
 
-        if (_newBeatmapWindow.Update(GetNewBeatmapWindowBounds(), GetNewBeatmapRows()) && !_newBeatmapWindow.IsOpen)
-            _isCreatingNewBeatmap = false;
+    private void SetNewBeatmapFolderNameFocused(bool focused)
+    {
+        if (_newBeatmapFolderNameFocused == focused)
+            return;
+
+        _newBeatmapFolderNameFocused = focused;
+        ResetCustomTextBackspaceRepeat();
     }
 
     private void CreateNewBeatmap()
     {
-        string beatmapName = string.IsNullOrWhiteSpace(_newBeatmapNameBuffer) ? "New Beatmap" : _newBeatmapNameBuffer.Trim();
-        string chartPath = GetAvailableNewBeatmapPath(beatmapName);
+        CreateNewBeatmapAtPackagePath(_newBeatmapFolderPath);
+    }
+
+    private void CreateNewBeatmapAtPackagePath(string packagePath)
+    {
+        string chartPath = GetAvailableNewBeatmapPath(packagePath);
+        string beatmapName = GetChartLeafDisplayName(chartPath);
         string songPath = _document?.SongPath ?? _defaultSongPath;
         double bpm = _document?.Chart?.BPM > 0 ? _document.Chart.BPM : 100;
 
@@ -1792,28 +1893,206 @@ public sealed class BeatmapEditorElement
     private void CloseNewBeatmapModal(string status)
     {
         _isCreatingNewBeatmap = false;
-        _newBeatmapWindow.Close();
+        _newBeatmapExplorer.Close();
+        _newBeatmapFolderNameFocused = false;
+        ResetCustomTextBackspaceRepeat();
         _status = status;
     }
 
-    private string GetAvailableNewBeatmapPath(string beatmapName)
+    private string GetAvailableNewBeatmapPath(string selectedFolderPath)
     {
-        return BeatmapPackagePaths.GetAvailablePackageChartPath(beatmapName);
+        string folderPath = string.IsNullOrWhiteSpace(selectedFolderPath)
+            ? BeatmapPackagePaths.GetPackagePathFromUserInput("New Beatmap")
+            : selectedFolderPath;
+
+        if (IsBeatmapsRoot(folderPath))
+            return BeatmapPackagePaths.GetAvailablePackageChartPath("New Beatmap");
+
+        return BeatmapPackagePaths.GetAvailablePackageChartPathForPackagePath(folderPath);
     }
 
-    private static string SanitizeFileName(string value)
+    private void NavigateToNewBeatmapFolder(string folderPath)
     {
-        char[] invalidChars = Path.GetInvalidFileNameChars();
-        string sanitized = new(value.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
-        return sanitized.Trim().Trim('.');
+        if (!Directory.Exists(folderPath) || !IsInsideBeatmapsRoot(folderPath))
+        {
+            _status = "Folder is not inside Beatmaps.";
+            return;
+        }
+
+        if (!IsBeatmapsRoot(folderPath) && File.Exists(BeatmapPackagePaths.GetChartPathForPackage(folderPath)))
+        {
+            _status = "Beatmap packages are hidden in New Beatmap.";
+            return;
+        }
+
+        string storedFolderPath = GetBeatmapsFolderStoragePath(folderPath);
+        _newBeatmapFolderPath = storedFolderPath;
+        _newBeatmapFolderListScroll = 0;
+        SetNewBeatmapFolderNameFocused(false);
+        _status = "Folder: " + GetBeatmapsFolderDisplayPath(storedFolderPath);
+    }
+
+    private void NavigateToParentNewBeatmapFolder()
+    {
+        string current = Path.GetFullPath(_newBeatmapFolderPath);
+        string root = Path.GetFullPath(BeatmapPackagePaths.BeatmapsRoot);
+        if (string.Equals(current.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), root.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), StringComparison.OrdinalIgnoreCase))
+            return;
+
+        string parent = Path.GetDirectoryName(current);
+        if (!string.IsNullOrWhiteSpace(parent))
+            NavigateToNewBeatmapFolder(parent);
+    }
+
+    private void CreateNewBeatmapSubfolder()
+    {
+        string folderName = BeatmapPackagePaths.SanitizeFileName(_newBeatmapNameBuffer);
+        if (string.IsNullOrWhiteSpace(folderName))
+            folderName = "New Folder";
+
+        string folderPath = GetAvailableSubfolderPath(_newBeatmapFolderPath, folderName);
+        Directory.CreateDirectory(folderPath);
+        _newBeatmapNameBuffer = string.Empty;
+        NavigateToNewBeatmapFolder(folderPath);
+    }
+
+    private static string GetAvailableSubfolderPath(string parentFolderPath, string folderName)
+    {
+        string candidate = Path.Combine(parentFolderPath, folderName);
+        if (!Directory.Exists(candidate) && !File.Exists(candidate))
+            return candidate;
+
+        for (int i = 2; ; i++)
+        {
+            candidate = Path.Combine(parentFolderPath, $"{folderName}_{i}");
+            if (!Directory.Exists(candidate) && !File.Exists(candidate))
+                return candidate;
+        }
+    }
+
+    private static bool IsInsideBeatmapsRoot(string folderPath)
+    {
+        if (string.IsNullOrWhiteSpace(folderPath))
+            return false;
+
+        string root = Path.GetFullPath(BeatmapPackagePaths.BeatmapsRoot).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        string folder = Path.GetFullPath(folderPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return string.Equals(folder, root, StringComparison.OrdinalIgnoreCase)
+            || folder.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+            || folder.StartsWith(root + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsBeatmapsRoot(string folderPath)
+    {
+        if (string.IsNullOrWhiteSpace(folderPath))
+            return false;
+
+        string root = Path.GetFullPath(BeatmapPackagePaths.BeatmapsRoot).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        string folder = Path.GetFullPath(folderPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return string.Equals(folder, root, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private IReadOnlyList<string> GetNewBeatmapChildFolders()
+    {
+        try
+        {
+            if (!Directory.Exists(_newBeatmapFolderPath) || !IsInsideBeatmapsRoot(_newBeatmapFolderPath))
+                return Array.Empty<string>();
+
+            return Directory.GetDirectories(_newBeatmapFolderPath)
+                .Where(IsInsideBeatmapsRoot)
+                .Where(path => !File.Exists(BeatmapPackagePaths.GetChartPathForPackage(path)))
+                .OrderBy(path => Path.GetFileName(path), StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+        }
+        catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException || ex is ArgumentException)
+        {
+            return Array.Empty<string>();
+        }
     }
 
     private static string GetChartDisplayName(string chartPath)
     {
         if (BeatmapPackagePaths.IsPackageChartPath(chartPath))
-            return Path.GetFileName(Path.GetDirectoryName(chartPath));
+        {
+            string packagePath = Path.GetDirectoryName(chartPath);
+            string relativePackagePath = GetBeatmapsRelativePath(packagePath);
+            return string.IsNullOrWhiteSpace(relativePackagePath)
+                ? Path.GetFileName(packagePath)
+                : relativePackagePath;
+        }
 
         return Path.GetFileName(chartPath);
+    }
+
+    private static string GetChartLeafDisplayName(string chartPath)
+    {
+        if (BeatmapPackagePaths.IsPackageChartPath(chartPath))
+            return Path.GetFileName(Path.GetDirectoryName(chartPath));
+
+        return Path.GetFileNameWithoutExtension(chartPath);
+    }
+
+    private static string GetBeatmapsFolderDisplayPath(string path)
+    {
+        string relativePath = GetBeatmapsRelativePath(path);
+        return string.IsNullOrWhiteSpace(relativePath) ? BeatmapPackagePaths.BeatmapsRoot : relativePath;
+    }
+
+    private static string GetBeatmapsFolderStoragePath(string path)
+    {
+        string relativePath = GetBeatmapsRelativePath(path);
+        return string.IsNullOrWhiteSpace(relativePath)
+            ? BeatmapPackagePaths.BeatmapsRoot
+            : Path.Combine(BeatmapPackagePaths.BeatmapsRoot, relativePath);
+    }
+
+    private static string GetNewBeatmapExplorerDisplayPath(string path)
+    {
+        string relativePath = GetBeatmapsRelativePath(path).Replace('\\', '/');
+        return string.IsNullOrWhiteSpace(relativePath)
+            ? BeatmapPackagePaths.BeatmapsRoot
+            : BeatmapPackagePaths.BeatmapsRoot + " / " + relativePath.Replace("/", " / ");
+    }
+
+    private static string GetBeatmapsRelativePath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return string.Empty;
+
+        string normalizedPath = NormalizePath(GetFullPathOrOriginal(path)).TrimEnd('/');
+        string root = NormalizePath(GetFullPathOrOriginal(BeatmapPackagePaths.BeatmapsRoot)).TrimEnd('/');
+        if (string.Equals(normalizedPath, root, StringComparison.OrdinalIgnoreCase))
+            return string.Empty;
+
+        string prefix = root + "/";
+        if (normalizedPath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            return normalizedPath[prefix.Length..];
+
+        normalizedPath = NormalizePath(path);
+        root = NormalizePath(BeatmapPackagePaths.BeatmapsRoot);
+        if (string.Equals(normalizedPath, root, StringComparison.OrdinalIgnoreCase))
+            return string.Empty;
+
+        prefix = root + "/";
+        return normalizedPath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+            ? normalizedPath[prefix.Length..]
+            : normalizedPath;
+    }
+
+    private static string FitDevUiText(string text, int maxWidth, int scale)
+    {
+        if (string.IsNullOrEmpty(text) || maxWidth <= 0)
+            return string.Empty;
+
+        int maxChars = Math.Max(1, maxWidth / Math.Max(1, scale * 4));
+        if (text.Length <= maxChars)
+            return text;
+
+        if (maxChars <= 3)
+            return text[..maxChars];
+
+        return text[..(maxChars - 3)] + "...";
     }
 
     private void RebuildPlayback(bool keepPlaying)
@@ -2410,6 +2689,7 @@ public sealed class BeatmapEditorElement
         if (Directory.Exists("Beatmaps"))
         {
             _availableCharts.AddRange(Directory.GetFiles("Beatmaps", "*.xml", SearchOption.AllDirectories)
+                .Where(BeatmapPackagePaths.IsDiscoverableBeatmapChart)
                 .OrderBy(path => path));
         }
 
@@ -2437,16 +2717,22 @@ public sealed class BeatmapEditorElement
         _noteOptionsWindow.Close();
         _metadataWindow.Close();
         ClearPendingOptions();
-        _openBeatmapWindow.Open();
-        _status = "Choose a beatmap to open";
+        _openBeatmapWindow.Close();
+        _openBeatmapExplorer.OpenSelectBeatmap(
+            "OPEN BEATMAP",
+            _document?.ChartPath ?? string.Empty,
+            OpenBeatmap,
+            () => CloseOpenBeatmapWindow("Open beatmap cancelled"),
+            status => _status = status);
     }
 
     private bool UpdateOpenBeatmapWindow()
     {
-        if (!_openBeatmapWindow.IsOpen)
+        if (!_openBeatmapExplorer.IsOpen)
             return false;
 
-        return _openBeatmapWindow.Update(GetOpenBeatmapWindowBounds(), GetOpenBeatmapRows());
+        _openBeatmapExplorer.Update(_mouse, _previousMouse, _keyboard, _previousKeyboard, GLOBALS.graphicsDevice.Viewport);
+        return true;
     }
 
     private void OpenBeatmap(string chartPath)
@@ -2461,12 +2747,14 @@ public sealed class BeatmapEditorElement
         LoadDocument(songPath, chartPath);
         RememberCurrentBeatmap();
         _openBeatmapWindow.Close();
+        _openBeatmapExplorer.Close();
         _status = $"Opened {GetChartDisplayName(chartPath)}";
     }
 
     private void CloseOpenBeatmapWindow(string status = "Open beatmap closed")
     {
         _openBeatmapWindow.Close();
+        _openBeatmapExplorer.Close();
         _status = status;
     }
 
@@ -2565,16 +2853,20 @@ public sealed class BeatmapEditorElement
         if (Pressed(Keys.Escape))
         {
             _isEditingText = false;
+            ResetCustomTextBackspaceRepeat();
             _status = "Edit cancelled";
             return;
         }
 
-        if (Pressed(Keys.Back) && _textBuffer.Length > 0)
+        if (DevUiTextInput.ShouldBackspace(_keyboard, _previousKeyboard, ref _customTextBackspaceHoldStartMs, ref _customTextBackspaceLastRepeatMs) && _textBuffer.Length > 0)
             _textBuffer = _textBuffer[..^1];
 
         foreach (Keys key in _keyboard.GetPressedKeys())
         {
             if (_previousKeyboard.IsKeyDown(key))
+                continue;
+
+            if (key == Keys.Back)
                 continue;
 
             if (TryKeyToChar(key, out char c))
@@ -2604,6 +2896,7 @@ public sealed class BeatmapEditorElement
             updated = ExecuteCommand(new SetMetadataCommand(EditorMetadataField.MusicName, _textBuffer), rebuildPlayback: false);
 
         _isEditingText = false;
+        ResetCustomTextBackspaceRepeat();
         if (updated)
             _status = $"Updated {field}";
     }
@@ -3743,9 +4036,178 @@ public sealed class BeatmapEditorElement
     private void DrawHud(SpriteBatch spriteBatch)
     {
         _noteOptionsWindow.Draw(spriteBatch, GetNoteOptionsWindowBounds(), GetNoteOptionsTitle(), GetNoteOptionRows());
-        _newBeatmapWindow.Draw(spriteBatch, GetNewBeatmapWindowBounds(), "NEW BEATMAP", GetNewBeatmapRows());
-        _openBeatmapWindow.Draw(spriteBatch, GetOpenBeatmapWindowBounds(), "OPEN BEATMAP", GetOpenBeatmapRows());
         _metadataWindow.Draw(spriteBatch, GetMetadataWindowBounds(), "BEATMAP METADATA", GetMetadataRows());
+
+        _openBeatmapExplorer.Draw(spriteBatch, GLOBALS.graphicsDevice.Viewport, _mouse.Position);
+        _newBeatmapExplorer.Draw(spriteBatch, GLOBALS.graphicsDevice.Viewport, _mouse.Position);
+    }
+
+    private void DrawNewBeatmapExplorer(SpriteBatch spriteBatch)
+    {
+        Viewport viewport = GLOBALS.graphicsDevice.Viewport;
+        Rectangle overlay = new(0, 0, viewport.Width, viewport.Height);
+        Rectangle modal = GetNewBeatmapExplorerBounds();
+
+        _ui.Fill(spriteBatch, overlay, new Color(0, 0, 0, 170));
+        _ui.Fill(spriteBatch, modal, new Color(4, 6, 10, 245));
+        _ui.Stroke(spriteBatch, modal, Color.LightGreen, 2);
+
+        DrawNewBeatmapExplorerHeader(spriteBatch, modal);
+        DrawNewBeatmapSidebar(spriteBatch, GetNewBeatmapSidebarBounds(modal));
+        DrawNewBeatmapFolderList(spriteBatch, GetNewBeatmapFolderListBounds(modal));
+        DrawNewBeatmapActions(spriteBatch, GetNewBeatmapActionsBounds(modal));
+    }
+
+    private void DrawNewBeatmapExplorerHeader(SpriteBatch spriteBatch, Rectangle modal)
+    {
+        Rectangle header = new(modal.X, modal.Y, modal.Width, 54);
+        Rectangle closeButton = GetNewBeatmapHeaderCloseButtonBounds(modal);
+        _ui.Fill(spriteBatch, header, new Color(18, 36, 24, 245));
+        _ui.Line(spriteBatch, new Vector2(modal.X, header.Bottom), new Vector2(modal.Right, header.Bottom), Color.DarkSlateGray, 1);
+        _ui.Label(spriteBatch, "NEW BEATMAP", new Vector2(modal.X + 18, modal.Y + 14), Color.LightGreen, 2);
+
+        string path = GetNewBeatmapExplorerDisplayPath(_newBeatmapFolderPath);
+        int pathWidth = Math.Max(80, closeButton.X - modal.X - 210);
+        DrawExplorerFittedLabel(spriteBatch, path, new Vector2(modal.X + 190, modal.Y + 15), Color.White, 2, pathWidth);
+        DrawExplorerButton(spriteBatch, closeButton, "X");
+    }
+
+    private void DrawNewBeatmapSidebar(SpriteBatch spriteBatch, Rectangle sidebar)
+    {
+        _ui.Fill(spriteBatch, sidebar, new Color(8, 10, 14, 235));
+        _ui.Stroke(spriteBatch, sidebar, Color.DarkSlateGray, 1);
+        _ui.Label(spriteBatch, "LOCATIONS", new Vector2(sidebar.X + 12, sidebar.Y + 12), Color.LightBlue, 2);
+
+        DrawExplorerButton(spriteBatch, GetNewBeatmapSidebarRootButtonBounds(sidebar), "BEATMAPS", IsBeatmapsRoot(_newBeatmapFolderPath));
+
+        if (!IsBeatmapsRoot(_newBeatmapFolderPath))
+            DrawExplorerButton(spriteBatch, GetNewBeatmapSidebarParentButtonBounds(sidebar), "PARENT");
+
+        Rectangle note = new(sidebar.X + 12, sidebar.Bottom - 94, sidebar.Width - 24, 82);
+        _ui.Fill(spriteBatch, note, new Color(4, 6, 10, 210));
+        _ui.Stroke(spriteBatch, note, Color.DarkSlateGray, 1);
+        _ui.Label(spriteBatch, "PACKAGES ARE HIDDEN\nHERE. USE OPEN\nBEATMAP TO LOAD\nEXISTING CHARTS.", new Vector2(note.X + 8, note.Y + 10), Color.DarkSeaGreen, 1);
+    }
+
+    private void DrawNewBeatmapFolderList(SpriteBatch spriteBatch, Rectangle list)
+    {
+        IReadOnlyList<string> folders = GetNewBeatmapChildFolders();
+        Rectangle content = GetNewBeatmapFolderListContentBounds(list);
+
+        _ui.Fill(spriteBatch, list, new Color(8, 10, 14, 235));
+        _ui.Stroke(spriteBatch, list, Color.DarkSlateGray, 1);
+        _ui.Label(spriteBatch, "FOLDERS", new Vector2(list.X + 12, list.Y + 12), Color.LightBlue, 2);
+        _ui.Line(spriteBatch, new Vector2(list.X + 10, content.Y - 8), new Vector2(list.Right - 10, content.Y - 8), Color.DarkSlateGray, 1);
+
+        if (folders.Count == 0)
+        {
+            DrawExplorerFittedLabel(spriteBatch, "No subfolders. Create one or create the beatmap here.", new Vector2(content.X + 8, content.Y + 10), Color.DarkSeaGreen, 2, content.Width - 16);
+            return;
+        }
+
+        for (int i = 0; i < folders.Count; i++)
+        {
+            Rectangle row = GetNewBeatmapFolderRowBounds(list, i);
+            if (!content.Intersects(row))
+                continue;
+
+            bool hovered = row.Contains(_mouse.Position);
+            _ui.Fill(spriteBatch, row, hovered ? new Color(24, 58, 36, 235) : new Color(4, 6, 10, 160));
+            _ui.Stroke(spriteBatch, row, hovered ? Color.LightGreen : Color.DarkSlateGray, 1);
+            DrawFolderIcon(spriteBatch, new Rectangle(row.X + 10, row.Y + 8, 20, 16), hovered ? Color.LightGreen : Color.Goldenrod);
+
+            string label = Path.GetFileName(folders[i]);
+            DrawExplorerFittedLabel(spriteBatch, label, new Vector2(row.X + 42, row.Y + 10), hovered ? Color.LightGreen : Color.White, 2, row.Width - 54);
+        }
+
+        DrawNewBeatmapFolderListScrollbar(spriteBatch, list, folders.Count);
+    }
+
+    private void DrawNewBeatmapActions(SpriteBatch spriteBatch, Rectangle actions)
+    {
+        _ui.Fill(spriteBatch, actions, new Color(8, 10, 14, 235));
+        _ui.Stroke(spriteBatch, actions, Color.DarkSlateGray, 1);
+        _ui.Label(spriteBatch, "CURRENT FOLDER", new Vector2(actions.X + 14, actions.Y + 14), Color.LightBlue, 2);
+
+        Rectangle currentBox = new(actions.X + 14, actions.Y + 44, actions.Width - 28, 34);
+        DrawExplorerValueBox(spriteBatch, currentBox, GetNewBeatmapExplorerDisplayPath(_newBeatmapFolderPath), Color.White);
+
+        _ui.Label(spriteBatch, "WILL CREATE", new Vector2(actions.X + 14, actions.Y + 92), Color.LightBlue, 2);
+        Rectangle createBox = new(actions.X + 14, actions.Y + 122, actions.Width - 28, 34);
+        DrawExplorerValueBox(spriteBatch, createBox, GetChartDisplayName(GetAvailableNewBeatmapPath(_newBeatmapFolderPath)), Color.LightGreen);
+
+        _ui.Label(spriteBatch, "NEW SUBFOLDER NAME", new Vector2(actions.X + 14, actions.Y + 170), Color.LightBlue, 2);
+        DrawExplorerTextInput(spriteBatch, GetNewBeatmapFolderNameInputBounds(actions));
+        DrawExplorerButton(spriteBatch, GetNewBeatmapCreateFolderButtonBounds(actions), "CREATE FOLDER");
+        DrawExplorerButton(spriteBatch, GetNewBeatmapCreateBeatmapButtonBounds(actions), "CREATE BEATMAP HERE", primary: true);
+        DrawExplorerButton(spriteBatch, GetNewBeatmapActionCancelButtonBounds(actions), "CANCEL");
+
+        Rectangle createFolderButton = GetNewBeatmapCreateFolderButtonBounds(actions);
+        _ui.Label(spriteBatch, "ENTER CREATES HERE\nESC CANCELS", new Vector2(actions.X + 14, createFolderButton.Bottom + 10), Color.DarkSeaGreen, 1);
+    }
+
+    private void DrawExplorerButton(SpriteBatch spriteBatch, Rectangle bounds, string text, bool selected = false, bool primary = false)
+    {
+        bool hovered = bounds.Contains(_mouse.Position);
+        Color fill = primary
+            ? hovered ? new Color(34, 84, 52, 245) : new Color(24, 58, 36, 245)
+            : selected ? new Color(24, 58, 36, 245) : hovered ? new Color(18, 36, 24, 245) : new Color(4, 6, 10, 230);
+        Color stroke = primary || hovered || selected ? Color.LightGreen : Color.DarkSlateGray;
+        Color label = primary || hovered || selected ? Color.LightGreen : Color.White;
+
+        _ui.Fill(spriteBatch, bounds, fill);
+        _ui.Stroke(spriteBatch, bounds, stroke, primary ? 2 : 1);
+        DrawExplorerFittedLabel(spriteBatch, text, new Vector2(bounds.X + 10, bounds.Y + 9), label, 2, bounds.Width - 20);
+    }
+
+    private void DrawExplorerTextInput(SpriteBatch spriteBatch, Rectangle bounds)
+    {
+        bool empty = string.IsNullOrEmpty(_newBeatmapNameBuffer);
+        string text = empty && !_newBeatmapFolderNameFocused ? "<folder name>" : _newBeatmapNameBuffer;
+        if (_newBeatmapFolderNameFocused)
+            text += "|";
+
+        Color stroke = _newBeatmapFolderNameFocused ? Color.Yellow : Color.LightGreen;
+        Color label = empty && !_newBeatmapFolderNameFocused ? Color.DarkSeaGreen : _newBeatmapFolderNameFocused ? Color.Yellow : Color.White;
+        _ui.Fill(spriteBatch, bounds, Color.Black * 0.85f);
+        _ui.Stroke(spriteBatch, bounds, stroke, 1);
+        DrawExplorerFittedLabel(spriteBatch, text, new Vector2(bounds.X + 8, bounds.Y + 8), label, 2, bounds.Width - 16);
+    }
+
+    private void DrawExplorerValueBox(SpriteBatch spriteBatch, Rectangle bounds, string text, Color color)
+    {
+        _ui.Fill(spriteBatch, bounds, Color.Black * 0.75f);
+        _ui.Stroke(spriteBatch, bounds, Color.DarkSlateGray, 1);
+        DrawExplorerFittedLabel(spriteBatch, text, new Vector2(bounds.X + 8, bounds.Y + 10), color, 2, bounds.Width - 16);
+    }
+
+    private void DrawFolderIcon(SpriteBatch spriteBatch, Rectangle bounds, Color color)
+    {
+        Rectangle tab = new(bounds.X + 2, bounds.Y, Math.Max(6, bounds.Width / 2), 5);
+        Rectangle body = new(bounds.X, bounds.Y + 4, bounds.Width, bounds.Height - 4);
+        _ui.Fill(spriteBatch, tab, color * 0.75f);
+        _ui.Fill(spriteBatch, body, color * 0.65f);
+        _ui.Stroke(spriteBatch, body, color, 1);
+    }
+
+    private void DrawNewBeatmapFolderListScrollbar(SpriteBatch spriteBatch, Rectangle list, int folderCount)
+    {
+        Rectangle content = GetNewBeatmapFolderListContentBounds(list);
+        int contentHeight = folderCount * 34;
+        if (contentHeight <= content.Height)
+            return;
+
+        Rectangle track = new(list.Right - 12, content.Y, 4, content.Height);
+        int thumbHeight = Math.Max(18, track.Height * content.Height / contentHeight);
+        int maxScroll = GetNewBeatmapFolderListMaxScroll(list, folderCount);
+        int thumbY = maxScroll == 0 ? track.Y : track.Y + (track.Height - thumbHeight) * _newBeatmapFolderListScroll / maxScroll;
+        _ui.Fill(spriteBatch, track, Color.DarkSlateGray);
+        _ui.Fill(spriteBatch, new Rectangle(track.X, thumbY, track.Width, thumbHeight), Color.LightGreen);
+    }
+
+    private void DrawExplorerFittedLabel(SpriteBatch spriteBatch, string text, Vector2 position, Color color, int scale, int maxWidth)
+    {
+        _ui.Label(spriteBatch, FitDevUiText(text, maxWidth, scale), position, color, scale);
     }
 
     private string GetNoteOptionsTitle()
@@ -3920,12 +4382,84 @@ public sealed class BeatmapEditorElement
         return GetEditorLayout().OptionsWindow;
     }
 
-    private Rectangle GetNewBeatmapWindowBounds()
+    private Rectangle GetNewBeatmapExplorerBounds()
     {
         Viewport viewport = GLOBALS.graphicsDevice.Viewport;
-        const int width = 420;
-        const int height = 150;
+        int width = Math.Clamp(viewport.Width - 100, 760, 1120);
+        int height = Math.Clamp(viewport.Height - 120, 480, 720);
         return new Rectangle((viewport.Width - width) / 2, (viewport.Height - height) / 2, width, height);
+    }
+
+    private static Rectangle GetNewBeatmapSidebarBounds(Rectangle modal)
+    {
+        return new Rectangle(modal.X + 16, modal.Y + 70, 170, modal.Height - 86);
+    }
+
+    private static Rectangle GetNewBeatmapActionsBounds(Rectangle modal)
+    {
+        const int width = 276;
+        return new Rectangle(modal.Right - width - 16, modal.Y + 70, width, modal.Height - 86);
+    }
+
+    private static Rectangle GetNewBeatmapFolderListBounds(Rectangle modal)
+    {
+        Rectangle sidebar = GetNewBeatmapSidebarBounds(modal);
+        Rectangle actions = GetNewBeatmapActionsBounds(modal);
+        int x = sidebar.Right + 14;
+        return new Rectangle(x, modal.Y + 70, Math.Max(1, actions.X - x - 14), modal.Height - 86);
+    }
+
+    private static Rectangle GetNewBeatmapFolderNameInputBounds(Rectangle actions)
+    {
+        return new Rectangle(actions.X + 14, actions.Y + 198, actions.Width - 28, 30);
+    }
+
+    private static Rectangle GetNewBeatmapHeaderCloseButtonBounds(Rectangle modal)
+    {
+        return new Rectangle(modal.Right - 48, modal.Y + 12, 32, 30);
+    }
+
+    private static Rectangle GetNewBeatmapSidebarRootButtonBounds(Rectangle sidebar)
+    {
+        return new Rectangle(sidebar.X + 12, sidebar.Y + 46, sidebar.Width - 24, 34);
+    }
+
+    private static Rectangle GetNewBeatmapSidebarParentButtonBounds(Rectangle sidebar)
+    {
+        return new Rectangle(sidebar.X + 12, sidebar.Y + 88, sidebar.Width - 24, 34);
+    }
+
+    private static Rectangle GetNewBeatmapFolderListContentBounds(Rectangle list)
+    {
+        return new Rectangle(list.X + 10, list.Y + 44, list.Width - 20, list.Height - 54);
+    }
+
+    private Rectangle GetNewBeatmapFolderRowBounds(Rectangle list, int index)
+    {
+        Rectangle content = GetNewBeatmapFolderListContentBounds(list);
+        return new Rectangle(content.X, content.Y + index * 34 - _newBeatmapFolderListScroll, content.Width - 8, 32);
+    }
+
+    private static int GetNewBeatmapFolderListMaxScroll(Rectangle list, int folderCount)
+    {
+        Rectangle content = GetNewBeatmapFolderListContentBounds(list);
+        return Math.Max(0, folderCount * 34 - content.Height);
+    }
+
+    private static Rectangle GetNewBeatmapCreateFolderButtonBounds(Rectangle actions)
+    {
+        Rectangle input = GetNewBeatmapFolderNameInputBounds(actions);
+        return new Rectangle(actions.X + 14, input.Bottom + 10, actions.Width - 28, 34);
+    }
+
+    private static Rectangle GetNewBeatmapCreateBeatmapButtonBounds(Rectangle actions)
+    {
+        return new Rectangle(actions.X + 14, actions.Bottom - 94, actions.Width - 28, 42);
+    }
+
+    private static Rectangle GetNewBeatmapActionCancelButtonBounds(Rectangle actions)
+    {
+        return new Rectangle(actions.X + 14, actions.Bottom - 44, actions.Width - 28, 32);
     }
 
     private Rectangle GetOpenBeatmapWindowBounds()
@@ -3942,16 +4476,6 @@ public sealed class BeatmapEditorElement
         int width = Math.Clamp(viewport.Width - 80, 480, 820);
         int height = Math.Clamp(viewport.Height - 80, 360, 640);
         return new Rectangle((viewport.Width - width) / 2, (viewport.Height - height) / 2, width, height);
-    }
-
-    private IReadOnlyList<DevUiWindowRow> GetNewBeatmapRows()
-    {
-        return new[]
-        {
-            DevUiWindowRow.Title("Name: " + _newBeatmapNameBuffer + "|"),
-            DevUiWindowRow.Title("ENTER or CREATE to confirm, ESC to cancel"),
-            DevUiWindowRow.Button("CREATE", CreateNewBeatmap)
-        };
     }
 
     private IReadOnlyList<DevUiWindowRow> GetOpenBeatmapRows()
@@ -4421,42 +4945,12 @@ public sealed class BeatmapEditorElement
 
     private bool TryKeyToChar(Keys key, out char c)
     {
-        bool shift = IsDown(Keys.LeftShift) || IsDown(Keys.RightShift);
-        c = '\0';
+        return DevUiTextInput.TryGetTypedChar(key, _keyboard, out c);
+    }
 
-        if (key >= Keys.A && key <= Keys.Z)
-        {
-            c = (char)('a' + (key - Keys.A));
-            if (shift)
-                c = char.ToUpperInvariant(c);
-            return true;
-        }
-
-        if (key >= Keys.D0 && key <= Keys.D9)
-        {
-            c = (char)('0' + (key - Keys.D0));
-            return true;
-        }
-
-        if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
-        {
-            c = (char)('0' + (key - Keys.NumPad0));
-            return true;
-        }
-
-        c = key switch
-        {
-            Keys.Space => ' ',
-            Keys.OemPeriod or Keys.Decimal => '.',
-            Keys.OemComma => ',',
-            Keys.OemMinus or Keys.Subtract => '-',
-            Keys.OemPlus or Keys.Add => '+',
-            Keys.OemQuestion => '/',
-            Keys.OemBackslash => '\\',
-            Keys.OemSemicolon => ';',
-            _ => '\0'
-        };
-
-        return c != '\0';
+    private void ResetCustomTextBackspaceRepeat()
+    {
+        _customTextBackspaceHoldStartMs = 0;
+        _customTextBackspaceLastRepeatMs = 0;
     }
 }

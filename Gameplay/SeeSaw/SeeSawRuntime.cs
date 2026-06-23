@@ -276,6 +276,28 @@ public sealed class SeeSawTimeline
             && _eventsById.TryGetValue(eventId, out patternEvent);
     }
 
+    public void RemoveEventsForNotes(IReadOnlyCollection<Note> notes)
+    {
+        if (notes == null || notes.Count == 0)
+            return;
+
+        HashSet<int> eventIds = new();
+        foreach (Note note in notes)
+        {
+            if (note != null && NoteToEventId.Remove(note, out int eventId))
+                eventIds.Add(eventId);
+        }
+
+        if (eventIds.Count == 0)
+            return;
+
+        PatternEvents.RemoveAll(patternEvent => eventIds.Contains(patternEvent.Id));
+        JumpSegments.RemoveAll(segment => eventIds.Contains(segment.EventId));
+        ImpactEvents.RemoveAll(impact => eventIds.Contains(impact.PatternEventId));
+        foreach (int eventId in eventIds)
+            _eventsById.Remove(eventId);
+    }
+
     public SeeSawJumpSegment GetActiveSegment(SeeSawActor actor, double beat)
     {
         return GetActiveSegment(actor, beat, null);
@@ -1942,6 +1964,11 @@ public sealed class SeeSawDirector
 
         _lastSongPosition = songPosition;
         _lastBeat = beat;
+    }
+
+    public void RemoveEventsForNotes(IReadOnlyCollection<Note> notes)
+    {
+        _timeline?.RemoveEventsForNotes(notes);
     }
 
     public void ApplyReaction(NoteReactionResult result, Note note)

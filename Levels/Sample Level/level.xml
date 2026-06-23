@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level Id="12a9c90a-f103-4d66-98d3-0169d9476d0f">
+  <DisplayName>Sample Level</DisplayName>
+  <LockedByDefault>false</LockedByDefault>
+  <UnlockLevelIds />
+  <StartNodeId>8f9853cb-7e63-4db7-a9bd-27461e95f7f6</StartNodeId>
+  <Nodes>
+    <Node Id="8f9853cb-7e63-4db7-a9bd-27461e95f7f6" Kind="Start" X="60" Y="150">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="f506c80c-9558-4eb4-a5a0-c5d5d63d2acb" Kind="Dialogue" X="310" Y="150">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text>Welcome to the sample level.</Text>
+      <ChartPath />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="cb1541de-8b59-4b99-b3d9-e367b5d301cb" Kind="TrainingBeatmap" X="570" Y="150">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/See Saw/chart.xml</ChartPath>
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="514e6fe6-e4bb-40fd-8631-a55bf86082a6" Kind="Dialogue" X="830" Y="80">
+      <Speaker>RainbowDash</Speaker>
+      <Text>Training complete. One final run!</Text>
+      <ChartPath />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="45dd270b-5098-41b5-86d0-5ef60db4f73f" Kind="Dialogue" X="830" Y="250">
+      <Speaker>Applejack</Speaker>
+      <Text>Try again. Your previous successes still count.</Text>
+      <ChartPath />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="539bfe2d-9983-4b53-a1f6-5f767a9a519d" Kind="PlayRepresentationBeatmap" X="1090" Y="80">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/See Saw/chart.xml</ChartPath>
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+  </Nodes>
+  <Connections>
+    <Connection FromNodeId="8f9853cb-7e63-4db7-a9bd-27461e95f7f6" FromPort="Next" ToNodeId="f506c80c-9558-4eb4-a5a0-c5d5d63d2acb" />
+    <Connection FromNodeId="f506c80c-9558-4eb4-a5a0-c5d5d63d2acb" FromPort="Next" ToNodeId="cb1541de-8b59-4b99-b3d9-e367b5d301cb" />
+    <Connection FromNodeId="cb1541de-8b59-4b99-b3d9-e367b5d301cb" FromPort="Success" ToNodeId="514e6fe6-e4bb-40fd-8631-a55bf86082a6" />
+    <Connection FromNodeId="cb1541de-8b59-4b99-b3d9-e367b5d301cb" FromPort="Failure" ToNodeId="45dd270b-5098-41b5-86d0-5ef60db4f73f" />
+    <Connection FromNodeId="514e6fe6-e4bb-40fd-8631-a55bf86082a6" FromPort="Next" ToNodeId="539bfe2d-9983-4b53-a1f6-5f767a9a519d" />
+    <Connection FromNodeId="45dd270b-5098-41b5-86d0-5ef60db4f73f" FromPort="Next" ToNodeId="cb1541de-8b59-4b99-b3d9-e367b5d301cb" />
+  </Connections>
+</Level>

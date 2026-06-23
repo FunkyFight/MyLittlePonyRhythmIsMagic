@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MLP_RiM.Elements;
 using MLP_RiM.Elements.Editor;
+using MLP_RiM.Elements.LevelEditor;
+using MLP_RiM.Elements.Levels;
 using Rhythm.Conductor;
 using Rhythm.Note;
 using Rhythm.Note.Evaluator;
@@ -22,14 +24,38 @@ public class Game1 : Core
     private string _currentRhythmGameSceneId;
     private Texture2D _blackoutPixel;
     private Effect _saturationEffect;
+    private SpriteFont _dialogueFont;
+    private AppMode _appMode = AppMode.MainMenu;
+    private LevelEditorElement _levelEditorElement;
+    private LevelRuntimeController _levelRuntimeController;
 
     private InputActionManager _inputActionManager;
     private KeyboardState _keyboard;
     private KeyboardState _previousKeyboard;
     private bool _showMouseViewportCoordinates;
 
-    public Game1() : base("My Little Pony: Rhythm Is Magic", 1920, 1080, true)
+    private enum AppMode
     {
+        MainMenu,
+        BeatmapEditor,
+        LevelEditor,
+        LevelRuntime
+    }
+
+    public Game1() : base("My Little Pony: Rhythm Is Magic", 1920, 1080, false)
+    {
+        ConfigureBorderlessFullscreen();
+    }
+
+    private void ConfigureBorderlessFullscreen()
+    {
+        DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+        Graphics.IsFullScreen = false;
+        Graphics.PreferredBackBufferWidth = displayMode.Width;
+        Graphics.PreferredBackBufferHeight = displayMode.Height;
+        Window.IsBorderless = true;
+        Window.Position = Point.Zero;
+        Graphics.ApplyChanges();
     }
 
     protected override void Initialize()
@@ -52,10 +78,8 @@ public class Game1 : Core
         _sceneManager.Viewport.SamplerState = SamplerState.PointClamp;
         GLOBALS.beatmapPlayer.RhythmGameSwitchRequested += SwitchRhythmGameScene;
 
-        // Beatmap editor
-        GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
-        if (_currentRhythmGameSceneId == null)
-            SwitchFirstAvailableRhythmGameScene();
+        // Scene starts on the main menu. Editors and level runtime are created only when selected.
+        _sceneManager.SetScene(CreateMainMenu());
 
 
         
@@ -77,26 +101,39 @@ public class Game1 : Core
         GLOBALS.controller_atlas = TextureAtlas.FromTexturePackerFile(Content, "atlas/xbox_controller", "atlas/xbox_controller.txt");
         GLOBALS.main_atlas = TextureAtlas.FromTexturePackerFile(Content, "atlas/main_atlas", "atlas/main_atlas.txt");
         _saturationEffect = Content.Load<Effect>("Effects/Saturation");
+        _dialogueFont = Content.Load<SpriteFont>("Fonts/Dialogue");
     }
 
     protected override void Update(GameTime gameTime)
     {
+        _previousKeyboard = _keyboard;
+        _keyboard = Keyboard.GetState();
+        _inputActionManager.Update();
+
+        bool beatmapEditorActive = _appMode == AppMode.BeatmapEditor && GLOBALS.beatmapEditorElement != null;
+        bool levelEditorActive = _appMode == AppMode.LevelEditor && _levelEditorElement != null;
+        bool levelRuntimeActive = _appMode == AppMode.LevelRuntime && _levelRuntimeController != null;
+        bool levelRuntimeRhythmSceneActive = levelRuntimeActive && _levelRuntimeController.ShouldUpdateRhythmScene;
+
         // Non-preview editor playback owns conductor updates to avoid advancing rhythm state twice.
-        bool editorOwnsBeatmapPlayback = GLOBALS.beatmapEditorElement != null && !GLOBALS.beatmapEditorElement.IsPreviewPlaying;
-        GLOBALS.SfxVolume = GLOBALS.beatmapEditorElement != null
+        bool editorOwnsBeatmapPlayback = beatmapEditorActive && !GLOBALS.beatmapEditorElement.IsPreviewPlaying;
+        GLOBALS.SfxVolume = beatmapEditorActive
             && (GLOBALS.beatmapEditorElement.IsPreviewPlaying || GLOBALS.beatmapEditorElement.IsEditorPlaybackPlaying)
+            || levelRuntimeRhythmSceneActive
             ? 1.0f
             : 0.0f;
 
+        if (levelEditorActive)
+            _levelEditorElement.Update(gameTime);
+
         if (editorOwnsBeatmapPlayback)
             GLOBALS.beatmapEditorElement.Update(gameTime);
-        else
+        else if (!levelEditorActive && (!levelRuntimeActive || levelRuntimeRhythmSceneActive))
             GLOBALS.beatmapPlayer?.Update(gameTime);
 
-        _sceneManager.Update(gameTime);
-
-        _previousKeyboard = _keyboard;
-        _keyboard = Keyboard.GetState();
+        bool blockSceneUpdate = levelEditorActive || (levelRuntimeActive && !levelRuntimeRhythmSceneActive);
+        if (!blockSceneUpdate)
+            _sceneManager.Update(gameTime);
 
         if (Pressed(Keys.F9))
             _showMouseViewportCoordinates = !_showMouseViewportCoordinates;
@@ -104,10 +141,13 @@ public class Game1 : Core
         if (Pressed(Keys.F10))
             CopyMouseViewportCoordinates();
 
-        if (!editorOwnsBeatmapPlayback)
+        if (beatmapEditorActive && !editorOwnsBeatmapPlayback)
             GLOBALS.beatmapEditorElement?.Update(gameTime);
 
         handleInputs();
+
+        if (levelRuntimeActive)
+            _levelRuntimeController.Update(gameTime, _inputActionManager);
 
         base.Update(gameTime);
     }
@@ -116,8 +156,11 @@ public class Game1 : Core
     {
         GraphicsDevice.Clear(Color.Black);
 
+        bool beatmapEditorActive = _appMode == AppMode.BeatmapEditor && GLOBALS.beatmapEditorElement != null;
+        bool levelEditorActive = _appMode == AppMode.LevelEditor && _levelEditorElement != null;
+        bool levelRuntimeActive = _appMode == AppMode.LevelRuntime && _levelRuntimeController != null;
 
-        if (GLOBALS.beatmapEditorElement != null)
+        if (beatmapEditorActive)
             GLOBALS.beatmapEditorElement.ConfigureSceneViewport(_sceneManager.Viewport);
         else
             BeatmapEditorElement.ConfigureSceneViewportFullscreen(_sceneManager.Viewport);
@@ -129,7 +172,12 @@ public class Game1 : Core
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         DrawSwitchGameBlackout(SpriteBatch);
 
-        GLOBALS.beatmapEditorElement?.Draw(SpriteBatch);
+        if (beatmapEditorActive)
+            GLOBALS.beatmapEditorElement?.Draw(SpriteBatch);
+        if (levelEditorActive)
+            _levelEditorElement?.Draw(SpriteBatch);
+        if (levelRuntimeActive)
+            _levelRuntimeController?.Draw(SpriteBatch);
         if (_showMouseViewportCoordinates)
             GLOBALS.mouseViewportCoordinatesElement?.Draw(SpriteBatch);
         
@@ -143,15 +191,21 @@ public class Game1 : Core
 
     private void handleInputs()
     {
-        _inputActionManager.Update();
         GLOBALS.ReactMainIsPressed = _inputActionManager.IsPressed("ReactMain");
         if (_inputActionManager.IsReleasedOnce("ReactMain"))
         {
             GLOBALS.ReactMainReleaseSerial++;
-            GLOBALS.ReactMainReleaseSongPosition = GLOBALS.beatmapPlayer?.Conductor?.SongPosition ?? double.NaN;
+            GLOBALS.ReactMainReleaseSongPosition = GLOBALS.beatmapPlayer?.GameplaySongPosition ?? double.NaN;
         }
         
-        if (GLOBALS.beatmapEditorElement != null && !GLOBALS.beatmapEditorElement.IsPreviewPlaying)
+        bool beatmapEditorActive = _appMode == AppMode.BeatmapEditor && GLOBALS.beatmapEditorElement != null;
+        if (beatmapEditorActive && !GLOBALS.beatmapEditorElement.IsPreviewPlaying)
+            return;
+
+        if (_appMode == AppMode.LevelEditor)
+            return;
+
+        if (_appMode == AppMode.LevelRuntime && _levelRuntimeController?.AcceptsRhythmInput != true)
             return;
 
         if(GLOBALS.beatmapPlayer != null && GLOBALS.beatmapPlayer.Conductor != null && GLOBALS.beatmapPlayer.Conductor.isPlaying())
@@ -159,9 +213,67 @@ public class Game1 : Core
             if(_inputActionManager.IsPressedOnce("ReactMain")) 
             {
                 GLOBALS.ReactMainInputSerial++;
-                GLOBALS.beatmapPlayer.ChartPlayer.React("ReactMain", GLOBALS.beatmapPlayer.Conductor.SongPosition);
+                GLOBALS.beatmapPlayer.ChartPlayer.React("ReactMain", GLOBALS.beatmapPlayer.GameplaySongPosition);
             }
         }
+    }
+
+    private void OpenBeatmapEditor()
+    {
+        ClearEditorsAndRuntime();
+        _appMode = AppMode.BeatmapEditor;
+        GLOBALS.beatmapEditorElement = new BeatmapEditorElement(GLOBALS.beatmapPlayer);
+        SwitchFirstAvailableRhythmGameScene();
+    }
+
+    private void OpenLevelEditor()
+    {
+        ClearEditorsAndRuntime();
+        _appMode = AppMode.LevelEditor;
+        _sceneManager.SetScene(CreateMainMenu());
+        _levelEditorElement = new LevelEditorElement(GraphicsDevice, document => StartLevel(document, ignoreLocks: true), ReturnToMainMenu);
+    }
+
+    private void StartLevel(LevelDocument document, bool ignoreLocks)
+    {
+        if (document == null)
+            return;
+
+        if (!ignoreLocks && !LevelProgressSave.Load().IsUnlocked(document.Level))
+            return;
+
+        ClearEditorsAndRuntime();
+        _appMode = AppMode.LevelRuntime;
+        _levelRuntimeController = new LevelRuntimeController(
+            document,
+            GLOBALS.beatmapPlayer,
+            _dialogueFont,
+            GraphicsDevice,
+            ReturnToMainMenu,
+            SwitchFirstAvailableRhythmGameScene,
+            SwitchRhythmGameScene);
+    }
+
+    private void ReturnToMainMenu()
+    {
+        ClearEditorsAndRuntime();
+        _appMode = AppMode.MainMenu;
+        _sceneManager.SetScene(CreateMainMenu());
+    }
+
+    private MainMenu CreateMainMenu()
+    {
+        return new MainMenu(_inputActionManager, document => StartLevel(document, ignoreLocks: false), OpenLevelEditor, OpenBeatmapEditor);
+    }
+
+    private void ClearEditorsAndRuntime()
+    {
+        GLOBALS.beatmapEditorElement = null;
+        _levelEditorElement = null;
+        _levelRuntimeController = null;
+        GLOBALS.beatmapPlayer?.StopBeatmap();
+        GLOBALS.SfxVolume = 0.0f;
+        _currentRhythmGameSceneId = null;
     }
 
     private bool Pressed(Keys key)
@@ -171,6 +283,9 @@ public class Game1 : Core
 
     private void SwitchRhythmGameScene(string rhythmGameId)
     {
+        if (_appMode != AppMode.BeatmapEditor && _appMode != AppMode.LevelRuntime)
+            return;
+
         if (_sceneManager == null || string.IsNullOrWhiteSpace(rhythmGameId) || rhythmGameId == _currentRhythmGameSceneId)
             return;
 

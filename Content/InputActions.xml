@@ -4,4 +4,15 @@
   <InputAction Name="ReactMain">
     <Key Value="Space" />
   </InputAction>
+
+  <!-- Main menu -->
+  <InputAction Name="MenuUp">
+    <Key Value="Z" />
+  </InputAction>
+  <InputAction Name="MenuDown">
+    <Key Value="S" />
+  </InputAction>
+  <InputAction Name="MenuSelect">
+    <Key Value="Enter" />
+  </InputAction>
 </InputActions>
