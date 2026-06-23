@@ -113,13 +113,13 @@ public class Game1 : Core
         bool beatmapEditorActive = _appMode == AppMode.BeatmapEditor && GLOBALS.beatmapEditorElement != null;
         bool levelEditorActive = _appMode == AppMode.LevelEditor && _levelEditorElement != null;
         bool levelRuntimeActive = _appMode == AppMode.LevelRuntime && _levelRuntimeController != null;
-        bool levelRuntimeRhythmSceneActive = levelRuntimeActive && _levelRuntimeController.ShouldUpdateRhythmScene;
+        bool levelRuntimeRhythmClockActive = levelRuntimeActive && _levelRuntimeController.ShouldUpdateRhythmScene;
 
         // Non-preview editor playback owns conductor updates to avoid advancing rhythm state twice.
         bool editorOwnsBeatmapPlayback = beatmapEditorActive && !GLOBALS.beatmapEditorElement.IsPreviewPlaying;
         GLOBALS.SfxVolume = beatmapEditorActive
             && (GLOBALS.beatmapEditorElement.IsPreviewPlaying || GLOBALS.beatmapEditorElement.IsEditorPlaybackPlaying)
-            || levelRuntimeRhythmSceneActive
+            || levelRuntimeRhythmClockActive
             ? 1.0f
             : 0.0f;
 
@@ -128,12 +128,11 @@ public class Game1 : Core
 
         if (editorOwnsBeatmapPlayback)
             GLOBALS.beatmapEditorElement.Update(gameTime);
-        else if (!levelEditorActive && (!levelRuntimeActive || levelRuntimeRhythmSceneActive))
+        else if (!levelEditorActive
+            && (!levelRuntimeActive
+                || levelRuntimeRhythmClockActive
+                || GLOBALS.beatmapPlayer?.HasAChartLoaded == true))
             GLOBALS.beatmapPlayer?.Update(gameTime);
-
-        bool blockSceneUpdate = levelEditorActive || (levelRuntimeActive && !levelRuntimeRhythmSceneActive);
-        if (!blockSceneUpdate)
-            _sceneManager.Update(gameTime);
 
         if (Pressed(Keys.F9))
             _showMouseViewportCoordinates = !_showMouseViewportCoordinates;
@@ -146,8 +145,15 @@ public class Game1 : Core
 
         handleInputs();
 
+        // Run graph transitions before the scene update. Starting the empty tail can remove notes
+        // and change the active node; the rhythm scene must see that new state in the same frame.
         if (levelRuntimeActive)
             _levelRuntimeController.Update(gameTime, _inputActionManager);
+
+        // Dialogue overlays must never pause the underlying rhythm scene. In particular, the
+        // post-training empty tail keeps actor state machines alive after leaving the training node.
+        if (!levelEditorActive)
+            _sceneManager.Update(gameTime);
 
         base.Update(gameTime);
     }
