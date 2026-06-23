@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>song</SongName>
+  <BeatmapName>carton canter</BeatmapName>
+  <Beatmapper>Unknown</Beatmapper>
+  <ArtistName>Unknown</ArtistName>
+  <MusicName>song</MusicName>
+  <SongPath>Beatmaps\carton canter\song.mp3</SongPath>
+  <MusicVolume>1</MusicVolume>
+  <BPM>124</BPM>
+  <Offset>4.2</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>6.135483870967742</SongPosition>
+      <BeatPosition>4</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>10.006451612903227</SongPosition>
+      <BeatPosition>12</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>13.877419354838711</SongPosition>
+      <BeatPosition>20</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>19.683870967741935</SongPosition>
+      <BeatPosition>32</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>23.55483870967742</SongPosition>
+      <BeatPosition>40</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>25.49032258064516</SongPosition>
+      <BeatPosition>44</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>27.425806451612903</SongPosition>
+      <BeatPosition>48</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>29.361290322580647</SongPosition>
+      <BeatPosition>52</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>31.296774193548387</SongPosition>
+      <BeatPosition>56</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>33.23225806451613</SongPosition>
+      <BeatPosition>60</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>35.65161290322581</SongPosition>
+      <BeatPosition>65</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>38.07096774193549</SongPosition>
+      <BeatPosition>70</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>43.877419354838715</SongPosition>
+      <BeatPosition>82</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>46.78064516129032</SongPosition>
+      <BeatPosition>88</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>49.68387096774194</SongPosition>
+      <BeatPosition>94</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>50.65161290322581</SongPosition>
+      <BeatPosition>96</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>51.61935483870968</SongPosition>
+      <BeatPosition>98</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>52.587096774193554</SongPosition>
+      <BeatPosition>100</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>56.94193548387097</SongPosition>
+      <BeatPosition>109</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>62.26451612903226</SongPosition>
+      <BeatPosition>120</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>66.37741935483871</SongPosition>
+      <BeatPosition>128.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>69.5225806451613</SongPosition>
+      <BeatPosition>135</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>71.45806451612904</SongPosition>
+      <BeatPosition>139</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>73.39354838709679</SongPosition>
+      <BeatPosition>143</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>78.71612903225807</SongPosition>
+      <BeatPosition>154</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>82.58709677419355</SongPosition>
+      <BeatPosition>162</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>86.45806451612904</SongPosition>
+      <BeatPosition>170</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>88.39354838709679</SongPosition>
+      <BeatPosition>174</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>91.78064516129032</SongPosition>
+      <BeatPosition>181</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects />
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>cfe38dc9ac614404bf3f07894e90fc13</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>0</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.switch_game</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="switch_game" />
+        <Entry Key="target_game" Value="carton_canter" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>27c3e2a8b70f49cd99181d4f20b063a2</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>0</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c1b7d4e38b2343eea468f0868817d1b1</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>8</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.applejack</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>77d45a2ccb0f418ca9a77dd46a783555</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>16</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2616bf840475457e892e0efa28fa5c2b</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>25</StartBeat>
+      <LengthBeats>9</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.fluttershy</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>5505e1e4cd79466380db0ce278a047da</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>36</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.applejack</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d52791b700714cf7951e759d9416be46</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>40</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>b76ae1ee75434663a906763972cce8ec</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>48</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2ee0a67d564e4096bed40cc931cd5544</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>45.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>2a29d1f61d854e3ea6c21e88e6b3a043</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>53.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>f17d31f4f4414dfba1cf199718402e7f</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>56</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3ee512be44bd4038b397d65af193fc3d</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>62.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>836cc5dda0ba484e95040d7cf26ba06f</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>66</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>922d60095a9b4bb496c3ee7ad6f5d969</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>78</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>81ae75e5f8e644cdaf6921cd7b76d5aa</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>84</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.applejack</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>129301ce1f1d47febcb3eec2e549b63e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>90</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.applejack</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>bc550cf58cd74c9e8203137c338742a9</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>93.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d0fbc3fac6e949f58fa18a2612136f89</Id>
+      <TrackIndex>2</TrackIndex>
+      <StartBeat>95.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d15bdc74d7ec47c48421af7b5ed06016</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>97.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>166ba4ff601a44aab785d22381ae05ad</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>102</StartBeat>
+      <LengthBeats>9</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.fluttershy</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>abadec9ab0e4435188387ccb235d80f5</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>113</StartBeat>
+      <LengthBeats>9</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.fluttershy</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>30706a90cd1b4cb2b9fdc7431fc88513</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>124.5</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>46b8af26f3414e35a37ada47c60a8a55</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>132.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>daadbbe50a4643f7a3681f81e01266dc</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>136.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8ca0a4573f014c959f0c8e0edecb7e46</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>140.5</StartBeat>
+      <LengthBeats>4.5</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.pinkie_pie</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_pinkie_pie" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c18f71822e2540189a6e5028056b7336</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>147</StartBeat>
+      <LengthBeats>9</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.fluttershy</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_fluttershy" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3f75e5ad56f240eabd9cdfac8e093852</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>158</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>c3f51c7f29714b63bc730ca10c1e6f54</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>170</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.applejack</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_applejack" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>8331016d2eb647719264ed0cec49687c</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>166</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>56e4b0d853274bdd9c57c3999a39123e</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>177</StartBeat>
+      <LengthBeats>6</LengthBeats>
+      <RhythmGameId>carton_canter</RhythmGameId>
+      <ClipTypeId>carton_canter.twilight_sparkle</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="carton_canter" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="carton_canter_twilight_sparkle" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>d5f4a2eb1e1c4855ac4121d8a5702c9f</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>79</StartBeat>
+      <LengthBeats>2</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="650" />
+        <Entry Key="offset_y" Value="800" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="3" />
+        <Entry Key="zoom_y" Value="3" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_quad" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>496cef184622422285e4a27029af1efb</Id>
+      <TrackIndex>1</TrackIndex>
+      <StartBeat>102</StartBeat>
+      <LengthBeats>7</LengthBeats>
+      <RhythmGameId>effects</RhythmGameId>
+      <ClipTypeId>effects.viewport</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="viewport_offset" />
+        <Entry Key="offset_x" Value="0" />
+        <Entry Key="offset_y" Value="0" />
+        <Entry Key="rotation_degrees" Value="0" />
+        <Entry Key="zoom_x" Value="1" />
+        <Entry Key="zoom_y" Value="1" />
+        <Entry Key="instant" Value="false" />
+        <Entry Key="interpolation" Value="ease_in_out_cubic" />
+      </Data>
+    </Clip>
+  </EditorClips>
+</Chart>
