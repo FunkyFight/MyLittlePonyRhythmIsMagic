@@ -52,6 +52,7 @@ public class SeeSawScene : Scene
     private SeeSawDirector _director;
     private ChartPlayer _reactionChartPlayer;
     private int _lastTempoMapBeat = int.MinValue;
+    private bool _emptyTailDirectorDrained;
 
     public SeeSawScene() : this(null)
     {
@@ -140,6 +141,7 @@ public class SeeSawScene : Scene
 
     private void OnBeatmapStarted()
     {
+        _emptyTailDirectorDrained = false;
         ResetActors();
         SetupTimelineAndDirector();
         _lastTempoMapBeat = int.MinValue;
@@ -148,11 +150,13 @@ public class SeeSawScene : Scene
 
     private void OnBeatmapLoopAppended()
     {
+        _emptyTailDirectorDrained = false;
         SetupTimelineAndDirector();
     }
 
     private void OnBeatmapNotesRemoved(IReadOnlyCollection<Note> notes)
     {
+        _emptyTailDirectorDrained = false;
         _director?.RemoveEventsForNotes(notes);
     }
 
@@ -257,25 +261,48 @@ public class SeeSawScene : Scene
         bool isEmptyTail = GLOBALS.beatmapPlayer?.IsContinuingEmptyBeatmap == true;
         if (isEmptyTail)
         {
-            UpdateEmptyTailAnimations();
+            DrainDirectorToFinalGroundedPose(gameTime);
+            if (_emptyTailDirectorDrained)
+                UpdateEmptyTailAnimations();
             return;
         }
 
-        if (GLOBALS.beatmapPlayer?.Conductor != null && _director != null)
-        {
-            double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.GameplaySongPosition;
-            double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
-            _director.Update(beat, songSeconds, gameTime);
-        }
+        _emptyTailDirectorDrained = false;
+        UpdateDirector(gameTime);
+    }
+
+    private void DrainDirectorToFinalGroundedPose(GameTime gameTime)
+    {
+        if (_emptyTailDirectorDrained)
+            return;
+
+        UpdateDirector(gameTime);
+        _emptyTailDirectorDrained = !IsAirborne(RainbowState) && !IsAirborne(ApplejackState);
+    }
+
+    private void UpdateDirector(GameTime gameTime)
+    {
+        if (GLOBALS.beatmapPlayer?.Conductor == null || _director == null)
+            return;
+
+        double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.GameplaySongPosition;
+        double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
+        _director.Update(beat, songSeconds, gameTime);
+    }
+
+    private static bool IsAirborne(AnimationStateMachine stateMachine)
+    {
+        string stateName = stateMachine?.CurrentState?.Name;
+        return stateName == "jump" || stateName == "fall";
     }
 
     private void UpdateEmptyTailAnimations()
     {
-        SettleState(RainbowState, "idle", "jump", "fall", "land", "fail");
+        SettleState(RainbowState, "idle", "land", "fail");
 
         bool applejackAtExit = Vector2.DistanceSquared(Applejack.Position, applejackExitPos) <= 1f;
         string applejackIdleState = applejackAtExit ? "start_idle" : "idle";
-        if (SettleState(ApplejackState, applejackIdleState, "jump", "fall", "land") && !applejackAtExit)
+        if (SettleState(ApplejackState, applejackIdleState, "land") && !applejackAtExit)
             Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
 
         if (SeeSawState == null || SeeSawState.StateProgress < 1f)
@@ -290,14 +317,10 @@ public class SeeSawScene : Scene
 
     private static bool SettleState(AnimationStateMachine stateMachine, string idleState, params string[] eventStates)
     {
-        if (stateMachine?.CurrentState == null)
+        if (stateMachine?.CurrentState == null || stateMachine.StateProgress < 1f)
             return false;
 
         string currentState = stateMachine.CurrentState.Name;
-        bool waitForCompletion = currentState == "land" || currentState == "fail";
-        if (waitForCompletion && stateMachine.StateProgress < 1f)
-            return false;
-
         foreach (string eventState in eventStates)
         {
             if (currentState != eventState)
