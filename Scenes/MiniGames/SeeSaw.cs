@@ -254,12 +254,60 @@ public class SeeSawScene : Scene
         ApplejackState?.Update(gameTime);
         SeeSawState?.Update(gameTime);
 
+        bool isEmptyTail = GLOBALS.beatmapPlayer?.IsContinuingEmptyBeatmap == true;
+        if (isEmptyTail)
+        {
+            UpdateEmptyTailAnimations();
+            return;
+        }
+
         if (GLOBALS.beatmapPlayer?.Conductor != null && _director != null)
         {
             double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.GameplaySongPosition;
             double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
             _director.Update(beat, songSeconds, gameTime);
         }
+    }
+
+    private void UpdateEmptyTailAnimations()
+    {
+        SettleState(RainbowState, "idle", "jump", "fall", "land", "fail");
+
+        bool applejackAtExit = Vector2.DistanceSquared(Applejack.Position, applejackExitPos) <= 1f;
+        string applejackIdleState = applejackAtExit ? "start_idle" : "idle";
+        if (SettleState(ApplejackState, applejackIdleState, "jump", "fall", "land") && !applejackAtExit)
+            Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
+
+        if (SeeSawState == null || SeeSawState.StateProgress < 1f)
+            return;
+
+        string beamState = SeeSawState.CurrentState?.Name;
+        if (beamState == "land_left")
+            SeeSawState.ForceState("idle_left");
+        else if (beamState == "land_right")
+            SeeSawState.ForceState("idle_right");
+    }
+
+    private static bool SettleState(AnimationStateMachine stateMachine, string idleState, params string[] eventStates)
+    {
+        if (stateMachine?.CurrentState == null)
+            return false;
+
+        string currentState = stateMachine.CurrentState.Name;
+        bool waitForCompletion = currentState == "land" || currentState == "fail";
+        if (waitForCompletion && stateMachine.StateProgress < 1f)
+            return false;
+
+        foreach (string eventState in eventStates)
+        {
+            if (currentState != eventState)
+                continue;
+
+            stateMachine.ForceState(idleState);
+            return true;
+        }
+
+        return false;
     }
 
     private void UpdateTempoMapBeatEvents()
