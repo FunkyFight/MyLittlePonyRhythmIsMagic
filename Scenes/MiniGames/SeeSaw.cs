@@ -278,10 +278,10 @@ public class SeeSawScene : Scene
         if (SettleState(ApplejackState, applejackIdleState, "jump", "fall", "land") && !applejackAtExit)
             Applejack.Rotation = MathHelper.ToRadians(ApplejackTiltDegrees);
 
-        string beamState = SeeSawState?.CurrentState?.Name;
-        if (SeeSawState?.StateProgress < 1f)
+        if (SeeSawState == null || SeeSawState.StateProgress < 1f)
             return;
 
+        string beamState = SeeSawState.CurrentState?.Name;
         if (beamState == "land_left")
             SeeSawState.ForceState("idle_left");
         else if (beamState == "land_right")
