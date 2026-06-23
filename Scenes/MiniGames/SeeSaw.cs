@@ -156,8 +156,19 @@ public class SeeSawScene : Scene
 
     private void OnBeatmapNotesRemoved(IReadOnlyCollection<Note> notes)
     {
-        _emptyTailDirectorDrained = false;
         _director?.RemoveEventsForNotes(notes);
+
+        // This event is raised synchronously when the playable future is cleared. Resolve the
+        // remaining timeline immediately so actors cannot retain the last pre-removal airborne pose,
+        // even if the level changes node during this same frame.
+        if (_director != null && GLOBALS.beatmapPlayer?.Conductor != null)
+        {
+            double songSeconds = GLOBALS.beatmapPlayer.GameplaySongPosition;
+            double beat = GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
+            _director.Update(beat, songSeconds, new GameTime());
+        }
+
+        _emptyTailDirectorDrained = true;
     }
 
     private void SetupTimelineAndDirector()
