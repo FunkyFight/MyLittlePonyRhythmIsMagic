@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Id="2bbb6fe0-3f87-490b-a2e2-f4683c6ac75b">
+  <DisplayName>Ponee Saw</DisplayName>
+  <LockedByDefault>false</LockedByDefault>
+  <UnlockLevelIds />
+  <StartNodeId>f32e06f4-3d8b-41a5-85d4-ba4446d5b72b</StartNodeId>
+  <Nodes>
+    <Node Id="f32e06f4-3d8b-41a5-85d4-ba4446d5b72b" Kind="Start" X="25" Y="56">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="4580e429-a0ae-4e10-9bf5-d435e8422e36" Kind="SetMiniGame" X="21" Y="160">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath />
+      <MiniGameId>see_saw</MiniGameId>
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="f8dcbb8c-5a14-414b-acb8-afcec0d628e3" Kind="Dialogue" X="357" Y="50">
+      <Speaker>RainbowDash</Speaker>
+      <Text>Oh, Applejack, here you are</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="72ae18fc-9cd8-42fe-8615-da443e417ab2" Kind="Dialogue" X="356" Y="158">
+      <Speaker>Applejack</Speaker>
+      <Text>howdy sugar</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="8fe209de-6a60-49b1-82d6-ee88fd4ac387" Kind="Dialogue" X="354" Y="277">
+      <Speaker>Applejack</Speaker>
+      <Text>So how can I help you?</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="cbcf715e-2615-40ee-b1a2-f6fe76e87cf0" Kind="Dialogue" X="357" Y="395">
+      <Speaker>RainbowDash</Speaker>
+      <Text>I want to make the biggest jump in all equestria</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="061d7c7c-111b-4639-987b-db120ecd93b7" Kind="Dialogue" X="354" Y="519">
+      <Speaker>RainbowDash</Speaker>
+      <Text>and make a double rainboom</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="7bc71e48-1d36-48ea-aa32-ace737e23580" Kind="Dialogue" X="354" Y="642">
+      <Speaker>Applejack</Speaker>
+      <Text>W-wait, hold on, it is way too dangerous</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="0109fdbf-e1fc-41c7-8518-214e4404fd58" Kind="Dialogue" X="350" Y="767">
+      <Speaker>Applejack</Speaker>
+      <Text>Is this see saw even safe to begin with?</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="0bb13d0e-4097-46d4-8122-ce72488614d9" Kind="Dialogue" X="353" Y="898">
+      <Speaker>RainbowDash</Speaker>
+      <Text>oh come on, do not be such a party pooper</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="a779301b-9c42-49c7-a6f0-d4b042999d64" Kind="Dialogue" X="355" Y="1035">
+      <Speaker>Applejack</Speaker>
+      <Text>Oh yeah? Then how about I tell Twilight about your little plan?</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="ef338739-d926-4de1-9bf4-958467b22493" Kind="Dialogue" X="355" Y="1160">
+      <Speaker>RainbowDash</Speaker>
+      <Text>What? N-no</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="99699480-4b11-44ab-9793-d1de501e7704" Kind="Dialogue" X="352" Y="1286">
+      <Speaker>RainbowDash</Speaker>
+      <Text>OKAY FINE, ill check if everything is safe duh</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="7b7b5401-747a-43d5-aa4e-099496ba45dd" Kind="Dialogue" X="353" Y="1417">
+      <Speaker>RainbowDash</Speaker>
+      <Text>But then we move on to cooler things, alright?</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="4c14eb19-ec20-49b2-83b7-866ece4a1d53" Kind="Dialogue" X="351" Y="1532">
+      <Speaker>Applejack</Speaker>
+      <Text>Sounds fine by me</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="4c453f98-770d-4645-b9e3-e3cea081504a" Kind="Dialogue" X="350" Y="1669">
+      <Speaker>RainbowDash</Speaker>
+      <Text>Then lets start with edges I guess</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="d0af00cc-0e06-4f7b-b6c3-549935bab0b3" Kind="Dialogue" X="353" Y="1799">
+      <Speaker>RainbowDash</Speaker>
+      <Text>I just need to press space to land</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="2a4e6bd3-7433-4cec-b484-7965d499f3ad" Kind="Dialogue" X="350" Y="1924">
+      <Speaker>RainbowDash</Speaker>
+      <Text>lets do it a few times so im sure i get the hang of it</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="77baaf75-10ec-4e5a-8ba9-543d8740cb51" Kind="TrainingBeatmap" X="685" Y="42">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/tutorials/see saw/edges/chart.xml</ChartPath>
+      <MiniGameId />
+      <RequiredSuccessCount>2</RequiredSuccessCount>
+    </Node>
+    <Node Id="bc5e3b6e-e720-43d4-8a04-939b58a03bb7" Kind="Dialogue" X="963" Y="40">
+      <Speaker>RainbowDash</Speaker>
+      <Text>Good, now lets try the inner part</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="d2fd5651-d7db-4526-a8ed-4f39ebd7c4a1" Kind="Dialogue" X="960" Y="177">
+      <Speaker>RainbowDash</Speaker>
+      <Text>the timing is different, its twice as fast as the outside of the see saw</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="14d2678a-5766-4374-9139-655265b01dd6" Kind="Dialogue" X="960" Y="305">
+      <Speaker>RainbowDash</Speaker>
+      <Text>lets try now</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="630cc840-35e9-444d-afed-49b439afa289" Kind="TrainingBeatmap" X="1246" Y="49">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/tutorials/see saw/inner/chart.xml</ChartPath>
+      <MiniGameId />
+      <RequiredSuccessCount>2</RequiredSuccessCount>
+    </Node>
+    <Node Id="d475cb97-6fff-48c3-991c-6b60b8a404b3" Kind="Dialogue" X="1511" Y="47">
+      <Speaker>RainbowDash</Speaker>
+      <Text>Good, now lets finally train</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="963e4daa-aa37-4243-be1e-39a5ea42b710" Kind="Dialogue" X="1512" Y="170">
+      <Speaker>Applejack</Speaker>
+      <Text>Seriously, Rainbow Dash?</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="8bf5b524-6e56-4b08-bdd7-21496c56e4c1" Kind="Dialogue" X="1514" Y="294">
+      <Speaker>RainbowDash</Speaker>
+      <Text>What again?</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="f5407177-0a02-47f3-b321-cdee23857052" Kind="Dialogue" X="1508" Y="438">
+      <Speaker>Applejack</Speaker>
+      <Text>We barely tested it</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="6335ca62-ebe4-4476-9b86-74b336fbefd8" Kind="Dialogue" X="1505" Y="578">
+      <Speaker>RainbowDash</Speaker>
+      <Text>Fine, then lets do it seriously this time</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="53e8da0b-8cc8-493b-94e5-f84442c975cc" Kind="PlayRepresentationBeatmap" X="1845" Y="61">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/See Saw/chart.xml</ChartPath>
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="9a83ec51-4bdc-4400-ab7e-7e21b5cea449" Kind="Dialogue" X="1500" Y="716">
+      <Speaker>RainbowDash</Speaker>
+      <Text>But you better make me go higher this time</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="98bedbe8-e72a-4975-ad51-1c7e401d2584" Kind="Dialogue" X="1503" Y="850">
+      <Speaker>Applejack</Speaker>
+      <Text>ILL try</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+  </Nodes>
+  <Connections>
+    <Connection FromNodeId="f32e06f4-3d8b-41a5-85d4-ba4446d5b72b" FromPort="Next" ToNodeId="4580e429-a0ae-4e10-9bf5-d435e8422e36" />
+    <Connection FromNodeId="4580e429-a0ae-4e10-9bf5-d435e8422e36" FromPort="Next" ToNodeId="f8dcbb8c-5a14-414b-acb8-afcec0d628e3" />
+    <Connection FromNodeId="f8dcbb8c-5a14-414b-acb8-afcec0d628e3" FromPort="Next" ToNodeId="72ae18fc-9cd8-42fe-8615-da443e417ab2" />
+    <Connection FromNodeId="72ae18fc-9cd8-42fe-8615-da443e417ab2" FromPort="Next" ToNodeId="8fe209de-6a60-49b1-82d6-ee88fd4ac387" />
+    <Connection FromNodeId="8fe209de-6a60-49b1-82d6-ee88fd4ac387" FromPort="Next" ToNodeId="cbcf715e-2615-40ee-b1a2-f6fe76e87cf0" />
+    <Connection FromNodeId="cbcf715e-2615-40ee-b1a2-f6fe76e87cf0" FromPort="Next" ToNodeId="061d7c7c-111b-4639-987b-db120ecd93b7" />
+    <Connection FromNodeId="061d7c7c-111b-4639-987b-db120ecd93b7" FromPort="Next" ToNodeId="7bc71e48-1d36-48ea-aa32-ace737e23580" />
+    <Connection FromNodeId="7bc71e48-1d36-48ea-aa32-ace737e23580" FromPort="Next" ToNodeId="0109fdbf-e1fc-41c7-8518-214e4404fd58" />
+    <Connection FromNodeId="0109fdbf-e1fc-41c7-8518-214e4404fd58" FromPort="Next" ToNodeId="0bb13d0e-4097-46d4-8122-ce72488614d9" />
+    <Connection FromNodeId="0bb13d0e-4097-46d4-8122-ce72488614d9" FromPort="Next" ToNodeId="a779301b-9c42-49c7-a6f0-d4b042999d64" />
+    <Connection FromNodeId="a779301b-9c42-49c7-a6f0-d4b042999d64" FromPort="Next" ToNodeId="ef338739-d926-4de1-9bf4-958467b22493" />
+    <Connection FromNodeId="ef338739-d926-4de1-9bf4-958467b22493" FromPort="Next" ToNodeId="99699480-4b11-44ab-9793-d1de501e7704" />
+    <Connection FromNodeId="99699480-4b11-44ab-9793-d1de501e7704" FromPort="Next" ToNodeId="7b7b5401-747a-43d5-aa4e-099496ba45dd" />
+    <Connection FromNodeId="7b7b5401-747a-43d5-aa4e-099496ba45dd" FromPort="Next" ToNodeId="4c14eb19-ec20-49b2-83b7-866ece4a1d53" />
+    <Connection FromNodeId="4c14eb19-ec20-49b2-83b7-866ece4a1d53" FromPort="Next" ToNodeId="4c453f98-770d-4645-b9e3-e3cea081504a" />
+    <Connection FromNodeId="4c453f98-770d-4645-b9e3-e3cea081504a" FromPort="Next" ToNodeId="d0af00cc-0e06-4f7b-b6c3-549935bab0b3" />
+    <Connection FromNodeId="d0af00cc-0e06-4f7b-b6c3-549935bab0b3" FromPort="Next" ToNodeId="2a4e6bd3-7433-4cec-b484-7965d499f3ad" />
+    <Connection FromNodeId="2a4e6bd3-7433-4cec-b484-7965d499f3ad" FromPort="Next" ToNodeId="77baaf75-10ec-4e5a-8ba9-543d8740cb51" />
+    <Connection FromNodeId="77baaf75-10ec-4e5a-8ba9-543d8740cb51" FromPort="Success" ToNodeId="bc5e3b6e-e720-43d4-8a04-939b58a03bb7" />
+    <Connection FromNodeId="bc5e3b6e-e720-43d4-8a04-939b58a03bb7" FromPort="Next" ToNodeId="d2fd5651-d7db-4526-a8ed-4f39ebd7c4a1" />
+    <Connection FromNodeId="d2fd5651-d7db-4526-a8ed-4f39ebd7c4a1" FromPort="Next" ToNodeId="14d2678a-5766-4374-9139-655265b01dd6" />
+    <Connection FromNodeId="14d2678a-5766-4374-9139-655265b01dd6" FromPort="Next" ToNodeId="630cc840-35e9-444d-afed-49b439afa289" />
+    <Connection FromNodeId="630cc840-35e9-444d-afed-49b439afa289" FromPort="Success" ToNodeId="d475cb97-6fff-48c3-991c-6b60b8a404b3" />
+    <Connection FromNodeId="d475cb97-6fff-48c3-991c-6b60b8a404b3" FromPort="Next" ToNodeId="963e4daa-aa37-4243-be1e-39a5ea42b710" />
+    <Connection FromNodeId="963e4daa-aa37-4243-be1e-39a5ea42b710" FromPort="Next" ToNodeId="8bf5b524-6e56-4b08-bdd7-21496c56e4c1" />
+    <Connection FromNodeId="8bf5b524-6e56-4b08-bdd7-21496c56e4c1" FromPort="Next" ToNodeId="f5407177-0a02-47f3-b321-cdee23857052" />
+    <Connection FromNodeId="f5407177-0a02-47f3-b321-cdee23857052" FromPort="Next" ToNodeId="6335ca62-ebe4-4476-9b86-74b336fbefd8" />
+    <Connection FromNodeId="6335ca62-ebe4-4476-9b86-74b336fbefd8" FromPort="Next" ToNodeId="9a83ec51-4bdc-4400-ab7e-7e21b5cea449" />
+    <Connection FromNodeId="9a83ec51-4bdc-4400-ab7e-7e21b5cea449" FromPort="Next" ToNodeId="98bedbe8-e72a-4975-ad51-1c7e401d2584" />
+    <Connection FromNodeId="98bedbe8-e72a-4975-ad51-1c7e401d2584" FromPort="Next" ToNodeId="53e8da0b-8cc8-493b-94e5-f84442c975cc" />
+  </Connections>
+</Level>

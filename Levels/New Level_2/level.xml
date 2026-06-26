@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Id="53a0846b-8843-41c9-b416-b395bb3beda1">
+  <DisplayName>Derpy Stampede</DisplayName>
+  <LockedByDefault>false</LockedByDefault>
+  <UnlockLevelIds />
+  <StartNodeId>0dae04e6-a566-4185-9467-e2266ecb43bc</StartNodeId>
+  <Nodes>
+    <Node Id="0dae04e6-a566-4185-9467-e2266ecb43bc" Kind="Start" X="60" Y="120">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="68404e21-8b49-4cad-8d7f-87e9f807d08a" Kind="Dialogue" X="634" Y="120">
+      <Speaker>Derpy</Speaker>
+      <Text>Today, we have a lot of work</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="199d08d2-1c00-4e35-8438-cdc6987bd517" Kind="SetMiniGame" X="327" Y="119">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath />
+      <MiniGameId>derpy_stampede</MiniGameId>
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="86b9fa45-6de2-418b-aa2b-8a16b5c47483" Kind="Dialogue" X="637" Y="274">
+      <Speaker>Derpy</Speaker>
+      <Text>Okay</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="29e046eb-23e3-4345-885a-cf9c6d17cdb3" Kind="Dialogue" X="637" Y="414">
+      <Speaker>Derpy</Speaker>
+      <Text>But</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="bbd7ea0d-0173-4bf7-84ed-52af030a6f5a" Kind="Dialogue" X="644" Y="555">
+      <Speaker>Derpy</Speaker>
+      <Text>the letters and packages are going to fast, its so hard to stamp</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="8e0e068f-2428-408d-9739-486c246b922e" Kind="Dialogue" X="637" Y="706">
+      <Speaker>Derpy</Speaker>
+      <Text>Aww mare</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="b4cb6d5c-7093-4e4d-b8cf-264fe659e613" Kind="Dialogue" X="642" Y="849">
+      <Speaker>Derpy</Speaker>
+      <Text>Mmmh but, sunny delivery always listens music while working, she kinda follow the rhythm too</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="d3dff7b8-1366-4ce7-b1c8-360eeaf40740" Kind="Dialogue" X="641" Y="987">
+      <Speaker>Derpy</Speaker>
+      <Text>okay, then ill try follow the rhythm of her music me too</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="070f4c98-1dd1-4d81-a481-ff69bc0903e4" Kind="Dialogue" X="636" Y="1134">
+      <Speaker>Derpy</Speaker>
+      <Text>First, the letters</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="e221bf9b-fc49-4c92-9def-72d86ec9a523" Kind="Dialogue" X="633" Y="1276">
+      <Speaker>Derpy</Speaker>
+      <Text>i must stamp one beat after the cue</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="c5dc7e84-f49c-4629-beab-916d2385c2d6" Kind="TrainingBeatmap" X="959" Y="122">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/tutorials/Derpy Stampede/letter/chart.xml</ChartPath>
+      <MiniGameId />
+      <RequiredSuccessCount>5</RequiredSuccessCount>
+    </Node>
+    <Node Id="429cc270-d198-4c73-9fb5-ad8f6a969646" Kind="TrainingBeatmap" X="1547" Y="119">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/tutorials/Derpy Stampede/package/chart.xml</ChartPath>
+      <MiniGameId />
+      <RequiredSuccessCount>4</RequiredSuccessCount>
+    </Node>
+    <Node Id="44800aed-bc3a-428c-8be2-a9fdadcf2dc1" Kind="Dialogue" X="1250" Y="123">
+      <Speaker>Derpy</Speaker>
+      <Text>yay</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="a3afbb6c-cf7b-4a1e-a186-f431c2bfd6af" Kind="Dialogue" X="1247" Y="262">
+      <Speaker>Derpy</Speaker>
+      <Text>now i must deal with parcels</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="ddcdc26a-6ff8-4c72-8edc-471a395db0bb" Kind="Dialogue" X="1250" Y="409">
+      <Speaker>Derpy</Speaker>
+      <Text>i will hear a double cue sound then I must stamp three times, following the stamp sound cues</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="81ba03eb-06c6-4b80-8668-6dd775b59da4" Kind="PlayRepresentationBeatmap" X="2090" Y="126">
+      <Speaker>TwilightSparkle</Speaker>
+      <Text />
+      <ChartPath>Beatmaps/babs seed/chart.xml</ChartPath>
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="6a4f4b72-86b3-48e8-a148-dface719dad2" Kind="Dialogue" X="1813" Y="119">
+      <Speaker>Derpy</Speaker>
+      <Text>i should be ready now</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+    <Node Id="28d45d9d-09fd-453c-bd32-a8025a078ba6" Kind="Dialogue" X="1817" Y="273">
+      <Speaker>Derpy</Speaker>
+      <Text>sUnny, bring me the letters and parcels</Text>
+      <ChartPath />
+      <MiniGameId />
+      <RequiredSuccessCount>1</RequiredSuccessCount>
+    </Node>
+  </Nodes>
+  <Connections>
+    <Connection FromNodeId="0dae04e6-a566-4185-9467-e2266ecb43bc" FromPort="Next" ToNodeId="199d08d2-1c00-4e35-8438-cdc6987bd517" />
+    <Connection FromNodeId="199d08d2-1c00-4e35-8438-cdc6987bd517" FromPort="Next" ToNodeId="68404e21-8b49-4cad-8d7f-87e9f807d08a" />
+    <Connection FromNodeId="68404e21-8b49-4cad-8d7f-87e9f807d08a" FromPort="Next" ToNodeId="86b9fa45-6de2-418b-aa2b-8a16b5c47483" />
+    <Connection FromNodeId="86b9fa45-6de2-418b-aa2b-8a16b5c47483" FromPort="Next" ToNodeId="29e046eb-23e3-4345-885a-cf9c6d17cdb3" />
+    <Connection FromNodeId="29e046eb-23e3-4345-885a-cf9c6d17cdb3" FromPort="Next" ToNodeId="bbd7ea0d-0173-4bf7-84ed-52af030a6f5a" />
+    <Connection FromNodeId="bbd7ea0d-0173-4bf7-84ed-52af030a6f5a" FromPort="Next" ToNodeId="8e0e068f-2428-408d-9739-486c246b922e" />
+    <Connection FromNodeId="8e0e068f-2428-408d-9739-486c246b922e" FromPort="Next" ToNodeId="b4cb6d5c-7093-4e4d-b8cf-264fe659e613" />
+    <Connection FromNodeId="b4cb6d5c-7093-4e4d-b8cf-264fe659e613" FromPort="Next" ToNodeId="d3dff7b8-1366-4ce7-b1c8-360eeaf40740" />
+    <Connection FromNodeId="d3dff7b8-1366-4ce7-b1c8-360eeaf40740" FromPort="Next" ToNodeId="070f4c98-1dd1-4d81-a481-ff69bc0903e4" />
+    <Connection FromNodeId="070f4c98-1dd1-4d81-a481-ff69bc0903e4" FromPort="Next" ToNodeId="e221bf9b-fc49-4c92-9def-72d86ec9a523" />
+    <Connection FromNodeId="e221bf9b-fc49-4c92-9def-72d86ec9a523" FromPort="Next" ToNodeId="c5dc7e84-f49c-4629-beab-916d2385c2d6" />
+    <Connection FromNodeId="c5dc7e84-f49c-4629-beab-916d2385c2d6" FromPort="Success" ToNodeId="44800aed-bc3a-428c-8be2-a9fdadcf2dc1" />
+    <Connection FromNodeId="44800aed-bc3a-428c-8be2-a9fdadcf2dc1" FromPort="Next" ToNodeId="a3afbb6c-cf7b-4a1e-a186-f431c2bfd6af" />
+    <Connection FromNodeId="a3afbb6c-cf7b-4a1e-a186-f431c2bfd6af" FromPort="Next" ToNodeId="ddcdc26a-6ff8-4c72-8edc-471a395db0bb" />
+    <Connection FromNodeId="ddcdc26a-6ff8-4c72-8edc-471a395db0bb" FromPort="Next" ToNodeId="429cc270-d198-4c73-9fb5-ad8f6a969646" />
+    <Connection FromNodeId="429cc270-d198-4c73-9fb5-ad8f6a969646" FromPort="Success" ToNodeId="6a4f4b72-86b3-48e8-a148-dface719dad2" />
+    <Connection FromNodeId="6a4f4b72-86b3-48e8-a148-dface719dad2" FromPort="Next" ToNodeId="28d45d9d-09fd-453c-bd32-a8025a078ba6" />
+    <Connection FromNodeId="28d45d9d-09fd-453c-bd32-a8025a078ba6" FromPort="Next" ToNodeId="81ba03eb-06c6-4b80-8668-6dd775b59da4" />
+  </Connections>
+</Level>

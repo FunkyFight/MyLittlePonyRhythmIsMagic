@@ -1813,7 +1813,7 @@ public sealed class SeeSawDirector
     private const double RewindThresholdBeats = 0.001;
     private const double MissWindowSeconds = 0.25;
 
-    private readonly SeeSawTimeline _timeline;
+    private SeeSawTimeline _timeline;
     private readonly SeeSawActorController _rainbow;
     private readonly SeeSawActorController _applejack;
     private readonly SeeSawBeamController _beam;
@@ -1823,11 +1823,16 @@ public sealed class SeeSawDirector
     private readonly SeeSawSoundScheduler _soundScheduler;
     private readonly SeeSawCameraEffectController _cameraEffectController;
     private readonly Func<double, double> _getBeatAt;
+    private readonly Func<double, double> _getSongPositionAtBeat;
     private readonly Func<double, double> _getCrotchetAt;
     private readonly double _fallbackCrotchet;
     private readonly HashSet<int> _startedSegmentIds = new();
     private readonly HashSet<int> _triggeredImpactIds = new();
     private readonly HashSet<int> _triggeredRainbowHighApexSegmentIds = new();
+    private int _emptyTailExitEventId = -1;
+    private double _emptyTailExitEndBeat = double.NaN;
+    private bool _emptyTailExitScheduled;
+    private bool _emptyTailExitAlreadyComplete;
     private double _lastSongPosition = double.NaN;
     private double _lastBeat = double.NaN;
     private double _currentBeat = double.NaN;
@@ -1836,16 +1841,21 @@ public sealed class SeeSawDirector
     private bool _hasLastRainbowTrailPosition;
 
     public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, double crotchet)
-        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, null, _ => crotchet, crotchet)
+        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, null, CreateFallbackSongPositionMapper(crotchet), _ => crotchet, crotchet)
     {
     }
 
     public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
-        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, null, getCrotchetAt, fallbackCrotchet)
+        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, null, null, CreateFallbackSongPositionMapper(fallbackCrotchet), getCrotchetAt, fallbackCrotchet)
     {
     }
 
     public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, SeeSawCameraEffectController cameraEffectController, Func<double, double> getBeatAt, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
+        : this(timeline, rainbow, applejack, beam, rainbowTrail, pathCatalog, cameraController, soundScheduler, cameraEffectController, getBeatAt, CreateFallbackSongPositionMapper(fallbackCrotchet), getCrotchetAt, fallbackCrotchet)
+    {
+    }
+
+    public SeeSawDirector(SeeSawTimeline timeline, SeeSawActorController rainbow, SeeSawActorController applejack, SeeSawBeamController beam, TrailGameObject rainbowTrail, SeeSawPathCatalog pathCatalog, SeeSawCameraController cameraController, SeeSawSoundScheduler soundScheduler, SeeSawCameraEffectController cameraEffectController, Func<double, double> getBeatAt, Func<double, double> getSongPositionAtBeat, Func<double, double> getCrotchetAt, double fallbackCrotchet = 0.6)
     {
         _timeline = timeline;
         _rainbow = rainbow;
@@ -1857,6 +1867,7 @@ public sealed class SeeSawDirector
         _soundScheduler = soundScheduler;
         _cameraEffectController = cameraEffectController;
         _getBeatAt = getBeatAt;
+        _getSongPositionAtBeat = getSongPositionAtBeat;
         _getCrotchetAt = getCrotchetAt;
         _fallbackCrotchet = fallbackCrotchet > 0.0 ? fallbackCrotchet : 0.6;
     }
@@ -1869,6 +1880,7 @@ public sealed class SeeSawDirector
         _startedSegmentIds.Clear();
         _triggeredImpactIds.Clear();
         _triggeredRainbowHighApexSegmentIds.Clear();
+        ClearEmptyTailExitState();
         _timeline?.ResetJudgements();
         _cameraController?.Reset();
         _cameraEffectController?.Reset();
@@ -1969,6 +1981,116 @@ public sealed class SeeSawDirector
     public void RemoveEventsForNotes(IReadOnlyCollection<Note> notes)
     {
         _timeline?.RemoveEventsForNotes(notes);
+    }
+
+    public void ReplaceTimelinePreservingPlayback(SeeSawTimeline timeline, double beat, double songPosition)
+    {
+        if (timeline == null)
+            return;
+
+        _timeline = timeline;
+        _currentBeat = beat;
+        _currentSongPosition = songPosition;
+        ClearEmptyTailExitState();
+        _timeline.ResetJudgements();
+        RestoreJudgementsFromNotes(beat);
+    }
+
+    public void BeginEmptyTailExit(double beat, double songPosition)
+    {
+        if (_timeline == null || _emptyTailExitScheduled || _emptyTailExitAlreadyComplete)
+            return;
+
+        if (!IsFinite(beat))
+            beat = _currentBeat;
+
+        if (!IsFinite(beat))
+            return;
+
+        if (!IsFinite(songPosition))
+            songPosition = GetSongPositionAtBeat(beat);
+
+        SeeSawJumpSegment activeSegment = _timeline.GetActiveSegment(SeeSawActor.Applejack, beat);
+        SeeSawSide fromSide = _timeline.GetLastGroundedSide(SeeSawActor.Applejack, beat);
+        if (fromSide == SeeSawSide.Exit && activeSegment == null)
+        {
+            _emptyTailExitAlreadyComplete = true;
+            _emptyTailExitEndBeat = beat;
+            return;
+        }
+
+        double endBeat = beat + SeeSawTiming.ExitJumpBeats;
+        double endSongPosition = GetSongPositionAtBeat(endBeat);
+        int eventId = GetNextPatternEventId();
+        int segmentId = GetNextJumpSegmentId();
+        int impactId = GetNextImpactEventId();
+        SeeSawSide rainbowSide = _timeline.GetLastGroundedSide(SeeSawActor.RainbowDash, beat);
+
+        _timeline.PatternEvents.Add(new SeeSawPatternEvent
+        {
+            Id = eventId,
+            SourceNote = null,
+            CueBeat = beat,
+            PlayerHitBeat = beat,
+            EndBeat = endBeat,
+            PrepStartBeat = beat,
+            CueSongPosition = songPosition,
+            PlayerHitSongPosition = songPosition,
+            EndSongPosition = endSongPosition,
+            PrepStartSongPosition = songPosition,
+            Pattern = SeeSawPatternKind.LongLong,
+            LaunchSide = rainbowSide,
+            ApplejackCueSide = fromSide,
+            TargetSide = rainbowSide,
+            ApplejackTargetSide = SeeSawSide.Exit,
+            RainbowHigh = false,
+            ApplejackHigh = false,
+            IsExit = true,
+            Judgement = SeeSawJudgement.Pending
+        });
+
+        _timeline.JumpSegments.Add(new SeeSawJumpSegment
+        {
+            Id = segmentId,
+            EventId = eventId,
+            Actor = SeeSawActor.Applejack,
+            StartBeat = beat,
+            EndBeat = endBeat,
+            StartSongPosition = songPosition,
+            EndSongPosition = endSongPosition,
+            FromSide = fromSide,
+            ToSide = SeeSawSide.Exit,
+            High = false,
+            PathId = GetApplejackPathId(fromSide, SeeSawSide.Exit)
+        });
+
+        _timeline.ImpactEvents.Add(new SeeSawImpactEvent
+        {
+            Id = impactId,
+            PatternEventId = eventId,
+            Actor = SeeSawActor.Applejack,
+            Beat = endBeat,
+            SongPosition = endSongPosition,
+            Side = SeeSawSide.Exit,
+            Kind = SeeSawImpactKind.Exit,
+            JumpLength = SeeSawTiming.GetJumpLengthFromSide(fromSide)
+        });
+
+        _timeline.FinalizeOrdering();
+        _emptyTailExitEventId = eventId;
+        _emptyTailExitEndBeat = endBeat;
+        _emptyTailExitScheduled = true;
+    }
+
+    public bool IsEmptyTailExitComplete(double beat)
+    {
+        if (_emptyTailExitAlreadyComplete)
+            return true;
+
+        return _emptyTailExitScheduled
+            && _emptyTailExitEventId >= 0
+            && IsFinite(beat)
+            && BeatTick.FromBeat(beat) >= BeatTick.FromBeat(_emptyTailExitEndBeat);
     }
 
     public void ApplyReaction(NoteReactionResult result, Note note)
@@ -2210,6 +2332,90 @@ public sealed class SeeSawDirector
 
         double crotchet = _getCrotchetAt(songPosition);
         return crotchet > 0.0 ? crotchet : _fallbackCrotchet;
+    }
+
+    private double GetSongPositionAtBeat(double beat)
+    {
+        if (_getSongPositionAtBeat != null)
+        {
+            double songPosition = _getSongPositionAtBeat(beat);
+            if (IsFinite(songPosition))
+                return songPosition;
+        }
+
+        return beat * _fallbackCrotchet;
+    }
+
+    private int GetNextPatternEventId()
+    {
+        int maxId = -1;
+        foreach (SeeSawPatternEvent patternEvent in _timeline.PatternEvents)
+        {
+            if (patternEvent.Id > maxId)
+                maxId = patternEvent.Id;
+        }
+
+        return maxId + 1;
+    }
+
+    private int GetNextJumpSegmentId()
+    {
+        int maxId = -1;
+        foreach (SeeSawJumpSegment segment in _timeline.JumpSegments)
+        {
+            if (segment.Id > maxId)
+                maxId = segment.Id;
+        }
+
+        return maxId + 1;
+    }
+
+    private int GetNextImpactEventId()
+    {
+        int maxId = -1;
+        foreach (SeeSawImpactEvent impact in _timeline.ImpactEvents)
+        {
+            if (impact.Id > maxId)
+                maxId = impact.Id;
+        }
+
+        return maxId + 1;
+    }
+
+    private void ClearEmptyTailExitState()
+    {
+        _emptyTailExitEventId = -1;
+        _emptyTailExitEndBeat = double.NaN;
+        _emptyTailExitScheduled = false;
+        _emptyTailExitAlreadyComplete = false;
+    }
+
+    private static SeeSawPathId GetApplejackPathId(SeeSawSide fromSide, SeeSawSide toSide)
+    {
+        if (fromSide == SeeSawSide.Exit)
+            return toSide == SeeSawSide.Inner ? SeeSawPathId.ApplejackStartIn : SeeSawPathId.ApplejackStartOut;
+
+        if (toSide == SeeSawSide.Exit)
+            return fromSide == SeeSawSide.Inner ? SeeSawPathId.ApplejackEndIn : SeeSawPathId.ApplejackEndOut;
+
+        return (fromSide, toSide) switch
+        {
+            (SeeSawSide.Outer, SeeSawSide.Inner) => SeeSawPathId.ApplejackOutIn,
+            (SeeSawSide.Inner, SeeSawSide.Outer) => SeeSawPathId.ApplejackInOut,
+            (SeeSawSide.Inner, SeeSawSide.Inner) => SeeSawPathId.ApplejackInIn,
+            _ => SeeSawPathId.ApplejackOutOut
+        };
+    }
+
+    private static Func<double, double> CreateFallbackSongPositionMapper(double crotchet)
+    {
+        double safeCrotchet = crotchet > 0.0 ? crotchet : 0.6;
+        return beat => beat * safeCrotchet;
+    }
+
+    private static bool IsFinite(double value)
+    {
+        return !double.IsNaN(value) && !double.IsInfinity(value);
     }
 
     private static SeeSawJudgement ToJudgement(NoteReactionResult result)

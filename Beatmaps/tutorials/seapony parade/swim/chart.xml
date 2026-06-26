@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>song</SongName>
+  <BeatmapName>swim</BeatmapName>
+  <Beatmapper>Unknown</Beatmapper>
+  <ArtistName>Unknown</ArtistName>
+  <MusicName>song</MusicName>
+  <SongPath>Beatmaps\tutorials\seapony parade\swim\song.mp3</SongPath>
+  <MusicVolume>1</MusicVolume>
+  <BPM>100</BPM>
+  <Offset>0</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>1.2</SongPosition>
+      <BeatPosition>2</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>2.4</SongPosition>
+      <BeatPosition>4</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects />
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>21e8afff178146e0b669be6d7ceec172</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>2</StartBeat>
+      <LengthBeats>2.25</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.swim</ClipTypeId>
+      <ClipCategory>Continuous</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="seapony_parade" />
+        <Entry Key="_type" Value="note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="seapony_parade_swim" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>ada87c143a544f23ba22def1d855e4f1</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>-0</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>seapony_parade</RhythmGameId>
+      <ClipTypeId>seapony_parade.switch_game</ClipTypeId>
+      <ClipCategory>Instant</ClipCategory>
+      <InputAction />
+      <Data>
+        <Entry Key="editor_event" Value="switch_game" />
+        <Entry Key="target_game" Value="seapony_parade" />
+      </Data>
+    </Clip>
+  </EditorClips>
+</Chart>

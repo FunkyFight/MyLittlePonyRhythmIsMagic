@@ -256,7 +256,7 @@ public class Game1 : Core
             _dialogueFont,
             GraphicsDevice,
             ReturnToMainMenu,
-            SwitchFirstAvailableRhythmGameScene,
+            EnsureRhythmGameScene,
             SwitchRhythmGameScene);
     }
 
@@ -304,6 +304,9 @@ public class Game1 : Core
 
     private void SwitchFirstAvailableRhythmGameScene()
     {
+        if (_sceneManager?.CurrentScene != null && !string.IsNullOrWhiteSpace(_currentRhythmGameSceneId))
+            return;
+
         foreach (IEditorNoteProvider provider in EditorNoteDefinitions.GameProviders)
         {
             if (provider == null || string.IsNullOrWhiteSpace(provider.RhythmGameId))
@@ -316,6 +319,14 @@ public class Game1 : Core
             _sceneManager.SetScene(scene);
             return;
         }
+    }
+
+    private void EnsureRhythmGameScene()
+    {
+        if (_sceneManager?.CurrentScene != null && !string.IsNullOrWhiteSpace(_currentRhythmGameSceneId))
+            return;
+
+        SwitchFirstAvailableRhythmGameScene();
     }
 
     private void DrawSceneWithCameraEffects(SpriteBatch spriteBatch)

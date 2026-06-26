@@ -1644,10 +1644,17 @@ public sealed class BeatmapEditorElement
 
     private void Save()
     {
-        _document.Save();
-        RefreshCharts();
-        SyncSelectedChartIndex();
-        _status = $"Saved {_document.Chart.Notes.Count} notes";
+        try
+        {
+            _document.Save();
+            RefreshCharts();
+            SyncSelectedChartIndex();
+            _status = $"Saved {_document.Chart.Notes.Count} notes";
+        }
+        catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException || ex is InvalidOperationException)
+        {
+            _status = $"Save failed: {ex.Message}";
+        }
     }
 
     private bool ExecuteCommand(IEditorCommand command, bool rebuildPlayback = true)

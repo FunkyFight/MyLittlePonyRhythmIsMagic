@@ -34,6 +34,8 @@ public sealed class LevelRuntimeController
     private bool _beatmapCompletionHandled;
     private double _trainingLoopDuration;
     private double _trainingCurrentLoopEndSongPosition;
+    private double _trainingCurrentLoopEvaluationSongPosition;
+    private double _trainingLoopEvaluationDelaySeconds;
     private bool _trainingSuccessExitPending;
     private double _trainingSuccessExitSongPosition;
     private IReadOnlyList<Note> _trainingCurrentLoopNotes = Array.Empty<Note>();
@@ -108,6 +110,7 @@ public sealed class LevelRuntimeController
 
         if (_state == RuntimeState.TrainingBeatmap && _currentNode != null)
         {
+            DrawTrainingInputWidget(spriteBatch);
             if (!_trainingSuccessExitPending)
                 DrawTrainingOverlay(spriteBatch, _currentNode);
             return;
@@ -150,6 +153,7 @@ public sealed class LevelRuntimeController
             case LevelNodeKind.Dialogue:
                 if (!_beatmapPlayer.IsContinuingEmptyBeatmap)
                     _beatmapPlayer.StopBeatmap();
+                ClearTrainingInputWidget();
                 _state = RuntimeState.Dialogue;
                 break;
 
@@ -215,7 +219,13 @@ public sealed class LevelRuntimeController
         _ensureRhythmScene?.Invoke();
         bool training = state == RuntimeState.TrainingBeatmap;
         ReactionRules rules = ReactionRules.RhythmHeavenLike();
+        _trainingLoopEvaluationDelaySeconds = training ? rules.MissInterval / 1000.0 : 0.0;
         _beatmapPlayer.StartBeatmap(songPath, chart, rules, new RhythmHeavenLikeReactionEvaluator(), independentBeatmapClock: training, loopMusic: training);
+        if (training)
+            EnableTrainingInputWidget();
+        else
+            ClearTrainingInputWidget();
+
         if (training)
             InitializeTrainingLoop();
     }
@@ -226,11 +236,11 @@ public sealed class LevelRuntimeController
         if (chartEnd <= 0.0)
             chartEnd = Math.Max(1.0, _beatmapPlayer.Conductor?.Duration ?? 1.0);
 
-        double loopSourceStart = _beatmapPlayer.RuntimeChartPlayableStartSongPosition;
-        _trainingLoopDuration = Math.Max(0.001, chartEnd - loopSourceStart);
-        _trainingCurrentLoopEndSongPosition = Math.Max(0.001, chartEnd);
         _trainingCurrentLoopNotes = _beatmapPlayer.ChartPlayer?.Notes.ToArray() ?? Array.Empty<Note>();
-        _trainingNextLoopNotes = _beatmapPlayer.AppendBeatmapLoopAt(_trainingCurrentLoopEndSongPosition, skipInitialOffset: true);
+        _trainingCurrentLoopEndSongPosition = Math.Max(0.001, GetTrainingLoopEndSongPosition(_trainingCurrentLoopNotes, chartEnd));
+        _trainingLoopDuration = Math.Max(0.001, _trainingCurrentLoopEndSongPosition);
+        _trainingCurrentLoopEvaluationSongPosition = GetTrainingLoopEvaluationSongPosition(_trainingCurrentLoopNotes, _trainingCurrentLoopEndSongPosition);
+        _trainingNextLoopNotes = _beatmapPlayer.AppendBeatmapLoopAt(_trainingCurrentLoopEndSongPosition, skipInitialOffset: false);
     }
 
     private void SetMiniGame(LevelNodeData node)
@@ -288,7 +298,7 @@ public sealed class LevelRuntimeController
 
         while (_state == RuntimeState.TrainingBeatmap
             && _trainingLoopDuration > 0.0
-            && _beatmapPlayer.GameplaySongPosition >= _trainingCurrentLoopEndSongPosition)
+            && _beatmapPlayer.GameplaySongPosition >= _trainingCurrentLoopEvaluationSongPosition)
         {
             HandleTrainingLoopFinished();
             if (_state != RuntimeState.TrainingBeatmap || _trainingSuccessExitPending)
@@ -347,6 +357,7 @@ public sealed class LevelRuntimeController
         _trainingSuccessExitPending = true;
         _trainingSuccessExitSongPosition = songPosition + oneBeatSeconds;
         _beatmapCompletionHandled = true;
+        ClearTrainingInputWidget();
         _beatmapPlayer.ContinueEmptyBeatmapWithoutMusic(_trainingNextLoopNotes);
     }
 
@@ -355,12 +366,61 @@ public sealed class LevelRuntimeController
         _beatmapCompletionHandled = false;
         _trainingCurrentLoopEndSongPosition += _trainingLoopDuration;
         _trainingCurrentLoopNotes = _trainingNextLoopNotes;
-        _trainingNextLoopNotes = _beatmapPlayer.AppendBeatmapLoopAt(_trainingCurrentLoopEndSongPosition, skipInitialOffset: true);
+        _trainingCurrentLoopEvaluationSongPosition = GetTrainingLoopEvaluationSongPosition(_trainingCurrentLoopNotes, _trainingCurrentLoopEndSongPosition);
+        _trainingNextLoopNotes = _beatmapPlayer.AppendBeatmapLoopAt(_trainingCurrentLoopEndSongPosition, skipInitialOffset: false);
+    }
+
+    private double GetTrainingLoopEvaluationSongPosition(IReadOnlyList<Note> notes, double loopEndSongPosition)
+    {
+        double evaluationSongPosition = loopEndSongPosition;
+        if (notes == null)
+            return evaluationSongPosition;
+
+        foreach (Note note in notes)
+        {
+            if (note == null)
+                continue;
+
+            evaluationSongPosition = Math.Max(evaluationSongPosition, note.SongPosition + _trainingLoopEvaluationDelaySeconds);
+        }
+
+        return evaluationSongPosition;
+    }
+
+    private double GetTrainingLoopEndSongPosition(IReadOnlyList<Note> notes, double chartEndSongPosition)
+    {
+        double loopEndSongPosition = chartEndSongPosition;
+        if (notes == null || notes.Count == 0)
+            return loopEndSongPosition;
+
+        List<double> notePositions = new();
+        foreach (Note note in notes)
+        {
+            if (note == null || double.IsNaN(note.SongPosition) || double.IsInfinity(note.SongPosition))
+                continue;
+
+            notePositions.Add(note.SongPosition);
+        }
+
+        if (notePositions.Count == 0)
+            return loopEndSongPosition;
+
+        notePositions.Sort();
+        double lastNotePosition = notePositions[^1];
+        double largestStep = 0.0;
+        for (int i = 1; i < notePositions.Count; i++)
+            largestStep = Math.Max(largestStep, notePositions[i] - notePositions[i - 1]);
+
+        double tailStep = largestStep > 0.0
+            ? largestStep
+            : Math.Max(0.001, _beatmapPlayer.GetCrotchetAt(lastNotePosition));
+        return Math.Max(loopEndSongPosition, lastNotePosition + tailStep);
     }
 
     private void CompleteLevel()
     {
         _state = RuntimeState.Complete;
+        ClearTrainingInputWidget();
         _beatmapPlayer.StopBeatmap();
 
         LevelProgressSave save = LevelProgressSave.Load();
@@ -375,7 +435,25 @@ public sealed class LevelRuntimeController
     {
         _state = RuntimeState.FailedGraph;
         _errorMessage = string.IsNullOrWhiteSpace(message) ? "Level runtime error." : message;
+        ClearTrainingInputWidget();
         _beatmapPlayer.StopBeatmap();
+    }
+
+    private void EnableTrainingInputWidget()
+    {
+        if (_beatmapPlayer.ChartPlayer == null)
+            return;
+
+        GLOBALS.rhythmInputVisualElement = new RhythmInputVisualElement(_beatmapPlayer);
+    }
+
+    private void ClearTrainingInputWidget()
+    {
+        if (GLOBALS.rhythmInputVisualElement == null && _beatmapPlayer.VisualNoteMng == null)
+            return;
+
+        GLOBALS.rhythmInputVisualElement = null;
+        _beatmapPlayer.VisualNoteMng = null;
     }
 
     private bool TryLoadBeatmap(string chartPathValue, out Chart chart, out string songPath, out string error)
@@ -512,6 +590,11 @@ public sealed class LevelRuntimeController
         const int scale = 3;
         int textWidth = Math.Max(0, (text.Length * 4 - 1) * scale);
         _ui.Label(spriteBatch, text, new Vector2((viewport.Width - textWidth) / 2f, viewport.Height - 72), Color.White, scale);
+    }
+
+    private static void DrawTrainingInputWidget(SpriteBatch spriteBatch)
+    {
+        GLOBALS.rhythmInputVisualElement?.Draw(spriteBatch);
     }
 
     private void DrawError(SpriteBatch spriteBatch)

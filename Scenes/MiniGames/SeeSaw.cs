@@ -151,30 +151,39 @@ public class SeeSawScene : Scene
     private void OnBeatmapLoopAppended()
     {
         _emptyTailDirectorDrained = false;
-        SetupTimelineAndDirector();
+        if (_director == null || GLOBALS.beatmapPlayer?.Conductor == null)
+        {
+            SetupTimelineAndDirector();
+            return;
+        }
+
+        SeeSawTimeline timeline = CompileCurrentTimeline();
+        if (timeline == null)
+            return;
+
+        double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.GameplaySongPosition;
+        double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
+        _director.ReplaceTimelinePreservingPlayback(timeline, beat, songSeconds);
     }
 
     private void OnBeatmapNotesRemoved(IReadOnlyCollection<Note> notes)
     {
         _director?.RemoveEventsForNotes(notes);
 
-        // This event is raised synchronously when the playable future is cleared. Resolve the
-        // remaining timeline immediately so actors cannot retain the last pre-removal airborne pose,
-        // even if the level changes node during this same frame.
         if (_director != null && GLOBALS.beatmapPlayer?.Conductor != null)
         {
             double songSeconds = GLOBALS.beatmapPlayer.GameplaySongPosition;
             double beat = GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
-            _director.Update(beat, songSeconds, new GameTime());
+            _director.BeginEmptyTailExit(beat, songSeconds);
         }
 
-        _emptyTailDirectorDrained = true;
+        _emptyTailDirectorDrained = false;
     }
 
     private void SetupTimelineAndDirector()
     {
-        ChartPlayer chartPlayer = GLOBALS.beatmapPlayer.ChartPlayer;
-        if (chartPlayer == null || GLOBALS.beatmapPlayer.Conductor == null)
+        SeeSawTimeline timeline = CompileCurrentTimeline();
+        if (timeline == null)
         {
             _director = null;
             return;
@@ -183,7 +192,6 @@ public class SeeSawScene : Scene
         SeeSawLayout layout = new(applejackOuterPos, applejackInnerPos, applejackExitPos, rainbowOuterPos, rainbowInnerPos);
         double currentSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.GameplaySongPosition;
         double baseCrotchet = GLOBALS.beatmapPlayer.GetCrotchetAt(currentSeconds);
-        SeeSawTimeline timeline = SeeSawChartCompiler.Compile(chartPlayer.Notes, GLOBALS.beatmapPlayer.GetBeatAt, GLOBALS.beatmapPlayer.GetSongPositionAtBeat, GLOBALS.beatmapPlayer.GetCrotchetAt, ChartTiming.GetLeadInBeats(GLOBALS.beatmapPlayer.CurrentChart));
         SeeSawPathCatalog pathCatalog = new(layout);
 
         _director = new SeeSawDirector(
@@ -197,10 +205,25 @@ public class SeeSawScene : Scene
             new SeeSawSoundScheduler(this),
             new SeeSawCameraEffectController(sceneCamera),
             GLOBALS.beatmapPlayer.GetBeatAt,
+            GLOBALS.beatmapPlayer.GetSongPositionAtBeat,
             GLOBALS.beatmapPlayer.GetCrotchetAt,
             baseCrotchet);
         _director.Reset();
         SyncDirectorToCurrentSongPosition();
+    }
+
+    private SeeSawTimeline CompileCurrentTimeline()
+    {
+        ChartPlayer chartPlayer = GLOBALS.beatmapPlayer?.ChartPlayer;
+        if (chartPlayer == null || GLOBALS.beatmapPlayer.Conductor == null)
+            return null;
+
+        return SeeSawChartCompiler.Compile(
+            chartPlayer.Notes,
+            GLOBALS.beatmapPlayer.GetBeatAt,
+            GLOBALS.beatmapPlayer.GetSongPositionAtBeat,
+            GLOBALS.beatmapPlayer.GetCrotchetAt,
+            ChartTiming.GetLeadInBeats(GLOBALS.beatmapPlayer.CurrentChart));
     }
 
     private void SyncDirectorToCurrentSongPosition()
@@ -287,8 +310,19 @@ public class SeeSawScene : Scene
         if (_emptyTailDirectorDrained)
             return;
 
+        if (_director == null || GLOBALS.beatmapPlayer?.Conductor == null)
+        {
+            _emptyTailDirectorDrained = true;
+            return;
+        }
+
         UpdateDirector(gameTime);
-        _emptyTailDirectorDrained = !IsAirborne(RainbowState) && !IsAirborne(ApplejackState);
+
+        double songSeconds = GLOBALS.beatmapPlayer.Clock?.SongSeconds ?? GLOBALS.beatmapPlayer.GameplaySongPosition;
+        double beat = GLOBALS.beatmapPlayer.Clock?.Beat ?? GLOBALS.beatmapPlayer.GetBeatAt(songSeconds);
+        _emptyTailDirectorDrained = _director.IsEmptyTailExitComplete(beat)
+            && !IsAirborne(RainbowState)
+            && !IsAirborne(ApplejackState);
     }
 
     private void UpdateDirector(GameTime gameTime)

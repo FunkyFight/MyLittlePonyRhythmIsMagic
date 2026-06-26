@@ -149,16 +149,38 @@ public sealed class BeatmapEditorDocument
         if (_needsV1Backup)
             BackupV1ChartIfNeeded();
 
-        string tempPath = ChartPath + ".tmp";
-        using (FileStream stream = File.Create(tempPath))
-        {
-            XmlSerializer serializer = new(typeof(Chart));
-            serializer.Serialize(stream, Chart);
-        }
-
-        File.Move(tempPath, ChartPath, overwrite: true);
+        SaveChartXml();
         _needsV1Backup = false;
         IsDirty = false;
+    }
+
+    private void SaveChartXml()
+    {
+        if (Directory.Exists(ChartPath))
+            throw new IOException($"Cannot save chart because '{ChartPath}' is a directory, not a file.");
+
+        using MemoryStream buffer = new();
+        {
+            XmlSerializer serializer = new(typeof(Chart));
+            serializer.Serialize(buffer, Chart);
+        }
+
+        EnsureExistingChartFileIsWritable(ChartPath);
+        using FileStream stream = new(ChartPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+        buffer.Position = 0;
+        buffer.CopyTo(stream);
+    }
+
+    private static void EnsureExistingChartFileIsWritable(string chartPath)
+    {
+        if (!File.Exists(chartPath))
+            return;
+
+        FileAttributes attributes = File.GetAttributes(chartPath);
+        if ((attributes & FileAttributes.ReadOnly) == 0)
+            return;
+
+        File.SetAttributes(chartPath, attributes & ~FileAttributes.ReadOnly);
     }
 
     private void BackupV1ChartIfNeeded()

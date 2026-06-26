@@ -40,6 +40,20 @@
         <Entry Key="pattern" Value="ShortShort" />
       </AdditionnalData>
     </Note>
+    <Note>
+      <SongPosition>4.8</SongPosition>
+      <BeatPosition>8</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
+      </AdditionnalData>
+    </Note>
   </Notes>
   <Effects />
   <EditorTracks>
@@ -127,6 +141,23 @@
         <Entry Key="_version" Value="1" />
         <Entry Key="action" Value="see_saw_toward_inner" />
         <Entry Key="pattern" Value="ShortShort" />
+      </Data>
+    </Clip>
+    <Clip>
+      <Id>3a48eaf6e760495ba819bffb771e66ce</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>8</StartBeat>
+      <LengthBeats>3</LengthBeats>
+      <RhythmGameId>see_saw</RhythmGameId>
+      <ClipTypeId>see_saw.short_long</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="see_saw" />
+        <Entry Key="_type" Value="jump" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="see_saw_toward_outer" />
+        <Entry Key="pattern" Value="ShortLong" />
       </Data>
     </Clip>
   </EditorClips>

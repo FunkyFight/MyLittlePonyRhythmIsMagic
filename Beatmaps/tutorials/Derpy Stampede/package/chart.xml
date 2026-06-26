@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Chart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SongName>song</SongName>
+  <BeatmapName>package</BeatmapName>
+  <Beatmapper>Unknown</Beatmapper>
+  <ArtistName>Unknown</ArtistName>
+  <MusicName>song</MusicName>
+  <SongPath>Beatmaps\tutorials\Derpy Stampede\letter\song.mp3</SongPath>
+  <MusicVolume>1</MusicVolume>
+  <BPM>100</BPM>
+  <Offset>0</Offset>
+  <LeadInBeats>0</LeadInBeats>
+  <ChartVersion>2</ChartVersion>
+  <Notes>
+    <Note>
+      <SongPosition>3</SongPosition>
+      <BeatPosition>5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>3.3</SongPosition>
+      <BeatPosition>5.5</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+    <Note>
+      <SongPosition>3.5999999999999996</SongPosition>
+      <BeatPosition>6</BeatPosition>
+      <HoldDuration>0</HoldDuration>
+      <HoldBeats>0</HoldBeats>
+      <InputActionToPress>ReactMain</InputActionToPress>
+      <AdditionnalData>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </AdditionnalData>
+    </Note>
+  </Notes>
+  <Effects />
+  <EditorTracks>
+    <Track>
+      <Id>track-1</Id>
+      <Name>Track 1</Name>
+      <Index>0</Index>
+    </Track>
+    <Track>
+      <Id>track-2</Id>
+      <Name>Track 2</Name>
+      <Index>1</Index>
+    </Track>
+    <Track>
+      <Id>track-3</Id>
+      <Name>Track 3</Name>
+      <Index>2</Index>
+    </Track>
+    <Track>
+      <Id>track-4</Id>
+      <Name>Track 4</Name>
+      <Index>3</Index>
+    </Track>
+    <Track>
+      <Id>track-5</Id>
+      <Name>Track 5</Name>
+      <Index>4</Index>
+    </Track>
+    <Track>
+      <Id>track-6</Id>
+      <Name>Track 6</Name>
+      <Index>5</Index>
+    </Track>
+    <Track>
+      <Id>track-7</Id>
+      <Name>Track 7</Name>
+      <Index>6</Index>
+    </Track>
+    <Track>
+      <Id>track-8</Id>
+      <Name>Track 8</Name>
+      <Index>7</Index>
+    </Track>
+    <Track>
+      <Id>track-9</Id>
+      <Name>Track 9</Name>
+      <Index>8</Index>
+    </Track>
+    <Track>
+      <Id>track-10</Id>
+      <Name>Track 10</Name>
+      <Index>9</Index>
+    </Track>
+  </EditorTracks>
+  <EditorClips>
+    <Clip>
+      <Id>2af2f8978d96498fa76765dc5508fe98</Id>
+      <TrackIndex>0</TrackIndex>
+      <StartBeat>5</StartBeat>
+      <LengthBeats>0</LengthBeats>
+      <RhythmGameId>derpy_stampede</RhythmGameId>
+      <ClipTypeId>derpy_stampede.triple_stamp</ClipTypeId>
+      <ClipCategory>SingleHit</ClipCategory>
+      <InputAction>ReactMain</InputAction>
+      <Data>
+        <Entry Key="_game" Value="derpy_stampede" />
+        <Entry Key="_type" Value="derpy_stampede_note" />
+        <Entry Key="_version" Value="1" />
+        <Entry Key="action" Value="derpy_stampede_triple_stamp" />
+      </Data>
+    </Clip>
+  </EditorClips>
+</Chart>
