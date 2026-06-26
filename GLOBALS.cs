@@ -10,6 +10,7 @@ public static class GLOBALS
 {
     public static TextureAtlas controller_atlas;
     public static TextureAtlas main_atlas;
+    public static SpriteFont gameFont;
 
 
     public static GraphicsDevice graphicsDevice;
